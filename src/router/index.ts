@@ -59,13 +59,14 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, _from, next) => {
   // Get locale from route or use default
-  const locale = to.params.locale as string
+  const locale = to.params.locale as string | undefined
   
   // If no locale in route, redirect to default locale
   if (!locale && to.name !== 'not-found') {
     const defaultLocale = getCurrentLocale()
-    const newPath = `/${defaultLocale}${to.path}`
-    return next(newPath)
+    const pathWithoutLeadingSlash = to.path.startsWith('/') ? to.path.slice(1) : to.path
+    const newPath = pathWithoutLeadingSlash ? `/${defaultLocale}/${pathWithoutLeadingSlash}` : `/${defaultLocale}`
+    return next({ path: newPath, query: to.query })
   }
   
   // Set i18n locale from route

@@ -204,20 +204,16 @@ const relatedShows = computed(() => {
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// SEO
-const { updateMeta } = useSEO()
-
 // Update SEO when show changes
 watch(show, (newShow) => {
   if (newShow) {
     const seoConfig = getShowSEO(newShow)
-    updateMeta()
     // Update with show-specific config
     useSEO(seoConfig)
     // Add structured data
     generateShowStructuredData(newShow)
   }
-}, { immediate: true })
+}, { immediate: false })
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {

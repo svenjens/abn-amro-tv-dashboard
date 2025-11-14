@@ -11,6 +11,7 @@
   "home": {
     "title": "TV Show Dashboard",
     "subtitle": "Ontdek en verken duizenden tv-series georganiseerd per genre",
+    "searchPlaceholder": "Zoek TV shows...",
     "showsCount": "{count} series weergegeven over {genres} genres",
     "noShows": "Geen tv-series gevonden",
     "noShowsMessage": "Probeer de pagina te vernieuwen of kom later terug."
