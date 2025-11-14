@@ -5,6 +5,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { getCurrentLocale, setCurrentLocale } from '@/i18n/helpers'
+import { logger } from '@/utils'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -128,7 +129,7 @@ function updateHreflangTags(path: string) {
 
 // Error handling
 router.onError((error) => {
-  console.error('[Router Error]', error)
+  logger.error('[Router Error]', error)
 })
 
 export default router

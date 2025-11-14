@@ -33,14 +33,14 @@ jobs:
       - name: Run TypeScript type check
         run: npx vue-tsc --noEmit
 
-      - name: Check for console.log statements
+      - name: Check for console statements
         run: |
-          echo "Checking for console.log statements..."
-          if grep -r "console\.log\|console\.warn\|console\.error" src/ --exclude-dir=node_modules --exclude="*.test.ts" --exclude="*.spec.ts" | grep -v "// eslint-disable"; then
-            echo "❌ Found console statements in source code"
+          echo "Checking for direct console statements (logger.* is allowed)..."
+          if grep -r "console\." src/ --exclude-dir=node_modules --exclude="*.test.ts" --exclude="*.spec.ts" | grep -v "// eslint-disable" | grep -v "logger\." ; then
+            echo "❌ Found direct console statements in source code. Use logger utility instead."
             exit 1
           else
-            echo "✅ No console statements found"
+            echo "✅ No direct console statements found (logger utility is properly used)"
           fi
 
   # Job 2: Unit Tests
@@ -109,7 +109,7 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -137,7 +137,7 @@ jobs:
         run: npm install -g pa11y-ci wait-on
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
@@ -179,7 +179,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
@@ -238,7 +238,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
@@ -281,7 +281,7 @@ jobs:
         run: npm ci
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/

@@ -10,7 +10,7 @@
       <!-- Hero Background -->
       <div
         class="absolute inset-0 opacity-10 bg-cover bg-center"
-        :style="{ backgroundImage: 'url(/optimized/hero-background.webp)' }"
+        :style="{ backgroundImage: `url(${heroBackground})` }"
         aria-hidden="true"
       ></div>
 
@@ -18,14 +18,11 @@
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo -->
-            <picture>
-              <source srcset="/optimized/logo-main.webp" type="image/webp" />
-              <img
-                src="/optimized/logo-main.png"
-                alt="TV Show Dashboard Logo"
-                class="h-16 w-16 object-contain"
-              />
-            </picture>
+            <img
+              :src="logoImage"
+              alt="TV Show Dashboard Logo"
+              class="h-16 w-16 object-contain"
+            />
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-primary-100 mb-8">
@@ -116,6 +113,8 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import logoImage from '/optimized/logo-main.webp?url'
+import heroBackground from '/optimized/hero-background.webp?url'
 
 const { t } = useI18n()
 

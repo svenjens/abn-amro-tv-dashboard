@@ -183,7 +183,7 @@
             class="prose prose-lg max-w-none text-gray-700"
             role="region"
             :aria-labelledby="'show-title'"
-            v-html="show.summary"
+            v-html="sanitizedSummary"
           ></div>
         </article>
 
@@ -225,6 +225,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import DOMPurify from 'dompurify'
 import { useShowsStore } from '@/stores'
 import type { Show, ApiError } from '@/types'
 import { getShowImage, formatSchedule } from '@/utils'
@@ -245,6 +246,12 @@ const showsStore = useShowsStore()
 const show = ref<Show | null>(null)
 const loading = ref(true)
 const error = ref<ApiError | null>(null)
+
+// Sanitize HTML to prevent XSS attacks
+const sanitizedSummary = computed(() => {
+  if (!show.value?.summary) return ''
+  return DOMPurify.sanitize(show.value.summary)
+})
 
 const relatedShows = computed(() => {
   if (!show.value) return []

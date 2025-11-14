@@ -7,7 +7,7 @@
 
 import axios, { type AxiosInstance, AxiosError } from 'axios'
 import type { Show, SearchResult, ApiError } from '@/types'
-import { apiCache, searchCache, showCache } from '@/utils/cache'
+import { apiCache, searchCache, showCache, logger } from '@/utils'
 
 const BASE_URL = 'https://api.tvmaze.com'
 
@@ -26,7 +26,7 @@ class TVMazeAPI {
     // Request interceptor for logging
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
+        logger.debug(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
         return config
       },
       (error) => {
@@ -43,7 +43,7 @@ class TVMazeAPI {
           status: error.response?.status,
           details: error.response?.data,
         }
-        console.error('[API Error]', apiError)
+        logger.error('[API Error]', apiError)
         return Promise.reject(apiError)
       }
     )
@@ -59,7 +59,7 @@ class TVMazeAPI {
     // Check cache
     const cached = apiCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as Show[]
     }
 
@@ -84,7 +84,7 @@ class TVMazeAPI {
     // Check cache
     const cached = showCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as Show
     }
 
@@ -113,7 +113,7 @@ class TVMazeAPI {
     // Check cache
     const cached = searchCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as SearchResult[]
     }
 
@@ -135,7 +135,7 @@ class TVMazeAPI {
     apiCache.clear()
     searchCache.clear()
     showCache.clear()
-    console.log('[API Cache] All caches cleared')
+    logger.debug('[API Cache] All caches cleared')
   }
 
   /**
@@ -157,7 +157,7 @@ class TVMazeAPI {
     const searchPruned = searchCache.prune()
     const showPruned = showCache.prune()
 
-    console.log(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
+    logger.debug(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
   }
 
   /**

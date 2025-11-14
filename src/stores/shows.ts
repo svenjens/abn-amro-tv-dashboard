@@ -5,10 +5,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { tvMazeAPI } from '@/api'
-import { groupShowsByGenre, getSortedGenres } from '@/utils'
+import { groupShowsByGenre, getSortedGenres, logger } from '@/utils'
+import { useToast } from '@/composables'
 import type { Show, ShowsByGenre, ApiError } from '@/types'
 
 export const useShowsStore = defineStore('shows', () => {
+  const toast = useToast()
+
   // State
   const allShows = ref<Show[]>([])
   const showsByGenre = ref<ShowsByGenre>({})
@@ -61,10 +64,11 @@ export const useShowsStore = defineStore('shows', () => {
       const shows = await tvMazeAPI.fetchAllShows()
       allShows.value = shows
       showsByGenre.value = groupShowsByGenre(shows)
-      console.log(`[Store] Loaded ${shows.length} shows across ${genres.value.length} genres`)
+      logger.debug(`[Store] Loaded ${shows.length} shows across ${genres.value.length} genres`)
     } catch (err) {
       error.value = err as ApiError
-      console.error('[Store] Failed to fetch shows:', err)
+      toast.error('Failed to load TV shows. Please try again later.')
+      logger.error('[Store] Failed to fetch shows:', err)
     } finally {
       loading.value = false
     }
@@ -83,7 +87,8 @@ export const useShowsStore = defineStore('shows', () => {
       return show
     } catch (err) {
       error.value = err as ApiError
-      console.error(`[Store] Failed to fetch show ${id}:`, err)
+      toast.error('Failed to load show details. Please try again later.')
+      logger.error(`[Store] Failed to fetch show ${id}:`, err)
       return null
     } finally {
       loading.value = false

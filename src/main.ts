@@ -9,6 +9,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 import { getCurrentLocale } from './i18n/helpers'
+import { logger } from './utils'
 import './style.css'
 
 const app = createApp(App)
@@ -32,4 +33,4 @@ document.documentElement.setAttribute('lang', getCurrentLocale())
 app.mount('#app')
 
 // Log app initialization
-console.log('[App] TV Show Dashboard initialized')
+logger.debug('[App] TV Show Dashboard initialized')

@@ -10,6 +10,8 @@
  * - Namespace support
  */
 
+import { logger } from './logger'
+
 export interface CacheEntry<T> {
   data: T
   timestamp: number
@@ -142,7 +144,7 @@ export class Cache<T = unknown> {
       try {
         localStorage.removeItem(fullKey)
       } catch (error) {
-        console.warn('[Cache] Failed to delete from localStorage:', error)
+        logger.warn('[Cache] Failed to delete from localStorage:', error)
       }
     }
 
@@ -297,7 +299,7 @@ export class Cache<T = unknown> {
         }
       }
     } catch (error) {
-      console.warn('[Cache] Failed to load from localStorage:', error)
+      logger.warn('[Cache] Failed to load from localStorage:', error)
     }
   }
 
@@ -308,7 +310,7 @@ export class Cache<T = unknown> {
         return JSON.parse(item) as CacheEntry<T>
       }
     } catch (error) {
-      console.warn('[Cache] Failed to get from localStorage:', error)
+      logger.warn('[Cache] Failed to get from localStorage:', error)
     }
     return null
   }
@@ -319,16 +321,16 @@ export class Cache<T = unknown> {
     } catch (error) {
       // QuotaExceededError - storage is full
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
-        console.warn('[Cache] localStorage quota exceeded, clearing old entries')
+        logger.warn('[Cache] localStorage quota exceeded, clearing old entries')
         this.clearOldestFromStorage()
         // Try again
         try {
           localStorage.setItem(fullKey, JSON.stringify(entry))
         } catch {
-          console.error('[Cache] Still unable to save to localStorage')
+          logger.error('[Cache] Still unable to save to localStorage')
         }
       } else {
-        console.warn('[Cache] Failed to save to localStorage:', error)
+        logger.warn('[Cache] Failed to save to localStorage:', error)
       }
     }
   }
@@ -344,7 +346,7 @@ export class Cache<T = unknown> {
         }
       }
     } catch (error) {
-      console.warn('[Cache] Failed to clear localStorage:', error)
+      logger.warn('[Cache] Failed to clear localStorage:', error)
     }
   }
 
@@ -376,7 +378,7 @@ export class Cache<T = unknown> {
         }
       }
     } catch (error) {
-      console.warn('[Cache] Failed to clear oldest from localStorage:', error)
+      logger.warn('[Cache] Failed to clear oldest from localStorage:', error)
     }
   }
 }

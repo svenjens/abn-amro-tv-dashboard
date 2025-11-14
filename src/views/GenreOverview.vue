@@ -77,15 +77,12 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16" role="status">
-        <picture>
-          <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-          <img
-            src="/optimized/empty-state-illustration.png"
-            alt=""
-            class="mx-auto h-48 w-48 object-contain opacity-50"
-            aria-hidden="true"
-          />
-        </picture>
+        <img
+          :src="emptyStateImage"
+          alt=""
+          class="mx-auto h-48 w-48 object-contain opacity-50"
+          aria-hidden="true"
+        />
         <h3 class="mt-6 text-lg font-medium text-gray-900">{{ t('genre.noShows') }}</h3>
         <p class="mt-2 text-sm text-gray-500">{{ t('genre.noShowsMessage') }}</p>
       </div>
@@ -102,6 +99,7 @@ import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import emptyStateImage from '/optimized/empty-state-illustration.webp?url'
 
 const { t } = useI18n()
 const route = useRoute()

@@ -98,15 +98,12 @@
 
       <!-- Initial State -->
       <div v-else class="text-center py-16">
-        <picture>
-          <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-          <img
-            src="/optimized/empty-state-illustration.png"
-            alt=""
-            class="mx-auto h-48 w-48 object-contain opacity-50"
-            aria-hidden="true"
-          />
-        </picture>
+        <img
+          :src="emptyStateImage"
+          alt=""
+          class="mx-auto h-48 w-48 object-contain opacity-50"
+          aria-hidden="true"
+        />
         <h3 class="mt-6 text-lg font-medium text-gray-900">Start searching</h3>
         <p class="mt-2 text-gray-500">
           Enter a TV show name to search through our extensive database.
@@ -125,6 +122,7 @@ import SearchBar from '@/components/SearchBar.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import emptyStateImage from '/optimized/empty-state-illustration.webp?url'
 
 const { t } = useI18n()
 const route = useRoute()
