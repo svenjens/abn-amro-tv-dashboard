@@ -7,7 +7,7 @@
       <!-- Hero Background -->
       <div 
         class="absolute inset-0 opacity-10 bg-cover bg-center"
-        :style="{ backgroundImage: 'url(/hero-background.png)' }"
+        :style="{ backgroundImage: 'url(/optimized/hero-background.webp)' }"
         aria-hidden="true"
       ></div>
       
@@ -15,11 +15,14 @@
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo -->
-            <img 
-              src="/logo-main.png" 
-              alt="TV Show Dashboard Logo" 
-              class="h-16 w-16 object-contain"
-            />
+            <picture>
+              <source srcset="/optimized/logo-main.webp" type="image/webp" />
+              <img 
+                src="/optimized/logo-main.png" 
+                alt="TV Show Dashboard Logo" 
+                class="h-16 w-16 object-contain"
+              />
+            </picture>
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-primary-100 mb-8">
@@ -76,12 +79,15 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16 px-4" role="status">
-        <img 
-          src="/empty-state-illustration.png" 
-          alt="" 
-          class="mx-auto h-48 w-48 object-contain opacity-50"
-          aria-hidden="true"
-        />
+        <picture>
+          <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
+          <img 
+            src="/optimized/empty-state-illustration.png" 
+            alt="" 
+            class="mx-auto h-48 w-48 object-contain opacity-50"
+            aria-hidden="true"
+          />
+        </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900">{{ t('home.noShows') }}</h3>
         <p class="mt-2 text-sm text-gray-500">{{ t('home.noShowsMessage') }}</p>
       </div>

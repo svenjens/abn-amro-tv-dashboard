@@ -12,7 +12,8 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "format": "prettier --write src/",
-    "generate:branding": "node scripts/generate-branding.js"
+    "generate:branding": "node scripts/generate-branding.js",
+    "optimize:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@vueuse/motion": "^3.0.3",
@@ -41,6 +42,7 @@
     "openai": "^6.9.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.18",
     "typescript": "~5.9.3",
     "vite": "^7.2.2",

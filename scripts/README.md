@@ -1,8 +1,26 @@
 # Scripts
 
-## Brand Asset Generator
+## Scripts Overview
+
+### 1. Brand Asset Generator
 
 Generate professional logo, icons, and other brand assets using OpenAI's gpt-image-1 (latest image model).
+
+```bash
+npm run generate:branding
+```
+
+### 2. Image Optimizer
+
+Optimize all brand assets for web performance with WebP conversion and responsive sizes.
+
+```bash
+npm run optimize:images
+```
+
+---
+
+## Brand Asset Generator
 
 ### Prerequisites
 
@@ -61,4 +79,100 @@ After generation, you'll find:
 - All PNG assets in `public/`
 - `branding-metadata.json` with generation info
 - `BRANDING.md` with usage instructions
+
+---
+
+## Image Optimizer
+
+Optimize PNG images and generate WebP versions for better web performance.
+
+### Features
+
+- **WebP Conversion**: Generate modern WebP format (25-35% smaller)
+- **Multiple Sizes**: Create responsive image variants
+- **PNG Optimization**: Compress PNGs with max compression
+- **Quality Control**: Maintain visual quality while reducing size
+- **Automatic**: Processes all brand assets in one command
+
+### Prerequisites
+
+The `sharp` library is already installed as a dev dependency.
+
+### Usage
+
+```bash
+npm run optimize:images
+```
+
+### What it Does
+
+1. **Creates optimized directory**: `public/optimized/`
+2. **Generates WebP versions**: Modern format for all browsers
+3. **Creates multiple sizes**: Responsive variants (16px to 1920px)
+4. **Optimizes PNGs**: Fallback for older browsers
+5. **Generates usage guide**: `public/optimized/USAGE.md`
+
+### Generated Variants
+
+For each asset, multiple sizes are created:
+
+- **favicon**: 16px, 32px, 48px, 96px, 192px, 512px
+- **logo-main**: 64px, 128px, 256px, 512px
+- **logo-full**: 512px, 768px, 1536px
+- **hero-background**: 768px, 1280px, 1920px
+- **empty-state**: 256px, 512px
+- And more...
+
+### Performance Benefits
+
+- **25-35% size reduction** with WebP
+- **Faster page loads** through smaller files
+- **Responsive images** serve appropriate sizes
+- **Better UX** especially on mobile/slow connections
+
+### Browser Support
+
+- WebP: Chrome, Firefox, Safari 14+, Edge (95%+ coverage)
+- PNG fallback: All browsers
+
+### Output Structure
+
+```
+public/optimized/
+├── logo-main.webp
+├── logo-main.png
+├── logo-main-64.webp
+├── logo-main-64.png
+├── favicon-16.webp
+├── favicon-16.png
+├── ... (all variants)
+└── USAGE.md
+```
+
+### Integration Example
+
+```html
+<!-- WebP with PNG fallback -->
+<picture>
+  <source srcset="/optimized/logo-main.webp" type="image/webp">
+  <img src="/optimized/logo-main.png" alt="Logo">
+</picture>
+
+<!-- Responsive hero background -->
+<picture>
+  <source 
+    media="(min-width: 1280px)" 
+    srcset="/optimized/hero-background.webp" 
+    type="image/webp"
+  >
+  <source 
+    media="(min-width: 768px)" 
+    srcset="/optimized/hero-background-1280.webp" 
+    type="image/webp"
+  >
+  <img src="/optimized/hero-background-768.png" alt="">
+</picture>
+```
+
+See `public/optimized/USAGE.md` for complete usage examples.
 
