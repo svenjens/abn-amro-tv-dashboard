@@ -40,8 +40,7 @@ const ASSET_PROMPTS = [
     Cinema and entertainment aesthetic with clean lines. 
     Icon only, no text. Centered composition. Professional but fun.`,
     size: '1024x1024',
-    quality: 'hd',
-    style: 'vivid'
+    quality: 'high'
   },
   {
     name: 'logo-full',
@@ -50,9 +49,8 @@ const ASSET_PROMPTS = [
     Use gradient blue colors (${BRAND_STYLE.primary} to ${BRAND_STYLE.primaryLight}). 
     Entertainment and media aesthetic. Wide format suitable for app headers. 
     Professional yet approachable design for a TV show discovery app.`,
-    size: '1536x640',
-    quality: 'hd',
-    style: 'vivid'
+    size: '1536x1024',
+    quality: 'high'
   },
   {
     name: 'hero-background',
@@ -61,9 +59,8 @@ const ASSET_PROMPTS = [
     Use deep blue gradients (${BRAND_STYLE.primary}) with subtle purple and amber accents. 
     Modern, clean aesthetic with depth and subtle motion blur. 
     Wide horizontal format suitable for hero section background. Atmospheric and professional.`,
-    size: '1792x1024',
-    quality: 'hd',
-    style: 'vivid'
+    size: '1536x1024',
+    quality: 'high'
   },
   {
     name: 'og-image',
@@ -73,8 +70,7 @@ const ASSET_PROMPTS = [
     Use blue gradient (${BRAND_STYLE.primary}) as the dominant color with entertainment vibe. 
     Text space in center. Professional social media design. 1200x630 composition.`,
     size: '1024x1024',
-    quality: 'hd',
-    style: 'vivid'
+    quality: 'high'
   },
   {
     name: 'favicon',
@@ -84,8 +80,7 @@ const ASSET_PROMPTS = [
     Must be recognizable at tiny sizes (16x16px to 512x512px). 
     Bold shapes, high contrast, simple and iconic. Centered composition.`,
     size: '1024x1024',
-    quality: 'standard',
-    style: 'natural'
+    quality: 'medium'
   },
   {
     name: 'icon-192',
@@ -95,8 +90,7 @@ const ASSET_PROMPTS = [
     Clean, recognizable design suitable for mobile home screens. 
     Rounded square format with padding. Professional and polished.`,
     size: '1024x1024',
-    quality: 'standard',
-    style: 'vivid'
+    quality: 'medium'
   },
   {
     name: 'icon-512',
@@ -106,8 +100,7 @@ const ASSET_PROMPTS = [
     Polished, professional design with subtle shadows and highlights. 
     Rounded square format. Suitable for app stores and high-res displays.`,
     size: '1024x1024',
-    quality: 'hd',
-    style: 'vivid'
+    quality: 'high'
   },
   {
     name: 'apple-touch-icon',
@@ -117,8 +110,7 @@ const ASSET_PROMPTS = [
     Professional, polished design suitable for iOS home screen. 
     High quality with subtle gradients and depth. 180x180 format.`,
     size: '1024x1024',
-    quality: 'hd',
-    style: 'vivid'
+    quality: 'high'
   },
   {
     name: 'loading-animation',
@@ -128,8 +120,7 @@ const ASSET_PROMPTS = [
     Clean, minimal design suitable for loading states. 
     Centered, simple shapes that work well when animated.`,
     size: '1024x1024',
-    quality: 'standard',
-    style: 'natural'
+    quality: 'medium'
   },
   {
     name: 'empty-state-illustration',
@@ -139,8 +130,7 @@ const ASSET_PROMPTS = [
     Friendly, approachable, minimal illustration style. 
     Centered composition suitable for empty search results or loading states.`,
     size: '1024x1024',
-    quality: 'standard',
-    style: 'natural'
+    quality: 'medium'
   }
 ];
 
@@ -164,11 +154,31 @@ async function generateImage(config) {
 
     const imageData = response.data[0];
     
-    // Download image from URL
-    const imageUrl = imageData.url;
-    const imageResponse = await fetch(imageUrl);
-    const arrayBuffer = await imageResponse.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    if (!imageData) {
+      throw new Error('No image data returned from API');
+    }
+    
+    let buffer;
+    
+    // gpt-image-1 returns base64, DALL-E returns URL
+    if (imageData.b64_json) {
+      // Base64 response
+      buffer = Buffer.from(imageData.b64_json, 'base64');
+      console.log(`   📦 Received base64 data`);
+    } else if (imageData.url) {
+      // URL response
+      console.log(`   🌐 Downloading from URL...`);
+      const imageResponse = await fetch(imageData.url);
+      
+      if (!imageResponse.ok) {
+        throw new Error(`Failed to download image: ${imageResponse.statusText}`);
+      }
+      
+      const arrayBuffer = await imageResponse.arrayBuffer();
+      buffer = Buffer.from(arrayBuffer);
+    } else {
+      throw new Error('No image URL or base64 data returned from API');
+    }
     
     const filename = `${config.name}.png`;
     const filepath = path.join(ASSETS_DIR, filename);
