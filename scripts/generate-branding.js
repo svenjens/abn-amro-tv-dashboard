@@ -24,9 +24,9 @@ const ASSETS_DIR = path.join(__dirname, '..', 'public')
 
 // Brand colors from Tailwind config
 const BRAND_STYLE = {
-  primary: '#2563eb', // primary-600 (blue)
-  primaryLight: '#3b82f6', // primary-500
-  primaryDark: '#1d4ed8', // primary-700
+  primary: '#dc2626', // primary-600 (red)
+  primaryLight: '#ef4444', // primary-500
+  primaryDark: '#b91c1c', // primary-700
   accent: '#f59e0b', // amber-500 (for ratings/highlights)
   style: 'modern, entertainment-focused, clean, cinematic',
 }

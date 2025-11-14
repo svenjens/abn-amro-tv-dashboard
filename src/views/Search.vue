@@ -99,7 +99,7 @@
       <!-- Initial State -->
       <div v-else class="text-center py-16">
         <img
-          src="/empty-state-illustration.png"
+          :src="emptyStateImage"
           alt=""
           class="mx-auto h-48 w-48 object-contain opacity-50"
           aria-hidden="true"
@@ -122,6 +122,7 @@ import SearchBar from '@/components/SearchBar.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import emptyStateImage from '/optimized/empty-state-illustration.webp?url'
 
 const { t } = useI18n()
 const route = useRoute()

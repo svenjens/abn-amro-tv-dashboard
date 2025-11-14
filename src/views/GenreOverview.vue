@@ -78,7 +78,7 @@
       <!-- Empty State -->
       <div v-else class="text-center py-16" role="status">
         <img
-          src="/empty-state-illustration.png"
+          :src="emptyStateImage"
           alt=""
           class="mx-auto h-48 w-48 object-contain opacity-50"
           aria-hidden="true"
@@ -99,6 +99,7 @@ import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import emptyStateImage from '/optimized/empty-state-illustration.webp?url'
 
 const { t } = useI18n()
 const route = useRoute()

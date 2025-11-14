@@ -10,7 +10,7 @@
       <!-- Hero Background -->
       <div
         class="absolute inset-0 opacity-10 bg-cover bg-center"
-        :style="{ backgroundImage: 'url(/hero-background.png)' }"
+        :style="{ backgroundImage: `url(${heroBackground})` }"
         aria-hidden="true"
       ></div>
 
@@ -19,7 +19,7 @@
           <div class="flex items-center gap-4">
             <!-- Logo -->
             <img
-              src="/logo-main.png"
+              :src="logoImage"
               alt="TV Show Dashboard Logo"
               class="h-16 w-16 object-contain"
             />
@@ -113,6 +113,8 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import logoImage from '/optimized/logo-main.webp?url'
+import heroBackground from '/optimized/hero-background.webp?url'
 
 const { t } = useI18n()
 
