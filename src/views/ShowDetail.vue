@@ -254,5 +254,14 @@ async function loadShow() {
 onMounted(() => {
   loadShow()
 })
+
+watch(
+  () => route.params.id,
+  (newId, oldId) => {
+    if (newId !== oldId) {
+      loadShow()
+    }
+  }
+)
 </script>
 
