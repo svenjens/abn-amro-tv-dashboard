@@ -29,11 +29,13 @@ export const useShowsStore = defineStore('shows', () => {
   const showsCount = computed(() => allShows.value.length)
 
   /**
-   * Get shows for a specific genre
+   * Get shows for a specific genre (case-insensitive)
    */
   const getShowsByGenre = computed(() => {
     return (genre: string): Show[] => {
-      return showsByGenre.value[genre] || []
+      // Capitalize first letter to match stored genre format
+      const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1).toLowerCase()
+      return showsByGenre.value[capitalizedGenre] || []
     }
   })
 

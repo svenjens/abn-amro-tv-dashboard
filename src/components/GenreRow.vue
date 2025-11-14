@@ -140,7 +140,7 @@ function expandMobile() {
 
 function navigateToGenre() {
   const locale = route.params.locale || 'en'
-  router.push({ name: 'genre-overview', params: { locale, genre: props.genre } })
+  router.push({ name: 'genre-overview', params: { locale, genre: props.genre.toLowerCase() } })
 }
 
 onMounted(() => {
