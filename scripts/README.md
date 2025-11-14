@@ -2,7 +2,7 @@
 
 ## Brand Asset Generator
 
-Generate professional logo, icons, and other brand assets using OpenAI's DALL-E 3.
+Generate professional logo, icons, and other brand assets using OpenAI's gpt-image-1 (latest image model).
 
 ### Prerequisites
 
@@ -12,10 +12,14 @@ Generate professional logo, icons, and other brand assets using OpenAI's DALL-E 
 ### Usage
 
 ```bash
-# Set your OpenAI API key
-export OPENAI_API_KEY=your-api-key-here
+# Option 1: Use .env file (already configured)
+npm run generate:branding
 
-# Or use it inline
+# Option 2: Set environment variable
+export OPENAI_API_KEY=your-api-key-here
+npm run generate:branding
+
+# Option 3: Inline
 OPENAI_API_KEY=your-api-key npm run generate:branding
 ```
 
@@ -36,9 +40,8 @@ The script will generate the following assets in the `public/` directory:
 
 ### Cost Estimate
 
-- DALL-E 3 HD Quality: ~$0.08 per image
-- DALL-E 3 Standard Quality: ~$0.04 per image
-- Total cost for all assets: ~$0.50 - $0.80
+- gpt-image-1: Check OpenAI pricing (latest model)
+- Estimated total cost for all assets: ~$0.50 - $1.00
 
 ### Rate Limiting
 

@@ -11,6 +11,7 @@ import OpenAI from 'openai';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -153,11 +154,11 @@ async function generateImage(config) {
   
   try {
     const response = await openai.images.generate({
-      model: 'dall-e-3',
+      model: 'gpt-image-1',
       prompt: config.prompt,
-      size: config.size === '1536x640' ? '1792x1024' : config.size, // DALL-E 3 doesn't support all sizes
+      size: config.size,
       quality: config.quality,
-      style: config.style,
+      background: 'transparent',
       n: 1
     });
 
@@ -267,7 +268,7 @@ async function generateAllAssets() {
   // Create a metadata file
   const metadata = {
     generated_at: new Date().toISOString(),
-    model: 'dall-e-3',
+    model: 'gpt-image-1',
     brand_colors: BRAND_STYLE,
     total_assets: ASSET_PROMPTS.length,
     successful: results.length,
@@ -292,7 +293,7 @@ async function generateAllAssets() {
 # TV Show Dashboard - Brand Assets
 
 Generated: ${new Date().toISOString()}
-Model: DALL-E 3
+Model: gpt-image-1
 
 ## Assets Generated
 
