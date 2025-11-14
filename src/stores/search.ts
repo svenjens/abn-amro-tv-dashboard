@@ -5,9 +5,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { tvMazeAPI } from '@/api'
+import { logger } from '@/utils'
+import { useToast } from '@/composables'
 import type { Show, SearchResult, ApiError } from '@/types'
 
 export const useSearchStore = defineStore('search', () => {
+  const toast = useToast()
+
   // State
   const searchQuery = ref<string>('')
   const searchResults = ref<SearchResult[]>([])
@@ -17,11 +21,11 @@ export const useSearchStore = defineStore('search', () => {
 
   // Getters
   const results = computed(() => searchResults.value.map((result) => result.show))
-  
+
   const hasResults = computed(() => searchResults.value.length > 0)
-  
+
   const isSearching = computed(() => loading.value)
-  
+
   const hasError = computed(() => error.value !== null)
 
   // Actions
@@ -42,7 +46,7 @@ export const useSearchStore = defineStore('search', () => {
     try {
       const results = await tvMazeAPI.searchShows(query)
       searchResults.value = results
-      
+
       // Add to recent searches (avoid duplicates)
       if (!recentSearches.value.includes(query)) {
         recentSearches.value.unshift(query)
@@ -53,11 +57,12 @@ export const useSearchStore = defineStore('search', () => {
         // Save to localStorage
         saveRecentSearches()
       }
-      
-      console.log(`[Search Store] Found ${results.length} results for "${query}"`)
+
+      logger.debug(`[Search Store] Found ${results.length} results for "${query}"`)
     } catch (err) {
       error.value = err as ApiError
-      console.error('[Search Store] Search failed:', err)
+      toast.error('Search failed. Please try again.')
+      logger.error('[Search Store] Search failed:', err)
     } finally {
       loading.value = false
     }
@@ -86,7 +91,7 @@ export const useSearchStore = defineStore('search', () => {
     try {
       localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value))
     } catch (err) {
-      console.error('[Search Store] Failed to save recent searches:', err)
+      logger.error('[Search Store] Failed to save recent searches:', err)
     }
   }
 
@@ -100,7 +105,7 @@ export const useSearchStore = defineStore('search', () => {
         recentSearches.value = JSON.parse(saved)
       }
     } catch (err) {
-      console.error('[Search Store] Failed to load recent searches:', err)
+      logger.error('[Search Store] Failed to load recent searches:', err)
     }
   }
 
@@ -112,7 +117,7 @@ export const useSearchStore = defineStore('search', () => {
     try {
       localStorage.removeItem('recentSearches')
     } catch (err) {
-      console.error('[Search Store] Failed to clear recent searches:', err)
+      logger.error('[Search Store] Failed to clear recent searches:', err)
     }
   }
 
@@ -145,13 +150,13 @@ export const useSearchStore = defineStore('search', () => {
     loading,
     error,
     recentSearches,
-    
+
     // Getters
     results,
     hasResults,
     isSearching,
     hasError,
-    
+
     // Actions
     search,
     clearSearch,
@@ -161,4 +166,3 @@ export const useSearchStore = defineStore('search', () => {
     $reset,
   }
 })
-

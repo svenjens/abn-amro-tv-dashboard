@@ -100,4 +100,3 @@ export interface ApiError {
   status?: number
   details?: unknown
 }
-

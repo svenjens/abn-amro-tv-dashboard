@@ -73,13 +73,9 @@ export function getShowSEO(show: Show): SEOConfig {
     description,
     image: show.image?.original || show.image?.medium,
     type: 'article',
-    keywords: [
-      show.name,
-      'tv show',
-      'series',
-      ...show.genres,
-      show.network?.name,
-    ].filter(Boolean) as string[],
+    keywords: [show.name, 'tv show', 'series', ...show.genres, show.network?.name].filter(
+      Boolean
+    ) as string[],
   }
 }
 
@@ -112,7 +108,9 @@ export function generateShowStructuredData(show: Show) {
   }
 
   // Add or update script tag
-  let script = document.querySelector('script[type="application/ld+json"]') as HTMLScriptElement | null
+  let script = document.querySelector(
+    'script[type="application/ld+json"]'
+  ) as HTMLScriptElement | null
   if (!script) {
     script = document.createElement('script')
     script.type = 'application/ld+json'
@@ -147,4 +145,3 @@ function stripHtml(html: string): string {
   div.innerHTML = html
   return div.textContent || div.innerText || ''
 }
-

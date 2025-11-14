@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     v-motion
     :initial="{ opacity: 0, scale: 0.9 }"
     :visible="{ opacity: 1, scale: 1, transition: { duration: 300, delay: 100 } }"
@@ -38,13 +38,12 @@ const currentLocale = computed(() => locale.value)
 function toggleLanguage() {
   const newLocale = currentLocale.value === 'en' ? 'nl' : 'en'
   setCurrentLocale(newLocale as 'en' | 'nl')
-  
+
   // Update route path to reflect new locale, preserving query params
   const pathWithoutLocale = route.path.replace(/^\/(en|nl)/, '') || '/'
-  router.push({ 
+  router.push({
     path: `/${newLocale}${pathWithoutLocale}`,
-    query: route.query
+    query: route.query,
   })
 }
 </script>
-

@@ -58,4 +58,3 @@ const containerClass = computed(() => {
   return props.fullScreen ? 'max-w-2xl mx-auto mt-8' : ''
 })
 </script>
-

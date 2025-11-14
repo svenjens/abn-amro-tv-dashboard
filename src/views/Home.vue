@@ -1,25 +1,28 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <SkipToContent />
-    
+
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white overflow-hidden" role="banner">
+    <div
+      class="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white overflow-hidden"
+      role="banner"
+    >
       <!-- Hero Background -->
-      <div 
+      <div
         class="absolute inset-0 opacity-10 bg-cover bg-center"
         :style="{ backgroundImage: 'url(/optimized/hero-background.webp)' }"
         aria-hidden="true"
       ></div>
-      
+
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo -->
             <picture>
               <source srcset="/optimized/logo-main.webp" type="image/webp" />
-              <img 
-                src="/optimized/logo-main.png" 
-                alt="TV Show Dashboard Logo" 
+              <img
+                src="/optimized/logo-main.png"
+                alt="TV Show Dashboard Logo"
                 class="h-16 w-16 object-contain"
               />
             </picture>
@@ -32,19 +35,19 @@
           </div>
           <LanguageSwitcher />
         </div>
-        
-            <SearchBar
-              v-model="searchQuery"
-              :placeholder="t('home.searchPlaceholder')"
-              :recent-searches="searchStore.recentSearches"
-              @search="handleSearch"
-              @clear-recent="searchStore.clearRecentSearches()"
-            />
+
+        <SearchBar
+          v-model="searchQuery"
+          :placeholder="t('home.searchPlaceholder')"
+          :recent-searches="searchStore.recentSearches"
+          @search="handleSearch"
+          @clear-recent="searchStore.clearRecentSearches()"
+        />
       </div>
     </div>
 
-        <!-- Main Content -->
-        <main id="main-content" class="max-w-7xl mx-auto py-8 overflow-visible" tabindex="-1">
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-7xl mx-auto py-8 overflow-visible" tabindex="-1">
       <!-- Loading State -->
       <LoadingSpinner
         v-if="showsStore.isLoading"
@@ -65,7 +68,12 @@
       <div v-else-if="showsStore.genres.length > 0" role="region" :aria-label="t('home.title')">
         <div class="px-4 md:px-0 mb-6">
           <p class="text-gray-600">
-            {{ t('home.showsCount', { count: showsStore.showsCount, genres: showsStore.genres.length }) }}
+            {{
+              t('home.showsCount', {
+                count: showsStore.showsCount,
+                genres: showsStore.genres.length,
+              })
+            }}
           </p>
         </div>
 
@@ -81,9 +89,9 @@
       <div v-else class="text-center py-16 px-4" role="status">
         <picture>
           <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-          <img 
-            src="/optimized/empty-state-illustration.png" 
-            alt="" 
+          <img
+            src="/optimized/empty-state-illustration.png"
+            alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
           />
@@ -120,7 +128,8 @@ const searchQuery = ref('')
 // SEO
 useSEO({
   title: 'TV Show Dashboard - Discover thousands of TV shows',
-  description: 'Explore and discover thousands of TV shows organized by genre. Search, browse, and find detailed information about your favorite series.',
+  description:
+    'Explore and discover thousands of TV shows organized by genre. Search, browse, and find detailed information about your favorite series.',
   keywords: ['tv shows', 'series', 'entertainment', 'genres', 'streaming'],
 })
 
@@ -135,4 +144,3 @@ onMounted(() => {
   showsStore.fetchAllShows()
 })
 </script>
-

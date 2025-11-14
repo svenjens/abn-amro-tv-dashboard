@@ -43,4 +43,3 @@ describe('RatingBadge', () => {
     expect(wrapper.text()).toContain('8.6')
   })
 })
-

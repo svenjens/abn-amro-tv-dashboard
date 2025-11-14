@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <SkipToContent />
-    
+
     <!-- Header -->
     <div class="bg-gradient-to-r from-primary-600 to-primary-800 text-white" role="banner">
       <div class="max-w-7xl mx-auto px-4 py-12">
@@ -11,7 +11,13 @@
             :aria-label="t('navigation.back')"
             @click="router.back()"
           >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -21,13 +27,19 @@
             </svg>
             {{ t('navigation.back') }}
           </button>
-          
+
           <button
             class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-primary-800 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
             :aria-label="t('navigation.home')"
             @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
           >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -38,7 +50,7 @@
             {{ t('navigation.home') }}
           </button>
         </div>
-        
+
         <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ genreName }}</h1>
         <p class="text-lg text-primary-100">
           {{ t('genre.showsInGenre', { count: genreShows.length }) }}
@@ -56,21 +68,20 @@
       />
 
       <!-- Shows Grid -->
-      <div v-else-if="genreShows.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr">
-        <ShowCard
-          v-for="show in genreShows"
-          :key="show.id"
-          :show="show"
-        />
+      <div
+        v-else-if="genreShows.length > 0"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
+      >
+        <ShowCard v-for="show in genreShows" :key="show.id" :show="show" />
       </div>
 
       <!-- Empty State -->
       <div v-else class="text-center py-16" role="status">
         <picture>
           <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-          <img 
-            src="/optimized/empty-state-illustration.png" 
-            alt="" 
+          <img
+            src="/optimized/empty-state-illustration.png"
+            alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
           />
@@ -117,4 +128,3 @@ onMounted(() => {
   }
 })
 </script>
-

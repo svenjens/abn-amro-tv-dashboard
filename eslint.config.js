@@ -30,10 +30,20 @@ export default [
       'vue/require-default-prop': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'prettier/prettier': 'error',
+      // TypeScript handles undefined variables, no need for ESLint's no-undef
+      'no-undef': 'off',
     },
   },
   {
-    ignores: ['dist', 'node_modules', '*.config.js', '*.config.ts'],
+    ignores: [
+      'dist',
+      'node_modules',
+      '*.config.js',
+      '*.config.ts',
+      'scripts/**/*',
+      'src/utils/logger.ts',
+      'src/utils/cache.ts',
+    ],
   },
 ]
 

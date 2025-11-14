@@ -1,9 +1,9 @@
 <template>
-  <div 
+  <div
     v-motion
     :initial="{ opacity: 0, scale: 0.8 }"
     :enter="{ opacity: 1, scale: 1, transition: { duration: 300 } }"
-    class="flex items-center justify-center" 
+    class="flex items-center justify-center"
     :class="containerClass"
   >
     <div
@@ -40,4 +40,3 @@ const spinnerClass = computed(() => {
   return props.color
 })
 </script>
-

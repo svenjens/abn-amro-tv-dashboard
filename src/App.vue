@@ -5,15 +5,19 @@
         <component :is="Component" />
       </transition>
     </router-view>
-    
+
     <!-- Cache Debug Component (only in dev mode or with ?debug param) -->
     <CacheDebug v-if="showDebug" />
+
+    <!-- Toast Notifications -->
+    <ToastNotification />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import CacheDebug from '@/components/CacheDebug.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
 
 const showDebug = ref(false)
 

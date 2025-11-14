@@ -40,4 +40,3 @@ const remainingCount = computed(() => {
   return props.genres.length - props.maxDisplay
 })
 </script>
-

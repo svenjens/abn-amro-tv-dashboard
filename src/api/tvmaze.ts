@@ -1,13 +1,13 @@
 /**
  * TVMaze API Service
- * 
+ *
  * Provides methods to interact with the TVMaze API
  * Documentation: https://www.tvmaze.com/api
  */
 
 import axios, { type AxiosInstance, AxiosError } from 'axios'
 import type { Show, SearchResult, ApiError } from '@/types'
-import { apiCache, searchCache, showCache } from '@/utils/cache'
+import { apiCache, searchCache, showCache, logger } from '@/utils'
 
 const BASE_URL = 'https://api.tvmaze.com'
 
@@ -26,7 +26,7 @@ class TVMazeAPI {
     // Request interceptor for logging
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
+        logger.debug(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
         return config
       },
       (error) => {
@@ -43,7 +43,7 @@ class TVMazeAPI {
           status: error.response?.status,
           details: error.response?.data,
         }
-        console.error('[API Error]', apiError)
+        logger.error('[API Error]', apiError)
         return Promise.reject(apiError)
       }
     )
@@ -55,11 +55,11 @@ class TVMazeAPI {
    */
   async fetchAllShows(): Promise<Show[]> {
     const cacheKey = 'all-shows'
-    
+
     // Check cache
     const cached = apiCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as Show[]
     }
 
@@ -80,16 +80,16 @@ class TVMazeAPI {
   async fetchShowById(id: number, embed?: string[]): Promise<Show> {
     const embedParam = embed ? `-${embed.join('-')}` : ''
     const cacheKey = `show-${id}${embedParam}`
-    
+
     // Check cache
     const cached = showCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as Show
     }
 
     const embedQuery = embed ? `?embed[]=${embed.join('&embed[]=')}` : ''
-    
+
     try {
       const response = await this.client.get<Show>(`/shows/${id}${embedQuery}`)
       showCache.set(cacheKey, response.data)
@@ -109,11 +109,11 @@ class TVMazeAPI {
     }
 
     const cacheKey = `search-${query.toLowerCase()}`
-    
+
     // Check cache
     const cached = searchCache.get(cacheKey)
     if (cached) {
-      console.log(`[API Cache] Hit for ${cacheKey}`)
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
       return cached as SearchResult[]
     }
 
@@ -135,7 +135,7 @@ class TVMazeAPI {
     apiCache.clear()
     searchCache.clear()
     showCache.clear()
-    console.log('[API Cache] All caches cleared')
+    logger.debug('[API Cache] All caches cleared')
   }
 
   /**
@@ -156,8 +156,8 @@ class TVMazeAPI {
     const apiPruned = apiCache.prune()
     const searchPruned = searchCache.prune()
     const showPruned = showCache.prune()
-    
-    console.log(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
+
+    logger.debug(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
   }
 
   /**
@@ -182,4 +182,3 @@ export const tvMazeAPI = new TVMazeAPI()
 
 // Export class for testing purposes
 export { TVMazeAPI }
-

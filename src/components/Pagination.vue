@@ -118,4 +118,3 @@ const endItem = computed(() => {
   return Math.min(props.currentPage * props.itemsPerPage, props.totalItems)
 })
 </script>
-

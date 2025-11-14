@@ -1,6 +1,6 @@
 /**
  * Advanced Cache Utility
- * 
+ *
  * Features:
  * - In-memory caching for fast access
  * - LocalStorage persistence for cross-session caching
@@ -61,7 +61,7 @@ export class Cache<T = unknown> {
    */
   get(key: string): T | null {
     const fullKey = this.getFullKey(key)
-    
+
     // Try memory cache first
     let entry: CacheEntry<T> | undefined | null = this.memory.get(fullKey)
 
@@ -133,7 +133,7 @@ export class Cache<T = unknown> {
    */
   delete(key: string): boolean {
     const fullKey = this.getFullKey(key)
-    
+
     // Delete from memory
     const deleted = this.memory.delete(fullKey)
 
@@ -402,4 +402,3 @@ export const showCache = new Cache({
   maxSize: 100,
   persistent: true,
 })
-

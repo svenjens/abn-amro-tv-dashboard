@@ -14,10 +14,7 @@
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
         @error="handleImageError"
       />
-      <div
-        v-else
-        class="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400"
-      >
+      <div v-else class="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400">
         <svg
           class="h-16 w-16"
           fill="currentColor"
@@ -31,7 +28,7 @@
           />
         </svg>
       </div>
-      
+
       <!-- Rating Badge Overlay -->
       <div v-if="show.rating.average" class="absolute top-2 right-2">
         <RatingBadge :rating="show.rating.average" />
@@ -39,15 +36,21 @@
     </div>
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
-      <h3 class="text-lg font-semibold text-gray-900 line-clamp-2 mb-3 group-hover/card:text-primary-600 transition-colors min-h-[3.5rem]">
+      <h3
+        class="text-lg font-semibold text-gray-900 line-clamp-2 mb-3 group-hover/card:text-primary-600 transition-colors min-h-[3.5rem]"
+      >
         {{ show.name }}
       </h3>
-      
+
       <div class="mt-auto space-y-2">
         <div class="min-h-[2rem]">
-          <GenreTags v-if="show.genres && show.genres.length > 0" :genres="show.genres" :max-display="2" />
+          <GenreTags
+            v-if="show.genres && show.genres.length > 0"
+            :genres="show.genres"
+            :max-display="2"
+          />
         </div>
-        
+
         <div v-if="show.premiered" class="text-sm text-gray-500">
           {{ premieredYear }}
         </div>
@@ -108,4 +111,3 @@ onMounted(() => {
   }
 })
 </script>
-

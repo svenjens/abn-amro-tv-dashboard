@@ -4,6 +4,7 @@
 
 import { ref, type Ref } from 'vue'
 import type { ApiError } from '@/types'
+import { logger } from '@/utils'
 
 export interface UseApiReturn<T> {
   data: Ref<T | null>
@@ -18,10 +19,7 @@ export interface UseApiReturn<T> {
  * @param immediate - Execute immediately on mount (default: true)
  * @returns Object with data, loading, error, and execute function
  */
-export function useApi<T>(
-  apiCall: () => Promise<T>,
-  immediate: boolean = true
-): UseApiReturn<T> {
+export function useApi<T>(apiCall: () => Promise<T>, immediate: boolean = true): UseApiReturn<T> {
   const data = ref<T | null>(null) as Ref<T | null>
   const loading = ref<boolean>(false)
   const error = ref<ApiError | null>(null)
@@ -35,7 +33,7 @@ export function useApi<T>(
       data.value = result
     } catch (err) {
       error.value = err as ApiError
-      console.error('API call failed:', err)
+      logger.error('API call failed:', err)
     } finally {
       loading.value = false
     }
@@ -52,4 +50,3 @@ export function useApi<T>(
     execute,
   }
 }
-

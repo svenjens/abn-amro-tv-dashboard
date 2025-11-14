@@ -6,10 +6,15 @@
         <div class="flex items-center gap-4 mb-4">
           <button
             class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
             aria-label="Go back"
+            @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
           >
-            <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="h-6 w-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -52,21 +57,21 @@
         <div class="mb-6">
           <h2 class="text-xl font-semibold text-gray-900">
             <span v-if="searchStore.hasResults">
-              Found {{ searchStore.results.length }} result{{ searchStore.results.length === 1 ? '' : 's' }} for "{{ searchQuery }}"
+              Found {{ searchStore.results.length }} result{{
+                searchStore.results.length === 1 ? '' : 's'
+              }}
+              for "{{ searchQuery }}"
             </span>
-            <span v-else>
-              No results found for "{{ searchQuery }}"
-            </span>
+            <span v-else> No results found for "{{ searchQuery }}" </span>
           </h2>
         </div>
 
         <!-- Results Grid -->
-        <div v-if="searchStore.hasResults" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr">
-          <ShowCard
-            v-for="show in searchStore.results"
-            :key="show.id"
-            :show="show"
-          />
+        <div
+          v-if="searchStore.hasResults"
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
+        >
+          <ShowCard v-for="show in searchStore.results" :key="show.id" :show="show" />
         </div>
 
         <!-- Empty State -->
@@ -95,9 +100,9 @@
       <div v-else class="text-center py-16">
         <picture>
           <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-          <img 
-            src="/optimized/empty-state-illustration.png" 
-            alt="" 
+          <img
+            src="/optimized/empty-state-illustration.png"
+            alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
           />
@@ -130,7 +135,7 @@ const searchQuery = ref('')
 
 async function handleSearch(query: string) {
   searchQuery.value = query
-  
+
   // Update URL query parameter
   if (query) {
     const locale = route.params.locale || 'en'
@@ -161,4 +166,3 @@ onMounted(() => {
   }
 })
 </script>
-
