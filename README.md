@@ -454,22 +454,173 @@ Language preference is:
 
 ## ♿ Accessibility
 
-The application is built with accessibility in mind:
+The application is built with accessibility as a core principle, following WCAG 2.1 Level AA guidelines.
 
-- **WCAG 2.1 AA compliant**
-- **Keyboard navigation**: Full keyboard support with visible focus rings
-- **Screen readers**: Proper ARIA labels, roles, and live regions
-- **Semantic HTML**: Correct use of HTML5 semantic elements
-- **Skip links**: Skip to main content for keyboard users
-- **Color contrast**: Meets WCAG AA standards
-- **Focus management**: Logical tab order throughout the application
+### Implemented Accessibility Features
+
+#### 1. **Keyboard Navigation**
+All interactive elements are fully accessible via keyboard:
+- **Tab**: Navigate to next focusable element
+- **Shift + Tab**: Navigate to previous focusable element
+- **Enter/Space**: Activate buttons and links
+- **Arrow keys**: Scroll through horizontal lists
+- **Escape**: Close modals and overlays
+
+Visible focus indicators with clear outlines:
+```css
+focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2
+```
+
+#### 2. **Skip to Content Link**
+A "Skip to main content" link appears when pressing Tab, allowing keyboard users to bypass navigation:
+```vue
+<SkipToContent />
+<!-- Becomes visible on focus, jumps to #main-content -->
+```
+
+#### 3. **ARIA Labels and Roles**
+Comprehensive ARIA implementation throughout:
+
+**Landmarks:**
+```html
+<div role="banner">        <!-- Header/Hero section -->
+<main id="main-content">   <!-- Main content area -->
+<nav aria-label="Pagination navigation">  <!-- Navigation -->
+<section aria-label="Related Shows">      <!-- Content sections -->
+```
+
+**Interactive Elements:**
+```html
+<button aria-label="Previous page">
+<button aria-label="Toggle language">
+<a aria-label="Official Website - Opens in new window">
+<div role="status" aria-live="polite">  <!-- For loading states -->
+```
+
+**Form Controls:**
+```html
+<input 
+  type="search" 
+  aria-label="Search TV shows"
+  aria-describedby="search-help"
+/>
+```
+
+#### 4. **Semantic HTML**
+Proper use of HTML5 semantic elements:
+- `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`
+- `<h1>` through `<h6>` in logical hierarchy
+- `<dl>`, `<dt>`, `<dd>` for definition lists (show details)
+- `<ul>`, `<ol>`, `<li>` for lists
+- `<button>` for actions, `<a>` for navigation
+
+#### 5. **Screen Reader Support**
+- All images have descriptive `alt` attributes
+- Decorative images use `aria-hidden="true"`
+- Icon-only buttons have `aria-label`
+- Status messages use `aria-live` regions
+- Loading states announced to screen readers
+
+Example:
+```vue
+<img 
+  :src="show.image" 
+  :alt="`${show.name} poster`"
+  loading="lazy"
+/>
+
+<svg aria-hidden="true">  <!-- Decorative icon -->
+  <path d="..." />
+</svg>
+```
+
+#### 6. **Color Contrast**
+All text meets WCAG AA standards:
+- **Normal text**: Minimum 4.5:1 contrast ratio
+- **Large text**: Minimum 3:1 contrast ratio
+- **Interactive elements**: Clear visual states (hover, focus, active)
+
+#### 7. **Form Accessibility**
+- Labels associated with inputs
+- Error messages linked with `aria-describedby`
+- Required fields marked with `aria-required`
+- Invalid states indicated with `aria-invalid`
+
+#### 8. **Responsive Focus Management**
+- Focus moves logically through the page
+- No keyboard traps
+- Focus returns to trigger element when closing modals
+- `tabindex="-1"` on main content for skip link target
 
 ### Testing Accessibility
+
+#### Automated Testing
 ```bash
-# Use axe DevTools or WAVE browser extension
-# Test with keyboard only (Tab, Enter, Space, Arrow keys)
-# Test with screen readers (NVDA, JAWS, VoiceOver)
+# Install axe DevTools browser extension
+# Or use pa11y CLI
+npm install -g pa11y
+pa11y http://localhost:5173/en/
+
+# Use Lighthouse in Chrome DevTools
+# Accessibility score should be 90+
 ```
+
+#### Manual Testing Checklist
+
+**Keyboard Navigation:**
+- [ ] Can navigate entire site with keyboard only
+- [ ] All interactive elements are reachable
+- [ ] Focus indicators are clearly visible
+- [ ] No keyboard traps
+- [ ] Tab order is logical
+
+**Screen Readers:**
+- [ ] Test with NVDA (Windows)
+- [ ] Test with JAWS (Windows)  
+- [ ] Test with VoiceOver (macOS/iOS)
+- [ ] Test with TalkBack (Android)
+- [ ] All content is announced correctly
+- [ ] Landmarks are properly identified
+
+**Visual Testing:**
+- [ ] Zoom to 200% - content still readable
+- [ ] High contrast mode works
+- [ ] No content loss at different zoom levels
+- [ ] Focus indicators visible in high contrast mode
+
+**Tools to Use:**
+- [axe DevTools](https://www.deque.com/axe/devtools/) - Browser extension
+- [WAVE](https://wave.webaim.org/) - Web accessibility evaluation tool
+- [Lighthouse](https://developers.google.com/web/tools/lighthouse) - Built into Chrome
+- [Pa11y](https://pa11y.org/) - Automated testing
+- [Screen Reader Testing](https://www.nvaccess.org/) - NVDA for Windows
+
+### Accessibility Keyboard Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Skip to main content | Tab (from top of page) |
+| Navigate forward | Tab |
+| Navigate backward | Shift + Tab |
+| Activate link/button | Enter or Space |
+| Scroll horizontally | Arrow keys (in carousel) |
+| Search | Focus search box + type |
+| Change language | Tab to language switcher + Enter |
+
+### Known Accessibility Considerations
+
+1. **Horizontal Scrolling**: On desktop, genre rows use horizontal scrolling which requires arrow key navigation or scroll wheel
+2. **Image Loading**: Lazy-loaded images announce when loaded
+3. **Dynamic Content**: Search results and loading states use aria-live regions
+4. **Third-party Content**: TVMaze API images may not always have optimal alt text
+
+### Continuous Improvement
+
+We welcome feedback on accessibility! If you encounter any barriers, please:
+1. Open an issue on GitHub
+2. Describe the barrier and context
+3. Include your assistive technology (if applicable)
+4. Suggest improvements
 
 ## 🤝 Contributing
 
@@ -491,7 +642,3 @@ For questions or issues, please refer to the TVMaze API documentation or contact
 
 - **GitHub Repository**: https://github.com/svenjens/abn-amro-tv-dashboard
 - **TVMaze API Documentation**: http://www.tvmaze.com/api
-
----
-
-**Built with ❤️ using Vue 3, TypeScript, Tailwind CSS, and Vue I18n for ABN AMRO**
