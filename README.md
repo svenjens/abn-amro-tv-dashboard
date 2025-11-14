@@ -672,13 +672,23 @@ We welcome feedback on accessibility! If you encounter any barriers, please:
 
 ## 🤝 Contributing
 
-This project follows standard Git workflow:
+Contributions are welcome! Please read our [Contributing Guidelines](./.github/CONTRIBUTING.md) for details on:
 
-1. Create a feature branch
-2. Make your changes
-3. Write/update tests
-4. Ensure all tests pass
-5. Create a pull request
+- Development workflow
+- Pull request process
+- Branch protection rules
+- Code style guidelines
+- Testing requirements
+- Commit message conventions
+
+Quick start for contributors:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with clear, focused commits
+4. Follow conventional commit messages
+5. Ensure all tests pass and build works
+6. Push to your fork and submit a pull request
 
 
 

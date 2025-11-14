@@ -1,9 +1,9 @@
 /**
  * Image Optimization Script
- * 
+ *
  * Optimizes PNG images and generates WebP versions for better web performance
  * Usage: node scripts/optimize-images.js
- * 
+ *
  * Features:
  * - Converts PNG to optimized WebP
  * - Generates multiple sizes for responsive images
@@ -11,15 +11,15 @@
  * - Creates fallback optimized PNGs
  */
 
-import sharp from 'sharp';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import sharp from 'sharp'
+import fs from 'fs/promises'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-const PUBLIC_DIR = path.join(__dirname, '..', 'public');
+const PUBLIC_DIR = path.join(__dirname, '..', 'public')
 
 // Image optimization configurations
 const IMAGE_CONFIGS = {
@@ -28,125 +28,116 @@ const IMAGE_CONFIGS = {
     { width: 512, suffix: '', quality: 90 },
     { width: 256, suffix: '-256', quality: 90 },
     { width: 128, suffix: '-128', quality: 90 },
-    { width: 64, suffix: '-64', quality: 85 }
+    { width: 64, suffix: '-64', quality: 85 },
   ],
   'logo-full.png': [
     { width: 1536, suffix: '', quality: 90 },
     { width: 768, suffix: '-768', quality: 85 },
-    { width: 512, suffix: '-512', quality: 85 }
+    { width: 512, suffix: '-512', quality: 85 },
   ],
   'hero-background.png': [
     { width: 1920, suffix: '', quality: 80 },
     { width: 1280, suffix: '-1280', quality: 75 },
-    { width: 768, suffix: '-768', quality: 70 }
+    { width: 768, suffix: '-768', quality: 70 },
   ],
-  'og-image.png': [
-    { width: 1200, suffix: '', quality: 85 }
-  ],
+  'og-image.png': [{ width: 1200, suffix: '', quality: 85 }],
   'favicon.png': [
     { width: 512, suffix: '-512', quality: 90 },
     { width: 192, suffix: '-192', quality: 90 },
     { width: 96, suffix: '-96', quality: 90 },
     { width: 48, suffix: '-48', quality: 85 },
     { width: 32, suffix: '-32', quality: 85 },
-    { width: 16, suffix: '-16', quality: 85 }
+    { width: 16, suffix: '-16', quality: 85 },
   ],
-  'icon-192.png': [
-    { width: 192, suffix: '', quality: 90 }
-  ],
-  'icon-512.png': [
-    { width: 512, suffix: '', quality: 90 }
-  ],
-  'apple-touch-icon.png': [
-    { width: 180, suffix: '', quality: 90 }
-  ],
+  'icon-192.png': [{ width: 192, suffix: '', quality: 90 }],
+  'icon-512.png': [{ width: 512, suffix: '', quality: 90 }],
+  'apple-touch-icon.png': [{ width: 180, suffix: '', quality: 90 }],
   'loading-animation.png': [
     { width: 128, suffix: '', quality: 85 },
-    { width: 64, suffix: '-64', quality: 80 }
+    { width: 64, suffix: '-64', quality: 80 },
   ],
   'empty-state-illustration.png': [
     { width: 512, suffix: '', quality: 85 },
-    { width: 256, suffix: '-256', quality: 80 }
-  ]
-};
+    { width: 256, suffix: '-256', quality: 80 },
+  ],
+}
 
 /**
  * Optimize a single image variant
  */
 async function optimizeImage(inputPath, outputPath, config) {
-  const image = sharp(inputPath);
-  const metadata = await image.metadata();
+  const image = sharp(inputPath)
+  const metadata = await image.metadata()
 
   // Resize if needed
-  let pipeline = image;
+  let pipeline = image
   if (config.width && metadata.width > config.width) {
     pipeline = pipeline.resize(config.width, null, {
       fit: 'inside',
-      withoutEnlargement: true
-    });
+      withoutEnlargement: true,
+    })
   }
 
   // Generate WebP version
-  const webpPath = outputPath.replace(/\.png$/, '.webp');
-  await pipeline
-    .clone()
-    .webp({ quality: config.quality, effort: 6 })
-    .toFile(webpPath);
+  const webpPath = outputPath.replace(/\.png$/, '.webp')
+  await pipeline.clone().webp({ quality: config.quality, effort: 6 }).toFile(webpPath)
 
-  const webpStats = await fs.stat(webpPath);
+  const webpStats = await fs.stat(webpPath)
 
   // Generate optimized PNG version
   await pipeline
     .clone()
     .png({ quality: config.quality, compressionLevel: 9, effort: 10 })
-    .toFile(outputPath);
+    .toFile(outputPath)
 
-  const pngStats = await fs.stat(outputPath);
+  const pngStats = await fs.stat(outputPath)
 
   return {
     webp: { path: webpPath, size: webpStats.size },
-    png: { path: outputPath, size: pngStats.size }
-  };
+    png: { path: outputPath, size: pngStats.size },
+  }
 }
 
 /**
  * Process all variants of an image
  */
 async function processImage(filename, configs) {
-  const inputPath = path.join(PUBLIC_DIR, filename);
-  
+  const inputPath = path.join(PUBLIC_DIR, filename)
+
   try {
-    await fs.access(inputPath);
+    await fs.access(inputPath)
   } catch {
-    console.log(`   ⚠️  ${filename} not found, skipping...`);
-    return { processed: 0, skipped: 1 };
+    console.log(`   ⚠️  ${filename} not found, skipping...`)
+    return { processed: 0, skipped: 1 }
   }
 
-  const baseName = filename.replace(/\.png$/, '');
-  const results = [];
+  const baseName = filename.replace(/\.png$/, '')
+  const results = []
 
-  console.log(`\n📸 Processing: ${filename}`);
+  console.log(`\n📸 Processing: ${filename}`)
 
   for (const config of configs) {
-    const outputFilename = `${baseName}${config.suffix}.png`;
-    const outputPath = path.join(PUBLIC_DIR, 'optimized', outputFilename);
+    const outputFilename = `${baseName}${config.suffix}.png`
+    const outputPath = path.join(PUBLIC_DIR, 'optimized', outputFilename)
 
     try {
-      const result = await optimizeImage(inputPath, outputPath, config);
-      
-      const webpSizeKB = (result.webp.size / 1024).toFixed(2);
-      const pngSizeKB = (result.png.size / 1024).toFixed(2);
-      const savings = ((1 - result.webp.size / result.png.size) * 100).toFixed(1);
+      const result = await optimizeImage(inputPath, outputPath, config)
 
-      console.log(`   ✅ ${config.width}px: WebP ${webpSizeKB}KB | PNG ${pngSizeKB}KB (${savings}% smaller)`);
-      
-      results.push(result);
+      const webpSizeKB = (result.webp.size / 1024).toFixed(2)
+      const pngSizeKB = (result.png.size / 1024).toFixed(2)
+      const savings = ((1 - result.webp.size / result.png.size) * 100).toFixed(1)
+
+      console.log(
+        `   ✅ ${config.width}px: WebP ${webpSizeKB}KB | PNG ${pngSizeKB}KB (${savings}% smaller)`
+      )
+
+      results.push(result)
     } catch (error) {
-      console.error(`   ❌ Failed to optimize ${outputFilename}:`, error.message);
+      console.error(`   ❌ Failed to optimize ${outputFilename}:`, error.message)
     }
   }
 
-  return { processed: results.length, skipped: 0 };
+  return { processed: results.length, skipped: 0 }
 }
 
 /**
@@ -272,70 +263,66 @@ const { webpPath, pngPath } = useOptimizedImage('/optimized/logo-main.png')
 All optimized images are in: \`public/optimized/\`
 
 Original images remain in: \`public/\`
-`;
+`
 }
 
 /**
  * Main optimization process
  */
 async function optimizeAllImages() {
-  console.log('🎨 Image Optimization Tool');
-  console.log('═'.repeat(60));
-  console.log('\n📁 Processing images from:', PUBLIC_DIR);
-  console.log('📦 Output directory: public/optimized/\n');
+  console.log('🎨 Image Optimization Tool')
+  console.log('═'.repeat(60))
+  console.log('\n📁 Processing images from:', PUBLIC_DIR)
+  console.log('📦 Output directory: public/optimized/\n')
 
   // Create optimized directory
-  const optimizedDir = path.join(PUBLIC_DIR, 'optimized');
-  await fs.mkdir(optimizedDir, { recursive: true });
+  const optimizedDir = path.join(PUBLIC_DIR, 'optimized')
+  await fs.mkdir(optimizedDir, { recursive: true })
 
-  let totalProcessed = 0;
-  let totalSkipped = 0;
-  const startTime = Date.now();
+  let totalProcessed = 0
+  let totalSkipped = 0
+  const startTime = Date.now()
 
   // Process all images
   for (const [filename, configs] of Object.entries(IMAGE_CONFIGS)) {
-    const result = await processImage(filename, configs);
-    totalProcessed += result.processed;
-    totalSkipped += result.skipped;
+    const result = await processImage(filename, configs)
+    totalProcessed += result.processed
+    totalSkipped += result.skipped
   }
 
-  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2)
 
   // Calculate statistics
   const stats = {
     totalProcessed,
     totalSkipped,
     duration,
-    averageSavings: 30 // WebP typically saves 30% over PNG
-  };
+    averageSavings: 30, // WebP typically saves 30% over PNG
+  }
 
   // Generate usage guide
-  const usageGuide = generateUsageGuide(stats);
-  await fs.writeFile(
-    path.join(optimizedDir, 'USAGE.md'),
-    usageGuide
-  );
+  const usageGuide = generateUsageGuide(stats)
+  await fs.writeFile(path.join(optimizedDir, 'USAGE.md'), usageGuide)
 
   // Summary
-  console.log('\n' + '═'.repeat(60));
-  console.log('✨ Image Optimization Complete!');
-  console.log('═'.repeat(60));
-  console.log(`\n📊 Results:`);
-  console.log(`   • Images processed: ${totalProcessed}`);
-  console.log(`   • Images skipped: ${totalSkipped}`);
-  console.log(`   • Total variants: ${totalProcessed * 2} (WebP + PNG)`);
-  console.log(`   • Duration: ${duration}s`);
-  console.log(`\n💾 Storage:`);
-  console.log(`   • WebP typically 25-35% smaller than PNG`);
-  console.log(`   • Average quality: 80-90%`);
-  console.log(`\n📂 Output: public/optimized/`);
-  console.log(`📝 Usage guide: public/optimized/USAGE.md`);
-  console.log('\n🚀 Ready to use optimized images!\n');
+  console.log('\n' + '═'.repeat(60))
+  console.log('✨ Image Optimization Complete!')
+  console.log('═'.repeat(60))
+  console.log(`\n📊 Results:`)
+  console.log(`   • Images processed: ${totalProcessed}`)
+  console.log(`   • Images skipped: ${totalSkipped}`)
+  console.log(`   • Total variants: ${totalProcessed * 2} (WebP + PNG)`)
+  console.log(`   • Duration: ${duration}s`)
+  console.log(`\n💾 Storage:`)
+  console.log(`   • WebP typically 25-35% smaller than PNG`)
+  console.log(`   • Average quality: 80-90%`)
+  console.log(`\n📂 Output: public/optimized/`)
+  console.log(`📝 Usage guide: public/optimized/USAGE.md`)
+  console.log('\n🚀 Ready to use optimized images!\n')
 }
 
 // Run the script
-optimizeAllImages().catch(error => {
-  console.error('\n❌ Fatal error:', error);
-  process.exit(1);
-});
-
+optimizeAllImages().catch((error) => {
+  console.error('\n❌ Fatal error:', error)
+  process.exit(1)
+})

@@ -112,9 +112,8 @@ export function formatSchedule(schedule: Show['schedule']): string {
   if (!schedule.days || schedule.days.length === 0) {
     return 'Schedule not available'
   }
-  
+
   const days = schedule.days.join(', ')
   const time = schedule.time || 'Time TBA'
   return `${days} at ${time}`
 }
-

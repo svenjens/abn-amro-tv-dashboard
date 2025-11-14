@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <SkipToContent />
-    
+
     <!-- Loading State -->
     <LoadingSpinner
       v-if="loading"
@@ -44,7 +44,13 @@
               :aria-label="t('navigation.back')"
               @click="router.back()"
             >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -54,13 +60,21 @@
               </svg>
               {{ t('navigation.back') }}
             </button>
-            
+
             <button
               class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
               :aria-label="t('navigation.home')"
-              @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
+              @click="
+                router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })
+              "
             >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -85,7 +99,7 @@
 
             <!-- Info -->
             <div class="flex-1">
-              <h1 class="text-4xl md:text-5xl font-bold mb-4" id="show-title">{{ show.name }}</h1>
+              <h1 id="show-title" class="text-4xl md:text-5xl font-bold mb-4">{{ show.name }}</h1>
 
               <div class="flex flex-wrap items-center gap-4 mb-6">
                 <RatingBadge v-if="show.rating.average" :rating="show.rating.average" />
@@ -108,11 +122,7 @@
                   <dd>
                     <span
                       class="px-2 py-1 rounded text-sm"
-                      :class="
-                        show.status === 'Running'
-                          ? 'bg-green-600'
-                          : 'bg-gray-600'
-                      "
+                      :class="show.status === 'Running' ? 'bg-green-600' : 'bg-gray-600'"
                     >
                       {{ show.status }}
                     </span>
@@ -144,7 +154,13 @@
                   :aria-label="`${t('show.officialWebsite')} - ${t('accessibility.externalLink')}`"
                 >
                   {{ t('show.officialWebsite') }}
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -163,14 +179,27 @@
       <main id="main-content" class="max-w-7xl mx-auto px-4 py-12" tabindex="-1">
         <article v-if="show.summary" class="mb-12">
           <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ t('show.summary') }}</h2>
-          <div class="prose prose-lg max-w-none text-gray-700" v-html="show.summary" role="region" :aria-labelledby="'show-title'"></div>
+          <div
+            class="prose prose-lg max-w-none text-gray-700"
+            role="region"
+            :aria-labelledby="'show-title'"
+            v-html="show.summary"
+          ></div>
         </article>
 
         <!-- Related Shows -->
         <section v-if="relatedShows.length > 0" class="mt-12" :aria-label="t('show.relatedShows')">
           <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ t('show.relatedShows') }}</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-fr" role="list">
-            <ShowCard v-for="relatedShow in relatedShows" :key="relatedShow.id" :show="relatedShow" role="listitem" />
+          <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-fr"
+            role="list"
+          >
+            <ShowCard
+              v-for="relatedShow in relatedShows"
+              :key="relatedShow.id"
+              :show="relatedShow"
+              role="listitem"
+            />
           </div>
         </section>
       </main>
@@ -181,8 +210,8 @@
       <div class="text-center">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ t('show.notFound') }}</h2>
         <p class="text-gray-600 mb-6">{{ t('show.notFoundMessage') }}</p>
-        <button 
-          class="btn-primary focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2" 
+        <button
+          class="btn-primary focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
           @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
         >
           {{ t('show.goHome') }}
@@ -223,15 +252,19 @@ const relatedShows = computed(() => {
 })
 
 // Update SEO when show changes
-watch(show, (newShow) => {
-  if (newShow) {
-    const seoConfig = getShowSEO(newShow)
-    // Update with show-specific config
-    useSEO(seoConfig)
-    // Add structured data
-    generateShowStructuredData(newShow)
-  }
-}, { immediate: false })
+watch(
+  show,
+  (newShow) => {
+    if (newShow) {
+      const seoConfig = getShowSEO(newShow)
+      // Update with show-specific config
+      useSEO(seoConfig)
+      // Add structured data
+      generateShowStructuredData(newShow)
+    }
+  },
+  { immediate: false }
+)
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -282,4 +315,3 @@ watch(
   }
 )
 </script>
-

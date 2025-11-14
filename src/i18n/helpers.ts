@@ -13,9 +13,7 @@ export function getCurrentLocale(): string {
   }
   const locale = i18nGlobal.locale
   // Handle both ref and direct string
-  return typeof locale === 'object' && 'value' in locale
-    ? String(locale.value)
-    : String(locale)
+  return typeof locale === 'object' && 'value' in locale ? String(locale.value) : String(locale)
 }
 
 /**
@@ -30,4 +28,3 @@ export function setCurrentLocale(newLocale: 'en' | 'nl'): void {
     locale.value = newLocale
   }
 }
-

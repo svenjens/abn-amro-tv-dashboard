@@ -18,10 +18,7 @@ export interface UseApiReturn<T> {
  * @param immediate - Execute immediately on mount (default: true)
  * @returns Object with data, loading, error, and execute function
  */
-export function useApi<T>(
-  apiCall: () => Promise<T>,
-  immediate: boolean = true
-): UseApiReturn<T> {
+export function useApi<T>(apiCall: () => Promise<T>, immediate: boolean = true): UseApiReturn<T> {
   const data = ref<T | null>(null) as Ref<T | null>
   const loading = ref<boolean>(false)
   const error = ref<ApiError | null>(null)
@@ -52,4 +49,3 @@ export function useApi<T>(
     execute,
   }
 }
-

@@ -18,11 +18,11 @@ export const useShowsStore = defineStore('shows', () => {
 
   // Getters
   const genres = computed(() => getSortedGenres(showsByGenre.value))
-  
+
   const isLoading = computed(() => loading.value)
-  
+
   const hasError = computed(() => error.value !== null)
-  
+
   const showsCount = computed(() => allShows.value.length)
 
   /**
@@ -106,7 +106,7 @@ export const useShowsStore = defineStore('shows', () => {
     }
 
     const relatedShows = new Set<Show>()
-    
+
     // Get shows from the same genres
     show.genres.forEach((genre) => {
       const genreShows = showsByGenre.value[genre] || []
@@ -148,7 +148,7 @@ export const useShowsStore = defineStore('shows', () => {
     currentShow,
     loading,
     error,
-    
+
     // Getters
     genres,
     isLoading,
@@ -156,7 +156,7 @@ export const useShowsStore = defineStore('shows', () => {
     showsCount,
     getShowsByGenre,
     topRatedShows,
-    
+
     // Actions
     fetchAllShows,
     fetchShowById,
@@ -166,4 +166,3 @@ export const useShowsStore = defineStore('shows', () => {
     $reset,
   }
 })
-

@@ -1,5 +1,7 @@
 <template>
-  <div class="inline-flex items-center gap-1 rounded-lg bg-yellow-100 px-2 py-1 text-sm font-medium transition-all duration-200 group-hover/card:bg-yellow-200 group-hover/card:scale-105">
+  <div
+    class="inline-flex items-center gap-1 rounded-lg bg-yellow-100 px-2 py-1 text-sm font-medium transition-all duration-200 group-hover/card:bg-yellow-200 group-hover/card:scale-105"
+  >
     <svg
       class="h-4 w-4 text-yellow-600 transition-transform duration-200 group-hover/card:rotate-12"
       fill="currentColor"
@@ -26,4 +28,3 @@ const props = defineProps<Props>()
 
 const formattedRating = computed(() => formatRating(props.rating))
 </script>
-

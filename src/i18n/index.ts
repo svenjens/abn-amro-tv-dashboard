@@ -75,4 +75,3 @@ export function saveLocale(locale: 'en' | 'nl') {
 }
 
 export default i18n
-

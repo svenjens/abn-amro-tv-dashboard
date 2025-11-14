@@ -1,12 +1,12 @@
 <template>
-  <section 
+  <section
     v-motion
     :initial="{ opacity: 0, x: -20 }"
     :visible="{ opacity: 1, x: 0, transition: { duration: 500 } }"
     class="mb-8 overflow-visible"
   >
     <div class="flex items-center justify-between mb-4 px-4 md:px-0">
-      <h2 
+      <h2
         class="text-2xl font-bold text-gray-900 transition-colors hover:text-primary-600 cursor-pointer"
         @click="navigateToGenre"
       >
@@ -19,49 +19,55 @@
         {{ t('genre.viewAll') }} →
       </button>
     </div>
-    
+
     <!-- Desktop: Horizontal Scroll -->
     <div class="hidden md:block overflow-visible">
       <div class="relative group overflow-visible">
         <button
           v-if="canScrollLeft"
           class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          @click="scrollLeft"
           aria-label="Scroll left"
+          @click="scrollLeft"
         >
           <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
-        
+
         <div
           ref="scrollContainer"
           class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-4 py-2"
-          style="overflow-y: visible;"
+          style="overflow-y: visible"
           @scroll="updateScrollButtons"
         >
-          <div
-            v-for="show in shows"
-            :key="show.id"
-            class="flex-none w-48"
-          >
+          <div v-for="show in shows" :key="show.id" class="flex-none w-48">
             <ShowCard :show="show" />
           </div>
         </div>
-        
+
         <button
           v-if="canScrollRight"
           class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          @click="scrollRight"
           aria-label="Scroll right"
+          @click="scrollRight"
         >
           <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
     </div>
-    
+
     <!-- Mobile: Grid -->
     <div class="md:hidden px-4">
       <div class="grid grid-cols-2 gap-4">
@@ -119,7 +125,7 @@ function scrollRight() {
 
 function updateScrollButtons() {
   if (!scrollContainer.value) return
-  
+
   const { scrollLeft, scrollWidth, clientWidth } = scrollContainer.value
   canScrollLeft.value = scrollLeft > 0
   canScrollRight.value = scrollLeft < scrollWidth - clientWidth - 10
@@ -158,4 +164,3 @@ onUnmounted(() => {
   scrollbar-width: none;
 }
 </style>
-

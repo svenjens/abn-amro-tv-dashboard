@@ -17,11 +17,11 @@ export const useSearchStore = defineStore('search', () => {
 
   // Getters
   const results = computed(() => searchResults.value.map((result) => result.show))
-  
+
   const hasResults = computed(() => searchResults.value.length > 0)
-  
+
   const isSearching = computed(() => loading.value)
-  
+
   const hasError = computed(() => error.value !== null)
 
   // Actions
@@ -42,7 +42,7 @@ export const useSearchStore = defineStore('search', () => {
     try {
       const results = await tvMazeAPI.searchShows(query)
       searchResults.value = results
-      
+
       // Add to recent searches (avoid duplicates)
       if (!recentSearches.value.includes(query)) {
         recentSearches.value.unshift(query)
@@ -53,7 +53,7 @@ export const useSearchStore = defineStore('search', () => {
         // Save to localStorage
         saveRecentSearches()
       }
-      
+
       console.log(`[Search Store] Found ${results.length} results for "${query}"`)
     } catch (err) {
       error.value = err as ApiError
@@ -145,13 +145,13 @@ export const useSearchStore = defineStore('search', () => {
     loading,
     error,
     recentSearches,
-    
+
     // Getters
     results,
     hasResults,
     isSearching,
     hasError,
-    
+
     // Actions
     search,
     clearSearch,
@@ -161,4 +161,3 @@ export const useSearchStore = defineStore('search', () => {
     $reset,
   }
 })
-

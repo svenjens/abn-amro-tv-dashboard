@@ -50,4 +50,3 @@ describe('GenreTags', () => {
     expect(wrapper.findAll('span').length).toBe(0)
   })
 })
-

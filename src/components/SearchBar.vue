@@ -1,12 +1,14 @@
 <template>
-  <div 
+  <div
     v-motion
     :initial="{ opacity: 0, y: -10 }"
     :visible="{ opacity: 1, y: 0, transition: { duration: 400, delay: 200 } }"
     class="relative w-full max-w-2xl mx-auto"
   >
     <div class="relative">
-      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-transform duration-200">
+      <div
+        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-transform duration-200"
+      >
         <svg
           class="h-5 w-5 text-gray-400 transition-colors"
           viewBox="0 0 20 20"
@@ -29,14 +31,11 @@
         @keyup.enter="handleSearch"
         @focus="showSuggestions = true"
       />
-      <div
-        v-if="localQuery"
-        class="absolute inset-y-0 right-0 flex items-center pr-3"
-      >
+      <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
           class="rounded-full p-1 hover:bg-gray-100 transition-colors"
-          @click="clearSearch"
           aria-label="Clear search"
+          @click="clearSearch"
         >
           <svg
             class="h-5 w-5 text-gray-400 hover:text-gray-600"
@@ -68,33 +67,42 @@
         v-if="showSuggestions && recentSearches.length > 0 && !localQuery"
         class="absolute z-10 mt-2 w-full rounded-lg bg-white shadow-lg border border-gray-200 overflow-hidden"
       >
-      <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-        <span class="text-xs font-medium text-gray-500 uppercase">{{ t('search.recentSearches') }}</span>
-        <button
-          class="text-xs text-primary-600 hover:text-primary-700"
-          @click="$emit('clear-recent')"
+        <div
+          class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between"
         >
-          {{ t('search.clearRecent') }}
-        </button>
-      </div>
-      <ul class="max-h-60 overflow-auto">
-        <li
-          v-for="(search, index) in recentSearches"
-          :key="index"
-          class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 transition-all duration-150 hover:translate-x-1"
-          @click="selectRecentSearch(search)"
-        >
-          <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span class="text-sm text-gray-700">{{ search }}</span>
-        </li>
-      </ul>
+          <span class="text-xs font-medium text-gray-500 uppercase">{{
+            t('search.recentSearches')
+          }}</span>
+          <button
+            class="text-xs text-primary-600 hover:text-primary-700"
+            @click="$emit('clear-recent')"
+          >
+            {{ t('search.clearRecent') }}
+          </button>
+        </div>
+        <ul class="max-h-60 overflow-auto">
+          <li
+            v-for="(search, index) in recentSearches"
+            :key="index"
+            class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 transition-all duration-150 hover:translate-x-1"
+            @click="selectRecentSearch(search)"
+          >
+            <svg
+              class="h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span class="text-sm text-gray-700">{{ search }}</span>
+          </li>
+        </ul>
       </div>
     </transition>
   </div>
@@ -121,7 +129,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  'search': [value: string]
+  search: [value: string]
   'clear-recent': []
 }>()
 
@@ -179,4 +187,3 @@ if (typeof window !== 'undefined') {
   document.addEventListener('click', handleClickOutside)
 }
 </script>
-

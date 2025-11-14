@@ -68,28 +68,30 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   // Get locale from route or use default
   const locale = to.params.locale as string | undefined
-  
+
   // If no locale in route, redirect to default locale
   if (!locale && to.name !== 'not-found') {
     const defaultLocale = getCurrentLocale()
     const pathWithoutLeadingSlash = to.path.startsWith('/') ? to.path.slice(1) : to.path
-    const newPath = pathWithoutLeadingSlash ? `/${defaultLocale}/${pathWithoutLeadingSlash}` : `/${defaultLocale}`
+    const newPath = pathWithoutLeadingSlash
+      ? `/${defaultLocale}/${pathWithoutLeadingSlash}`
+      : `/${defaultLocale}`
     return next({ path: newPath, query: to.query })
   }
-  
+
   // Set i18n locale from route
   if (locale && (locale === 'en' || locale === 'nl')) {
     setCurrentLocale(locale)
     document.documentElement.setAttribute('lang', locale)
     localStorage.setItem('locale', locale)
   }
-  
+
   // Update document title
   const title = to.meta.title
   if (title && typeof title === 'string') {
     document.title = title
   }
-  
+
   // Add hreflang tags for SEO
   updateHreflangTags(to.path)
 
@@ -102,10 +104,10 @@ router.beforeEach((to, _from, next) => {
 function updateHreflangTags(path: string) {
   // Remove existing hreflang tags
   document.querySelectorAll('link[rel="alternate"]').forEach((link) => link.remove())
-  
+
   // Get base path without locale
   const basePath = path.replace(/^\/(en|nl)/, '')
-  
+
   // Add hreflang tags for each locale
   const locales = ['en', 'nl']
   locales.forEach((locale) => {
@@ -115,7 +117,7 @@ function updateHreflangTags(path: string) {
     link.href = `${window.location.origin}/${locale}${basePath}`
     document.head.appendChild(link)
   })
-  
+
   // Add x-default
   const defaultLink = document.createElement('link')
   defaultLink.rel = 'alternate'
@@ -130,4 +132,3 @@ router.onError((error) => {
 })
 
 export default router
-

@@ -103,4 +103,3 @@ export function usePagination<T>(items: T[], options: PaginationOptions = {}) {
     reset,
   }
 }
-

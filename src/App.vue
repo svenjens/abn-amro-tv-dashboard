@@ -5,7 +5,7 @@
         <component :is="Component" />
       </transition>
     </router-view>
-    
+
     <!-- Cache Debug Component (only in dev mode or with ?debug param) -->
     <CacheDebug v-if="showDebug" />
   </div>

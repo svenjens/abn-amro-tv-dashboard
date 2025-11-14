@@ -6,12 +6,17 @@
     <div class="flex items-center justify-between mb-3">
       <h3 class="text-sm font-bold text-gray-900">🔍 Cache Statistics</h3>
       <button
-        @click="toggleShow"
         class="text-gray-400 hover:text-gray-600 transition-colors"
         aria-label="Close"
+        @click="toggleShow"
       >
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
     </div>
@@ -53,20 +58,20 @@
       <!-- Actions -->
       <div class="flex gap-2 pt-2 border-t border-gray-200">
         <button
-          @click="refreshStats"
           class="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+          @click="refreshStats"
         >
           Refresh
         </button>
         <button
-          @click="pruneCache"
           class="flex-1 px-3 py-1.5 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors"
+          @click="pruneCache"
         >
           Prune
         </button>
         <button
-          @click="clearCache"
           class="flex-1 px-3 py-1.5 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+          @click="clearCache"
         >
           Clear
         </button>
@@ -77,9 +82,9 @@
   <!-- Toggle Button -->
   <button
     v-else
-    @click="toggleShow"
     class="fixed bottom-4 right-4 bg-gray-800 text-white rounded-full p-3 shadow-lg hover:bg-gray-700 transition-colors z-50"
     aria-label="Show cache statistics"
+    @click="toggleShow"
   >
     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
@@ -137,7 +142,7 @@ onMounted(() => {
   // Check for dev mode or specific query param to show debug tools
   const isDev = import.meta.env.DEV
   const hasDebugParam = new URLSearchParams(window.location.search).has('debug')
-  
+
   if (isDev || hasDebugParam) {
     // Component is available
   } else {
@@ -152,4 +157,3 @@ onUnmounted(() => {
   }
 })
 </script>
-

@@ -1,9 +1,5 @@
 <template>
-  <a
-    href="#main-content"
-    class="skip-to-content"
-    @click="skipToContent"
-  >
+  <a href="#main-content" class="skip-to-content" @click="skipToContent">
     {{ t('accessibility.skipToContent') }}
   </a>
 </template>
@@ -43,4 +39,3 @@ function skipToContent(event: Event) {
   outline-offset: 2px;
 }
 </style>
-
