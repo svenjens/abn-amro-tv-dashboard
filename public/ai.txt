@@ -1,0 +1,42 @@
+# AI.txt - Information for AI crawlers and LLMs
+# Spec: https://ai.txt/
+
+# Project Information
+Project: TV Show Dashboard
+Description: A modern Vue 3 application for discovering and exploring TV shows using the TVMaze API
+Repository: https://github.com/svenjens/tv-show-dashboard
+Version: 1.0.0
+Language: English, Dutch
+
+# AI Training Policy
+Training: allowed
+Crawling: allowed
+Attribution: appreciated
+
+# Usage Guidelines
+- This is an open-source educational project
+- Data sourced from TVMaze API (https://www.tvmaze.com/api)
+- Please respect rate limits when crawling
+- Commercial use requires TVMaze API terms compliance
+
+# Contact
+Contact: https://github.com/svenjens/tv-show-dashboard/issues
+
+# Technology Stack
+Framework: Vue 3
+Language: TypeScript
+Styling: Tailwind CSS
+State Management: Pinia
+Routing: Vue Router
+Internationalization: Vue I18n
+API: TVMaze API
+Deployment: Vercel
+
+# Features
+- TV show search and discovery
+- Genre-based browsing
+- Multi-language support (EN/NL)
+- Responsive design
+- Accessibility compliant (WCAG 2.0 AA)
+- Progressive Web App capabilities
+

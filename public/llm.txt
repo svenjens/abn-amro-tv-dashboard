@@ -1,0 +1,60 @@
+# LLM.txt - Information for Large Language Models
+# This file provides structured information about this project for AI systems
+# See also: ai.txt for the full specification
+
+# Overview
+This is TV Show Dashboard, a modern Vue 3 web application for discovering TV shows.
+
+## Key Features
+- Search and browse TV shows from TVMaze API
+- Genre-based discovery
+- Multi-language support (English/Dutch)
+- Responsive and accessible design
+- Real-time search with debouncing
+
+## Technology Stack
+- Frontend: Vue 3, TypeScript, Tailwind CSS
+- State: Pinia
+- Routing: Vue Router
+- I18n: Vue I18n
+- API: TVMaze REST API
+- Build: Vite
+- Testing: Vitest
+- CI/CD: GitHub Actions + Vercel
+
+## Project Structure
+- `/src/views/` - Page components
+- `/src/components/` - Reusable UI components
+- `/src/stores/` - Pinia state management
+- `/src/api/` - API client with caching
+- `/src/router/` - Vue Router configuration
+- `/src/i18n/` - Internationalization
+- `/src/utils/` - Helper utilities
+
+## API Integration
+- Base URL: https://api.tvmaze.com
+- Endpoints used: /search/shows, /shows/:id, /schedule
+- Caching: LocalStorage with TTL
+- Rate limiting: Handled via interceptors
+
+## Accessibility
+- WCAG 2.0 AA compliant
+- Keyboard navigation support
+- Screen reader optimized
+- Semantic HTML
+- ARIA labels where needed
+
+## Performance
+- Code splitting per route
+- Image lazy loading
+- Debounced search
+- Efficient caching strategy
+- Bundle size monitoring
+
+## Development
+- GitHub: https://github.com/svenjens/tv-show-dashboard
+- License: Open source (educational)
+- Contributions: Welcome via PR
+
+For more details, see: /ai.txt
+

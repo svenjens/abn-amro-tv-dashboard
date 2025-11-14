@@ -210,8 +210,7 @@ jobs:
           npm install -g @lhci/cli wait-on
           npx vite preview --port 4173 &
           npx wait-on http://localhost:4173
-          lhci autorun --config=./lighthouserc.json || true
-        continue-on-error: true
+          lhci autorun --config=./lighthouserc.json
 
   # Job 6: Security Audit
   security:
