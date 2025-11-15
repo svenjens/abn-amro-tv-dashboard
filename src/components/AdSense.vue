@@ -9,7 +9,7 @@
         class="adsbygoogle"
         :style="adStyle"
         :data-ad-client="adClient"
-        :data-ad-slot="adSlot"
+        v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
         :data-ad-format="format"
         data-full-width-responsive="true"
       ></ins>
@@ -29,7 +29,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  adSlot: '',
+  adSlot: undefined,
   format: 'auto',
   style: () => ({ display: 'block' }),
 })
