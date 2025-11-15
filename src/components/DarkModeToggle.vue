@@ -1,7 +1,7 @@
 <template>
   <button
-    class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-    :class="buttonClass"
+    class="relative inline-flex items-center gap-2 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2"
+    :class="[buttonClass, focusClass]"
     :aria-label="t('darkMode.toggle')"
     :title="themeLabel"
     @click="toggle"
@@ -81,6 +81,13 @@ const buttonClass = computed(() => {
     default:
       return `${base} text-gray-700 dark:text-gray-200`
   }
+})
+
+const focusClass = computed(() => {
+  if (props.variant === 'header') {
+    return 'focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 dark:focus:ring-offset-gray-800'
+  }
+  return 'focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
 })
 </script>
 

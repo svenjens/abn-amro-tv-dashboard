@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent } from 'vue'
+import { ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt.vue'
 import AppFooter from '@/components/AppFooter.vue'
@@ -35,6 +35,7 @@ const CacheDebug = defineAsyncComponent(() => import('@/components/CacheDebug.vu
 
 const showDebug = ref(false)
 const { init: initDarkMode } = useDarkMode()
+let cleanupDarkMode: (() => void) | undefined
 
 onMounted(() => {
   const isDev = import.meta.env.DEV
@@ -42,7 +43,11 @@ onMounted(() => {
   showDebug.value = isDev || hasDebugParam
   
   // Initialize dark mode (watch for system preference changes)
-  initDarkMode()
+  cleanupDarkMode = initDarkMode()
+})
+
+onUnmounted(() => {
+  cleanupDarkMode?.()
 })
 </script>
 

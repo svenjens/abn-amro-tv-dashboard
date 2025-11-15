@@ -42,6 +42,15 @@
     );
     background-size: 1000px 100%;
   }
+
+  .dark .skeleton {
+    background: linear-gradient(
+      to right,
+      #374151 4%,
+      #4b5563 25%,
+      #374151 36%
+    );
+  }
   
   /* Pulse animation for loading */
   @keyframes pulse-subtle {
