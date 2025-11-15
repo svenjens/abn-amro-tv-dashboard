@@ -67,11 +67,15 @@
         </div>
 
         <!-- Results Grid -->
-        <div
-          v-if="searchStore.hasResults"
-          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
-        >
-          <ShowCard v-for="show in searchStore.results" :key="show.id" :show="show" />
+        <div v-if="searchStore.hasResults">
+          <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr mb-8"
+          >
+            <ShowCard v-for="show in searchStore.results" :key="show.id" :show="show" />
+          </div>
+
+          <!-- Advertisement -->
+          <AdSense format="horizontal" />
         </div>
 
         <!-- Empty State -->
@@ -101,7 +105,10 @@
         <picture>
           <source
             type="image/webp"
-            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            srcset="
+              /optimized/empty-state-illustration-256.webp 256w,
+              /optimized/empty-state-illustration.webp     512w
+            "
             sizes="192px"
           />
           <img
@@ -130,6 +137,7 @@ import SearchBar from '@/components/SearchBar.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import AdSense from '@/components/AdSense.vue'
 
 const { t } = useI18n()
 const route = useRoute()

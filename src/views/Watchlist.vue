@@ -3,10 +3,7 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div
-      class="bg-gradient-to-r from-primary-600 to-primary-800 text-white"
-      role="banner"
-    >
+    <div class="bg-gradient-to-r from-primary-600 to-primary-800 text-white" role="banner">
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-4">
@@ -56,13 +53,9 @@
         v-if="watchlistStore.hasShows"
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
       >
-        <div
-          v-for="show in watchlistStore.watchlist"
-          :key="show.id"
-          class="relative group"
-        >
+        <div v-for="show in watchlistStore.watchlist" :key="show.id" class="relative group">
           <ShowCard :show="show" />
-          
+
           <!-- Remove Button Overlay -->
           <button
             class="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -86,7 +79,10 @@
         <picture>
           <source
             type="image/webp"
-            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            srcset="
+              /optimized/empty-state-illustration-256.webp 256w,
+              /optimized/empty-state-illustration.webp     512w
+            "
             sizes="192px"
           />
           <img
@@ -143,4 +139,3 @@ onMounted(() => {
   // Ensure watchlist is loaded (already done in store init, but just in case)
 })
 </script>
-

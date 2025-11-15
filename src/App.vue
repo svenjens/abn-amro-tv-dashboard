@@ -9,21 +9,21 @@
     <!-- Cache Debug Component (only in dev mode or with ?debug param) -->
     <CacheDebug v-if="showDebug" />
 
-        <!-- Toast Notifications -->
-        <ToastNotification />
+    <!-- Toast Notifications -->
+    <ToastNotification />
 
-        <!-- PWA Install Prompt -->
-        <PWAInstallPrompt />
-      </div>
-    </template>
+    <!-- PWA Install Prompt -->
+    <PWAInstallPrompt />
+  </div>
+</template>
 
-    <script setup lang="ts">
-    import { ref, onMounted, defineAsyncComponent } from 'vue'
-    import ToastNotification from '@/components/ToastNotification.vue'
-    import PWAInstallPrompt from '@/components/PWAInstallPrompt.vue'
+<script setup lang="ts">
+import { ref, onMounted, defineAsyncComponent } from 'vue'
+import ToastNotification from '@/components/ToastNotification.vue'
+import PWAInstallPrompt from '@/components/PWAInstallPrompt.vue'
 
-    // Lazy load debug component (only needed in dev mode)
-    const CacheDebug = defineAsyncComponent(() => import('@/components/CacheDebug.vue'))
+// Lazy load debug component (only needed in dev mode)
+const CacheDebug = defineAsyncComponent(() => import('@/components/CacheDebug.vue'))
 
 const showDebug = ref(false)
 

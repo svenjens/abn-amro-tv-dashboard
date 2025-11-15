@@ -11,7 +11,11 @@
       <picture class="absolute inset-0 opacity-10" aria-hidden="true">
         <source
           type="image/webp"
-          srcset="/optimized/hero-background-768.webp 768w, /optimized/hero-background-1280.webp 1280w, /optimized/hero-background.webp 1920w"
+          srcset="
+            /optimized/hero-background-768.webp   768w,
+            /optimized/hero-background-1280.webp 1280w,
+            /optimized/hero-background.webp      1920w
+          "
           sizes="100vw"
         />
         <img
@@ -26,18 +30,22 @@
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo (hidden on mobile) -->
-        <picture class="hidden md:block">
-          <source
-            type="image/webp"
-            srcset="/optimized/logo-main-64.webp 64w, /optimized/logo-main-128.webp 128w, /optimized/logo-main-256.webp 256w"
-            sizes="64px"
-          />
-          <img
-            src="/optimized/logo-main.png"
-            alt="BingeList Logo"
-            class="h-16 w-16 object-contain"
-          />
-        </picture>
+            <picture class="hidden md:block">
+              <source
+                type="image/webp"
+                srcset="
+                  /optimized/logo-main-64.webp   64w,
+                  /optimized/logo-main-128.webp 128w,
+                  /optimized/logo-main-256.webp 256w
+                "
+                sizes="64px"
+              />
+              <img
+                src="/optimized/logo-main.png"
+                alt="BingeList Logo"
+                class="h-16 w-16 object-contain"
+              />
+            </picture>
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-primary-100 mb-8">
@@ -120,7 +128,7 @@
           :genre="genre"
           :shows="showsStore.getShowsByGenre(genre)"
         />
-        
+
         <!-- Infinite Scroll Trigger -->
         <div
           v-if="canLoadMore"
@@ -128,9 +136,25 @@
           class="text-center py-8 text-gray-500 text-sm"
         >
           <div class="flex items-center justify-center gap-2">
-            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <svg
+              class="animate-spin h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             <span>{{ t('home.loadingMore') }}...</span>
           </div>
@@ -142,7 +166,10 @@
         <picture>
           <source
             type="image/webp"
-            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            srcset="
+              /optimized/empty-state-illustration-256.webp 256w,
+              /optimized/empty-state-illustration.webp     512w
+            "
             sizes="192px"
           />
           <img

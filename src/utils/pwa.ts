@@ -44,9 +44,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
             logger.debug('[PWA] New content available, reload to update')
             // Could show a toast notification here
             if (
-              confirm(
-                'A new version of TV Show Dashboard is available! Would you like to update?'
-              )
+              confirm('A new version of TV Show Dashboard is available! Would you like to update?')
             ) {
               newWorker.postMessage({ type: 'SKIP_WAITING' })
               window.location.reload()
@@ -139,4 +137,3 @@ export async function clearPWACache(): Promise<void> {
     logger.debug('[PWA] Cache clear requested')
   }
 }
-

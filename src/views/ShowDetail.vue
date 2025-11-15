@@ -190,6 +190,9 @@
           <!-- Safe: HTML is sanitized with DOMPurify before rendering -->
         </article>
 
+        <!-- Advertisement -->
+        <AdSense format="horizontal" />
+
         <!-- Related Shows -->
         <section v-if="relatedShows.length > 0" class="mt-12" :aria-label="t('show.relatedShows')">
           <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ t('show.relatedShows') }}</h2>
@@ -240,6 +243,7 @@ import SkipToContent from '@/components/SkipToContent.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import WatchlistButton from '@/components/WatchlistButton.vue'
+import AdSense from '@/components/AdSense.vue'
 
 const { t } = useI18n()
 

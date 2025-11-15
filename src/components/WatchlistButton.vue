@@ -13,9 +13,7 @@
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M5 3C3.89543 3 3 3.89543 3 5V21L12 17L21 21V5C21 3.89543 20.1046 3 19 3H5Z"
-      />
+      <path d="M5 3C3.89543 3 3 3.89543 3 5V21L12 17L21 21V5C21 3.89543 20.1046 3 19 3H5Z" />
     </svg>
     <svg
       v-else
@@ -67,9 +65,7 @@ const buttonText = computed(() => {
 })
 
 const ariaLabel = computed(() => {
-  return isInWatchlist.value
-    ? t('watchlist.removeFromWatchlist')
-    : t('watchlist.addToWatchlist')
+  return isInWatchlist.value ? t('watchlist.removeFromWatchlist') : t('watchlist.addToWatchlist')
 })
 
 const title = computed(() => ariaLabel.value)
@@ -106,4 +102,3 @@ function handleClick() {
   }
 }
 </script>
-

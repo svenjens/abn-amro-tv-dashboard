@@ -68,11 +68,15 @@
       />
 
       <!-- Shows Grid -->
-      <div
-        v-else-if="genreShows.length > 0"
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
-      >
-        <ShowCard v-for="show in genreShows" :key="show.id" :show="show" />
+      <div v-else-if="genreShows.length > 0">
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
+        >
+          <ShowCard v-for="show in genreShows" :key="show.id" :show="show" />
+        </div>
+
+        <!-- Advertisement -->
+        <AdSense format="horizontal" />
       </div>
 
       <!-- Empty State -->
@@ -80,7 +84,10 @@
         <picture>
           <source
             type="image/webp"
-            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            srcset="
+              /optimized/empty-state-illustration-256.webp 256w,
+              /optimized/empty-state-illustration.webp     512w
+            "
             sizes="192px"
           />
           <img
@@ -106,6 +113,7 @@ import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import AdSense from '@/components/AdSense.vue'
 
 const { t } = useI18n()
 const route = useRoute()

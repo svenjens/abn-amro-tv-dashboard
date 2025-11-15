@@ -113,6 +113,9 @@
     "notNow": "Not now",
     "updateAvailable": "A new version is available!",
     "update": "Update now"
+  },
+  "ads": {
+    "sponsored": "Advertisement"
   }
 }
 

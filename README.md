@@ -63,7 +63,9 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Genre-Based Browsing**: Browse TV shows organized by genre with horizontal scrollable lists
 - **Show Details**: View comprehensive information about each show including ratings, schedule, and summary
 - **Search Functionality**: Search for TV shows by name with real-time results
-- **Pagination**: Efficient pagination for large datasets with page navigation
+- **Watchlist**: Save your favorite shows and track what you want to watch
+- **Progressive Web App**: Install as a native app with offline support
+- **Monetization**: Google AdSense integration for sustainable development
 
 ### Internationalization (i18n)
 - **Multi-language Support**: Full support for English and Dutch
@@ -122,6 +124,22 @@ cd tv-show-dashboard
 ```bash
 npm install
 ```
+
+3. **Configure Google AdSense** (Optional):
+
+Create a `.env` file in the root directory:
+
+```bash
+cp .env.example .env
+```
+
+Update the `.env` file with your Google AdSense Publisher ID:
+
+```env
+VITE_GOOGLE_ADSENSE_ID=ca-pub-XXXXXXXXXXXXXXXX
+```
+
+> **Note**: Ads only appear in production builds. To test locally, run `npm run build && npm run preview`.
 
 ## 🏃 Running the Application
 

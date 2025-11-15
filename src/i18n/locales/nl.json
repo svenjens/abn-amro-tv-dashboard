@@ -113,6 +113,9 @@
     "notNow": "Niet nu",
     "updateAvailable": "Een nieuwe versie is beschikbaar!",
     "update": "Nu updaten"
+  },
+  "ads": {
+    "sponsored": "Advertentie"
   }
 }
 

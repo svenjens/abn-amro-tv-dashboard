@@ -182,4 +182,3 @@ self.addEventListener('sync', (event) => {
   console.log('[SW] Background sync triggered:', event.tag)
   // Could be used for syncing watchlist changes when back online
 })
-

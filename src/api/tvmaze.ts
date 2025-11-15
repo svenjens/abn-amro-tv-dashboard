@@ -1,6 +1,6 @@
 /**
  * TVMaze API Service
- * 
+ *
  * Provides methods to interact with the TVMaze API
  * Documentation: https://www.tvmaze.com/api
  */
@@ -55,7 +55,7 @@ class TVMazeAPI {
    */
   async fetchAllShows(): Promise<Show[]> {
     const cacheKey = 'all-shows'
-    
+
     // Check cache
     const cached = apiCache.get(cacheKey)
     if (cached) {
@@ -80,7 +80,7 @@ class TVMazeAPI {
   async fetchShowById(id: number, embed?: string[]): Promise<Show> {
     const embedParam = embed ? `-${embed.join('-')}` : ''
     const cacheKey = `show-${id}${embedParam}`
-    
+
     // Check cache
     const cached = showCache.get(cacheKey)
     if (cached) {
@@ -89,7 +89,7 @@ class TVMazeAPI {
     }
 
     const embedQuery = embed ? `?embed[]=${embed.join('&embed[]=')}` : ''
-    
+
     try {
       const response = await this.client.get<Show>(`/shows/${id}${embedQuery}`)
       showCache.set(cacheKey, response.data)
@@ -109,7 +109,7 @@ class TVMazeAPI {
     }
 
     const cacheKey = `search-${query.toLowerCase()}`
-    
+
     // Check cache
     const cached = searchCache.get(cacheKey)
     if (cached) {
@@ -156,7 +156,7 @@ class TVMazeAPI {
     const apiPruned = apiCache.prune()
     const searchPruned = searchCache.prune()
     const showPruned = showCache.prune()
-    
+
     logger.debug(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
   }
 
