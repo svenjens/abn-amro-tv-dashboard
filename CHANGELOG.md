@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.5.0...v1.6.0) (2025-11-15)
+
+
+### Features
+
+* navigate to search view on search bar focus ([#18](https://github.com/svenjens/tv-show-dashboard/issues/18)) ([dd88746](https://github.com/svenjens/tv-show-dashboard/commit/dd887465784c00bceaf27696bf8171b99bcb1853))
+
 ## [1.5.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.4.0...v1.5.0) (2025-11-15)
 
 
