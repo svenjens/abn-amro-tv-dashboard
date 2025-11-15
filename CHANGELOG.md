@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.7.1...v1.8.0) (2025-11-15)
+
+
+### Features
+
+* add AI Vision & Roadmap page ([#26](https://github.com/svenjens/tv-show-dashboard/issues/26)) ([0b34170](https://github.com/svenjens/tv-show-dashboard/commit/0b34170af9eebc45c944df4e35a16459dc72d73d))
+
 ## [1.7.1](https://github.com/svenjens/tv-show-dashboard/compare/v1.7.0...v1.7.1) (2025-11-15)
 
 
