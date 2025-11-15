@@ -142,6 +142,71 @@
     "overview": "Overview",
     "episodes": "Episodes",
     "cast": "Cast"
+  },
+  "roadmap": {
+    "title": "AI Vision & Roadmap",
+    "subtitle": "Exploring the future of intelligent TV show discovery and personalization",
+    "currentStatus": "Current Features",
+    "aiVision": "AI-Powered Future",
+    "aiVisionDescription": "Our vision is to create the most intelligent and personalized TV show discovery platform, powered by cutting-edge AI technology. Here's what we're working on.",
+    "techStack": "Technology Stack",
+    "privacyTitle": "Privacy & Ethics First",
+    "privacyPoint1": "All AI recommendations run on aggregated, anonymized data",
+    "privacyPoint2": "Your watchlist and preferences stay local on your device",
+    "privacyPoint3": "No personal data is sold or shared with third parties",
+    "privacyPoint4": "You're always in control of your data and can opt-out anytime",
+    "phase": {
+      "nearTerm": "Near Term (3-6 months)",
+      "midTerm": "Mid Term (6-12 months)",
+      "longTerm": "Long Term (12+ months)"
+    },
+    "current": {
+      "smartSearch": "Smart Search & Discovery",
+      "smartSearchDesc": "Fast, multilingual search across thousands of TV shows with real-time results",
+      "watchlist": "Personal Watchlist",
+      "watchlistDesc": "Track your favorite shows, mark episodes as watched, and never lose your progress",
+      "multilingual": "Multilingual Support",
+      "multilingualDesc": "Full internationalization with English and Dutch language support",
+      "episodeTracking": "Episode Tracking",
+      "episodeTrackingDesc": "Track watched episodes, view season progress, and manage your binge-watching"
+    },
+    "ai": {
+      "personalizedRecs": "Personalized Recommendations",
+      "personalizedRecsDesc": "AI-powered show recommendations based on your viewing history and preferences",
+      "personalizedRecs1": "Analyze watching patterns and preferences",
+      "personalizedRecs2": "Discover shows similar to your favorites",
+      "personalizedRecs3": "Get personalized genre suggestions",
+      "smartNotifications": "Smart Notifications",
+      "smartNotificationsDesc": "Intelligent alerts for new episodes, season premieres, and shows you might like",
+      "smartNotifications1": "New episode alerts for watchlist shows",
+      "smartNotifications2": "Season finale reminders",
+      "smartNotifications3": "Trending show notifications",
+      "contentDiscovery": "AI Content Discovery",
+      "contentDiscoveryDesc": "Natural language search and semantic understanding of your preferences",
+      "contentDiscovery1": "Search by mood, theme, or vibe",
+      "contentDiscovery2": "Find shows based on plot descriptions",
+      "contentDiscovery3": "Discover hidden gems matching your taste",
+      "aiChatbot": "AI Chat Assistant",
+      "aiChatbotDesc": "Talk to our AI to find the perfect show for any mood or occasion",
+      "aiChatbot1": "Conversational show recommendations",
+      "aiChatbot2": "Answer questions about shows",
+      "aiChatbot3": "Help you decide what to watch next",
+      "predictiveWatching": "Predictive Watching Patterns",
+      "predictiveWatchingDesc": "AI learns when and what you prefer to watch, optimizing your experience",
+      "predictiveWatching1": "Predict when you'll finish a series",
+      "predictiveWatching2": "Suggest optimal binge schedules",
+      "predictiveWatching3": "Smart content preloading",
+      "socialIntegration": "Social & Community AI",
+      "socialIntegrationDesc": "Connect with friends and discover shows together with AI matchmaking",
+      "socialIntegration1": "Find shows friends are watching",
+      "socialIntegration2": "AI-matched watch parties",
+      "socialIntegration3": "Community-driven recommendations"
+    },
+    "tech": {
+      "frontend": "Frontend",
+      "aiPotential": "AI Potential",
+      "infrastructure": "Infrastructure"
+    }
   }
 }
 

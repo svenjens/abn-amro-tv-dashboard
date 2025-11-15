@@ -142,6 +142,71 @@
     "overview": "Overzicht",
     "episodes": "Afleveringen",
     "cast": "Cast"
+  },
+  "roadmap": {
+    "title": "AI Visie & Roadmap",
+    "subtitle": "De toekomst verkennen van intelligente tv-serie ontdekking en personalisatie",
+    "currentStatus": "Huidige Features",
+    "aiVision": "AI-Aangedreven Toekomst",
+    "aiVisionDescription": "Onze visie is om het meest intelligente en persoonlijke tv-serie ontdekplatform te creëren, aangedreven door geavanceerde AI-technologie. Dit is waar we aan werken.",
+    "techStack": "Technologie Stack",
+    "privacyTitle": "Privacy & Ethiek Eerst",
+    "privacyPoint1": "Alle AI-aanbevelingen draaien op geaggregeerde, geanonimiseerde data",
+    "privacyPoint2": "Je watchlist en voorkeuren blijven lokaal op je apparaat",
+    "privacyPoint3": "Geen persoonlijke gegevens worden verkocht of gedeeld met derden",
+    "privacyPoint4": "Je hebt altijd controle over je data en kunt op elk moment uitschrijven",
+    "phase": {
+      "nearTerm": "Korte Termijn (3-6 maanden)",
+      "midTerm": "Middellange Termijn (6-12 maanden)",
+      "longTerm": "Lange Termijn (12+ maanden)"
+    },
+    "current": {
+      "smartSearch": "Smart Zoeken & Ontdekken",
+      "smartSearchDesc": "Snelle, meertalige zoekfunctie over duizenden tv-series met realtime resultaten",
+      "watchlist": "Persoonlijke Watchlist",
+      "watchlistDesc": "Volg je favoriete series, markeer afleveringen als gekeken, en verlies nooit je voortgang",
+      "multilingual": "Meertalige Ondersteuning",
+      "multilingualDesc": "Volledige internationalisatie met Engels en Nederlands taalondersteuning",
+      "episodeTracking": "Aflevering Tracking",
+      "episodeTrackingDesc": "Volg gekeken afleveringen, bekijk seizoen voortgang, en beheer je binge-watching"
+    },
+    "ai": {
+      "personalizedRecs": "Gepersonaliseerde Aanbevelingen",
+      "personalizedRecsDesc": "AI-aangedreven serie aanbevelingen gebaseerd op je kijkgeschiedenis en voorkeuren",
+      "personalizedRecs1": "Analyseer kijkpatronen en voorkeuren",
+      "personalizedRecs2": "Ontdek series vergelijkbaar met je favorieten",
+      "personalizedRecs3": "Krijg gepersonaliseerde genre suggesties",
+      "smartNotifications": "Slimme Notificaties",
+      "smartNotificationsDesc": "Intelligente meldingen voor nieuwe afleveringen, seizoen premieres en series die je leuk vindt",
+      "smartNotifications1": "Nieuwe aflevering meldingen voor watchlist series",
+      "smartNotifications2": "Seizoen finale herinneringen",
+      "smartNotifications3": "Trending serie notificaties",
+      "contentDiscovery": "AI Content Ontdekking",
+      "contentDiscoveryDesc": "Natuurlijke taal zoeken en semantisch begrip van je voorkeuren",
+      "contentDiscovery1": "Zoek op stemming, thema of sfeer",
+      "contentDiscovery2": "Vind series gebaseerd op plot beschrijvingen",
+      "contentDiscovery3": "Ontdek verborgen juweeltjes die bij je smaak passen",
+      "aiChatbot": "AI Chat Assistent",
+      "aiChatbotDesc": "Praat met onze AI om de perfecte serie te vinden voor elke stemming of gelegenheid",
+      "aiChatbot1": "Conversationele serie aanbevelingen",
+      "aiChatbot2": "Beantwoord vragen over series",
+      "aiChatbot3": "Help je beslissen wat je volgende kijkt",
+      "predictiveWatching": "Voorspellende Kijkpatronen",
+      "predictiveWatchingDesc": "AI leert wanneer en wat je graag kijkt, en optimaliseert je ervaring",
+      "predictiveWatching1": "Voorspel wanneer je een serie afmaakt",
+      "predictiveWatching2": "Stel optimale binge schema's voor",
+      "predictiveWatching3": "Smart content voorladen",
+      "socialIntegration": "Social & Community AI",
+      "socialIntegrationDesc": "Verbind met vrienden en ontdek series samen met AI matchmaking",
+      "socialIntegration1": "Vind series die vrienden kijken",
+      "socialIntegration2": "AI-gematched watch parties",
+      "socialIntegration3": "Community-gedreven aanbevelingen"
+    },
+    "tech": {
+      "frontend": "Frontend",
+      "aiPotential": "AI Potentieel",
+      "infrastructure": "Infrastructuur"
+    }
   }
 }
 

@@ -51,6 +51,14 @@ const routes: RouteRecordRaw[] = [
           title: 'My Watchlist - TV Show Dashboard',
         },
       },
+      {
+        path: 'roadmap',
+        name: 'roadmap',
+        component: () => import('@/views/AIRoadmap.vue'),
+        meta: {
+          title: 'AI Vision & Roadmap - BingeList',
+        },
+      },
     ],
   },
   {
