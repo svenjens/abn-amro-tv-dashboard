@@ -3,8 +3,8 @@
  * Handles offline support and caching strategies
  */
 
-const CACHE_NAME = 'tv-show-dashboard-v1'
-const RUNTIME_CACHE = 'tv-show-dashboard-runtime'
+const CACHE_NAME = 'tv-show-dashboard-v2'
+const RUNTIME_CACHE = 'tv-show-dashboard-runtime-v2'
 
 // Static assets to cache on install
 const STATIC_ASSETS = [
@@ -74,6 +74,12 @@ self.addEventListener('fetch', (event) => {
 
   // Skip chrome extensions and non-http(s) requests
   if (!url.protocol.startsWith('http')) {
+    return
+  }
+
+  // Skip verification files (ads.txt, robots.txt, ai.txt, etc.)
+  // These must be served directly for crawler verification
+  if (url.pathname.match(/\.(txt)$/i)) {
     return
   }
 
