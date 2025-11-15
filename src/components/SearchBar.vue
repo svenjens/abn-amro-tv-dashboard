@@ -26,7 +26,7 @@
       <input
         id="tv-show-search"
         v-model="localQuery"
-        type="search"
+        type="text"
         class="block w-full rounded-lg border border-gray-300 bg-white py-3 pl-10 pr-12 text-gray-900 placeholder:text-gray-400 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:shadow-lg sm:text-sm transition-all duration-200"
         :placeholder="placeholder"
         :aria-label="placeholder"
