@@ -87,6 +87,7 @@
           :recent-searches="searchStore.recentSearches"
           @search="handleSearch"
           @clear-recent="searchStore.clearRecentSearches()"
+          @focus="handleSearchFocus"
         />
       </div>
     </div>
@@ -263,6 +264,11 @@ function handleSearch(query: string) {
     const locale = route.params.locale || 'en'
     router.push({ name: 'search', params: { locale }, query: { q: query } })
   }
+}
+
+function handleSearchFocus() {
+  const locale = route.params.locale || 'en'
+  router.push({ name: 'search', params: { locale } })
 }
 
 onMounted(async () => {
