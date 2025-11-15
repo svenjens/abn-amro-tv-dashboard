@@ -1,178 +1,273 @@
-# Scripts
+# 🛠️ Scripts Documentation
 
-## Scripts Overview
+This directory contains utility scripts for the BingeList project.
 
-### 1. Brand Asset Generator
+## 📦 Bundle Analysis Scripts
 
-Generate professional logo, icons, and other brand assets using OpenAI's gpt-image-1 (latest image model).
+### `analyze-bundle.js`
 
+Analyzes the Vite build output and generates a comprehensive bundle size report.
+
+**Usage:**
 ```bash
-npm run generate:branding
+npm run build
+npm run analyze:bundle
 ```
 
-### 2. Image Optimizer
+**Output:**
+- Console output with bundle statistics
+- `bundle-report.json` - Detailed JSON report with all metrics
 
-Optimize all brand assets for web performance with WebP conversion and responsive sizes.
+**Features:**
+- Total bundle size (raw + gzipped)
+- JavaScript and CSS breakdown
+- Individual chunk sizes
+- Top 5 largest chunks
+- File count statistics
 
-```bash
-npm run optimize:images
+**Example Output:**
+```
+📊 Bundle Analysis Summary
+==================================================
+
+📦 Total Assets: 27 files
+   Size: 406.53 KB
+   Gzip: 143.56 KB
+
+📜 JavaScript: 22 files
+   Size: 373.73 KB
+   Gzip: 137.21 KB
+
+🎨 CSS: 5 files
+   Size: 32.8 KB
+   Gzip: 6.35 KB
 ```
 
 ---
 
-## Brand Asset Generator
+### `compare-bundle.js`
 
-### Prerequisites
+Compares two bundle reports and generates a diff with visual indicators.
 
-1. Get an OpenAI API key from https://platform.openai.com/api-keys
-2. Set the API key as an environment variable
-
-### Usage
-
+**Usage:**
 ```bash
-# Option 1: Use .env file (already configured)
-npm run generate:branding
+# Compare current build with base
+npm run compare:bundle [base-report.json] [head-report.json]
 
-# Option 2: Set environment variable
-export OPENAI_API_KEY=your-api-key-here
-npm run generate:branding
-
-# Option 3: Inline
-OPENAI_API_KEY=your-api-key npm run generate:branding
+# Default paths:
+# - base: ./base-bundle-report.json
+# - head: ./bundle-report.json
 ```
 
-### What it Generates
+**Output:**
+- Console output with comparison tables
+- `bundle-comparison.md` - Markdown report for PR comments
 
-The script will generate the following assets in the `public/` directory:
+**Features:**
+- Size changes (increases/decreases)
+- Percentage changes
+- Visual indicators (📈 increase, 📉 decrease, ✅ minimal)
+- New/removed files detection
+- Top changed chunks
 
-1. **logo-main.png** - Main logo icon (1024x1024)
-2. **logo-full.png** - Full logo with text (1536x640)
-3. **hero-background.png** - Hero section background (1792x1024)
-4. **og-image.png** - Social media share image (1200x630)
-5. **favicon.png** - Website favicon (512x512)
-6. **icon-192.png** - PWA app icon 192x192
-7. **icon-512.png** - PWA app icon 512x512
-8. **apple-touch-icon.png** - Apple touch icon (180x180)
-9. **loading-animation.png** - Loading spinner base
-10. **empty-state-illustration.png** - Empty state illustration
+**Example Output:**
+```markdown
+## 📦 Bundle Size Report
 
-### Cost Estimate
+### Total Bundle Size
 
-- gpt-image-1: Check OpenAI pricing (latest model)
-- Estimated total cost for all assets: ~$0.50 - $1.00
-
-### Rate Limiting
-
-The script includes a 2-second delay between requests to respect OpenAI's rate limits.
-
-### Customization
-
-Edit `scripts/generate-branding.js` to:
-- Change brand colors in `BRAND_STYLE`
-- Modify prompts in `ASSET_PROMPTS`
-- Add or remove assets
-- Adjust image sizes and quality
-
-### Output
-
-After generation, you'll find:
-- All PNG assets in `public/`
-- `branding-metadata.json` with generation info
-- `BRANDING.md` with usage instructions
+| Metric | Base | Head | Change |
+|--------|------|------|--------|
+| Size | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
+| Gzip | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
+| Files | 27 | 28 | 📈 +1 (3.70%) |
+```
 
 ---
 
-## Image Optimizer
+## 🎨 Image Generation Scripts
 
-Optimize PNG images and generate WebP versions for better web performance.
+### `generate-branding.js`
 
-### Features
+Generates all branding assets using OpenAI's image generation API.
 
-- **WebP Conversion**: Generate modern WebP format (25-35% smaller)
-- **Multiple Sizes**: Create responsive image variants
-- **PNG Optimization**: Compress PNGs with max compression
-- **Quality Control**: Maintain visual quality while reducing size
-- **Automatic**: Processes all brand assets in one command
+**Prerequisites:**
+```bash
+export OPENAI_API_KEY="your-api-key"
+```
 
-### Prerequisites
+**Usage:**
+```bash
+npm run generate:branding
+```
 
-The `sharp` library is already installed as a dev dependency.
+**Generated Assets:**
+- Logo (main icon)
+- Full logo with text
+- Hero background
+- OG image (social sharing)
+- Favicon (multiple sizes)
+- PWA icons (192x192, 512x512)
+- Apple touch icon
+- Loading animation
+- Empty state illustration
 
-### Usage
+**Configuration:**
+Edit `BRAND_STYLE` in the script to customize:
+- Primary colors
+- Accent colors
+- Design style
 
+---
+
+### `optimize-images.js`
+
+Optimizes images using Sharp (converts to WebP, resizes, etc.).
+
+**Usage:**
 ```bash
 npm run optimize:images
 ```
 
-### What it Does
+**Features:**
+- WebP conversion
+- Multiple size variants (64px, 128px, 256px, original)
+- Preserves original PNG files
+- Outputs to `/public/optimized/`
 
-1. **Creates optimized directory**: `public/optimized/`
-2. **Generates WebP versions**: Modern format for all browsers
-3. **Creates multiple sizes**: Responsive variants (16px to 1920px)
-4. **Optimizes PNGs**: Fallback for older browsers
-5. **Generates usage guide**: `public/optimized/USAGE.md`
+---
 
-### Generated Variants
+## 🗺️ SEO Scripts
 
-For each asset, multiple sizes are created:
+### `generate-sitemap.js`
 
-- **favicon**: 16px, 32px, 48px, 96px, 192px, 512px
-- **logo-main**: 64px, 128px, 256px, 512px
-- **logo-full**: 512px, 768px, 1536px
-- **hero-background**: 768px, 1280px, 1920px
-- **empty-state**: 256px, 512px
-- And more...
+Generates a dynamic sitemap with all shows and pages.
 
-### Performance Benefits
-
-- **25-35% size reduction** with WebP
-- **Faster page loads** through smaller files
-- **Responsive images** serve appropriate sizes
-- **Better UX** especially on mobile/slow connections
-
-### Browser Support
-
-- WebP: Chrome, Firefox, Safari 14+, Edge (95%+ coverage)
-- PNG fallback: All browsers
-
-### Output Structure
-
-```
-public/optimized/
-├── logo-main.webp
-├── logo-main.png
-├── logo-main-64.webp
-├── logo-main-64.png
-├── favicon-16.webp
-├── favicon-16.png
-├── ... (all variants)
-└── USAGE.md
+**Usage:**
+```bash
+npm run generate:sitemap
 ```
 
-### Integration Example
+**Output:**
+- `public/sitemap.xml` - Complete sitemap for search engines
 
-```html
-<!-- WebP with PNG fallback -->
-<picture>
-  <source srcset="/optimized/logo-main.webp" type="image/webp">
-  <img src="/optimized/logo-main.png" alt="Logo">
-</picture>
+**Features:**
+- Dynamic show URLs with SEO-friendly slugs
+- Static pages (home, search, watchlist, roadmap)
+- Multi-language support
+- Priority and update frequency metadata
 
-<!-- Responsive hero background -->
-<picture>
-  <source 
-    media="(min-width: 1280px)" 
-    srcset="/optimized/hero-background.webp" 
-    type="image/webp"
-  >
-  <source 
-    media="(min-width: 768px)" 
-    srcset="/optimized/hero-background-1280.webp" 
-    type="image/webp"
-  >
-  <img src="/optimized/hero-background-768.png" alt="">
-</picture>
+**Configuration:**
+- Base URL: `https://bingelist.app`
+- Languages: `en`, `nl`
+- Update frequency: weekly (shows), daily (static pages)
+
+---
+
+## 🚀 CI/CD Integration
+
+### GitHub Actions Workflow
+
+The bundle analysis scripts are integrated into the CI/CD pipeline:
+
+1. **Build Job** - Generates `bundle-report.json` after building
+2. **PR Comment Job** - Compares bundle sizes and posts results to PR
+
+**Workflow:**
+1. Build application
+2. Run `analyze-bundle.js`
+3. Upload bundle report as artifact
+4. Download base branch bundle report
+5. Run `compare-bundle.js`
+6. Post enhanced comment to PR with:
+   - Deployment preview URL
+   - Test coverage
+   - Bundle size comparison
+   - Changed/added/removed chunks
+
+**Example PR Comment:**
+```markdown
+## 🚀 Deployment Preview
+
+✅ **Preview deployed successfully!**
+
+🔗 **Preview URL:** https://preview-abc123.vercel.app
+
+---
+
+### 📊 Test Coverage
+
+Current coverage: **78.5%**
+
+## 📦 Bundle Size Report
+
+### Total Bundle Size
+
+| Metric | Base | Head | Change |
+|--------|------|------|--------|
+| Size | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
+| Gzip | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
+
+### 📝 Changed Chunks
+
+| File | Base (gzip) | Head (gzip) | Change |
+|------|-------------|-------------|--------|
+| `ShowDetail-abc123.js` | 5.5 KB | 6.2 KB | 📈 +0.7 KB (12.73%) |
+
+---
+
+⚡ Build completed in workflow #123
 ```
 
-See `public/optimized/USAGE.md` for complete usage examples.
+---
 
+## 📝 Notes
+
+- All bundle reports are ignored by `.gitignore`
+- Scripts use ES modules (`.js` files)
+- Node.js 20+ required
+- GitHub Actions automatically runs these on PRs
+
+---
+
+## 🔧 Troubleshooting
+
+### Bundle analysis fails
+
+**Issue:** `dist/` directory not found
+
+**Solution:**
+```bash
+npm run build
+npm run analyze:bundle
+```
+
+### Comparison shows no changes
+
+**Issue:** Base report is missing or identical
+
+**Solution:**
+```bash
+# Manually create base report from current build
+cp bundle-report.json base-bundle-report.json
+
+# Or wait for GitHub Actions to download base branch report
+```
+
+### OpenAI API errors
+
+**Issue:** API key not set or invalid
+
+**Solution:**
+```bash
+export OPENAI_API_KEY="your-actual-key"
+npm run generate:branding
+```
+
+---
+
+## 📚 Related Documentation
+
+- [GitHub Actions Workflow](../.github/workflows/deploy.yml)
+- [Bundle Size Best Practices](https://web.dev/bundle-size/)
+- [Vite Build Options](https://vitejs.dev/guide/build.html)

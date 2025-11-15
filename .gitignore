@@ -44,3 +44,8 @@ coverage
 
 # Build
 *.tsbuildinfo
+
+# Bundle analysis
+bundle-report.json
+base-bundle-report.json
+bundle-comparison.md
