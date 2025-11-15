@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.6.0...v1.7.0) (2025-11-15)
+
+
+### Features
+
+* episode tracking, seasons, and cast information ([#20](https://github.com/svenjens/tv-show-dashboard/issues/20)) ([607d28b](https://github.com/svenjens/tv-show-dashboard/commit/607d28b0f7449a255940aa38f42a72d24fcecaa7))
+
 ## [1.6.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.5.0...v1.6.0) (2025-11-15)
 
 
