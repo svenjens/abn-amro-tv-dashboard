@@ -25,8 +25,8 @@
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
-            <!-- Logo -->
-        <picture>
+            <!-- Logo (hidden on mobile) -->
+        <picture class="hidden md:block">
           <source
             type="image/webp"
             srcset="/optimized/logo-main-64.webp 64w, /optimized/logo-main-128.webp 128w, /optimized/logo-main-256.webp 256w"
