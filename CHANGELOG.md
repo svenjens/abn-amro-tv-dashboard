@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.9.0...v1.10.0) (2025-11-15)
+
+
+### Features
+
+* add enhanced PR comments with bundle size comparison ([95aa8ea](https://github.com/svenjens/tv-show-dashboard/commit/95aa8eaceeaa5ae03f2673d6a4f1c944e8427bd8))
+
 ## [1.9.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.8.0...v1.9.0) (2025-11-15)
 
 
