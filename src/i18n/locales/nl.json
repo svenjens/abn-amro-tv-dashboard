@@ -235,6 +235,7 @@
     "rights": "Alle rechten voorbehouden.",
     "madeWith": "Gemaakt met",
     "and": "en"
+  },
   "filters": {
     "title": "Filters",
     "clearAll": "Alles wissen",
@@ -252,4 +253,3 @@
     "noResults": "Geen series voldoen aan je filters"
   }
 }
-

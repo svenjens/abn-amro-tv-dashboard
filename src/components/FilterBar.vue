@@ -73,12 +73,7 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.status') }}: {{ localFilters.status }}
-        <button
-          @click="
-            localFilters.status = ''
-            emitFilters()
-          "
-        >
+        <button @click="clearStatus">
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -93,12 +88,7 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.network') }}: {{ localFilters.network }}
-        <button
-          @click="
-            localFilters.network = ''
-            emitFilters()
-          "
-        >
+        <button @click="clearNetwork">
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -113,12 +103,7 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.year') }}: {{ localFilters.year }}
-        <button
-          @click="
-            localFilters.year = ''
-            emitFilters()
-          "
-        >
+        <button @click="clearYear">
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -202,6 +187,22 @@ function clearFilters() {
 // Emit filter changes
 function emitFilters() {
   emit('update:modelValue', { ...localFilters.value })
+}
+
+// Clear individual filters
+function clearStatus() {
+  localFilters.value.status = ''
+  emitFilters()
+}
+
+function clearNetwork() {
+  localFilters.value.network = ''
+  emitFilters()
+}
+
+function clearYear() {
+  localFilters.value.year = ''
+  emitFilters()
 }
 
 // Watch for external filter changes
