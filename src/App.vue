@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen">
+  <div class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
     <!-- Main Content -->
     <div class="flex-grow">
       <router-view v-slot="{ Component }">
@@ -28,16 +28,21 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt.vue'
 import AppFooter from '@/components/AppFooter.vue'
+import { useDarkMode } from '@/composables'
 
 // Lazy load debug component (only needed in dev mode)
 const CacheDebug = defineAsyncComponent(() => import('@/components/CacheDebug.vue'))
 
 const showDebug = ref(false)
+const { init: initDarkMode } = useDarkMode()
 
 onMounted(() => {
   const isDev = import.meta.env.DEV
   const hasDebugParam = new URLSearchParams(window.location.search).has('debug')
   showDebug.value = isDev || hasDebugParam
+  
+  // Initialize dark mode (watch for system preference changes)
+  initDarkMode()
 })
 </script>
 

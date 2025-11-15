@@ -6,7 +6,7 @@
     class="card group/card cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 hover:-translate-y-1 h-full flex flex-col"
     @click="navigateToShow"
   >
-    <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 flex-shrink-0">
+    <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0">
       <img
         v-if="imageLoaded && showImage"
         :src="showImage"
@@ -16,7 +16,7 @@
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
         @error="handleImageError"
       />
-      <div v-else class="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400">
+      <div v-else class="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500">
         <svg
           class="h-16 w-16"
           fill="currentColor"
@@ -44,7 +44,7 @@
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
       <h3
-        class="text-lg font-semibold text-gray-900 line-clamp-2 mb-3 group-hover/card:text-primary-600 transition-colors min-h-[3.5rem]"
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors min-h-[3.5rem]"
       >
         {{ show.name }}
       </h3>
@@ -58,7 +58,7 @@
           />
         </div>
 
-        <div v-if="show.premiered" class="text-sm text-gray-500">
+        <div v-if="show.premiered" class="text-sm text-gray-500 dark:text-gray-400">
           {{ premieredYear }}
         </div>
       </div>

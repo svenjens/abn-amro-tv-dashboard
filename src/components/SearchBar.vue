@@ -28,7 +28,7 @@
         ref="searchInput"
         v-model="localQuery"
         type="text"
-        class="block w-full rounded-lg border border-gray-300 bg-white py-3 pl-10 pr-12 text-gray-900 placeholder:text-gray-400 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:shadow-lg sm:text-sm transition-all duration-200"
+        class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-3 pl-10 pr-12 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-primary-600 dark:focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-500 focus:shadow-lg sm:text-sm transition-all duration-200"
         :placeholder="placeholder"
         :aria-label="placeholder"
         @input="handleInput"
@@ -37,12 +37,12 @@
       />
       <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
-          class="rounded-full p-1 hover:bg-gray-100 transition-colors"
+          class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           aria-label="Clear search"
           @click="clearSearch"
         >
           <svg
-            class="h-5 w-5 text-gray-400 hover:text-gray-600"
+            class="h-5 w-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -69,16 +69,16 @@
     >
       <div
         v-if="showSuggestions && recentSearches.length > 0 && !localQuery"
-        class="absolute z-10 mt-2 w-full rounded-lg bg-white shadow-lg border border-gray-200 overflow-hidden"
+        class="absolute z-10 mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
       >
         <div
-          class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between"
+          class="px-4 py-2 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between"
         >
-          <span class="text-xs font-medium text-gray-500 uppercase">{{
+          <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{
             t('search.recentSearches')
           }}</span>
           <button
-            class="text-xs text-primary-600 hover:text-primary-700"
+            class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
             @click="$emit('clear-recent')"
           >
             {{ t('search.clearRecent') }}
@@ -88,11 +88,11 @@
           <li
             v-for="(search, index) in recentSearches"
             :key="index"
-            class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 transition-all duration-150 hover:translate-x-1"
+            class="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 transition-all duration-150 hover:translate-x-1"
             @click="selectRecentSearch(search)"
           >
             <svg
-              class="h-4 w-4 text-gray-400"
+              class="h-4 w-4 text-gray-400 dark:text-gray-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -104,7 +104,7 @@
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span class="text-sm text-gray-700">{{ search }}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300">{{ search }}</span>
           </li>
         </ul>
       </div>

@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
 
     <!-- Hero Section -->
     <div
-      class="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white overflow-hidden"
+      class="relative bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white overflow-hidden"
       role="banner"
     >
       <!-- Hero Background -->
-      <picture class="absolute inset-0 opacity-10" aria-hidden="true">
+      <picture class="absolute inset-0 opacity-10 dark:opacity-20" aria-hidden="true">
         <source
           type="image/webp"
           srcset="
@@ -77,6 +77,9 @@
               </span>
             </router-link>
 
+            <!-- Dark Mode Toggle -->
+            <DarkModeToggle variant="header" />
+
             <LanguageSwitcher />
           </div>
         </div>
@@ -113,7 +116,7 @@
       <!-- Genre Rows -->
       <div v-else-if="showsStore.genres.length > 0" role="region" :aria-label="t('home.title')">
         <div class="px-4 md:px-0 mb-6">
-          <p class="text-gray-600">
+          <p class="text-gray-600 dark:text-gray-400">
             {{
               t('home.showsCount', {
                 count: showsStore.showsCount,
@@ -134,7 +137,7 @@
         <div
           v-if="canLoadMore"
           ref="loadMoreTrigger"
-          class="text-center py-8 text-gray-500 text-sm"
+          class="text-center py-8 text-gray-500 dark:text-gray-400 text-sm"
         >
           <div class="flex items-center justify-center gap-2">
             <svg
@@ -180,8 +183,8 @@
             aria-hidden="true"
           />
         </picture>
-        <h3 class="mt-6 text-lg font-medium text-gray-900">{{ t('home.noShows') }}</h3>
-        <p class="mt-2 text-sm text-gray-500">{{ t('home.noShowsMessage') }}</p>
+        <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">{{ t('home.noShows') }}</h3>
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ t('home.noShowsMessage') }}</p>
       </div>
     </main>
   </div>
@@ -196,6 +199,7 @@ import { useSEO } from '@/composables'
 import GenreRow from '@/components/GenreRow.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'

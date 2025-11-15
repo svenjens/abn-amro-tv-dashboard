@@ -11,7 +11,11 @@ import router from './router'
 import i18n from './i18n'
 import { getCurrentLocale } from './i18n/helpers'
 import { logger, registerServiceWorker, initInstallPrompt } from './utils'
+import { initDarkModeEarly } from './composables'
 import './style.css'
+
+// Initialize dark mode before app mounts (prevents flash of wrong theme)
+initDarkModeEarly()
 
 const app = createApp(App)
 

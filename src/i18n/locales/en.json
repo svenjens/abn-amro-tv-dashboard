@@ -235,6 +235,11 @@
     "rights": "All rights reserved.",
     "madeWith": "Made with",
     "and": "and"
+  },
+  "darkMode": {
+    "toggle": "Toggle dark mode",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 }
-

@@ -236,6 +236,12 @@
     "madeWith": "Gemaakt met",
     "and": "en"
   },
+  "darkMode": {
+    "toggle": "Schakel donkere modus",
+    "light": "Licht",
+    "dark": "Donker",
+    "system": "Systeem"
+  },
   "filters": {
     "title": "Filters",
     "clearAll": "Alles wissen",
