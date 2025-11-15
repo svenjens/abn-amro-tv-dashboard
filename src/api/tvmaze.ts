@@ -6,7 +6,7 @@
  */
 
 import axios, { type AxiosInstance, AxiosError } from 'axios'
-import type { Show, SearchResult, ApiError } from '@/types'
+import type { Show, SearchResult, ApiError, Episode, CastMember } from '@/types'
 import { apiCache, searchCache, showCache, logger } from '@/utils'
 
 const BASE_URL = 'https://api.tvmaze.com'
@@ -122,6 +122,52 @@ class TVMazeAPI {
         params: { q: query },
       })
       searchCache.set(cacheKey, response.data)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error)
+    }
+  }
+
+  /**
+   * Fetch episodes for a show
+   * @param showId - Show ID
+   */
+  async fetchEpisodes(showId: number): Promise<Episode[]> {
+    const cacheKey = `episodes-${showId}`
+
+    // Check cache
+    const cached = showCache.get(cacheKey)
+    if (cached) {
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
+      return cached as Episode[]
+    }
+
+    try {
+      const response = await this.client.get<Episode[]>(`/shows/${showId}/episodes`)
+      showCache.set(cacheKey, response.data)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error)
+    }
+  }
+
+  /**
+   * Fetch cast for a show
+   * @param showId - Show ID
+   */
+  async fetchCast(showId: number): Promise<CastMember[]> {
+    const cacheKey = `cast-${showId}`
+
+    // Check cache
+    const cached = showCache.get(cacheKey)
+    if (cached) {
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
+      return cached as CastMember[]
+    }
+
+    try {
+      const response = await this.client.get<CastMember[]>(`/shows/${showId}/cast`)
+      showCache.set(cacheKey, response.data)
       return response.data
     } catch (error) {
       throw this.handleError(error)

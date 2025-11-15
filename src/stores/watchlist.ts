@@ -5,13 +5,15 @@
 
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Show } from '@/types'
+import type { Show, WatchedEpisode } from '@/types'
 import { logger } from '@/utils'
 
 const WATCHLIST_STORAGE_KEY = 'tv-dashboard-watchlist'
+const WATCHED_EPISODES_STORAGE_KEY = 'tv-dashboard-watched-episodes'
 
 export const useWatchlistStore = defineStore('watchlist', () => {
   const watchlist = ref<Show[]>([])
+  const watchedEpisodes = ref<WatchedEpisode[]>([])
 
   // Load watchlist from localStorage on init
   function loadFromStorage() {
@@ -20,6 +22,12 @@ export const useWatchlistStore = defineStore('watchlist', () => {
       if (stored) {
         watchlist.value = JSON.parse(stored)
         logger.debug(`[Watchlist] Loaded ${watchlist.value.length} shows from storage`)
+      }
+      
+      const storedEpisodes = localStorage.getItem(WATCHED_EPISODES_STORAGE_KEY)
+      if (storedEpisodes) {
+        watchedEpisodes.value = JSON.parse(storedEpisodes)
+        logger.debug(`[Watchlist] Loaded ${watchedEpisodes.value.length} watched episodes from storage`)
       }
     } catch (error) {
       logger.error('[Watchlist] Failed to load from localStorage:', error)
@@ -33,6 +41,16 @@ export const useWatchlistStore = defineStore('watchlist', () => {
       logger.debug(`[Watchlist] Saved ${watchlist.value.length} shows to storage`)
     } catch (error) {
       logger.error('[Watchlist] Failed to save to localStorage:', error)
+    }
+  }
+
+  // Save watched episodes to localStorage
+  function saveEpisodesToStorage() {
+    try {
+      localStorage.setItem(WATCHED_EPISODES_STORAGE_KEY, JSON.stringify(watchedEpisodes.value))
+      logger.debug(`[Watchlist] Saved ${watchedEpisodes.value.length} watched episodes to storage`)
+    } catch (error) {
+      logger.error('[Watchlist] Failed to save episodes to localStorage:', error)
     }
   }
 
@@ -78,14 +96,64 @@ export const useWatchlistStore = defineStore('watchlist', () => {
     logger.debug('[Watchlist] Cleared all shows')
   }
 
+  // Episode tracking functions
+  function isEpisodeWatched(showId: number, episodeId: number): boolean {
+    return watchedEpisodes.value.some(
+      (ep) => ep.showId === showId && ep.episodeId === episodeId
+    )
+  }
+
+  function markEpisodeAsWatched(showId: number, episodeId: number, season: number, episode: number) {
+    if (!isEpisodeWatched(showId, episodeId)) {
+      watchedEpisodes.value.push({
+        showId,
+        episodeId,
+        season,
+        episode,
+        watchedAt: Date.now(),
+      })
+      saveEpisodesToStorage()
+      logger.debug(`[Watchlist] Marked episode S${season}E${episode} as watched`)
+    }
+  }
+
+  function unmarkEpisodeAsWatched(showId: number, episodeId: number) {
+    const index = watchedEpisodes.value.findIndex(
+      (ep) => ep.showId === showId && ep.episodeId === episodeId
+    )
+    if (index !== -1) {
+      watchedEpisodes.value.splice(index, 1)
+      saveEpisodesToStorage()
+      logger.debug(`[Watchlist] Unmarked episode as watched`)
+    }
+  }
+
+  function toggleEpisodeWatched(showId: number, episodeId: number, season: number, episode: number) {
+    if (isEpisodeWatched(showId, episodeId)) {
+      unmarkEpisodeAsWatched(showId, episodeId)
+    } else {
+      markEpisodeAsWatched(showId, episodeId, season, episode)
+    }
+  }
+
+  function getWatchedEpisodesForShow(showId: number): WatchedEpisode[] {
+    return watchedEpisodes.value.filter((ep) => ep.showId === showId)
+  }
+
+  function getWatchedEpisodesCount(showId: number): number {
+    return getWatchedEpisodesForShow(showId).length
+  }
+
   // Computed properties
   const watchlistCount = computed(() => watchlist.value.length)
   const hasShows = computed(() => watchlist.value.length > 0)
+  const totalWatchedEpisodes = computed(() => watchedEpisodes.value.length)
 
   // Initialize on store creation
   loadFromStorage()
 
   return {
+    // Watchlist
     watchlist,
     watchlistCount,
     hasShows,
@@ -94,5 +162,14 @@ export const useWatchlistStore = defineStore('watchlist', () => {
     removeFromWatchlist,
     toggleWatchlist,
     clearWatchlist,
+    // Episode tracking
+    watchedEpisodes,
+    totalWatchedEpisodes,
+    isEpisodeWatched,
+    markEpisodeAsWatched,
+    unmarkEpisodeAsWatched,
+    toggleEpisodeWatched,
+    getWatchedEpisodesForShow,
+    getWatchedEpisodesCount,
   }
 })
