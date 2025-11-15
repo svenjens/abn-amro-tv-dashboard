@@ -32,7 +32,7 @@
         :aria-label="placeholder"
         @input="handleInput"
         @keyup.enter="handleSearch"
-        @focus="showSuggestions = true"
+        @focus="handleFocus"
       />
       <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
@@ -134,6 +134,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
   search: [value: string]
   'clear-recent': []
+  focus: []
 }>()
 
 const localQuery = ref(props.modelValue)
@@ -175,6 +176,11 @@ function selectRecentSearch(search: string) {
   emit('update:modelValue', search)
   emit('search', search)
   showSuggestions.value = false
+}
+
+function handleFocus() {
+  showSuggestions.value = true
+  emit('focus')
 }
 
 // Close suggestions when clicking outside
