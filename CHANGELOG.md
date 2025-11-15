@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.1.1...v1.2.0) (2025-11-15)
+
+
+### Features
+
+* add watchlist functionality ([#9](https://github.com/svenjens/tv-show-dashboard/issues/9)) ([07e9b53](https://github.com/svenjens/tv-show-dashboard/commit/07e9b53731926301a6d6ad99c13fefd822df109d))
+
 ## [1.1.1](https://github.com/svenjens/tv-show-dashboard/compare/v1.1.0...v1.1.1) (2025-11-15)
 
 
