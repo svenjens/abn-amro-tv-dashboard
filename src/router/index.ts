@@ -59,6 +59,38 @@ const routes: RouteRecordRaw[] = [
           title: 'AI Vision & Roadmap - BingeList',
         },
       },
+      {
+        path: 'terms',
+        name: 'terms',
+        component: () => import('@/views/TermsOfService.vue'),
+        meta: {
+          title: 'Terms of Service - BingeList',
+        },
+      },
+      {
+        path: 'privacy',
+        name: 'privacy',
+        component: () => import('@/views/PrivacyPolicy.vue'),
+        meta: {
+          title: 'Privacy Policy - BingeList',
+        },
+      },
+      {
+        path: 'disclaimer',
+        name: 'disclaimer',
+        component: () => import('@/views/Disclaimer.vue'),
+        meta: {
+          title: 'Disclaimer - BingeList',
+        },
+      },
+      {
+        path: 'accessibility',
+        name: 'accessibility-statement',
+        component: () => import('@/views/Accessibility.vue'),
+        meta: {
+          title: 'Accessibility Statement - BingeList',
+        },
+      },
     ],
   },
   {
