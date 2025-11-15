@@ -27,6 +27,7 @@
         </div>
 
         <SearchBar
+          ref="searchBarRef"
           v-model="searchQuery"
           :placeholder="t('search.searchByName')"
           :recent-searches="searchStore.recentSearches"
@@ -128,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores'
@@ -144,6 +145,7 @@ const route = useRoute()
 const router = useRouter()
 const searchStore = useSearchStore()
 
+const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
 const searchQuery = ref('')
 
 // SEO (multilingual)
@@ -184,5 +186,10 @@ onMounted(() => {
     searchQuery.value = query
     searchStore.search(query)
   }
+
+  // Auto-focus search bar when navigating from home page
+  nextTick(() => {
+    searchBarRef.value?.focus()
+  })
 })
 </script>

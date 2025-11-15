@@ -25,6 +25,7 @@
       <label for="tv-show-search" class="sr-only">{{ placeholder }}</label>
       <input
         id="tv-show-search"
+        ref="searchInput"
         v-model="localQuery"
         type="text"
         class="block w-full rounded-lg border border-gray-300 bg-white py-3 pl-10 pr-12 text-gray-900 placeholder:text-gray-400 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:shadow-lg sm:text-sm transition-all duration-200"
@@ -137,8 +138,17 @@ const emit = defineEmits<{
   focus: []
 }>()
 
+const searchInput = ref<HTMLInputElement | null>(null)
 const localQuery = ref(props.modelValue)
 const showSuggestions = ref(false)
+
+// Focus method to be called from parent
+function focus() {
+  searchInput.value?.focus()
+}
+
+// Expose focus method
+defineExpose({ focus })
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null
 
 watch(

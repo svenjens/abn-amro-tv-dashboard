@@ -19,6 +19,7 @@
     "optimize:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.2.0",
     "@vueuse/motion": "^3.0.3",
     "axios": "^1.13.2",
     "dompurify": "^3.3.0",
