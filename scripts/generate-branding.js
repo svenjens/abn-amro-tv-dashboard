@@ -41,7 +41,7 @@ const ASSET_PROMPTS = [
     Icon only, no text. Centered composition. Professional and memorable. 
     Design should work perfectly on red backgrounds (#dc2626).`,
     size: '1024x1024',
-    quality: 'hd',
+    quality: 'high',
   },
   {
     name: 'logo-full',
@@ -51,8 +51,8 @@ const ASSET_PROMPTS = [
     Entertainment and streaming aesthetic. Wide format suitable for app headers. 
     Should look premium on red backgrounds (#dc2626). 
     Professional, memorable, and modern design for a TV show discovery and tracking platform.`,
-    size: '1792x1024',
-    quality: 'hd',
+    size: '1536x1024',
+    quality: 'high',
   },
   {
     name: 'hero-background',
@@ -62,8 +62,8 @@ const ASSET_PROMPTS = [
     Modern, clean aesthetic with depth and subtle motion blur. 
     Wide horizontal format suitable for hero section background. Atmospheric and professional. 
     Should evoke the feeling of discovering your next favorite show.`,
-    size: '1792x1024',
-    quality: 'hd',
+    size: '1536x1024',
+    quality: 'high',
   },
   {
     name: 'og-image',
@@ -73,7 +73,7 @@ const ASSET_PROMPTS = [
     Use red gradient (#dc2626) as dominant color with white and gold accents (#f59e0b). 
     Modern, engaging social media design. Professional yet exciting. 1200x1200 composition.`,
     size: '1024x1024',
-    quality: 'hd',
+    quality: 'high',
   },
   {
     name: 'favicon',
@@ -83,7 +83,7 @@ const ASSET_PROMPTS = [
     Must be recognizable at tiny sizes (16x16px to 512x512px). 
     Bold shapes, high contrast, simple and iconic. Centered composition.`,
     size: '1024x1024',
-    quality: 'standard',
+    quality: 'medium',
   },
   {
     name: 'icon-192',
@@ -93,7 +93,7 @@ const ASSET_PROMPTS = [
     Clean, recognizable design suitable for mobile home screens. 
     Rounded square format with padding. Professional and memorable.`,
     size: '1024x1024',
-    quality: 'standard',
+    quality: 'medium',
   },
   {
     name: 'icon-512',
@@ -103,7 +103,7 @@ const ASSET_PROMPTS = [
     Polished, professional design with subtle shadows and highlights. 
     Rounded square format. Suitable for app stores and high-res displays.`,
     size: '1024x1024',
-    quality: 'hd',
+    quality: 'high',
   },
   {
     name: 'apple-touch-icon',
@@ -113,7 +113,7 @@ const ASSET_PROMPTS = [
     Professional, polished design suitable for iOS home screen. 
     High quality with subtle gradients and depth. 180x180 format.`,
     size: '1024x1024',
-    quality: 'hd',
+    quality: 'high',
   },
   {
     name: 'loading-animation',
@@ -123,7 +123,7 @@ const ASSET_PROMPTS = [
     Clean, minimal design suitable for loading states. 
     Centered, simple shapes that work well when animated.`,
     size: '1024x1024',
-    quality: 'standard',
+    quality: 'medium',
   },
   {
     name: 'empty-state-illustration',
@@ -133,7 +133,7 @@ const ASSET_PROMPTS = [
     Friendly, approachable, minimal illustration style. 
     Centered composition suitable for empty watchlist or search results.`,
     size: '1024x1024',
-    quality: 'standard',
+    quality: 'medium',
   },
 ]
 

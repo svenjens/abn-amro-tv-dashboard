@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-15T11:37:01.858Z",
+  "generated_at": "2025-11-15T14:55:47.045Z",
   "model": "gpt-image-1",
   "brand_colors": {
     "primary": "#dc2626",
@@ -15,61 +15,61 @@
     {
       "name": "logo-main",
       "filename": "logo-main.png",
-      "size_kb": "1400.90",
+      "size_kb": "1384.17",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/logo-main.png"
     },
     {
       "name": "logo-full",
       "filename": "logo-full.png",
-      "size_kb": "2108.04",
+      "size_kb": "2074.86",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/logo-full.png"
     },
     {
       "name": "hero-background",
       "filename": "hero-background.png",
-      "size_kb": "2078.80",
+      "size_kb": "2523.90",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/hero-background.png"
     },
     {
       "name": "og-image",
       "filename": "og-image.png",
-      "size_kb": "1483.93",
+      "size_kb": "1795.92",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/og-image.png"
     },
     {
       "name": "favicon",
       "filename": "favicon.png",
-      "size_kb": "1302.33",
+      "size_kb": "1326.40",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/favicon.png"
     },
     {
       "name": "icon-192",
       "filename": "icon-192.png",
-      "size_kb": "1420.92",
+      "size_kb": "1445.52",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/icon-192.png"
     },
     {
       "name": "icon-512",
       "filename": "icon-512.png",
-      "size_kb": "1552.70",
+      "size_kb": "1662.72",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/icon-512.png"
     },
     {
       "name": "apple-touch-icon",
       "filename": "apple-touch-icon.png",
-      "size_kb": "1456.92",
+      "size_kb": "1424.71",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/apple-touch-icon.png"
     },
     {
       "name": "loading-animation",
       "filename": "loading-animation.png",
-      "size_kb": "1404.24",
+      "size_kb": "1134.81",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/loading-animation.png"
     },
     {
       "name": "empty-state-illustration",
       "filename": "empty-state-illustration.png",
-      "size_kb": "1409.05",
+      "size_kb": "1254.61",
       "path": "/Users/svenjens/Projects/tv-show-dashboard/tv-show-dashboard/public/empty-state-illustration.png"
     }
   ]
