@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.3.0...v1.4.0) (2025-11-15)
+
+
+### Features
+
+* complete rebrand to BingeList with new brand assets ([#13](https://github.com/svenjens/tv-show-dashboard/issues/13)) ([bc7222a](https://github.com/svenjens/tv-show-dashboard/commit/bc7222a198d0fa9c19a795740ff764933696422f))
+
 ## [1.3.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.2.0...v1.3.0) (2025-11-15)
 
 
