@@ -24,7 +24,7 @@
     <div class="hidden md:block overflow-visible">
       <div class="relative group overflow-visible">
         <button
-          v-if="canScrollLeft && hasMoreShows"
+          v-if="canScrollLeft"
           class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Scroll left"
           @click="scrollLeft"
@@ -54,7 +54,7 @@
         </div>
 
         <button
-          v-if="canScrollRight && hasMoreShows"
+          v-if="canScrollRight"
           class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Scroll right"
           @click="scrollRight"
