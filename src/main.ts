@@ -5,6 +5,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { MotionPlugin } from '@vueuse/motion'
+import { injectSpeedInsights } from '@vercel/speed-insights'
 import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
@@ -35,6 +36,9 @@ app.mount('#app')
 // Initialize PWA features
 registerServiceWorker()
 initInstallPrompt()
+
+// Initialize Vercel Speed Insights (Web Vitals monitoring)
+injectSpeedInsights()
 
 // Log app initialization
 logger.debug('[App] TV Show Dashboard initialized')
