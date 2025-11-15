@@ -3,13 +3,13 @@
     <span
       v-for="genre in displayGenres"
       :key="genre"
-      class="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-800"
+      class="inline-flex items-center rounded-full bg-primary-100 dark:bg-primary-900 px-3 py-1 text-xs font-medium text-primary-800 dark:text-primary-200"
     >
       {{ genre }}
     </span>
     <span
       v-if="hasMore"
-      class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600"
+      class="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300"
     >
       +{{ remainingCount }}
     </span>

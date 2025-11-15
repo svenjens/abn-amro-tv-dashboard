@@ -7,13 +7,13 @@
   >
     <div class="flex items-center justify-between mb-4 px-4 md:px-0">
       <h2
-        class="text-2xl font-bold text-gray-900 transition-colors hover:text-primary-600 cursor-pointer"
+        class="text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
         @click="navigateToGenre"
       >
         {{ genre }}
       </h2>
       <button
-        class="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 rounded px-2 py-1"
+        class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 rounded px-2 py-1"
         @click="navigateToGenre"
       >
         {{ t('genre.viewAll') }} →
@@ -25,11 +25,11 @@
       <div class="relative group overflow-visible">
         <button
           v-if="canScrollLeft"
-          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Scroll left"
           @click="scrollLeft"
         >
-          <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -55,11 +55,11 @@
 
         <button
           v-if="canScrollRight"
-          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-label="Scroll right"
           @click="scrollRight"
         >
-          <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"

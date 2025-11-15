@@ -24,7 +24,10 @@
             </button>
           </div>
 
-          <LanguageSwitcher />
+          <div class="flex items-center gap-3">
+            <DarkModeToggle variant="header" />
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <div class="flex items-center justify-between">
@@ -116,6 +119,7 @@ import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 const { t } = useI18n()
 const router = useRouter()
