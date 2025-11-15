@@ -71,7 +71,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 export function initInstallPrompt(): void {
   window.addEventListener('beforeinstallprompt', (e) => {
     // Prevent the mini-infobar from appearing on mobile
-    // @ts-expect-error - preventDefault is deprecated but still functional
+    // Note: preventDefault() is deprecated but still functional and widely used
     e.preventDefault()
     // Store the event for later use
     deferredPrompt = e as BeforeInstallPromptEvent
