@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.4.0...v1.5.0) (2025-11-15)
+
+
+### Features
+
+* add Google AdSense integration ([#16](https://github.com/svenjens/tv-show-dashboard/issues/16)) ([5bc0bd2](https://github.com/svenjens/tv-show-dashboard/commit/5bc0bd2ae236aa0c03f3b3f9fa5a6dbfac1727ae))
+
 ## [1.4.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.3.0...v1.4.0) (2025-11-15)
 
 
