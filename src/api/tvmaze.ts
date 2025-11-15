@@ -1,12 +1,12 @@
 /**
  * TVMaze API Service
- *
+ * 
  * Provides methods to interact with the TVMaze API
  * Documentation: https://www.tvmaze.com/api
  */
 
 import axios, { type AxiosInstance, AxiosError } from 'axios'
-import type { Show, SearchResult, ApiError } from '@/types'
+import type { Show, SearchResult, ApiError, Episode, CastMember } from '@/types'
 import { apiCache, searchCache, showCache, logger } from '@/utils'
 
 const BASE_URL = 'https://api.tvmaze.com'
@@ -55,7 +55,7 @@ class TVMazeAPI {
    */
   async fetchAllShows(): Promise<Show[]> {
     const cacheKey = 'all-shows'
-
+    
     // Check cache
     const cached = apiCache.get(cacheKey)
     if (cached) {
@@ -80,7 +80,7 @@ class TVMazeAPI {
   async fetchShowById(id: number, embed?: string[]): Promise<Show> {
     const embedParam = embed ? `-${embed.join('-')}` : ''
     const cacheKey = `show-${id}${embedParam}`
-
+    
     // Check cache
     const cached = showCache.get(cacheKey)
     if (cached) {
@@ -89,7 +89,7 @@ class TVMazeAPI {
     }
 
     const embedQuery = embed ? `?embed[]=${embed.join('&embed[]=')}` : ''
-
+    
     try {
       const response = await this.client.get<Show>(`/shows/${id}${embedQuery}`)
       showCache.set(cacheKey, response.data)
@@ -109,7 +109,7 @@ class TVMazeAPI {
     }
 
     const cacheKey = `search-${query.toLowerCase()}`
-
+    
     // Check cache
     const cached = searchCache.get(cacheKey)
     if (cached) {
@@ -122,6 +122,52 @@ class TVMazeAPI {
         params: { q: query },
       })
       searchCache.set(cacheKey, response.data)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error)
+    }
+  }
+
+  /**
+   * Fetch episodes for a show
+   * @param showId - Show ID
+   */
+  async fetchEpisodes(showId: number): Promise<Episode[]> {
+    const cacheKey = `episodes-${showId}`
+
+    // Check cache
+    const cached = showCache.get(cacheKey)
+    if (cached) {
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
+      return cached as Episode[]
+    }
+
+    try {
+      const response = await this.client.get<Episode[]>(`/shows/${showId}/episodes`)
+      showCache.set(cacheKey, response.data)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error)
+    }
+  }
+
+  /**
+   * Fetch cast for a show
+   * @param showId - Show ID
+   */
+  async fetchCast(showId: number): Promise<CastMember[]> {
+    const cacheKey = `cast-${showId}`
+
+    // Check cache
+    const cached = showCache.get(cacheKey)
+    if (cached) {
+      logger.debug(`[API Cache] Hit for ${cacheKey}`)
+      return cached as CastMember[]
+    }
+
+    try {
+      const response = await this.client.get<CastMember[]>(`/shows/${showId}/cast`)
+      showCache.set(cacheKey, response.data)
       return response.data
     } catch (error) {
       throw this.handleError(error)
@@ -156,7 +202,7 @@ class TVMazeAPI {
     const apiPruned = apiCache.prune()
     const searchPruned = searchCache.prune()
     const showPruned = showCache.prune()
-
+    
     logger.debug(`[API Cache] Pruned ${apiPruned + searchPruned + showPruned} expired entries`)
   }
 

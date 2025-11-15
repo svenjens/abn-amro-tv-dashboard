@@ -116,6 +116,32 @@
   },
   "ads": {
     "sponsored": "Advertisement"
+  },
+  "episodes": {
+    "title": "Episodes",
+    "season": "Season {number}",
+    "loading": "Loading episodes...",
+    "noEpisodes": "No episodes available",
+    "markWatched": "Mark as watched",
+    "markUnwatched": "Mark as unwatched",
+    "minutes": "min",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "progress": "Season Progress"
+  },
+  "cast": {
+    "title": "Cast & Crew",
+    "loading": "Loading cast...",
+    "noCast": "No cast information available",
+    "voice": "Voice",
+    "self": "Self",
+    "showMore": "Show more cast",
+    "more": "more"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "episodes": "Episodes",
+    "cast": "Cast"
   }
 }
 

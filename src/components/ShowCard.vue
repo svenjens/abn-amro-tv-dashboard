@@ -8,7 +8,7 @@
   >
     <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 flex-shrink-0">
       <img
-        v-if="imageLoaded"
+        v-if="imageLoaded && showImage"
         :src="showImage"
         :alt="show.name"
         loading="lazy"
@@ -90,9 +90,9 @@ const imageError = ref(false)
 
 const showImage = computed(() => {
   if (imageError.value) {
-    return getShowImage(props.show, 'medium')
+    return null
   }
-  return props.show.image?.medium || getShowImage(props.show, 'medium')
+  return getShowImage(props.show, 'medium')
 })
 
 const premieredYear = computed(() => {

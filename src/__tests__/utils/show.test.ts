@@ -4,7 +4,6 @@ import {
   getSortedGenres,
   stripHtml,
   formatRating,
-  getPlaceholderImage,
   getShowImage,
   truncateText,
   formatSchedule,
@@ -120,13 +119,6 @@ describe('Show Utils', () => {
     })
   })
 
-  describe('getPlaceholderImage', () => {
-    it('should return placeholder image URL', () => {
-      const url = getPlaceholderImage()
-      expect(url).toContain('placeholder')
-    })
-  })
-
   describe('getShowImage', () => {
     it('should return medium image by default', () => {
       expect(getShowImage(mockShow)).toBe('http://example.com/medium.jpg')
@@ -136,10 +128,9 @@ describe('Show Utils', () => {
       expect(getShowImage(mockShow, 'original')).toBe('http://example.com/original.jpg')
     })
 
-    it('should return placeholder when image is null', () => {
+    it('should return null when image is not available', () => {
       const showWithoutImage = { ...mockShow, image: null }
-      const url = getShowImage(showWithoutImage)
-      expect(url).toContain('placeholder')
+      expect(getShowImage(showWithoutImage)).toBe(null)
     })
   })
 

@@ -100,3 +100,76 @@ export interface ApiError {
   status?: number
   details?: unknown
 }
+
+/**
+ * Episode types
+ */
+export interface Episode {
+  id: number
+  url: string
+  name: string
+  season: number
+  number: number
+  type: string
+  airdate: string
+  airtime: string
+  airstamp: string
+  runtime: number | null
+  rating: Rating
+  image: Image | null
+  summary: string | null
+  _links: {
+    self: Link
+    show: Link
+  }
+}
+
+export interface EpisodesBySeason {
+  [season: number]: Episode[]
+}
+
+/**
+ * Cast types
+ */
+export interface CastMember {
+  person: Person
+  character: Character
+  self: boolean
+  voice: boolean
+}
+
+export interface Person {
+  id: number
+  url: string
+  name: string
+  country: Country | null
+  birthday: string | null
+  deathday: string | null
+  gender: string | null
+  image: Image | null
+  updated: number
+  _links: {
+    self: Link
+  }
+}
+
+export interface Character {
+  id: number
+  url: string
+  name: string
+  image: Image | null
+  _links: {
+    self: Link
+  }
+}
+
+/**
+ * Episode tracking
+ */
+export interface WatchedEpisode {
+  showId: number
+  episodeId: number
+  season: number
+  episode: number
+  watchedAt: number
+}

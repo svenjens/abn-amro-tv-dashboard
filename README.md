@@ -471,7 +471,9 @@ Potential features for future iterations:
 
 - [ ] User authentication and favorites
 - [ ] Advanced filtering (by network, year, status)
-- [ ] Episode tracking
+- [x] Episode tracking - ✅ **Implemented**
+- [x] Season and episode details - ✅ **Implemented**
+- [x] Cast and crew information - ✅ **Implemented**
 - [ ] Show recommendations based on viewing history
 - [ ] Dark mode toggle
 - [x] Internationalization (i18n) - ✅ **Implemented**
@@ -480,8 +482,6 @@ Potential features for future iterations:
 - [x] Infinite scroll for genres - ✅ **Implemented** (better UX than pagination)
 - [x] Watchlist functionality - ✅ **Implemented**
 - [x] Progressive Web App (PWA) support - ✅ **Implemented**
-- [ ] Season and episode details
-- [ ] Cast and crew information
 - [ ] More language options (German, French, Spanish)
 
 ### Node Version

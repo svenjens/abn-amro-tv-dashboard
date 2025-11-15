@@ -116,6 +116,32 @@
   },
   "ads": {
     "sponsored": "Advertentie"
+  },
+  "episodes": {
+    "title": "Afleveringen",
+    "season": "Seizoen {number}",
+    "loading": "Afleveringen laden...",
+    "noEpisodes": "Geen afleveringen beschikbaar",
+    "markWatched": "Markeer als gekeken",
+    "markUnwatched": "Markeer als niet gekeken",
+    "minutes": "min",
+    "showMore": "Meer tonen",
+    "showLess": "Minder tonen",
+    "progress": "Seizoen Voortgang"
+  },
+  "cast": {
+    "title": "Cast & Crew",
+    "loading": "Cast laden...",
+    "noCast": "Geen cast informatie beschikbaar",
+    "voice": "Stem",
+    "self": "Zichzelf",
+    "showMore": "Meer cast tonen",
+    "more": "meer"
+  },
+  "tabs": {
+    "overview": "Overzicht",
+    "episodes": "Afleveringen",
+    "cast": "Cast"
   }
 }
 
