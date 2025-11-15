@@ -121,17 +121,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
 import SearchBar from '@/components/SearchBar.vue'
 import ShowCard from '@/components/ShowCard.vue'
-
-// Lazy load conditional components
-const LoadingSpinner = defineAsyncComponent(() => import('@/components/LoadingSpinner.vue'))
-const ErrorMessage = defineAsyncComponent(() => import('@/components/ErrorMessage.vue'))
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 const { t } = useI18n()
 const route = useRoute()

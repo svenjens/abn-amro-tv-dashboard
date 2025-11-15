@@ -98,16 +98,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, defineAsyncComponent } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useShowsStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
-
-// Lazy load conditional component
-const LoadingSpinner = defineAsyncComponent(() => import('@/components/LoadingSpinner.vue'))
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const route = useRoute()

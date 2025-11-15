@@ -135,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useShowsStore } from '@/stores'
@@ -145,10 +145,8 @@ import GenreRow from '@/components/GenreRow.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
-
-// Lazy load conditional components
-const LoadingSpinner = defineAsyncComponent(() => import('@/components/LoadingSpinner.vue'))
-const ErrorMessage = defineAsyncComponent(() => import('@/components/ErrorMessage.vue'))
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 const { t } = useI18n()
 
