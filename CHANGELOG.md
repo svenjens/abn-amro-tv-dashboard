@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/svenjens/tv-show-dashboard/compare/v1.1.0...v1.1.1) (2025-11-15)
+
+
+### Performance Improvements
+
+* complete performance optimization suite ([#7](https://github.com/svenjens/tv-show-dashboard/issues/7)) ([0f1b0db](https://github.com/svenjens/tv-show-dashboard/commit/0f1b0db0fd9f79005836d9ee2e19a83e3d16fec1))
+
 ## [1.1.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.0.0...v1.1.0) (2025-11-14)
 
 
