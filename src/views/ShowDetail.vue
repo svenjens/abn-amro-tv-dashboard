@@ -282,7 +282,7 @@ import { useI18n } from 'vue-i18n'
 import DOMPurify from 'dompurify'
 import { useShowsStore } from '@/stores'
 import type { Show, ApiError, Episode, CastMember } from '@/types'
-import { getShowImage, formatSchedule } from '@/utils'
+import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import { tvMazeAPI } from '@/api/tvmaze'
 import RatingBadge from '@/components/RatingBadge.vue'
@@ -394,9 +394,12 @@ function formatDate(dateString: string): string {
 }
 
 async function loadShow() {
-  const id = Number(route.params.id)
-  if (isNaN(id)) {
-    error.value = { message: 'Invalid show ID' }
+  // Extract ID from slug (format: show-name-123)
+  const slug = route.params.slug as string
+  const id = extractIdFromSlug(slug)
+  
+  if (!id) {
+    error.value = { message: 'Invalid show URL' }
     loading.value = false
     return
   }
@@ -421,6 +424,16 @@ async function loadShow() {
 
     show.value = showData
 
+    // Validate slug and redirect if incorrect (for SEO and old URLs)
+    if (showData) {
+      const correctSlug = createShowSlug(showData.name, showData.id)
+      if (slug !== correctSlug) {
+        const locale = route.params.locale || 'en'
+        router.replace({ name: 'show-detail', params: { locale, slug: correctSlug } })
+        return
+      }
+    }
+
     // If user is already on episodes/cast tab, trigger fetch for new show
     if (activeTab.value === 'episodes') {
       await fetchEpisodes()
@@ -439,9 +452,9 @@ onMounted(() => {
 })
 
 watch(
-  () => route.params.id,
-  (newId, oldId) => {
-    if (newId !== oldId) {
+  () => route.params.slug,
+  (newSlug, oldSlug) => {
+    if (newSlug !== oldSlug) {
       loadShow()
     }
   }

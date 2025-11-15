@@ -70,7 +70,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Show } from '@/types'
-import { getShowImage } from '@/utils'
+import { getShowImage, createShowSlug } from '@/utils'
 import RatingBadge from './RatingBadge.vue'
 import GenreTags from './GenreTags.vue'
 import WatchlistButton from './WatchlistButton.vue'
@@ -103,7 +103,8 @@ const premieredYear = computed(() => {
 function navigateToShow() {
   const currentRoute = router.currentRoute.value
   const locale = currentRoute.params.locale || 'en'
-  router.push({ name: 'show-detail', params: { locale, id: props.show.id } })
+  const slug = createShowSlug(props.show.name, props.show.id)
+  router.push({ name: 'show-detail', params: { locale, slug } })
 }
 
 function handleImageError() {
