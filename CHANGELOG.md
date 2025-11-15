@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/svenjens/tv-show-dashboard/compare/v1.7.0...v1.7.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* exclude .txt files from service worker for ads.txt verification ([#23](https://github.com/svenjens/tv-show-dashboard/issues/23)) ([83d36b5](https://github.com/svenjens/tv-show-dashboard/commit/83d36b5b5716f89b5dda0e2654f8c36ef8a2c236))
+
 ## [1.7.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.6.0...v1.7.0) (2025-11-15)
 
 
