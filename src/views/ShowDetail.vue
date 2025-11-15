@@ -404,6 +404,12 @@ async function loadShow() {
   loading.value = true
   error.value = null
 
+  // Reset episodes and cast data when loading a new show
+  episodes.value = []
+  episodesError.value = null
+  cast.value = []
+  castError.value = null
+
   try {
     // First try to get from store
     let showData = showsStore.getShowById(id)
@@ -414,6 +420,13 @@ async function loadShow() {
     }
 
     show.value = showData
+
+    // If user is already on episodes/cast tab, trigger fetch for new show
+    if (activeTab.value === 'episodes') {
+      await fetchEpisodes()
+    } else if (activeTab.value === 'cast') {
+      await fetchCast()
+    }
   } catch (err) {
     error.value = err as ApiError
   } finally {
