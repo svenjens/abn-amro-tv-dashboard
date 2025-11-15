@@ -105,6 +105,18 @@
       "fallbackDescription": "Watch {name} and discover more TV shows on TV Show Dashboard",
       "keywords": "{name}, tv show, series"
     }
+  },
+  "watchlist": {
+    "title": "My Watchlist",
+    "addToWatchlist": "Add to watchlist",
+    "removeFromWatchlist": "Remove from watchlist",
+    "addedToast": "{name} added to your watchlist",
+    "removedToast": "{name} removed from your watchlist",
+    "empty": "Your watchlist is empty",
+    "emptyMessage": "Start adding shows to your watchlist to keep track of what you want to watch.",
+    "showCount": "No show | {count} show | {count} shows",
+    "clearAll": "Clear all",
+    "confirmClear": "Are you sure you want to clear your entire watchlist?"
   }
 }
 

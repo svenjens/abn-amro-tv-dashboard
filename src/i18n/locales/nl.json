@@ -105,6 +105,18 @@
       "fallbackDescription": "Bekijk {name} en ontdek meer tv-series op TV Show Dashboard",
       "keywords": "{name}, tv-serie, serie"
     }
+  },
+  "watchlist": {
+    "title": "Mijn Watchlist",
+    "addToWatchlist": "Toevoegen aan watchlist",
+    "removeFromWatchlist": "Verwijderen uit watchlist",
+    "addedToast": "{name} toegevoegd aan je watchlist",
+    "removedToast": "{name} verwijderd van je watchlist",
+    "empty": "Je watchlist is leeg",
+    "emptyMessage": "Begin met het toevoegen van series aan je watchlist om bij te houden wat je wilt kijken.",
+    "showCount": "Geen serie | {count} serie | {count} series",
+    "clearAll": "Alles wissen",
+    "confirmClear": "Weet je zeker dat je je hele watchlist wilt wissen?"
   }
 }
 

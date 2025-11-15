@@ -45,7 +45,32 @@
               </p>
             </div>
           </div>
-          <LanguageSwitcher />
+          <div class="flex items-center gap-4">
+            <!-- Watchlist Link -->
+            <router-link
+              :to="{ name: 'watchlist', params: { locale: route.params.locale || 'en' } }"
+              class="relative inline-flex items-center gap-2 text-white hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg px-3 py-2"
+              :aria-label="t('watchlist.title')"
+            >
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 3H19C20.1046 3 21 3.89543 21 5V21L12 17L3 21V5C3 3.89543 3.89543 3 5 3Z"
+                />
+              </svg>
+              <span class="hidden md:inline">{{ t('watchlist.title') }}</span>
+              <span
+                v-if="watchlistStore.hasShows"
+                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+              >
+                {{ watchlistStore.watchlistCount }}
+              </span>
+            </router-link>
+
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <SearchBar
@@ -138,8 +163,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useShowsStore } from '@/stores'
-import { useSearchStore } from '@/stores'
+import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import GenreRow from '@/components/GenreRow.vue'
 import SearchBar from '@/components/SearchBar.vue'
@@ -154,6 +178,7 @@ const router = useRouter()
 const route = useRoute()
 const showsStore = useShowsStore()
 const searchStore = useSearchStore()
+const watchlistStore = useWatchlistStore()
 const searchQuery = ref('')
 
 // Performance: Lazy load genres with infinite scroll

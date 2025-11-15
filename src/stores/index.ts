@@ -4,3 +4,4 @@
 
 export * from './shows'
 export * from './search'
+export * from './watchlist'

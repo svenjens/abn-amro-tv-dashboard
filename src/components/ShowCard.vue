@@ -35,6 +35,11 @@
       <div v-if="show.rating.average" class="absolute top-2 right-2">
         <RatingBadge :rating="show.rating.average" />
       </div>
+
+      <!-- Watchlist Button Overlay -->
+      <div class="absolute top-2 left-2 opacity-0 group-hover/card:opacity-100 transition-opacity">
+        <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
+      </div>
     </div>
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
@@ -68,6 +73,7 @@ import type { Show } from '@/types'
 import { getShowImage } from '@/utils'
 import RatingBadge from './RatingBadge.vue'
 import GenreTags from './GenreTags.vue'
+import WatchlistButton from './WatchlistButton.vue'
 
 interface Props {
   show: Show

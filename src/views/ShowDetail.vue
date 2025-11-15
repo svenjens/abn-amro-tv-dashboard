@@ -104,6 +104,7 @@
               <div class="flex flex-wrap items-center gap-4 mb-6">
                 <RatingBadge v-if="show.rating.average" :rating="show.rating.average" />
                 <GenreTags v-if="show.genres" :genres="show.genres" :max-display="5" />
+                <WatchlistButton :show="show" variant="button" size="lg" />
               </div>
 
               <dl class="space-y-3 text-gray-200">
@@ -238,6 +239,7 @@ import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import WatchlistButton from '@/components/WatchlistButton.vue'
 
 const { t } = useI18n()
 

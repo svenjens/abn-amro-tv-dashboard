@@ -43,6 +43,14 @@ const routes: RouteRecordRaw[] = [
           title: 'Genre - TV Show Dashboard',
         },
       },
+      {
+        path: 'watchlist',
+        name: 'watchlist',
+        component: () => import('@/views/Watchlist.vue'),
+        meta: {
+          title: 'My Watchlist - TV Show Dashboard',
+        },
+      },
     ],
   },
   {
