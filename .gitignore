@@ -32,9 +32,6 @@ dist-ssr
 .vercel
 scripts/setup-vercel.sh
 
-# Optimized images (generated)
-public/optimized/
-
 # Testing
 coverage
 *.lcov

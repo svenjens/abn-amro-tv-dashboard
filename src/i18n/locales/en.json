@@ -14,7 +14,8 @@
     "searchPlaceholder": "Search TV shows...",
     "showsCount": "Showing {count} shows across {genres} genres",
     "noShows": "No TV shows found",
-    "noShowsMessage": "Try refreshing the page or check back later."
+    "noShowsMessage": "Try refreshing the page or check back later.",
+    "loadingMore": "Loading more genres"
   },
   "search": {
     "title": "Search TV Shows",
@@ -82,6 +83,28 @@
     "to": "to",
     "of": "of",
     "results": "results"
+  },
+  "seo": {
+    "home": {
+      "title": "TV Show Dashboard - Discover thousands of TV shows",
+      "description": "Explore and discover thousands of TV shows organized by genre. Search, browse, and find detailed information about your favorite series.",
+      "keywords": "tv shows, series, entertainment, genres, streaming"
+    },
+    "search": {
+      "title": "Search TV Shows - TV Show Dashboard",
+      "description": "Search through our extensive database of TV shows. Find your favorite series and discover new ones.",
+      "keywords": "search tv shows, find series, tv show search"
+    },
+    "genre": {
+      "title": "{genre} TV Shows - TV Show Dashboard",
+      "description": "Browse all {genre} TV shows. Discover the best {genre} series sorted by rating.",
+      "keywords": "{genre}, tv shows, series, entertainment"
+    },
+    "show": {
+      "title": "{name} - TV Show Dashboard",
+      "fallbackDescription": "Watch {name} and discover more TV shows on TV Show Dashboard",
+      "keywords": "{name}, tv show, series"
+    }
   }
 }
 

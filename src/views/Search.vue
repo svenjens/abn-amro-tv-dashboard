@@ -98,12 +98,19 @@
 
       <!-- Initial State -->
       <div v-else class="text-center py-16">
-        <img
-          src="/empty-state-illustration.png"
-          alt=""
-          class="mx-auto h-48 w-48 object-contain opacity-50"
-          aria-hidden="true"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            sizes="192px"
+          />
+          <img
+            src="/empty-state-illustration.png"
+            alt=""
+            class="mx-auto h-48 w-48 object-contain opacity-50"
+            aria-hidden="true"
+          />
+        </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900">Start searching</h3>
         <p class="mt-2 text-gray-500">
           Enter a TV show name to search through our extensive database.
@@ -118,6 +125,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores'
+import { useSEO } from '@/composables'
 import SearchBar from '@/components/SearchBar.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
@@ -129,6 +137,13 @@ const router = useRouter()
 const searchStore = useSearchStore()
 
 const searchQuery = ref('')
+
+// SEO (multilingual)
+useSEO({
+  title: t('seo.search.title'),
+  description: t('seo.search.description'),
+  keywords: t('seo.search.keywords').split(', '),
+})
 
 async function handleSearch(query: string) {
   searchQuery.value = query

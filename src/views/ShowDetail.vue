@@ -232,12 +232,12 @@ import { useShowsStore } from '@/stores'
 import type { Show, ApiError } from '@/types'
 import { getShowImage, formatSchedule } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ErrorMessage from '@/components/ErrorMessage.vue'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 const { t } = useI18n()
 
@@ -260,12 +260,13 @@ const relatedShows = computed(() => {
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// Update SEO when show changes
+// Update SEO when show changes (multilingual)
 watch(
   show,
   (newShow) => {
     if (newShow) {
-      const seoConfig = getShowSEO(newShow)
+      const fallbackDesc = t('seo.show.fallbackDescription', { name: newShow.name })
+      const seoConfig = getShowSEO(newShow, fallbackDesc)
       // Update with show-specific config
       useSEO(seoConfig)
       // Add structured data

@@ -15,9 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import CacheDebug from '@/components/CacheDebug.vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import ToastNotification from '@/components/ToastNotification.vue'
+
+// Lazy load debug component (only needed in dev mode)
+const CacheDebug = defineAsyncComponent(() => import('@/components/CacheDebug.vue'))
 
 const showDebug = ref(false)
 

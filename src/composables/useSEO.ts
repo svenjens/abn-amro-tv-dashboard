@@ -61,12 +61,14 @@ export function useSEO(config: SEOConfig = {}) {
 
 /**
  * Generate SEO configuration for a show
+ * @param show - Show object
+ * @param fallbackDescription - Fallback description if show.summary is empty (should be localized)
  */
-export function getShowSEO(show: Show): SEOConfig {
+export function getShowSEO(show: Show, fallbackDescription?: string): SEOConfig {
   const title = `${show.name} - TV Show Dashboard`
   const description = show.summary
     ? stripHtml(show.summary).slice(0, 160) + '...'
-    : `Watch ${show.name} and discover more TV shows on TV Show Dashboard`
+    : fallbackDescription || `Watch ${show.name} and discover more TV shows on TV Show Dashboard`
 
   return {
     title,

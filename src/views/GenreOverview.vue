@@ -77,12 +77,19 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16" role="status">
-        <img
-          src="/empty-state-illustration.png"
-          alt=""
-          class="mx-auto h-48 w-48 object-contain opacity-50"
-          aria-hidden="true"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            sizes="192px"
+          />
+          <img
+            src="/empty-state-illustration.png"
+            alt=""
+            class="mx-auto h-48 w-48 object-contain opacity-50"
+            aria-hidden="true"
+          />
+        </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900">{{ t('genre.noShows') }}</h3>
         <p class="mt-2 text-sm text-gray-500">{{ t('genre.noShowsMessage') }}</p>
       </div>
@@ -97,8 +104,8 @@ import { useI18n } from 'vue-i18n'
 import { useShowsStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -115,10 +122,11 @@ const genreShows = computed(() => {
 })
 
 // SEO
+// SEO (multilingual)
 useSEO({
-  title: `${genreName.value} TV Shows - TV Show Dashboard`,
-  description: `Browse all ${genreName.value} TV shows. Discover the best ${genreName.value} series sorted by rating.`,
-  keywords: [genreName.value, 'tv shows', 'series', 'entertainment'],
+  title: t('seo.genre.title', { genre: genreName.value }),
+  description: t('seo.genre.description', { genre: genreName.value }),
+  keywords: t('seo.genre.keywords', { genre: genreName.value }).split(', '),
 })
 
 onMounted(() => {

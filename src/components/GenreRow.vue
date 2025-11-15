@@ -48,7 +48,7 @@
           tabindex="0"
           @scroll="updateScrollButtons"
         >
-          <div v-for="show in shows" :key="show.id" class="flex-none w-48">
+          <div v-for="show in limitedShowsDesktop" :key="show.id" class="flex-none w-48">
             <ShowCard :show="show" />
           </div>
         </div>
@@ -109,9 +109,14 @@ const scrollContainer = ref<HTMLElement | null>(null)
 const canScrollLeft = ref(false)
 const canScrollRight = ref(true)
 const mobileLimit = ref(6)
+const desktopLimit = 12 // Limit shows on desktop for better performance
 
 const limitedShows = computed(() => {
   return props.shows.slice(0, mobileLimit.value)
+})
+
+const limitedShowsDesktop = computed(() => {
+  return props.shows.slice(0, desktopLimit)
 })
 
 function scrollLeft() {

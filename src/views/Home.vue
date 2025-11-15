@@ -8,21 +8,36 @@
       role="banner"
     >
       <!-- Hero Background -->
-      <div
-        class="absolute inset-0 opacity-10 bg-cover bg-center"
-        style="background-image: url('/hero-background.png')"
-        aria-hidden="true"
-      ></div>
+      <picture class="absolute inset-0 opacity-10" aria-hidden="true">
+        <source
+          type="image/webp"
+          srcset="/optimized/hero-background-768.webp 768w, /optimized/hero-background-1280.webp 1280w, /optimized/hero-background.webp 1920w"
+          sizes="100vw"
+        />
+        <img
+          src="/hero-background.png"
+          alt=""
+          class="w-full h-full object-cover"
+          aria-hidden="true"
+        />
+      </picture>
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo -->
-            <img
-              src="/logo-main.png"
-              alt="TV Show Dashboard Logo"
-              class="h-16 w-16 object-contain"
-            />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/optimized/logo-main-64.webp 64w, /optimized/logo-main-128.webp 128w, /optimized/logo-main-256.webp 256w"
+            sizes="64px"
+          />
+          <img
+            src="/logo-main.png"
+            alt="TV Show Dashboard Logo"
+            class="h-16 w-16 object-contain"
+          />
+        </picture>
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-primary-100 mb-8">
@@ -75,21 +90,43 @@
         </div>
 
         <GenreRow
-          v-for="genre in showsStore.genres"
+          v-for="genre in displayedGenres"
           :key="genre"
           :genre="genre"
           :shows="showsStore.getShowsByGenre(genre)"
         />
+        
+        <!-- Infinite Scroll Trigger -->
+        <div
+          v-if="canLoadMore"
+          ref="loadMoreTrigger"
+          class="text-center py-8 text-gray-500 text-sm"
+        >
+          <div class="flex items-center justify-center gap-2">
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ t('home.loadingMore') }}...</span>
+          </div>
+        </div>
       </div>
 
       <!-- Empty State -->
       <div v-else class="text-center py-16 px-4" role="status">
-        <img
-          src="/empty-state-illustration.png"
-          alt=""
-          class="mx-auto h-48 w-48 object-contain opacity-50"
-          aria-hidden="true"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/optimized/empty-state-illustration-256.webp 256w, /optimized/empty-state-illustration.webp 512w"
+            sizes="192px"
+          />
+          <img
+            src="/empty-state-illustration.png"
+            alt=""
+            class="mx-auto h-48 w-48 object-contain opacity-50"
+            aria-hidden="true"
+          />
+        </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900">{{ t('home.noShows') }}</h3>
         <p class="mt-2 text-sm text-gray-500">{{ t('home.noShowsMessage') }}</p>
       </div>
@@ -98,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useShowsStore } from '@/stores'
@@ -106,10 +143,10 @@ import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
 import GenreRow from '@/components/GenreRow.vue'
 import SearchBar from '@/components/SearchBar.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ErrorMessage from '@/components/ErrorMessage.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 const { t } = useI18n()
 
@@ -119,12 +156,54 @@ const showsStore = useShowsStore()
 const searchStore = useSearchStore()
 const searchQuery = ref('')
 
-// SEO
+// Performance: Lazy load genres with infinite scroll
+const genresPerPage = 5
+const visibleGenresCount = ref(genresPerPage)
+const loadMoreTrigger = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+const displayedGenres = computed(() => {
+  return showsStore.genres.slice(0, visibleGenresCount.value)
+})
+
+const canLoadMore = computed(() => {
+  return visibleGenresCount.value < showsStore.genres.length
+})
+
+// Setup intersection observer for infinite scroll
+function setupInfiniteScroll() {
+  if (!loadMoreTrigger.value) return
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (entry && entry.isIntersecting && canLoadMore.value) {
+        // Load more genres when trigger comes into view
+        visibleGenresCount.value += genresPerPage
+      }
+    },
+    {
+      root: null,
+      rootMargin: '100px', // Start loading 100px before the trigger
+      threshold: 0.1,
+    }
+  )
+
+  observer.observe(loadMoreTrigger.value)
+}
+
+onUnmounted(() => {
+  if (observer && loadMoreTrigger.value) {
+    observer.unobserve(loadMoreTrigger.value)
+    observer.disconnect()
+  }
+})
+
+// SEO (multilingual)
 useSEO({
-  title: 'TV Show Dashboard - Discover thousands of TV shows',
-  description:
-    'Explore and discover thousands of TV shows organized by genre. Search, browse, and find detailed information about your favorite series.',
-  keywords: ['tv shows', 'series', 'entertainment', 'genres', 'streaming'],
+  title: t('seo.home.title'),
+  description: t('seo.home.description'),
+  keywords: t('seo.home.keywords').split(', '),
 })
 
 function handleSearch(query: string) {
@@ -134,7 +213,9 @@ function handleSearch(query: string) {
   }
 }
 
-onMounted(() => {
-  showsStore.fetchAllShows()
+onMounted(async () => {
+  await showsStore.fetchAllShows()
+  // Setup infinite scroll after genres are loaded
+  setTimeout(() => setupInfiniteScroll(), 100)
 })
 </script>

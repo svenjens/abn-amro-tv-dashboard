@@ -14,7 +14,8 @@
     "searchPlaceholder": "Zoek TV shows...",
     "showsCount": "{count} series weergegeven over {genres} genres",
     "noShows": "Geen tv-series gevonden",
-    "noShowsMessage": "Probeer de pagina te vernieuwen of kom later terug."
+    "noShowsMessage": "Probeer de pagina te vernieuwen of kom later terug.",
+    "loadingMore": "Meer genres laden"
   },
   "search": {
     "title": "TV-series zoeken",
@@ -82,6 +83,28 @@
     "to": "tot",
     "of": "van",
     "results": "resultaten"
+  },
+  "seo": {
+    "home": {
+      "title": "TV Show Dashboard - Ontdek duizenden tv-series",
+      "description": "Ontdek en verken duizenden tv-series georganiseerd per genre. Zoek, blader en vind gedetailleerde informatie over je favoriete series.",
+      "keywords": "tv-series, series, entertainment, genres, streaming"
+    },
+    "search": {
+      "title": "Zoek TV-series - TV Show Dashboard",
+      "description": "Doorzoek onze uitgebreide database van tv-series. Vind je favoriete series en ontdek nieuwe.",
+      "keywords": "zoek tv-series, vind series, tv-serie zoeken"
+    },
+    "genre": {
+      "title": "{genre} TV-series - TV Show Dashboard",
+      "description": "Bekijk alle {genre} tv-series. Ontdek de beste {genre} series gesorteerd op waardering.",
+      "keywords": "{genre}, tv-series, series, entertainment"
+    },
+    "show": {
+      "title": "{name} - TV Show Dashboard",
+      "fallbackDescription": "Bekijk {name} en ontdek meer tv-series op TV Show Dashboard",
+      "keywords": "{name}, tv-serie, serie"
+    }
   }
 }
 
