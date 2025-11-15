@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.8.0...v1.9.0) (2025-11-15)
+
+
+### Features
+
+* implement SEO-friendly URLs with show name slugs ([#28](https://github.com/svenjens/tv-show-dashboard/issues/28)) ([45c0e46](https://github.com/svenjens/tv-show-dashboard/commit/45c0e46860e2e418e85063a5901d595c96b7527b))
+
+
+### Bug Fixes
+
+* resolve build errors and remove redundant AI link from header ([d25bf83](https://github.com/svenjens/tv-show-dashboard/commit/d25bf834cd22e834ad52fb956982eb4ce9afc545))
+
 ## [1.8.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.7.1...v1.8.0) (2025-11-15)
 
 
