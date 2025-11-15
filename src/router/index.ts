@@ -20,7 +20,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'show/:id',
+        path: 'show/:slug',
         name: 'show-detail',
         component: () => import('@/views/ShowDetail.vue'),
         meta: {
