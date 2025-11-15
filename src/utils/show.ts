@@ -74,20 +74,13 @@ export function formatRating(rating: number | null): string {
 }
 
 /**
- * Get placeholder image URL when show image is not available
- */
-export function getPlaceholderImage(): string {
-  return 'https://via.placeholder.com/210x295/1f2937/ffffff?text=No+Image'
-}
-
-/**
- * Get show image URL with fallback
+ * Get show image URL (no fallback)
  * @param show - Show object
  * @param size - Image size ('medium' or 'original')
- * @returns Image URL or placeholder
+ * @returns Image URL or null if not available
  */
-export function getShowImage(show: Show, size: 'medium' | 'original' = 'medium'): string {
-  return show.image?.[size] || getPlaceholderImage()
+export function getShowImage(show: Show, size: 'medium' | 'original' = 'medium'): string | null {
+  return show.image?.[size] || null
 }
 
 /**

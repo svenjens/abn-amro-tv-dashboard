@@ -88,9 +88,9 @@
 
           <div class="flex flex-col md:flex-row gap-8">
             <!-- Poster -->
-            <div class="flex-shrink-0">
+            <div v-if="getShowImage(show, 'original')" class="flex-shrink-0">
               <img
-                :src="getShowImage(show, 'original')"
+                :src="getShowImage(show, 'original')!"
                 :alt="`${show.name} poster`"
                 class="w-64 rounded-lg shadow-2xl"
                 loading="eager"
@@ -203,36 +203,36 @@
         <div role="tabpanel">
           <!-- Overview Tab -->
           <div v-if="activeTab === 'overview'">
-            <article v-if="show.summary" class="mb-12">
-              <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ t('show.summary') }}</h2>
+        <article v-if="show.summary" class="mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ t('show.summary') }}</h2>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <div
-                class="prose prose-lg max-w-none text-gray-700"
-                role="region"
-                :aria-labelledby="'show-title'"
+          <div
+            class="prose prose-lg max-w-none text-gray-700"
+            role="region"
+            :aria-labelledby="'show-title'"
                 v-html="sanitizedSummary"
-              ></div>
+          ></div>
               <!-- Safe: HTML is sanitized with DOMPurify before rendering -->
-            </article>
+        </article>
 
             <!-- Advertisement -->
             <AdSense format="horizontal" />
 
-            <!-- Related Shows -->
-            <section v-if="relatedShows.length > 0" class="mt-12" :aria-label="t('show.relatedShows')">
-              <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ t('show.relatedShows') }}</h2>
-              <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-fr"
-                role="list"
-              >
-                <ShowCard
-                  v-for="relatedShow in relatedShows"
-                  :key="relatedShow.id"
-                  :show="relatedShow"
-                  role="listitem"
-                />
-              </div>
-            </section>
+        <!-- Related Shows -->
+        <section v-if="relatedShows.length > 0" class="mt-12" :aria-label="t('show.relatedShows')">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ t('show.relatedShows') }}</h2>
+          <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-fr"
+            role="list"
+          >
+            <ShowCard
+              v-for="relatedShow in relatedShows"
+              :key="relatedShow.id"
+              :show="relatedShow"
+              role="listitem"
+            />
+          </div>
+        </section>
           </div>
 
           <!-- Episodes Tab -->
