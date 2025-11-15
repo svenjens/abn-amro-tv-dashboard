@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { logger } from '@/utils'
 
 /**
  * Dark Mode Composable
@@ -58,7 +59,7 @@ function loadTheme(): Theme {
       return stored as Theme
     }
   } catch (error) {
-    console.error('[DarkMode] Failed to load theme:', error)
+    logger.error('[DarkMode] Failed to load theme:', error)
   }
   return 'system'
 }
@@ -70,7 +71,7 @@ function saveTheme(newTheme: Theme) {
   try {
     localStorage.setItem(STORAGE_KEY, newTheme)
   } catch (error) {
-    console.error('[DarkMode] Failed to save theme:', error)
+    logger.error('[DarkMode] Failed to save theme:', error)
   }
 }
 

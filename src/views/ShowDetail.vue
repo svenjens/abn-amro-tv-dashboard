@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
 
     <!-- Loading State -->
@@ -23,11 +23,11 @@
     <!-- Show Details -->
     <div v-else-if="show" class="pb-12">
       <!-- Hero Section -->
-      <div class="relative bg-gray-900 text-white" role="banner">
+      <div class="relative bg-gray-900 dark:bg-gray-950 text-white" role="banner">
         <!-- Background Image -->
         <div
           v-if="show.image?.original"
-          class="absolute inset-0 opacity-20"
+          class="absolute inset-0 opacity-20 dark:opacity-30"
           role="img"
           :aria-label="`${show.name} background`"
           :style="{
