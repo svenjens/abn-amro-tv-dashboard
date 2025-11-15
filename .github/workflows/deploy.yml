@@ -79,6 +79,13 @@ jobs:
           name: codecov-umbrella
         continue-on-error: true
 
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
   # Job 3: Secret Scanning
   secret-scan:
     name: Secret Scanning
@@ -114,6 +121,16 @@ jobs:
 
       - name: Build application
         run: npm run build
+
+      - name: Analyze bundle size
+        run: node scripts/analyze-bundle.js
+
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-report
+          path: bundle-report.json
+          retention-days: 7
 
       - name: Check bundle size
         run: |
@@ -286,6 +303,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test, build]
     if: github.event_name == 'pull_request'
+    outputs:
+      url: ${{ steps.deploy.outputs.preview-url }}
     environment:
       name: preview
       url: ${{ steps.deploy.outputs.url }}
@@ -317,20 +336,146 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
 
-      - name: Comment deployment URL on PR
+  # Job 9: Enhanced PR Comments
+  pr-comment:
+    name: PR Comment with Metrics
+    runs-on: ubuntu-latest
+    needs: [build, test, deploy-preview]
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download current bundle report
+        uses: actions/download-artifact@v4
+        with:
+          name: bundle-report
+          path: ./
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: coverage
+          path: ./coverage
+
+      - name: Download base branch bundle report
+        uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
+        with:
+          workflow: deploy.yml
+          branch: ${{ github.base_ref }}
+          name: bundle-report
+          path: ./base
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compare bundle sizes
+        id: bundle-comparison
+        run: |
+          if [ -f "./base/bundle-report.json" ]; then
+            echo "Base report found, comparing..."
+            cp ./base/bundle-report.json ./base-bundle-report.json
+            node scripts/compare-bundle.js
+            echo "has_comparison=true" >> $GITHUB_OUTPUT
+          else
+            echo "No base report found, skipping comparison"
+            echo "has_comparison=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get test coverage
+        id: coverage
+        continue-on-error: true
+        run: |
+          if [ -f "./coverage/coverage-summary.json" ]; then
+            COVERAGE=$(cat ./coverage/coverage-summary.json | jq -r '.total.lines.pct')
+            echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          else
+            echo "coverage=N/A" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post enhanced PR comment
         uses: actions/github-script@v7
-        if: github.event_name == 'pull_request'
         env:
-          PREVIEW_URL: ${{ steps.deploy.outputs.preview-url }}
+          PREVIEW_URL: ${{ needs.deploy-preview.outputs.url }}
+          HAS_COMPARISON: ${{ steps.bundle-comparison.outputs.has_comparison }}
+          COVERAGE: ${{ steps.coverage.outputs.coverage }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const fs = require('fs');
             const previewUrl = process.env.PREVIEW_URL || 'URL not available';
             const fullUrl = previewUrl.startsWith('http') ? previewUrl : `https://${previewUrl}`;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            const hasComparison = process.env.HAS_COMPARISON === 'true';
+            const coverage = process.env.COVERAGE;
+            
+            // Start building comment
+            let commentBody = '## 🚀 Deployment Preview\n\n';
+            commentBody += `✅ **Preview deployed successfully!**\n\n`;
+            commentBody += `🔗 **Preview URL:** ${fullUrl}\n\n`;
+            commentBody += `---\n\n`;
+            
+            // Add coverage info
+            if (coverage !== 'N/A') {
+              commentBody += `### 📊 Test Coverage\n\n`;
+              commentBody += `Current coverage: **${coverage}%**\n\n`;
+            }
+            
+            // Add bundle comparison if available
+            if (hasComparison && fs.existsSync('bundle-comparison.md')) {
+              const bundleComparison = fs.readFileSync('bundle-comparison.md', 'utf-8');
+              commentBody += bundleComparison;
+            } else {
+              // Show current bundle stats
+              if (fs.existsSync('bundle-report.json')) {
+                const report = JSON.parse(fs.readFileSync('bundle-report.json', 'utf-8'));
+                commentBody += '## 📦 Bundle Size\n\n';
+                commentBody += `- **Total:** ${report.totals.all.gzipSizeFormatted} (gzip)\n`;
+                commentBody += `- **JavaScript:** ${report.totals.javascript.gzipSizeFormatted} (gzip)\n`;
+                commentBody += `- **CSS:** ${report.totals.css.gzipSizeFormatted} (gzip)\n`;
+                commentBody += `- **Files:** ${report.totals.all.count}\n\n`;
+              }
+            }
+            
+            commentBody += `\n---\n\n`;
+            commentBody += `<sub>⚡ Build completed in workflow [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})</sub>`;
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `✅ **Preview deployed successfully!**\n\n🔗 ${fullUrl}`
-            })
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('🚀 Deployment Preview')
+            );
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody
+              });
+            }
 
