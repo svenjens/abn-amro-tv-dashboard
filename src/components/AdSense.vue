@@ -59,9 +59,7 @@ const loadAdSenseScript = () => {
   if (!shouldShowAd.value || scriptLoaded.value) return
 
   // Check if script already exists
-  const existingScript = document.querySelector(
-    `script[src*="pagead2.googlesyndication.com"]`
-  )
+  const existingScript = document.querySelector(`script[src*="pagead2.googlesyndication.com"]`)
   if (existingScript) {
     scriptLoaded.value = true
     return

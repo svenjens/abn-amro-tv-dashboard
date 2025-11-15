@@ -23,11 +23,13 @@ export const useWatchlistStore = defineStore('watchlist', () => {
         watchlist.value = JSON.parse(stored)
         logger.debug(`[Watchlist] Loaded ${watchlist.value.length} shows from storage`)
       }
-      
+
       const storedEpisodes = localStorage.getItem(WATCHED_EPISODES_STORAGE_KEY)
       if (storedEpisodes) {
         watchedEpisodes.value = JSON.parse(storedEpisodes)
-        logger.debug(`[Watchlist] Loaded ${watchedEpisodes.value.length} watched episodes from storage`)
+        logger.debug(
+          `[Watchlist] Loaded ${watchedEpisodes.value.length} watched episodes from storage`
+        )
       }
     } catch (error) {
       logger.error('[Watchlist] Failed to load from localStorage:', error)
@@ -98,12 +100,15 @@ export const useWatchlistStore = defineStore('watchlist', () => {
 
   // Episode tracking functions
   function isEpisodeWatched(showId: number, episodeId: number): boolean {
-    return watchedEpisodes.value.some(
-      (ep) => ep.showId === showId && ep.episodeId === episodeId
-    )
+    return watchedEpisodes.value.some((ep) => ep.showId === showId && ep.episodeId === episodeId)
   }
 
-  function markEpisodeAsWatched(showId: number, episodeId: number, season: number, episode: number) {
+  function markEpisodeAsWatched(
+    showId: number,
+    episodeId: number,
+    season: number,
+    episode: number
+  ) {
     if (!isEpisodeWatched(showId, episodeId)) {
       watchedEpisodes.value.push({
         showId,
@@ -128,7 +133,12 @@ export const useWatchlistStore = defineStore('watchlist', () => {
     }
   }
 
-  function toggleEpisodeWatched(showId: number, episodeId: number, season: number, episode: number) {
+  function toggleEpisodeWatched(
+    showId: number,
+    episodeId: number,
+    season: number,
+    episode: number
+  ) {
     if (isEpisodeWatched(showId, episodeId)) {
       unmarkEpisodeAsWatched(showId, episodeId)
     } else {

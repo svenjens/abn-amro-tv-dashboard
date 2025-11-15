@@ -40,9 +40,7 @@
                 : 'border-gray-300 hover:border-primary-400'
             "
             :aria-label="
-              isWatched(episode.id)
-                ? t('episodes.markUnwatched')
-                : t('episodes.markWatched')
+              isWatched(episode.id) ? t('episodes.markUnwatched') : t('episodes.markWatched')
             "
             @click="toggleWatched(episode)"
           >
@@ -64,7 +62,10 @@
         </div>
 
         <!-- Episode image (if available) -->
-        <div v-if="episode.image" class="flex-shrink-0 w-24 h-16 rounded overflow-hidden bg-gray-100">
+        <div
+          v-if="episode.image"
+          class="flex-shrink-0 w-24 h-16 rounded overflow-hidden bg-gray-100"
+        >
           <img
             :src="episode.image.medium"
             :alt="episode.name"
@@ -104,7 +105,9 @@
               class="text-sm text-primary-600 hover:text-primary-700 font-medium mt-1"
               @click="toggleExpanded(episode.id)"
             >
-              {{ expandedEpisodes.has(episode.id) ? t('episodes.showLess') : t('episodes.showMore') }}
+              {{
+                expandedEpisodes.has(episode.id) ? t('episodes.showLess') : t('episodes.showMore')
+              }}
             </button>
           </div>
         </div>
@@ -117,8 +120,9 @@
             {{ t('episodes.progress') }}
           </span>
           <span class="text-sm font-semibold text-primary-600">
-            {{ seasonProgress.watched }} / {{ seasonProgress.total }}
-            ({{ seasonProgress.percentage }}%)
+            {{ seasonProgress.watched }} / {{ seasonProgress.total }} ({{
+              seasonProgress.percentage
+            }}%)
           </span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2">
@@ -263,4 +267,3 @@ watch(
   overflow: hidden;
 }
 </style>
-

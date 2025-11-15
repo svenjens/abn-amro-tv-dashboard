@@ -73,7 +73,12 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.status') }}: {{ localFilters.status }}
-        <button @click="localFilters.status = ''; emitFilters()">
+        <button
+          @click="
+            localFilters.status = ''
+            emitFilters()
+          "
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -88,7 +93,12 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.network') }}: {{ localFilters.network }}
-        <button @click="localFilters.network = ''; emitFilters()">
+        <button
+          @click="
+            localFilters.network = ''
+            emitFilters()
+          "
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -103,7 +113,12 @@
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
         {{ t('filters.year') }}: {{ localFilters.year }}
-        <button @click="localFilters.year = ''; emitFilters()">
+        <button
+          @click="
+            localFilters.year = ''
+            emitFilters()
+          "
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -198,4 +213,3 @@ watch(
   { deep: true }
 )
 </script>
-
