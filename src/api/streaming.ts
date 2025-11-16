@@ -215,8 +215,7 @@ class StreamingService {
    */
   private tmdbProviderToAvailability(
     provider: TMDBWatchProvider,
-    type: 'subscription' | 'buy' | 'rent' | 'free' | 'ads',
-    linkUrl: string
+    type: 'subscription' | 'buy' | 'rent' | 'free' | 'ads'
   ): StreamingAvailability | null {
     const platformId = this.mapTMDBProviderToId(provider.provider_id, provider.provider_name)
     
@@ -230,7 +229,8 @@ class StreamingService {
       return null
     }
 
-    let link = linkUrl
+    // Use platform homepage instead of TMDB link
+    let link = platform.homePage
 
     // Add affiliate tag for Amazon Prime Video
     if (platformId === 'prime' && this.affiliateConfig.amazonAssociateTag) {
@@ -281,8 +281,7 @@ class StreamingService {
             for (const provider of countryData.flatrate) {
               const streamingOption = this.tmdbProviderToAvailability(
                 provider,
-                'subscription',
-                countryData.link
+                'subscription'
               )
               if (streamingOption && !this.isDuplicate(availability, streamingOption)) {
                 availability.push(streamingOption)
@@ -295,8 +294,7 @@ class StreamingService {
             for (const provider of countryData.ads) {
               const streamingOption = this.tmdbProviderToAvailability(
                 provider,
-                'ads',
-                countryData.link
+                'ads'
               )
               if (streamingOption && !this.isDuplicate(availability, streamingOption)) {
                 availability.push(streamingOption)
