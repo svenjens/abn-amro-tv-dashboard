@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.14.0...v1.15.0) (2025-11-16)
+
+
+### Features
+
+* Add filters to home page ([#43](https://github.com/svenjens/tv-show-dashboard/issues/43)) ([1b0fcff](https://github.com/svenjens/tv-show-dashboard/commit/1b0fcff0d61453fd125ebb1f75ebdedfb3da6685))
+* Add Google Tag Manager / Google Ads tracking ([#42](https://github.com/svenjens/tv-show-dashboard/issues/42)) ([f00c937](https://github.com/svenjens/tv-show-dashboard/commit/f00c9376e523a6eb95e91ca8e32c611f33d2a05e))
+
 ## [1.14.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.13.0...v1.14.0) (2025-11-16)
 
 
