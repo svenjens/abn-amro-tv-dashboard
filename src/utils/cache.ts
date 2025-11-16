@@ -386,21 +386,21 @@ export class Cache<T = unknown> {
 // Export singleton instances for different cache types
 export const apiCache = new Cache({
   namespace: 'tv-show-api',
-  ttl: 5 * 60 * 1000, // 5 minutes
-  maxSize: 100,
+  ttl: 30 * 60 * 1000, // 30 minutes (shows don't change often)
+  maxSize: 200, // Increased for better caching
   persistent: true,
 })
 
 export const searchCache = new Cache({
   namespace: 'tv-show-search',
-  ttl: 2 * 60 * 1000, // 2 minutes
-  maxSize: 50,
+  ttl: 5 * 60 * 1000, // 5 minutes (search results can change)
+  maxSize: 100, // More search queries
   persistent: true,
 })
 
 export const showCache = new Cache({
   namespace: 'tv-show-details',
-  ttl: 10 * 60 * 1000, // 10 minutes
-  maxSize: 100,
+  ttl: 24 * 60 * 60 * 1000, // 24 hours (show details rarely change)
+  maxSize: 200, // Store more shows
   persistent: true,
 })

@@ -1,21 +1,22 @@
 
 # TV Show Dashboard - Brand Assets
 
-Generated: 2025-11-15T14:55:47.048Z
+Generated: 2025-11-16T14:53:31.893Z
 Model: gpt-image-1
 
 ## Assets Generated
 
-- **logo-main.png** - 1384.17 KB
-- **logo-full.png** - 2074.86 KB
-- **hero-background.png** - 2523.90 KB
-- **og-image.png** - 1795.92 KB
-- **favicon.png** - 1326.40 KB
-- **icon-192.png** - 1445.52 KB
-- **icon-512.png** - 1662.72 KB
-- **apple-touch-icon.png** - 1424.71 KB
-- **loading-animation.png** - 1134.81 KB
-- **empty-state-illustration.png** - 1254.61 KB
+- **logo-main.png** - 1391.16 KB
+- **logo-full.png** - 2039.92 KB
+- **hero-background.png** - 2167.83 KB
+- **og-image.png** - 1471.20 KB
+- **favicon-light.png** - 1124.37 KB
+- **favicon-dark.png** - 689.38 KB
+- **icon-192.png** - 1434.76 KB
+- **icon-512.png** - 1682.13 KB
+- **apple-touch-icon.png** - 1414.59 KB
+- **loading-animation.png** - 1085.72 KB
+- **empty-state-illustration.png** - 1226.90 KB
 
 ## Usage
 

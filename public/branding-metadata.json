@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-15T14:55:47.045Z",
+  "generated_at": "2025-11-16T14:53:31.889Z",
   "model": "gpt-image-1",
   "brand_colors": {
     "primary": "#dc2626",
@@ -8,8 +8,8 @@
     "accent": "#f59e0b",
     "style": "modern, entertainment-focused, clean, cinematic"
   },
-  "total_assets": 10,
-  "successful": 10,
+  "total_assets": 11,
+  "successful": 11,
   "failed": 0,
   "assets": [
     {
