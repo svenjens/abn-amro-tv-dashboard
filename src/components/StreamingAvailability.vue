@@ -42,7 +42,7 @@
           </div>
 
           <!-- Price if available -->
-          <div v-if="option.price" class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center">
+          <div v-if="option.price !== undefined && option.price !== null" class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center">
             {{ formatPrice(option.price, option.currency) }}
           </div>
         </a>
