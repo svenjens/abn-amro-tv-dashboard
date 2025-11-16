@@ -10,7 +10,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 import { getCurrentLocale } from './i18n/helpers'
-import { logger, registerServiceWorker, initInstallPrompt } from './utils'
+import { logger, registerServiceWorker, initInstallPrompt, initGoogleAds } from './utils'
 import { initDarkModeEarly } from './composables'
 import { streamingService } from './api/streaming'
 import './style.css'
@@ -22,6 +22,12 @@ initDarkModeEarly()
 streamingService.setAffiliateConfig({
   amazonAssociateTag: import.meta.env.VITE_AMAZON_ASSOCIATE_TAG,
 })
+
+// Initialize Google Ads tracking
+const googleAdsId = import.meta.env.VITE_GOOGLE_ADS_ID
+if (googleAdsId) {
+  initGoogleAds(googleAdsId)
+}
 
 const app = createApp(App)
 

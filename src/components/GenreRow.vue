@@ -29,7 +29,12 @@
           aria-label="Scroll left"
           @click="scrollLeft"
         >
-          <svg class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="h-6 w-6 text-gray-800 dark:text-gray-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -59,7 +64,12 @@
           aria-label="Scroll right"
           @click="scrollRight"
         >
-          <svg class="h-6 w-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="h-6 w-6 text-gray-800 dark:text-gray-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"

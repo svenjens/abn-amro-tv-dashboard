@@ -3,7 +3,7 @@ import { logger } from '@/utils'
 
 /**
  * Dark Mode Composable
- * 
+ *
  * Provides dark mode functionality with:
  * - System preference detection
  * - localStorage persistence
@@ -150,4 +150,3 @@ export function initDarkModeEarly() {
   const shouldBeDark = stored === 'dark' || (stored === 'system' && getSystemPreference())
   applyTheme(shouldBeDark)
 }
-

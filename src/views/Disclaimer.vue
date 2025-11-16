@@ -3,7 +3,10 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white" role="banner">
+    <div
+      class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
+      role="banner"
+    >
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
           <button
@@ -38,7 +41,7 @@
 
         <section>
           <h2>2. {{ t('legal.contentAccuracy') }}</h2>
-          <p v-html="t('legal.disclaimer.accuracyDesc', { tvmaze: tvmazeLink })"></p>
+          <SafeHtml :content="t('legal.disclaimer.accuracyDesc', { tvmaze: tvmazeLink })" />
         </section>
 
         <section>
@@ -97,11 +100,13 @@ import { useSEO } from '@/composables'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LegalArticle from '@/components/LegalArticle.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import SafeHtml from '@/components/SafeHtml.vue'
 
 const { t, locale } = useI18n()
 const router = useRouter()
 
-const tvmazeLink = '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
+const tvmazeLink =
+  '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
 
 const lastUpdated = computed(() => {
   return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {
@@ -114,7 +119,8 @@ const lastUpdated = computed(() => {
 onMounted(() => {
   useSEO({
     title: t('legal.disclaimer'),
-    description: 'Disclaimer for BingeList - Information about service limitations and liabilities.',
+    description:
+      'Disclaimer for BingeList - Information about service limitations and liabilities.',
   })
 })
 </script>

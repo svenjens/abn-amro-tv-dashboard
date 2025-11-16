@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+  <div
+    class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
+  >
     <!-- Main Content -->
     <div class="flex-grow">
       <router-view v-slot="{ Component }">
@@ -41,7 +43,7 @@ onMounted(() => {
   const isDev = import.meta.env.DEV
   const hasDebugParam = new URLSearchParams(window.location.search).has('debug')
   showDebug.value = isDev || hasDebugParam
-  
+
   // Initialize dark mode (watch for system preference changes)
   cleanupDarkMode = initDarkMode()
 })

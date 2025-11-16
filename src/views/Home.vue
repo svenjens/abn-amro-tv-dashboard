@@ -183,7 +183,9 @@
             aria-hidden="true"
           />
         </picture>
-        <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">{{ t('home.noShows') }}</h3>
+        <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ t('home.noShows') }}
+        </h3>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ t('home.noShowsMessage') }}</p>
       </div>
     </main>

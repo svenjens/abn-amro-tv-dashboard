@@ -3,7 +3,10 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white" role="banner">
+    <div
+      class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
+      role="banner"
+    >
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
           <button
@@ -45,12 +48,24 @@
           <h2>{{ t('legal.accessibilityFeatures') }}</h2>
           <p>{{ t('legal.accessibility.featuresIntro') }}</p>
           <ul>
-            <li><strong>{{ t('legal.accessibility.featureKeyboard') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.featureScreenReader') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.featureDarkMode') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.featureSkip') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.featureLanguage') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.featureFocus') }}</strong></li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureKeyboard') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureScreenReader') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureDarkMode') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureSkip') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureLanguage') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.featureFocus') }}</strong>
+            </li>
           </ul>
         </section>
 
@@ -58,8 +73,12 @@
           <h2>{{ t('legal.knownLimitations') }}</h2>
           <p>{{ t('legal.accessibility.limitationsDesc') }}</p>
           <ul>
-            <li><strong>{{ t('legal.accessibility.limitationThirdParty') }}</strong></li>
-            <li><strong>{{ t('legal.accessibility.limitationDynamic') }}</strong></li>
+            <li>
+              <strong>{{ t('legal.accessibility.limitationThirdParty') }}</strong>
+            </li>
+            <li>
+              <strong>{{ t('legal.accessibility.limitationDynamic') }}</strong>
+            </li>
           </ul>
         </section>
 
@@ -99,10 +118,20 @@
           <p>{{ t('legal.accessibility.resourcesIntro') }}</p>
           <ul>
             <li>
-              <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener noreferrer external">{{ t('legal.accessibility.resourceWCAG') }}</a>
+              <a
+                href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+                target="_blank"
+                rel="noopener noreferrer external"
+                >{{ t('legal.accessibility.resourceWCAG') }}</a
+              >
             </li>
             <li>
-              <a href="https://www.a11yproject.com/" target="_blank" rel="noopener noreferrer external">{{ t('legal.accessibility.resourceA11y') }}</a>
+              <a
+                href="https://www.a11yproject.com/"
+                target="_blank"
+                rel="noopener noreferrer external"
+                >{{ t('legal.accessibility.resourceA11y') }}</a
+              >
             </li>
           </ul>
         </section>
@@ -139,7 +168,8 @@ const lastUpdated = computed(() => {
 onMounted(() => {
   useSEO({
     title: t('legal.accessibility'),
-    description: 'Accessibility Statement for BingeList - Our commitment to WCAG 2.1 Level AA compliance.',
+    description:
+      'Accessibility Statement for BingeList - Our commitment to WCAG 2.1 Level AA compliance.',
   })
 })
 </script>

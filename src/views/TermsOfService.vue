@@ -3,7 +3,10 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white" role="banner">
+    <div
+      class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
+      role="banner"
+    >
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
           <button
@@ -99,7 +102,8 @@ import DarkModeToggle from '@/components/DarkModeToggle.vue'
 const { t, locale } = useI18n()
 const router = useRouter()
 
-const tvmazeLink = '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
+const tvmazeLink =
+  '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
 
 const lastUpdated = computed(() => {
   return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {

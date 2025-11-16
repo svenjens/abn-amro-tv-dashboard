@@ -12,7 +12,12 @@
             @click="router.back()"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             {{ t('navigation.back') }}
           </button>
@@ -67,7 +72,9 @@
             class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
           >
             <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"
+              >
                 <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fill-rule="evenodd"
@@ -96,7 +103,9 @@
 
       <!-- AI Vision -->
       <section class="mb-12">
-        <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-8 text-white mb-6">
+        <div
+          class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-8 text-white mb-6"
+        >
           <div class="flex items-center gap-3 mb-4">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -144,7 +153,11 @@
                 :key="capability"
                 class="flex items-start gap-2 text-sm text-gray-700"
               >
-                <svg class="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  class="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path
                     fill-rule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -162,7 +175,12 @@
       <section class="mb-12">
         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
           <span class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-6 h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -183,7 +201,9 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ t(stack.category) }}</h3>
             <ul class="space-y-3">
               <li v-for="tech in stack.items" :key="tech.name" class="flex items-center gap-3">
-                <span class="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-xs font-bold">
+                <span
+                  class="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-xs font-bold"
+                >
                   {{ tech.icon }}
                 </span>
                 <div>
@@ -199,8 +219,15 @@
       <!-- Privacy & Ethics -->
       <section class="bg-amber-50 border-2 border-amber-200 rounded-xl p-8">
         <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div
+            class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-amber-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -375,4 +402,3 @@ const techStacks = [
   },
 ]
 </script>
-

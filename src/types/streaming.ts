@@ -1,6 +1,6 @@
 /**
  * Streaming Availability Types
- * 
+ *
  * Types for streaming service information and availability
  */
 
@@ -119,4 +119,3 @@ export interface AffiliateConfig {
   amazonAssociateTag?: string
   // Future: other affiliate programs can be added here
 }
-

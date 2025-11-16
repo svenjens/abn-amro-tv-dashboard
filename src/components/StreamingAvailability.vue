@@ -4,7 +4,7 @@
       <span class="text-2xl">📺</span>
       {{ t('streaming.title') }}
     </h3>
-    
+
     <div class="grid gap-3">
       <a
         v-for="option in availability"
@@ -14,19 +14,22 @@
         rel="noopener noreferrer"
         class="streaming-card group"
         :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
+        @click="handleStreamingClick($event, option.service, option.link)"
       >
         <div class="flex items-center gap-4">
           <!-- Service Logo/Icon -->
-          <div 
+          <div
             class="streaming-icon"
             :style="{ backgroundColor: getServiceColor(option.service.id) }"
           >
             <span class="text-2xl">{{ option.service.logo }}</span>
           </div>
-          
+
           <!-- Service Info -->
           <div class="flex-1">
-            <div class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <div
+              class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            >
               {{ option.service.name }}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
@@ -36,22 +39,29 @@
               </span>
             </div>
           </div>
-          
+
           <!-- Arrow Icon -->
-          <div class="text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <div
+            class="text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+          >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </div>
         </div>
-        
+
         <!-- Price if available -->
         <div v-if="option.price" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
           {{ formatPrice(option.price, option.currency) }}
         </div>
       </a>
     </div>
-    
+
     <!-- Disclaimer -->
     <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
       {{ t('streaming.disclaimer') }}
@@ -63,13 +73,41 @@
 import { useI18n } from 'vue-i18n'
 import type { StreamingAvailability } from '@/types'
 import { STREAMING_PLATFORMS } from '@/types'
+import { trackStreamingClick } from '@/utils'
 
 interface Props {
   availability: StreamingAvailability[]
+  showName?: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const { t } = useI18n()
+
+/**
+ * Handle streaming link click and track event
+ * Prevents default navigation to ensure tracking completes
+ */
+const handleStreamingClick = (
+  event: MouseEvent,
+  service: StreamingAvailability['service'],
+  link: string
+) => {
+  // Prevent default navigation
+  event.preventDefault()
+
+  const platform = service.name
+  const showName = props.showName || 'Unknown'
+  const isAffiliate = hasAffiliate(service.id)
+
+  // Track the event
+  trackStreamingClick(platform, showName, isAffiliate)
+
+  // Use small delay to ensure tracking completes before navigation
+  // This is more reliable than trying to await gtag which is fire-and-forget
+  setTimeout(() => {
+    window.open(link, '_blank', 'noopener,noreferrer')
+  }, 100)
+}
 
 /**
  * Get the theme color for a streaming service
@@ -123,4 +161,3 @@ const formatPrice = (price: number, currency?: string): string => {
          bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
 }
 </style>
-

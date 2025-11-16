@@ -55,4 +55,3 @@ export function validateSlug(slug: string, expectedName: string, expectedId: num
   const expectedSlug = createShowSlug(expectedName, expectedId)
   return slug === expectedSlug
 }
-

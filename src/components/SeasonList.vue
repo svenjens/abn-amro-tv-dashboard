@@ -93,13 +93,13 @@
 
           <!-- Summary (collapsed/expanded) -->
           <div v-if="episode.summary">
-            <p
+            <SafeHtml
               v-if="!expandedEpisodes.has(episode.id)"
+              :content="episode.summary"
               class="text-sm text-gray-600 line-clamp-2"
-              v-html="sanitize(episode.summary)"
-            ></p>
+            />
             <div v-else>
-              <p class="text-sm text-gray-600 mb-2" v-html="sanitize(episode.summary)"></p>
+              <SafeHtml :content="episode.summary" class="text-sm text-gray-600 mb-2" />
             </div>
             <button
               class="text-sm text-primary-600 hover:text-primary-700 font-medium mt-1"
@@ -144,7 +144,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DOMPurify from 'dompurify'
+import SafeHtml from '@/components/SafeHtml.vue'
 import type { Episode, EpisodesBySeason, ApiError } from '@/types'
 import { useWatchlistStore } from '@/stores'
 import RatingBadge from './RatingBadge.vue'
@@ -230,9 +230,7 @@ function toggleExpanded(episodeId: number) {
 }
 
 // Sanitize HTML
-function sanitize(html: string): string {
-  return DOMPurify.sanitize(html)
-}
+// SafeHtml component handles sanitization
 
 // Format date
 function formatDate(dateString: string): string {

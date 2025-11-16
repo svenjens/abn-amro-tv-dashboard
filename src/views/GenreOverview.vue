@@ -3,7 +3,10 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white" role="banner">
+    <div
+      class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
+      role="banner"
+    >
       <div class="max-w-7xl mx-auto px-4 py-12">
         <div class="flex items-center justify-between mb-6">
           <button
@@ -33,7 +36,9 @@
             <button
               class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-primary-800 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
               :aria-label="t('navigation.home')"
-              @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
+              @click="
+                router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })
+              "
             >
               <svg
                 class="h-5 w-5"

@@ -1,6 +1,6 @@
 /**
  * Streaming Availability Service
- * 
+ *
  * Provides methods to fetch streaming availability data
  * This uses TVMaze's web channel data and can be extended with
  * third-party streaming APIs like Watchmode or Streaming Availability API
@@ -41,19 +41,60 @@ class StreamingService {
     const availability: StreamingAvailability[] = []
 
     // Map common web channels to streaming services
-    const channelMap: Record<string, { id: string; name: string; logo: string; baseUrl: string }> = {
-      'Netflix': { id: 'netflix', name: 'Netflix', logo: '🎬', baseUrl: 'https://www.netflix.com' },
-      'Amazon Prime Video': { id: 'prime', name: 'Amazon Prime Video', logo: '📺', baseUrl: 'https://www.primevideo.com' },
-      'Prime Video': { id: 'prime', name: 'Amazon Prime Video', logo: '📺', baseUrl: 'https://www.primevideo.com' },
-      'Disney+': { id: 'disney', name: 'Disney+', logo: '🏰', baseUrl: 'https://www.disneyplus.com' },
-      'HBO Max': { id: 'hbo', name: 'HBO Max', logo: '🎭', baseUrl: 'https://www.max.com' },
-      'Hulu': { id: 'hulu', name: 'Hulu', logo: '📱', baseUrl: 'https://www.hulu.com' },
-      'Apple TV+': { id: 'apple', name: 'Apple TV+', logo: '🍎', baseUrl: 'https://tv.apple.com' },
-      'Paramount+': { id: 'paramount', name: 'Paramount+', logo: '⛰️', baseUrl: 'https://www.paramountplus.com' },
-      'Peacock': { id: 'peacock', name: 'Peacock', logo: '🦚', baseUrl: 'https://www.peacocktv.com' },
-      'SkyShowtime': { id: 'skyshowtime', name: 'SkyShowtime', logo: '🌟', baseUrl: 'https://www.skyshowtime.com' },
-      'Videoland': { id: 'videoland', name: 'Videoland', logo: '📹', baseUrl: 'https://www.videoland.com' },
-    }
+    const channelMap: Record<string, { id: string; name: string; logo: string; baseUrl: string }> =
+      {
+        Netflix: { id: 'netflix', name: 'Netflix', logo: '🎬', baseUrl: 'https://www.netflix.com' },
+        'Amazon Prime Video': {
+          id: 'prime',
+          name: 'Amazon Prime Video',
+          logo: '📺',
+          baseUrl: 'https://www.primevideo.com',
+        },
+        'Prime Video': {
+          id: 'prime',
+          name: 'Amazon Prime Video',
+          logo: '📺',
+          baseUrl: 'https://www.primevideo.com',
+        },
+        'Disney+': {
+          id: 'disney',
+          name: 'Disney+',
+          logo: '🏰',
+          baseUrl: 'https://www.disneyplus.com',
+        },
+        'HBO Max': { id: 'hbo', name: 'HBO Max', logo: '🎭', baseUrl: 'https://www.max.com' },
+        Hulu: { id: 'hulu', name: 'Hulu', logo: '📱', baseUrl: 'https://www.hulu.com' },
+        'Apple TV+': {
+          id: 'apple',
+          name: 'Apple TV+',
+          logo: '🍎',
+          baseUrl: 'https://tv.apple.com',
+        },
+        'Paramount+': {
+          id: 'paramount',
+          name: 'Paramount+',
+          logo: '⛰️',
+          baseUrl: 'https://www.paramountplus.com',
+        },
+        Peacock: {
+          id: 'peacock',
+          name: 'Peacock',
+          logo: '🦚',
+          baseUrl: 'https://www.peacocktv.com',
+        },
+        SkyShowtime: {
+          id: 'skyshowtime',
+          name: 'SkyShowtime',
+          logo: '🌟',
+          baseUrl: 'https://www.skyshowtime.com',
+        },
+        Videoland: {
+          id: 'videoland',
+          name: 'Videoland',
+          logo: '📹',
+          baseUrl: 'https://www.videoland.com',
+        },
+      }
 
     const channelInfo = channelMap[webChannel.name]
     if (channelInfo) {
@@ -77,7 +118,9 @@ class StreamingService {
       })
     }
 
-    logger.debug(`[Streaming] Found ${availability.length} streaming options for ${webChannel.name}`)
+    logger.debug(
+      `[Streaming] Found ${availability.length} streaming options for ${webChannel.name}`
+    )
     return availability
   }
 
@@ -101,11 +144,11 @@ class StreamingService {
    */
   async getSuggestedServices(showTitle: string): Promise<string[]> {
     logger.debug(`[Streaming] Getting suggestions for: ${showTitle}`)
-    
+
     // This is a placeholder. In a real implementation, you would:
     // 1. Call a streaming availability API (e.g., Watchmode API)
     // 2. Return the list of services where the show is available
-    
+
     // For now, return popular streaming services
     return [
       'Check Netflix',
@@ -132,4 +175,3 @@ export const streamingService = new StreamingService()
 
 // Export class for testing
 export { StreamingService }
-

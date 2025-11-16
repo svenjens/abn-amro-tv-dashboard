@@ -72,7 +72,7 @@ const themeLabel = computed(() => {
 
 const buttonClass = computed(() => {
   const base = 'hover:bg-gray-100 dark:hover:bg-gray-700'
-  
+
   switch (props.variant) {
     case 'header':
       return 'text-white hover:text-primary-200 hover:bg-white/10'
@@ -90,4 +90,3 @@ const focusClass = computed(() => {
   return 'focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
 })
 </script>
-

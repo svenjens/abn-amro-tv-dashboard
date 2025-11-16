@@ -5,7 +5,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { getCurrentLocale, setCurrentLocale } from '@/i18n/helpers'
-import { logger } from '@/utils'
+import { logger, trackPageView } from '@/utils'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -143,6 +143,9 @@ router.beforeEach((to, _from, next) => {
 
   // Add hreflang tags for SEO
   updateHreflangTags(to.path)
+
+  // Track page view
+  trackPageView(title && typeof title === 'string' ? title : 'BingeList', to.path)
 
   next()
 })

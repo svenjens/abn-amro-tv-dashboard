@@ -16,7 +16,10 @@
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
         @error="handleImageError"
       />
-      <div v-else class="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500">
+      <div
+        v-else
+        class="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+      >
         <svg
           class="h-16 w-16"
           fill="currentColor"
