@@ -76,12 +76,23 @@ const ASSET_PROMPTS = [
     quality: 'high',
   },
   {
-    name: 'favicon',
-    prompt: `Create a simple, bold favicon icon for BingeList, a TV show tracking platform. 
+    name: 'favicon-light',
+    prompt: `Create a simple, bold favicon icon for BingeList for LIGHT MODE. 
     A clean TV screen or play button icon with minimal details. 
-    Use white and gold (${BRAND_STYLE.accent}) on red (${BRAND_STYLE.primary}) background. 
+    Use white and gold (${BRAND_STYLE.accent}) on vibrant red (${BRAND_STYLE.primary}) gradient background. 
     Must be recognizable at tiny sizes (16x16px to 512x512px). 
-    Bold shapes, high contrast, simple and iconic. Centered composition.`,
+    Bold shapes, high contrast, simple and iconic. Centered composition. Optimized for light backgrounds.`,
+    size: '1024x1024',
+    quality: 'medium',
+  },
+  {
+    name: 'favicon-dark',
+    prompt: `Create a simple, bold favicon icon for BingeList for DARK MODE. 
+    A clean TV screen or play button icon with minimal details. 
+    Use white and gold (${BRAND_STYLE.accent}) on deep red (${BRAND_STYLE.primaryDark}) gradient background with subtle glow. 
+    Must be recognizable at tiny sizes (16x16px to 512x512px). 
+    Bold shapes, high contrast, simple and iconic with a subtle luminous quality. 
+    Centered composition. Optimized for dark backgrounds with enhanced visibility.`,
     size: '1024x1024',
     quality: 'medium',
   },
