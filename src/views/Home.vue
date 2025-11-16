@@ -97,6 +97,11 @@
 
     <!-- Main Content -->
     <main id="main-content" class="max-w-7xl mx-auto py-8 overflow-visible" tabindex="-1">
+      <!-- Filters -->
+      <div class="px-4">
+        <FilterBar v-if="!showsStore.isLoading && showsStore.showsCount > 0" v-model="filters" :shows="showsStore.allShows" />
+      </div>
+
       <!-- Loading State -->
       <LoadingSpinner
         v-if="showsStore.isLoading"
@@ -114,23 +119,23 @@
       />
 
       <!-- Genre Rows -->
-      <div v-else-if="showsStore.genres.length > 0" role="region" :aria-label="t('home.title')">
+      <div v-else-if="filteredGenres.length > 0" role="region" :aria-label="t('home.title')">
         <div class="px-4 md:px-0 mb-6">
           <p class="text-gray-600 dark:text-gray-400">
             {{
               t('home.showsCount', {
-                count: showsStore.showsCount,
-                genres: showsStore.genres.length,
+                count: filteredShows.length,
+                genres: filteredGenres.length,
               })
             }}
           </p>
         </div>
 
         <GenreRow
-          v-for="genre in displayedGenres"
-          :key="genre"
-          :genre="genre"
-          :shows="showsStore.getShowsByGenre(genre)"
+          v-for="genreData in displayedGenres"
+          :key="genreData.name"
+          :genre="genreData.name"
+          :shows="genreData.shows"
         />
 
         <!-- Infinite Scroll Trigger -->
@@ -203,6 +208,8 @@ import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
+import FilterBar from '@/components/FilterBar.vue'
+import type { Show } from '@/types'
 
 const { t } = useI18n()
 
@@ -213,6 +220,64 @@ const searchStore = useSearchStore()
 const watchlistStore = useWatchlistStore()
 const searchQuery = ref('')
 
+// Filters
+const filters = ref({
+  status: '',
+  network: '',
+  year: '',
+})
+
+// Filter shows based on selected filters
+const filteredShows = computed(() => {
+  let shows = showsStore.allShows
+
+  if (filters.value.status) {
+    shows = shows.filter((show: Show) => show.status === filters.value.status)
+  }
+
+  if (filters.value.network) {
+    shows = shows.filter(
+      (show: Show) =>
+        show.network?.name === filters.value.network ||
+        show.webChannel?.name === filters.value.network
+    )
+  }
+
+  if (filters.value.year) {
+    const year = parseInt(filters.value.year)
+    shows = shows.filter((show: Show) => {
+      if (!show.premiered) return false
+      const showYear = new Date(show.premiered).getFullYear()
+      return showYear === year
+    })
+  }
+
+  return shows
+})
+
+// Get genres from filtered shows
+const filteredGenres = computed(() => {
+  const genreMap = new Map<string, Show[]>()
+  
+  filteredShows.value.forEach((show: Show) => {
+    if (show.genres && show.genres.length > 0) {
+      show.genres.forEach((genre: string) => {
+        if (!genreMap.has(genre)) {
+          genreMap.set(genre, [])
+        }
+        genreMap.get(genre)!.push(show)
+      })
+    }
+  })
+
+  return Array.from(genreMap.entries())
+    .map(([genre, shows]) => ({
+      name: genre,
+      shows: shows,
+    }))
+    .sort((a, b) => b.shows.length - a.shows.length)
+})
+
 // Performance: Lazy load genres with infinite scroll
 const genresPerPage = 5
 const visibleGenresCount = ref(genresPerPage)
@@ -220,11 +285,11 @@ const loadMoreTrigger = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
 
 const displayedGenres = computed(() => {
-  return showsStore.genres.slice(0, visibleGenresCount.value)
+  return filteredGenres.value.slice(0, visibleGenresCount.value)
 })
 
 const canLoadMore = computed(() => {
-  return visibleGenresCount.value < showsStore.genres.length
+  return visibleGenresCount.value < filteredGenres.value.length
 })
 
 // Setup intersection observer for infinite scroll
