@@ -140,7 +140,7 @@
 
         <!-- Infinite Scroll Trigger -->
         <div
-          v-if="canLoadMore"
+          v-show="canLoadMore"
           ref="loadMoreTrigger"
           class="text-center py-8 text-gray-500 dark:text-gray-400 text-sm"
         >
@@ -196,7 +196,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
@@ -339,6 +339,11 @@ function handleSearchFocus() {
   const locale = route.params.locale || 'en'
   router.push({ name: 'search', params: { locale } })
 }
+
+// Reset visible genres count when filters change
+watch(filters, () => {
+  visibleGenresCount.value = genresPerPage
+}, { deep: true })
 
 onMounted(async () => {
   await showsStore.fetchAllShows()
