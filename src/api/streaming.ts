@@ -2,12 +2,15 @@
  * Streaming Availability Service
  *
  * Provides methods to fetch streaming availability data
- * This uses TVMaze's web channel data and can be extended with
- * third-party streaming APIs like Watchmode or Streaming Availability API
+ * Combines TVMaze's web channel data with TMDB's watch providers API
+ * for comprehensive multi-platform streaming availability
  */
 
-import type { StreamingAvailability, AffiliateConfig } from '@/types'
+import type { StreamingAvailability, AffiliateConfig, TMDBWatchProvider } from '@/types'
+import { STREAMING_PLATFORMS } from '@/types'
 import { logger } from '@/utils'
+import { tmdbAPI } from './tmdb'
+import type { Show } from '@/types'
 
 interface WebChannel {
   id: number
@@ -167,6 +170,164 @@ class StreamingService {
       return this.addAmazonAffiliateTag(showUrl, this.affiliateConfig.amazonAssociateTag)
     }
     return showUrl
+  }
+
+  /**
+   * Map TMDB provider ID to our platform ID
+   */
+  private mapTMDBProviderToId(providerId: number, providerName: string): string | null {
+    // Common TMDB provider IDs (these are consistent across regions)
+    const providerMap: Record<number, string> = {
+      8: 'netflix',
+      119: 'prime',
+      9: 'prime', // Amazon Video
+      337: 'disney',
+      384: 'hbo', // HBO Max
+      15: 'hulu',
+      350: 'apple',
+      531: 'paramount',
+      387: 'peacock',
+    }
+
+    // Try direct ID mapping first
+    if (providerMap[providerId]) {
+      return providerMap[providerId]
+    }
+
+    // Fall back to name matching
+    const nameLower = providerName.toLowerCase()
+    if (nameLower.includes('netflix')) return 'netflix'
+    if (nameLower.includes('amazon') || nameLower.includes('prime')) return 'prime'
+    if (nameLower.includes('disney')) return 'disney'
+    if (nameLower.includes('hbo') || nameLower.includes('max')) return 'hbo'
+    if (nameLower.includes('hulu')) return 'hulu'
+    if (nameLower.includes('apple')) return 'apple'
+    if (nameLower.includes('paramount')) return 'paramount'
+    if (nameLower.includes('peacock')) return 'peacock'
+    if (nameLower.includes('skyshowtime')) return 'skyshowtime'
+    if (nameLower.includes('videoland')) return 'videoland'
+
+    return null
+  }
+
+  /**
+   * Convert TMDB watch provider to our StreamingAvailability format
+   */
+  private tmdbProviderToAvailability(
+    provider: TMDBWatchProvider,
+    type: 'subscription' | 'buy' | 'rent' | 'free' | 'ads',
+    linkUrl: string
+  ): StreamingAvailability | null {
+    const platformId = this.mapTMDBProviderToId(provider.provider_id, provider.provider_name)
+    
+    if (!platformId) {
+      logger.debug(`[Streaming] Unknown TMDB provider: ${provider.provider_name} (ID: ${provider.provider_id})`)
+      return null
+    }
+
+    const platform = STREAMING_PLATFORMS[platformId]
+    if (!platform) {
+      return null
+    }
+
+    let link = linkUrl
+
+    // Add affiliate tag for Amazon Prime Video
+    if (platformId === 'prime' && this.affiliateConfig.amazonAssociateTag) {
+      link = this.addAmazonAffiliateTag(link, this.affiliateConfig.amazonAssociateTag)
+    }
+
+    return {
+      service: {
+        id: platform.id,
+        name: platform.name,
+        logo: platform.logo,
+        link: platform.homePage,
+        country: 'NL', // This comes from TMDB response
+        type,
+      },
+      link,
+    }
+  }
+
+  /**
+   * Get comprehensive streaming availability from TMDB
+   * Combines with webChannel data for complete picture
+   */
+  async getStreamingAvailability(
+    show: Show,
+    country: string = 'NL'
+  ): Promise<StreamingAvailability[]> {
+    const availability: StreamingAvailability[] = []
+
+    // First, add webChannel data (for originals like Netflix Originals)
+    const webChannelData = this.getStreamingFromWebChannel(show.webChannel || null)
+    availability.push(...webChannelData)
+
+    // Then, fetch TMDB data for multi-platform availability
+    if (tmdbAPI.isEnabled()) {
+      try {
+        const tmdbData = await tmdbAPI.getStreamingAvailability(
+          show.name,
+          show.premiered,
+          country
+        )
+
+        if (tmdbData && tmdbData.results[country]) {
+          const countryData = tmdbData.results[country]
+
+          // Add subscription services (Netflix, Disney+, etc.)
+          if (countryData.flatrate) {
+            for (const provider of countryData.flatrate) {
+              const streamingOption = this.tmdbProviderToAvailability(
+                provider,
+                'subscription',
+                countryData.link
+              )
+              if (streamingOption && !this.isDuplicate(availability, streamingOption)) {
+                availability.push(streamingOption)
+              }
+            }
+          }
+
+          // Add free with ads services
+          if (countryData.ads) {
+            for (const provider of countryData.ads) {
+              const streamingOption = this.tmdbProviderToAvailability(
+                provider,
+                'ads',
+                countryData.link
+              )
+              if (streamingOption && !this.isDuplicate(availability, streamingOption)) {
+                availability.push(streamingOption)
+              }
+            }
+          }
+
+          // Optionally add rent/buy options (commented out to focus on streaming)
+          // if (countryData.rent) { ... }
+          // if (countryData.buy) { ... }
+        }
+      } catch (error) {
+        logger.error('[Streaming] Error fetching TMDB data:', error)
+      }
+    }
+
+    logger.info(
+      `[Streaming] Found ${availability.length} total streaming options for: ${show.name}`
+    )
+
+    return availability
+  }
+
+  /**
+   * Check if a streaming option is already in the list (avoid duplicates)
+   */
+  private isDuplicate(
+    list: StreamingAvailability[],
+    option: StreamingAvailability
+  ): boolean {
+    return list.some((item) => item.service.id === option.service.id)
   }
 }
 

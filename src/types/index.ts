@@ -4,3 +4,4 @@
 
 export * from './show'
 export * from './streaming'
+export * from './tmdb'

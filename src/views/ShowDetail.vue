@@ -288,8 +288,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import type { Show, ApiError, Episode, CastMember } from '@/types'
-import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
+import type { Show, ApiError, Episode, CastMember, StreamingAvailability as StreamingAvailabilityType } from '@/types'
+import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug, logger } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import { tvMazeAPI } from '@/api/tvmaze'
 import { streamingService } from '@/api/streaming'
@@ -343,11 +343,24 @@ const relatedShows = computed(() => {
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// Get streaming availability
-const streamingAvailability = computed(() => {
-  if (!show.value) return []
-  return streamingService.getStreamingFromWebChannel(show.value.webChannel || null)
-})
+// Streaming availability state
+const streamingAvailability = ref<StreamingAvailabilityType[]>([])
+
+// Fetch streaming availability
+async function fetchStreamingAvailability() {
+  if (!show.value) return
+
+  try {
+    const availability = await streamingService.getStreamingAvailability(show.value, 'NL')
+    streamingAvailability.value = availability
+  } catch (err) {
+    logger.error('Error fetching streaming availability:', err)
+    // Fall back to webChannel only
+    streamingAvailability.value = streamingService.getStreamingFromWebChannel(
+      show.value.webChannel || null
+    )
+  }
+}
 
 // Fetch episodes
 async function fetchEpisodes() {
@@ -435,6 +448,9 @@ async function loadShow() {
     }
 
     show.value = showData
+
+    // Fetch streaming availability
+    fetchStreamingAvailability()
 
     // Validate slug and redirect if incorrect (for SEO and old URLs)
     if (showData) {

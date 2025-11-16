@@ -126,7 +126,7 @@ cd tv-show-dashboard
 npm install
 ```
 
-3. **Configure Google AdSense** (Optional):
+3. **Configure Environment Variables**:
 
 Create a `.env` file in the root directory:
 
@@ -134,13 +134,29 @@ Create a `.env` file in the root directory:
 cp .env.example .env
 ```
 
-Update the `.env` file with your Google AdSense Publisher ID:
+Update the `.env` file with your API keys:
 
 ```env
+# Google AdSense (Optional)
 VITE_GOOGLE_ADSENSE_ID=ca-pub-XXXXXXXXXXXXXXXX
+
+# TMDB API (Required for multi-platform streaming data)
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
+
+# Amazon Associates (Optional)
+VITE_AMAZON_ASSOCIATE_TAG=your-tag-20
 ```
 
-> **Note**: Ads only appear in production builds. To test locally, run `npm run build && npm run preview`.
+**Get your free TMDB API key:**
+1. Sign up at [themoviedb.org](https://www.themoviedb.org/)
+2. Go to Settings → API
+3. Request an API key (free, no credit card required)
+4. Copy your API key to `.env`
+
+> **Note**: 
+> - TMDB API is free with 40 requests per 10 seconds
+> - Without TMDB key, only webChannel streaming data will be shown
+> - Ads only appear in production builds (`npm run build && npm run preview`)
 
 ## 🏃 Running the Application
 
