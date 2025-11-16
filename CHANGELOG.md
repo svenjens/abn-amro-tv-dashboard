@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.12.0...v1.13.0) (2025-11-16)
+
+
+### Features
+
+* add legal page navigation links to footer ([#36](https://github.com/svenjens/tv-show-dashboard/issues/36)) ([586ab8f](https://github.com/svenjens/tv-show-dashboard/commit/586ab8f3685806f5f91a7587376ea43ed6bfc53d))
+
 ## [1.12.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.11.0...v1.12.0) (2025-11-15)
 
 
