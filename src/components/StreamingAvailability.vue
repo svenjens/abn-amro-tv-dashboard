@@ -86,7 +86,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 /**
  * Handle streaming link click and track event
@@ -143,7 +143,6 @@ const formatPrice = (price: number, currency?: string): string => {
     return '-'
   }
   const curr = currency || 'USD'
-  const { locale } = useI18n()
   return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: curr,
