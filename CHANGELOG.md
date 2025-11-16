@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.16.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.15.0...v1.16.0) (2025-11-16)
+
+
+### Features
+
+* add adaptive favicon for light and dark mode ([2bb15d9](https://github.com/svenjens/tv-show-dashboard/commit/2bb15d9fc7cc728876f887f703924b07fa94c238))
+* generate adaptive favicons with AI ([0539a72](https://github.com/svenjens/tv-show-dashboard/commit/0539a72c178c9d6ffda3dc4639abad675ab24e2d))
+* update branding script to generate adaptive favicons ([e57d344](https://github.com/svenjens/tv-show-dashboard/commit/e57d34409c3cc8477eae3b3053a27316325bd0e9))
+
+
+### Bug Fixes
+
+* remove absolute filesystem paths from branding metadata ([b67ec33](https://github.com/svenjens/tv-show-dashboard/commit/b67ec3360802b7b8d1de4b005fd3997ac6751dcb))
+* remove duplicate 'disclaimer' and 'accessibility' keys in legal translations ([f8fcd63](https://github.com/svenjens/tv-show-dashboard/commit/f8fcd630fcf5fc92a17cfa560fdc2b7e38582c0d))
+* resolve translation key conflicts for legal footer ([9c0ebbd](https://github.com/svenjens/tv-show-dashboard/commit/9c0ebbda76543a8888d1cb1f90c250d6ab96b77d))
+
 ## [1.15.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.14.0...v1.15.0) (2025-11-16)
 
 
