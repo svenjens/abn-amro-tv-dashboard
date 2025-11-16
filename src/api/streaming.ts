@@ -181,12 +181,15 @@ class StreamingService {
       8: 'netflix',
       119: 'prime',
       9: 'prime', // Amazon Video
+      10: 'prime', // Amazon Video (buy/rent)
       337: 'disney',
-      384: 'hbo', // HBO Max
+      384: 'hbo', // HBO Max (US)
+      1899: 'hbo', // HBO Max (International/NL)
       15: 'hulu',
       350: 'apple',
       531: 'paramount',
       387: 'peacock',
+      1773: 'skyshowtime', // SkyShowtime (NL)
     }
 
     // Try direct ID mapping first
