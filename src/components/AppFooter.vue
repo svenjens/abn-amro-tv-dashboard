@@ -173,7 +173,7 @@
                 :to="{ name: 'disclaimer', params: { locale: currentLocale } }"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
-                {{ t('legal.disclaimer') }}
+                {{ t('legal.disclaimerTitle') }}
               </router-link>
             </li>
             <li>
@@ -181,7 +181,7 @@
                 :to="{ name: 'accessibility-statement', params: { locale: currentLocale } }"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
-                {{ t('legal.accessibility') }}
+                {{ t('legal.accessibilityTitle') }}
               </router-link>
             </li>
           </ul>

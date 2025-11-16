@@ -251,6 +251,8 @@
   "legal": {
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy & Cookies",
+    "disclaimerTitle": "Disclaimer",
+    "accessibilityTitle": "Accessibility",
     "lastUpdated": "Last Updated",
     "commitment": "Our commitment to accessibility",
     "acceptanceOfTerms": "Acceptance of Terms",
