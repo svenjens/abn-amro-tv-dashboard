@@ -149,14 +149,36 @@
           <h3 class="text-white font-semibold mb-4">{{ t('footer.legal') }}</h3>
           <ul class="space-y-3">
             <li>
-              <a href="/robots.txt" class="text-gray-400 hover:text-white transition-colors text-sm">
-                robots.txt
-              </a>
+              <router-link
+                :to="{ name: 'terms', params: { locale: currentLocale } }"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {{ t('legal.termsOfService') }}
+              </router-link>
             </li>
             <li>
-              <a href="/sitemap.xml" class="text-gray-400 hover:text-white transition-colors text-sm">
-                sitemap.xml
-              </a>
+              <router-link
+                :to="{ name: 'privacy', params: { locale: currentLocale } }"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {{ t('legal.privacyPolicy') }}
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'disclaimer', params: { locale: currentLocale } }"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {{ t('legal.disclaimer') }}
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'accessibility-statement', params: { locale: currentLocale } }"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {{ t('legal.accessibility') }}
+              </router-link>
             </li>
           </ul>
         </div>
