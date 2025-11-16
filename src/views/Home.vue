@@ -97,7 +97,7 @@
     <!-- Main Content -->
     <main id="main-content" class="max-w-7xl mx-auto py-8 overflow-visible" tabindex="-1">
       <!-- Filters -->
-      <div class="px-4">
+      <div class="px-4 md:px-0">
         <FilterBar
           v-if="!showsStore.isLoading && showsStore.showsCount > 0"
           v-model="filters"
