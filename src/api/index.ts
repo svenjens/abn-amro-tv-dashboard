@@ -3,3 +3,4 @@
  */
 
 export * from './tvmaze'
+export * from './streaming'

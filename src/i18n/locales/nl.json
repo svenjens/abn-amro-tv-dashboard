@@ -242,6 +242,14 @@
     "dark": "Donker",
     "system": "Systeem"
   },
+  "streaming": {
+    "title": "Waar te Kijken",
+    "watch_on": "Bekijk op",
+    "affiliate_note": "Affiliate",
+    "disclaimer": "Beschikbaarheid kan per regio verschillen. Prijzen en streamingopties kunnen veranderen.",
+    "checkAvailability": "Controleer beschikbaarheid in jouw regio",
+    "notAvailable": "Streaminginformatie niet beschikbaar voor deze serie"
+  },
   "filters": {
     "title": "Filters",
     "clearAll": "Alles wissen",

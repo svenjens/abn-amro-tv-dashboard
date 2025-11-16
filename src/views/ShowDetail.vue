@@ -218,6 +218,11 @@
               <!-- Safe: HTML is sanitized with DOMPurify before rendering -->
             </article>
 
+            <!-- Streaming Availability -->
+            <section class="mb-12">
+              <StreamingAvailability :availability="streamingAvailability" />
+            </section>
+
             <!-- Advertisement -->
             <AdSense format="horizontal" />
 
@@ -287,6 +292,7 @@ import type { Show, ApiError, Episode, CastMember } from '@/types'
 import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import { tvMazeAPI } from '@/api/tvmaze'
+import { streamingService } from '@/api/streaming'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'
 import ShowCard from '@/components/ShowCard.vue'
@@ -298,6 +304,7 @@ import AdSense from '@/components/AdSense.vue'
 import SeasonList from '@/components/SeasonList.vue'
 import CastList from '@/components/CastList.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import StreamingAvailability from '@/components/StreamingAvailability.vue'
 
 const { t } = useI18n()
 
@@ -338,6 +345,12 @@ const sanitizedSummary = computed(() => {
 const relatedShows = computed(() => {
   if (!show.value) return []
   return showsStore.getRelatedShows(show.value, 6)
+})
+
+// Get streaming availability
+const streamingAvailability = computed(() => {
+  if (!show.value) return []
+  return streamingService.getStreamingFromWebChannel(show.value.webChannel || null)
 })
 
 // Fetch episodes

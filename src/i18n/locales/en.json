@@ -242,6 +242,14 @@
     "dark": "Dark",
     "system": "System"
   },
+  "streaming": {
+    "title": "Where to Watch",
+    "watch_on": "Watch on",
+    "affiliate_note": "Affiliate",
+    "disclaimer": "Availability may vary by region. Prices and streaming options are subject to change.",
+    "checkAvailability": "Check availability in your region",
+    "notAvailable": "Streaming information not available for this show"
+  },
   "legal": {
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy & Cookies",

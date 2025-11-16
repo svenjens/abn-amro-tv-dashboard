@@ -12,10 +12,16 @@ import i18n from './i18n'
 import { getCurrentLocale } from './i18n/helpers'
 import { logger, registerServiceWorker, initInstallPrompt } from './utils'
 import { initDarkModeEarly } from './composables'
+import { streamingService } from './api/streaming'
 import './style.css'
 
 // Initialize dark mode before app mounts (prevents flash of wrong theme)
 initDarkModeEarly()
+
+// Initialize streaming service with affiliate configuration
+streamingService.setAffiliateConfig({
+  amazonAssociateTag: import.meta.env.VITE_AMAZON_ASSOCIATE_TAG,
+})
 
 const app = createApp(App)
 
