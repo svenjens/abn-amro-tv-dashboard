@@ -207,7 +207,7 @@ async function generateImage(config) {
     return {
       name: config.name,
       filename,
-      path: filepath,
+      path: `public/${filename}`, // Use relative path to avoid exposing local filesystem
       size: buffer.length,
     }
   } catch (error) {
@@ -298,7 +298,7 @@ async function generateAllAssets() {
       name: r.name,
       filename: r.filename,
       size_kb: (r.size / 1024).toFixed(2),
-      path: r.path,
+      path: r.path, // Already relative from generateImage()
     })),
   }
   

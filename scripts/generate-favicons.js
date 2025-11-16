@@ -81,7 +81,12 @@ async function generateFavicon(config) {
     
     console.log(`   ✅ Saved: ${filename} (${(buffer.length / 1024).toFixed(2)} KB)`)
     
-    return { name: config.name, filename, size: buffer.length }
+    return { 
+      name: config.name, 
+      filename, 
+      path: `public/${filename}`, // Use relative path
+      size: buffer.length 
+    }
   } catch (error) {
     console.error(`   ❌ Error: ${error.message}`)
     throw error
