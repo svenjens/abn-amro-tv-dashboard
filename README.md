@@ -4,6 +4,7 @@ Your ultimate TV show discovery and tracking platform. Built with Vue 3, TypeScr
 
 🌐 **Live:** [bingelist.app](https://bingelist.app)
 
+[![Deploy Pipeline](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml)
 ![Vue 3](https://img.shields.io/badge/Vue-3.5-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![Vite](https://img.shields.io/badge/Vite-7.2-purple)
