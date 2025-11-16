@@ -164,11 +164,31 @@ export function trackWatchlistAction(action: 'add' | 'remove', showId: number, s
 }
 
 /**
+ * Sanitize search term to prevent PII leakage
+ * Truncates long queries and removes potential email patterns
+ */
+function sanitizeSearchTerm(searchTerm: string): string {
+  if (!searchTerm) return ''
+  
+  // Truncate to max 100 characters to prevent long personal info
+  let sanitized = searchTerm.slice(0, 100)
+  
+  // Remove potential email addresses (basic pattern)
+  sanitized = sanitized.replace(/\S+@\S+\.\S+/g, '[email]')
+  
+  // Remove potential phone numbers (basic patterns)
+  sanitized = sanitized.replace(/\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g, '[phone]')
+  
+  return sanitized.trim()
+}
+
+/**
  * Track search (custom event)
+ * Note: Search terms are sanitized to prevent accidental PII tracking
  */
 export function trackSearch(searchTerm: string, resultCount: number): void {
   trackEvent('search', {
-    search_term: searchTerm,
+    search_term: sanitizeSearchTerm(searchTerm),
     result_count: resultCount,
   })
 }
