@@ -4,6 +4,7 @@ Your ultimate TV show discovery and tracking platform. Built with Vue 3, TypeScr
 
 🌐 **Live:** [bingelist.app](https://bingelist.app)
 
+[![Deploy Pipeline](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml)
 ![Vue 3](https://img.shields.io/badge/Vue-3.5-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![Vite](https://img.shields.io/badge/Vite-7.2-purple)
@@ -125,7 +126,7 @@ cd tv-show-dashboard
 npm install
 ```
 
-3. **Configure Google AdSense** (Optional):
+3. **Configure Environment Variables**:
 
 Create a `.env` file in the root directory:
 
@@ -133,13 +134,29 @@ Create a `.env` file in the root directory:
 cp .env.example .env
 ```
 
-Update the `.env` file with your Google AdSense Publisher ID:
+Update the `.env` file with your API keys:
 
 ```env
+# Google AdSense (Optional)
 VITE_GOOGLE_ADSENSE_ID=ca-pub-XXXXXXXXXXXXXXXX
+
+# TMDB API (Required for multi-platform streaming data)
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
+
+# Amazon Associates (Optional)
+VITE_AMAZON_ASSOCIATE_TAG=your-tag-20
 ```
 
-> **Note**: Ads only appear in production builds. To test locally, run `npm run build && npm run preview`.
+**Get your free TMDB API key:**
+1. Sign up at [themoviedb.org](https://www.themoviedb.org/)
+2. Go to Settings → API
+3. Request an API key (free, no credit card required)
+4. Copy your API key to `.env`
+
+> **Note**: 
+> - TMDB API is free with 40 requests per 10 seconds
+> - Without TMDB key, only webChannel streaming data will be shown
+> - Ads only appear in production builds (`npm run build && npm run preview`)
 
 ## 🏃 Running the Application
 
@@ -186,6 +203,31 @@ npm run test:ui
 ```bash
 npm run test:coverage
 ```
+
+### Testing Streaming Availability
+
+The streaming availability feature shows where shows can be watched online. Currently, it detects streaming platforms from the TVMaze API's `webChannel` property.
+
+**Test Cases:**
+
+| Show | webChannel | Result | Use Case |
+|------|------------|--------|----------|
+| **Stranger Things** | Netflix | ✅ Shows Netflix | Netflix Original |
+| **The Boys** | Amazon Prime Video | ✅ Shows Amazon Prime | Prime Original |
+| **The Mandalorian** | Disney+ | ✅ Shows Disney+ | Disney+ Original |
+| **Game of Thrones** | HBO Max | ✅ Shows HBO Max | HBO Original |
+| **Under the Dome** | CBS | ❌ No streaming | Network TV (no webChannel streaming) |
+| **Breaking Bad** | AMC | ❌ No streaming | Network TV (requires external API) |
+
+**Empty State Testing:**
+- Navigate to shows without a `webChannel` property to test the "not available" message
+- Example shows: "Breaking Bad", "The Office", "Friends"
+
+**Future Enhancement:**
+To show multi-platform availability (e.g., a show on both Netflix and Hulu), we would need to integrate with:
+- Streaming Availability API
+- JustWatch API (deprecated)
+- TMDB (limited streaming data)
 
 ## 🏗️ Architecture
 
@@ -494,7 +536,13 @@ If you encounter any issues, ensure you're using compatible versions.
 
 ### Environment Variables
 
-No environment variables are required for this project as it uses the public TVMaze API.
+The core TVMaze features work without any environment variables, but some integrations use optional keys:
+
+- `VITE_TMDB_API_KEY` — enables multi-platform streaming availability via TMDB.
+- `VITE_GOOGLE_ADSENSE_ID` — enables Google AdSense in production builds.
+- `VITE_AMAZON_ASSOCIATE_TAG` — enables Amazon affiliate tagging for Prime Video links.
+
+See the "Configure Environment Variables" section above for setup details.
 
 ### Known Limitations
 

@@ -246,23 +246,9 @@
     "title": "Waar te Kijken",
     "watch_on": "Bekijk op",
     "affiliate_note": "Affiliate",
-    "disclaimer": "Beschikbaarheid kan per regio verschillen. Prijzen en streamingopties kunnen veranderen."
-  },
-  "filters": {
-    "title": "Filters",
-    "clearAll": "Alles wissen",
-    "status": "Status",
-    "network": "Zender",
-    "year": "Jaar",
-    "allStatuses": "Alle statussen",
-    "allNetworks": "Alle zenders",
-    "allYears": "Alle jaren",
-    "running": "Lopend",
-    "ended": "Beëindigd",
-    "toBeDetermined": "Nog te bepalen",
-    "inDevelopment": "In ontwikkeling",
-    "active": "Actieve filters",
-    "noResults": "Geen series voldoen aan je filters"
+    "disclaimer": "Toont beschikbaarheid voor Nederland. Prijzen en streamingopties kunnen veranderen.",
+    "not_available": "Momenteel niet beschikbaar op streamingdiensten",
+    "check_later": "Kom later terug of bezoek de officiële website voor meer informatie"
   },
   "legal": {
     "termsOfService": "Algemene Voorwaarden",

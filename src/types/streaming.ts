@@ -119,3 +119,4 @@ export interface AffiliateConfig {
   amazonAssociateTag?: string
   // Future: other affiliate programs can be added here
 }
+

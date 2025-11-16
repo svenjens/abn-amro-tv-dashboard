@@ -1,65 +1,70 @@
 <template>
-  <div v-if="availability.length > 0" class="streaming-availability">
+  <div class="streaming-availability">
     <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
       <span class="text-2xl">📺</span>
       {{ t('streaming.title') }}
     </h3>
 
-    <div class="grid gap-3">
-      <a
-        v-for="option in availability"
-        :key="option.service.id"
-        :href="option.link"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="streaming-card group"
-        :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
-        @click="handleStreamingClick($event, option.service, option.link)"
-      >
-        <div class="flex items-center gap-4">
+    <!-- Available Streaming Options -->
+    <div v-if="availability.length > 0" class="streaming-scroll-container">
+      <div class="streaming-horizontal-list">
+        <a
+          v-for="option in availability"
+          :key="option.service.id"
+          :href="option.link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="streaming-card group"
+          :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
+          @click="handleStreamingClick($event, option.service, option.link)"
+        >
           <!-- Service Logo/Icon -->
           <div
             class="streaming-icon"
             :style="{ backgroundColor: getServiceColor(option.service.id) }"
           >
-            <span class="text-2xl">{{ option.service.logo }}</span>
+            <span class="text-3xl">{{ option.service.logo }}</span>
           </div>
 
           <!-- Service Info -->
-          <div class="flex-1">
+          <div class="mt-3 text-center">
             <div
-              class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+              class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
             >
               {{ option.service.name }}
             </div>
-            <div class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
               <span class="capitalize">{{ option.service.type }}</span>
-              <span v-if="hasAffiliate(option.service.id)" class="affiliate-badge">
-                {{ t('streaming.affiliate_note') }}
-              </span>
+            </div>
+            <div v-if="hasAffiliate(option.service.id)" class="affiliate-badge mt-1">
+              {{ t('streaming.affiliate_note') }}
             </div>
           </div>
 
-          <!-- Arrow Icon -->
-          <div
-            class="text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+          <!-- Price if available -->
+          <div v-if="option.price !== undefined && option.price !== null" class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center">
+            {{ formatPrice(option.price, option.currency) }}
           </div>
-        </div>
+        </a>
+      </div>
+    </div>
 
-        <!-- Price if available -->
-        <div v-if="option.price" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          {{ formatPrice(option.price, option.currency) }}
-        </div>
-      </a>
+    <!-- Not Available State -->
+    <div v-else class="not-available-state">
+      <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p class="text-sm">{{ t('streaming.not_available') }}</p>
+      </div>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+        {{ t('streaming.check_later') }}
+      </p>
     </div>
 
     <!-- Disclaimer -->
@@ -81,7 +86,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 /**
  * Handle streaming link click and track event
@@ -92,7 +97,12 @@ const handleStreamingClick = (
   service: StreamingAvailability['service'],
   link: string
 ) => {
-  // Prevent default navigation
+  // Allow default behavior for modified clicks (cmd/ctrl/middle-click/right-click)
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) {
+    return
+  }
+
+  // Prevent default navigation for normal left clicks only
   event.preventDefault()
 
   const platform = service.name
@@ -133,7 +143,6 @@ const formatPrice = (price: number, currency?: string): string => {
     return '-'
   }
   const curr = currency || 'USD'
-  const { locale } = useI18n()
   return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: curr,
@@ -146,18 +155,55 @@ const formatPrice = (price: number, currency?: string): string => {
   @apply bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700;
 }
 
+.streaming-scroll-container {
+  @apply -mx-2 px-2 overflow-x-auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(209 213 219) transparent;
+}
+
+.streaming-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.streaming-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.streaming-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgb(209 213 219);
+  border-radius: 3px;
+}
+
+.dark .streaming-scroll-container {
+  scrollbar-color: rgb(75 85 99) transparent;
+}
+
+.dark .streaming-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
+}
+
+.streaming-horizontal-list {
+  @apply flex gap-4 pb-2;
+  min-width: min-content;
+}
+
 .streaming-card {
-  @apply block p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 
-         hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-200
-         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800;
+  @apply flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 
+         hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-200
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800
+         flex-shrink-0 w-32;
 }
 
 .streaming-icon {
-  @apply w-12 h-12 rounded-lg flex items-center justify-center shadow-sm;
+  @apply w-16 h-16 rounded-lg flex items-center justify-center shadow-sm;
 }
 
 .affiliate-badge {
   @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium 
          bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
+}
+
+.not-available-state {
+  @apply py-8 px-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600;
 }
 </style>

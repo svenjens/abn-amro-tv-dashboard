@@ -23,12 +23,11 @@
     <!-- Show Details -->
     <div v-else-if="show" class="pb-12">
       <!-- Hero Section -->
-      <div class="relative bg-gray-900 dark:bg-gray-950 text-white" role="banner">
+      <header class="relative bg-gray-900 dark:bg-gray-950 text-white">
         <!-- Background Image -->
         <div
           v-if="show.image?.original"
           class="absolute inset-0 opacity-20 dark:opacity-30"
-          role="img"
           :aria-label="`${show.name} background`"
           :style="{
             backgroundImage: `url(${show.image.original})`,
@@ -97,6 +96,7 @@
                 :alt="`${show.name} poster`"
                 class="w-64 rounded-lg shadow-2xl"
                 loading="eager"
+                fetchpriority="high"
               />
             </div>
 
@@ -177,7 +177,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       <!-- Tabs Section -->
       <main id="main-content" class="max-w-7xl mx-auto px-4 py-12" tabindex="-1">
@@ -288,8 +288,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import type { Show, ApiError, Episode, CastMember } from '@/types'
-import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
+import type { Show, ApiError, Episode, CastMember, StreamingAvailability as StreamingAvailabilityType } from '@/types'
+import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug, logger } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import { tvMazeAPI } from '@/api/tvmaze'
 import { streamingService } from '@/api/streaming'
@@ -343,11 +343,24 @@ const relatedShows = computed(() => {
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// Get streaming availability
-const streamingAvailability = computed(() => {
-  if (!show.value) return []
-  return streamingService.getStreamingFromWebChannel(show.value.webChannel || null)
-})
+// Streaming availability state
+const streamingAvailability = ref<StreamingAvailabilityType[]>([])
+
+// Fetch streaming availability
+async function fetchStreamingAvailability() {
+  if (!show.value) return
+
+  try {
+    const availability = await streamingService.getStreamingAvailability(show.value, 'NL')
+    streamingAvailability.value = availability
+  } catch (err) {
+    logger.error('Error fetching streaming availability:', err)
+    // Fall back to webChannel only
+    streamingAvailability.value = streamingService.getStreamingFromWebChannel(
+      show.value.webChannel || null
+    )
+  }
+}
 
 // Fetch episodes
 async function fetchEpisodes() {
@@ -424,6 +437,7 @@ async function loadShow() {
   episodesError.value = null
   cast.value = []
   castError.value = null
+  streamingAvailability.value = []
 
   try {
     // First try to get from store
@@ -435,6 +449,9 @@ async function loadShow() {
     }
 
     show.value = showData
+
+    // Fetch streaming availability
+    fetchStreamingAvailability()
 
     // Validate slug and redirect if incorrect (for SEO and old URLs)
     if (showData) {
