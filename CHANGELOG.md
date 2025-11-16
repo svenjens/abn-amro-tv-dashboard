@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.16.0...v1.17.0) (2025-11-16)
+
+
+### Features
+
+* **streaming:** add horizontal layout with empty state ([#47](https://github.com/svenjens/tv-show-dashboard/issues/47)) ([78115a0](https://github.com/svenjens/tv-show-dashboard/commit/78115a09a60916ea2ac3b000eae4f69714bd5740))
+* **streaming:** add UTM tracking and make utilities public ([c4bf7ab](https://github.com/svenjens/tv-show-dashboard/commit/c4bf7aba6bfa456e54845ae66cbf4003a796436a))
+
 ## [1.16.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.15.0...v1.16.0) (2025-11-16)
 
 
