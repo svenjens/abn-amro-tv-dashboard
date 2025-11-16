@@ -108,6 +108,9 @@ class StreamingService {
         link = this.addAmazonAffiliateTag(link, this.affiliateConfig.amazonAssociateTag)
       }
 
+      // Add UTM tracking parameters for analytics
+      link = this.addUTMParameters(link, channelInfo.name)
+
       availability.push({
         service: {
           id: channelInfo.id,
@@ -130,10 +133,40 @@ class StreamingService {
   /**
    * Add Amazon affiliate tag to a URL
    */
-  private addAmazonAffiliateTag(url: string, tag: string): string {
+  addAmazonAffiliateTag(url: string, tag: string): string {
     try {
       const urlObj = new URL(url)
       urlObj.searchParams.set('tag', tag)
+      return urlObj.toString()
+    } catch {
+      // If URL parsing fails, return original URL
+      return url
+    }
+  }
+
+  /**
+   * Add UTM tracking parameters to a URL
+   * Can be used for any external link tracking
+   */
+  addUTMParameters(url: string, platform: string, showName?: string): string {
+    try {
+      const urlObj = new URL(url)
+      
+      // Add standard UTM parameters
+      urlObj.searchParams.set('utm_source', 'bingelist')
+      urlObj.searchParams.set('utm_medium', 'referral')
+      urlObj.searchParams.set('utm_campaign', 'streaming_availability')
+      
+      // Add platform-specific content parameter
+      if (platform) {
+        urlObj.searchParams.set('utm_content', platform.toLowerCase().replace(/\s+/g, '_'))
+      }
+      
+      // Add show name if available (for future deep linking)
+      if (showName) {
+        urlObj.searchParams.set('utm_term', showName.toLowerCase().replace(/\s+/g, '_'))
+      }
+      
       return urlObj.toString()
     } catch {
       // If URL parsing fails, return original URL
@@ -166,10 +199,20 @@ class StreamingService {
    * Get affiliate link for a specific service and show
    */
   getAffiliateLink(serviceId: string, showUrl: string): string {
+    let link = showUrl
+    
+    // Add affiliate tag for Amazon Prime Video
     if (serviceId === 'prime' && this.affiliateConfig.amazonAssociateTag) {
-      return this.addAmazonAffiliateTag(showUrl, this.affiliateConfig.amazonAssociateTag)
+      link = this.addAmazonAffiliateTag(link, this.affiliateConfig.amazonAssociateTag)
     }
-    return showUrl
+    
+    // Add UTM tracking parameters
+    const platform = STREAMING_PLATFORMS[serviceId]
+    if (platform) {
+      link = this.addUTMParameters(link, platform.name)
+    }
+    
+    return link
   }
 
   /**
@@ -240,6 +283,9 @@ class StreamingService {
     if (platformId === 'prime' && this.affiliateConfig.amazonAssociateTag) {
       link = this.addAmazonAffiliateTag(link, this.affiliateConfig.amazonAssociateTag)
     }
+
+    // Add UTM tracking parameters for analytics
+    link = this.addUTMParameters(link, platform.name)
 
     return {
       service: {
