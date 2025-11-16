@@ -14,6 +14,7 @@
         rel="noopener noreferrer"
         class="streaming-card group"
         :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
+        @click="handleStreamingClick(option.service)"
       >
         <div class="flex items-center gap-4">
           <!-- Service Logo/Icon -->
@@ -63,13 +64,26 @@
 import { useI18n } from 'vue-i18n'
 import type { StreamingAvailability } from '@/types'
 import { STREAMING_PLATFORMS } from '@/types'
+import { trackStreamingClick } from '@/utils'
 
 interface Props {
   availability: StreamingAvailability[]
+  showName?: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const { t } = useI18n()
+
+/**
+ * Handle streaming link click and track event
+ */
+const handleStreamingClick = (service: StreamingAvailability['service']) => {
+  trackStreamingClick(
+    service.name,
+    props.showName || 'Unknown',
+    hasAffiliate(service.id)
+  )
+}
 
 /**
  * Get the theme color for a streaming service

@@ -220,7 +220,7 @@
 
             <!-- Streaming Availability -->
             <section class="mb-12">
-              <StreamingAvailability :availability="streamingAvailability" />
+              <StreamingAvailability :availability="streamingAvailability" :show-name="show.name" />
             </section>
 
             <!-- Advertisement -->
