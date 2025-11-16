@@ -17,14 +17,19 @@ declare global {
 
 /**
  * Check if tracking is allowed (respects Do Not Track)
+ * Checks multiple browser implementations for maximum compatibility
  */
 function isTrackingAllowed(): boolean {
   if (typeof window === 'undefined') {
     return false
   }
   
-  // Respect Do Not Track preference
-  if (navigator.doNotTrack === '1') {
+  // Check Do Not Track preference across different browser implementations
+  // @ts-ignore - msDoNotTrack is IE-specific
+  const dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack
+  
+  // DNT can be '1', 'yes', or true depending on browser
+  if (dnt === '1' || dnt === 'yes' || dnt === true) {
     return false
   }
   
