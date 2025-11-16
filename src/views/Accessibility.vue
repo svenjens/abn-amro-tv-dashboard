@@ -3,9 +3,8 @@
     <SkipToContent />
 
     <!-- Header -->
-    <div
+    <header
       class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
-      role="banner"
     >
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
@@ -26,10 +25,10 @@
           </button>
           <DarkModeToggle variant="header" />
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold">{{ t('legal.accessibility') }}</h1>
+        <h1 class="text-3xl md:text-4xl font-bold">{{ t('legal.accessibilityTitle') }}</h1>
         <p class="text-primary-100 mt-2">{{ t('legal.commitment') }}</p>
       </div>
-    </div>
+    </header>
 
     <!-- Content -->
     <main id="main-content" class="max-w-4xl mx-auto px-4 py-12" tabindex="-1">

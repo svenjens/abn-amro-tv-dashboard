@@ -23,12 +23,11 @@
     <!-- Show Details -->
     <div v-else-if="show" class="pb-12">
       <!-- Hero Section -->
-      <div class="relative bg-gray-900 dark:bg-gray-950 text-white" role="banner">
+      <header class="relative bg-gray-900 dark:bg-gray-950 text-white">
         <!-- Background Image -->
         <div
           v-if="show.image?.original"
           class="absolute inset-0 opacity-20 dark:opacity-30"
-          role="img"
           :aria-label="`${show.name} background`"
           :style="{
             backgroundImage: `url(${show.image.original})`,
@@ -97,6 +96,7 @@
                 :alt="`${show.name} poster`"
                 class="w-64 rounded-lg shadow-2xl"
                 loading="eager"
+                fetchpriority="high"
               />
             </div>
 
@@ -177,7 +177,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       <!-- Tabs Section -->
       <main id="main-content" class="max-w-7xl mx-auto px-4 py-12" tabindex="-1">
