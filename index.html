@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     
-    <!-- Favicons and App Icons -->
+    <!-- Adaptive Favicons (Light/Dark Mode) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
+    
+    <!-- Fallback PNG Favicons -->
     <link rel="icon" type="image/png" sizes="16x16" href="/optimized/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/optimized/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/optimized/favicon-48.png" />
@@ -16,7 +21,10 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="BingeList - Your ultimate platform to discover, track, and binge-watch thousands of TV shows" />
-    <meta name="theme-color" content="#dc2626" />
+    
+    <!-- Adaptive Theme Color (Light/Dark Mode) -->
+    <meta name="theme-color" content="#dc2626" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="BingeList" />
@@ -42,6 +50,29 @@
     <meta name="twitter:image" content="https://bingelist.app/optimized/og-image.png" />
     
     <title>BingeList - Discover & Track TV Shows</title>
+    
+    <!-- Favicon Switcher Script (for browsers that don't support media queries in link tags) -->
+    <script>
+      (function() {
+        // Update favicon based on color scheme
+        function updateFavicon() {
+          const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const favicon = document.querySelector('link[rel="icon"][type="image/svg+xml"]:not([media])');
+          if (favicon) {
+            favicon.href = isDark ? '/favicon-dark.svg' : '/favicon-light.svg';
+          }
+        }
+        
+        // Listen for changes in color scheme preference
+        if (window.matchMedia) {
+          const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          darkModeQuery.addListener(updateFavicon);
+        }
+        
+        // Initial update
+        updateFavicon();
+      })();
+    </script>
     
     <!-- Google Fonts - Optimized -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
