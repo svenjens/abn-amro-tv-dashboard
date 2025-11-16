@@ -29,7 +29,7 @@
 
     <!-- Content -->
     <main id="main-content" class="max-w-4xl mx-auto px-4 py-12" tabindex="-1">
-      <article class="prose dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-700 prose-p:mb-6 prose-p:leading-relaxed prose-ul:my-6 prose-li:my-2">
+      <LegalArticle>
         <section>
           <h2>1. {{ t('legal.acceptanceOfTerms') }}</h2>
           <p>
@@ -131,7 +131,7 @@
             </a>.
           </p>
         </section>
-      </article>
+      </LegalArticle>
     </main>
   </div>
 </template>
@@ -142,6 +142,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSEO } from '@/composables'
 import SkipToContent from '@/components/SkipToContent.vue'
+import LegalArticle from '@/components/LegalArticle.vue'
 
 const { t } = useI18n()
 const router = useRouter()
