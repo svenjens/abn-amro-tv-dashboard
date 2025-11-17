@@ -28,7 +28,14 @@
     "clearRecent": "Clear",
     "startSearching": "Start searching",
     "startSearchingMessage": "Enter a TV show name to search through our extensive database.",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "regular": "Regular",
+    "smart": "Smart Search",
+    "semanticPlaceholder": "Try: 'dark sci-fi shows like Black Mirror'",
+    "tryAsking": "Try asking:",
+    "searchingFor": "Searching for:",
+    "similarTo": "Similar to {show}",
+    "aiSearching": "Understanding your query..."
   },
   "show": {
     "rating": "Rating",

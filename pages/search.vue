@@ -30,10 +30,39 @@
           </h1>
         </div>
 
+        <!-- Search Mode Toggle -->
+        <div class="flex items-center gap-3 mb-4">
+          <button
+            @click="isSemanticMode = false"
+            :class="[
+              'px-4 py-2 rounded-lg font-medium transition-all',
+              !isSemanticMode
+                ? 'bg-primary-600 text-white shadow-sm'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            ]"
+          >
+            {{ t('search.regular') }}
+          </button>
+          <button
+            @click="isSemanticMode = true"
+            :class="[
+              'px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2',
+              isSemanticMode
+                ? 'bg-primary-600 text-white shadow-sm'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            ]"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            {{ t('search.smart') }}
+          </button>
+        </div>
+
         <SearchBar
           ref="searchBarRef"
           v-model="searchQuery"
-          :placeholder="t('search.searchByName')"
+          :placeholder="isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')"
           :recent-searches="searchStore.recentSearches"
           @search="handleSearch"
           @clear-recent="searchStore.clearRecentSearches()"
@@ -43,12 +72,67 @@
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Example Queries (only in semantic mode, no search yet) -->
+      <div v-if="isSemanticMode && !searchQuery" class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          {{ t('search.tryAsking') }}
+        </h3>
+        <div class="flex flex-wrap gap-3">
+          <button
+            v-for="example in exampleQueries"
+            :key="example"
+            @click="searchQuery = example; handleSearch(example)"
+            class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-sm"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Semantic Intent Display -->
+      <div v-if="semanticIntent && !semanticIntent.fallback" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+              {{ t('search.searchingFor') }}
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span
+                v-if="semanticIntent.genres"
+                v-for="genre in semanticIntent.genres"
+                :key="genre"
+                class="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded text-xs font-medium"
+              >
+                {{ genre }}
+              </span>
+              <span
+                v-if="semanticIntent.mood"
+                v-for="mood in semanticIntent.mood"
+                :key="mood"
+                class="px-2 py-1 bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 rounded text-xs font-medium"
+              >
+                {{ mood }}
+              </span>
+              <span
+                v-if="semanticIntent.similar"
+                class="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded text-xs font-medium"
+              >
+                {{ t('search.similarTo', { show: semanticIntent.similar }) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Filters -->
       <FilterBar v-if="searchStore.hasResults" v-model="filters" :shows="searchStore.results" />
 
       <!-- Loading State -->
-      <div v-if="searchStore.isSearching" class="flex justify-center py-12">
-        <LoadingSpinner text="Searching..." />
+      <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
+        <LoadingSpinner :text="isSemanticMode ? t('search.aiSearching') : t('search.searching')" />
       </div>
 
       <!-- Error State -->
@@ -163,6 +247,18 @@ const searchStore = useSearchStore()
 const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
 const searchQuery = ref('')
 const filters = ref({ status: '', network: '', year: '' })
+const isSemanticMode = ref(false)
+const semanticIntent = ref<any>(null)
+const isSemanticLoading = ref(false)
+
+// Example queries for semantic search
+const exampleQueries = [
+  'dark sci-fi shows like Black Mirror',
+  'funny workplace comedies',
+  'mystery series with strong female leads',
+  'intense crime dramas',
+  'feel-good family shows'
+]
 
 // Apply filters to search results
 const filteredResults = computed(() => {
@@ -202,11 +298,45 @@ async function handleSearch(query: string) {
 
   // Update URL query parameter
   if (query) {
-    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}`))
+    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}&mode=${isSemanticMode.value ? 'smart' : 'regular'}`))
   }
 
-  // Perform search
-  await searchStore.search(query)
+  if (isSemanticMode.value) {
+    // AI-powered semantic search
+    await handleSemanticSearch(query)
+  } else {
+    // Regular keyword search
+    semanticIntent.value = null
+    await searchStore.search(query)
+  }
+}
+
+async function handleSemanticSearch(query: string) {
+  isSemanticLoading.value = true
+  semanticIntent.value = null
+  
+  try {
+    const response = await $fetch('/api/search/semantic', {
+      method: 'POST',
+      body: { query }
+    })
+    
+    // Store intent for display
+    semanticIntent.value = response.intent
+    
+    // Update search store with results
+    searchStore.results = response.results.map((r: any) => r.show)
+    searchStore.isSearching = false
+    searchStore.error = null
+    
+  } catch (error) {
+    console.error('Semantic search failed:', error)
+    // Fallback to regular search
+    semanticIntent.value = null
+    await searchStore.search(query)
+  } finally {
+    isSemanticLoading.value = false
+  }
 }
 
 // Watch for URL query parameter changes

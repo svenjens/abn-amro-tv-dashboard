@@ -171,6 +171,9 @@ export default defineNuxtConfig({
   
   // Runtime config for env variables
   runtimeConfig: {
+    // Private keys (server-only)
+    openaiApiKey: process.env.OPENAI_API_KEY || '',
+    // Public keys (client-accessible)
     public: {
       tmdbApiKey: process.env.VITE_TMDB_API_KEY || '',
       googleAdsenseId: process.env.VITE_GOOGLE_ADSENSE_ID || '',

@@ -28,7 +28,14 @@
     "clearRecent": "Limpiar",
     "startSearching": "Comienza a buscar",
     "startSearchingMessage": "Ingresa el nombre de una serie para buscar en nuestra extensa base de datos.",
-    "searching": "Buscando..."
+    "searching": "Buscando...",
+    "regular": "Regular",
+    "smart": "Búsqueda Inteligente",
+    "semanticPlaceholder": "Prueba: 'series de ciencia ficción oscura como Black Mirror'",
+    "tryAsking": "Prueba preguntando:",
+    "searchingFor": "Buscando:",
+    "similarTo": "Similar a {show}",
+    "aiSearching": "Entendiendo tu consulta..."
   },
   "show": {
     "rating": "Calificación",

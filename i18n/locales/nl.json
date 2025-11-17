@@ -28,7 +28,14 @@
     "clearRecent": "Wissen",
     "startSearching": "Begin met zoeken",
     "startSearchingMessage": "Voer een serienaam in om te zoeken in onze uitgebreide database.",
-    "searching": "Zoeken..."
+    "searching": "Zoeken...",
+    "regular": "Regulier",
+    "smart": "Slim Zoeken",
+    "semanticPlaceholder": "Probeer: 'donkere sci-fi series zoals Black Mirror'",
+    "tryAsking": "Probeer te vragen:",
+    "searchingFor": "Zoeken naar:",
+    "similarTo": "Vergelijkbaar met {show}",
+    "aiSearching": "Je zoekopdracht begrijpen..."
   },
   "show": {
     "rating": "Waardering",
