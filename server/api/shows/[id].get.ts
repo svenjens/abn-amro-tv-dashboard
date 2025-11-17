@@ -2,7 +2,10 @@
  * Server API route to fetch a single show by ID
  * Combines TVMaze data with TMDB streaming availability and extra metadata
  * Uses Nitro caching for improved performance
+ * Sanitizes HTML content server-side before sending to client
  */
+
+import { sanitizeShowSummary } from '../utils/sanitize'
 
 export default cachedEventHandler(
   async (event) => {
@@ -24,6 +27,11 @@ export default cachedEventHandler(
         'User-Agent': 'BingeList/1.0'
       }
     })
+
+    // Sanitize HTML content server-side
+    if (show.summary) {
+      show.summary = sanitizeShowSummary(show.summary)
+    }
     
     const config = useRuntimeConfig()
     const tmdbApiKey = config.public.tmdbApiKey

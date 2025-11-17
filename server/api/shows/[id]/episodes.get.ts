@@ -1,7 +1,10 @@
 /**
  * Server API route to fetch episodes for a show
  * Uses Nitro caching for better performance
+ * Sanitizes HTML summaries server-side
  */
+
+import { sanitizeEpisodeSummary } from '../../utils/sanitize'
 
 export default cachedEventHandler(
   async (event) => {
@@ -15,13 +18,20 @@ export default cachedEventHandler(
     }
   
     try {
-      const response = await $fetch(`https://api.tvmaze.com/shows/${id}/episodes`, {
+      const episodes = await $fetch<any[]>(`https://api.tvmaze.com/shows/${id}/episodes`, {
         headers: {
           'User-Agent': 'BingeList/1.0'
         }
       })
+
+      // Sanitize episode summaries server-side
+      episodes.forEach((episode) => {
+        if (episode.summary) {
+          episode.summary = sanitizeEpisodeSummary(episode.summary)
+        }
+      })
     
-      return response
+      return episodes
     } catch (error) {
       console.error(`Error fetching episodes for show ${id}:`, error)
       throw createError({

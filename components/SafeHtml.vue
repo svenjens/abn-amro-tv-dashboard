@@ -1,53 +1,23 @@
 <template>
+  <!-- 
+    Content is already sanitized server-side in API routes
+    This component is now just a safe wrapper for v-html
+  -->
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-html="sanitizedHtml" />
+  <div v-html="content" />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import DOMPurify from 'isomorphic-dompurify'
+/**
+ * SafeHtml component
+ * 
+ * Note: HTML sanitization now happens server-side in API routes for better performance
+ * This component is kept for backwards compatibility and as a semantic wrapper
+ */
 
 interface Props {
   content: string
-  /** Optional: additional DOMPurify config */
-  config?: Record<string, unknown>
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  config: () => ({}),
-})
-
-/**
- * Sanitize HTML content using isomorphic-dompurify (SSR-compatible)
- */
-const sanitizedHtml = computed(() => {
-  if (!props.content) return ''
-
-  return DOMPurify.sanitize(props.content, {
-    // Allow common HTML elements for rich text
-    ALLOWED_TAGS: [
-      'p',
-      'b',
-      'i',
-      'em',
-      'strong',
-      'a',
-      'br',
-      'ul',
-      'ol',
-      'li',
-      'h1',
-      'h2',
-      'h3',
-      'h4',
-      'h5',
-      'h6',
-    ],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
-    // Always add noopener noreferrer to links
-    ADD_ATTR: ['target', 'rel'],
-    // Custom config overrides
-    ...props.config,
-  })
-})
+defineProps<Props>()
 </script>
