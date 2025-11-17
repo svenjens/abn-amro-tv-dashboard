@@ -1,0 +1,109 @@
+/**
+ * Server API route to fetch a single show by ID
+ * Combines TVMaze data with TMDB streaming availability and extra metadata
+ */
+
+export default defineEventHandler(async (event) => {
+  const id = getRouterParam(event, 'id')
+  const query = getQuery(event)
+  const country = (query.country as string) || 'US'
+  
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Show ID is required'
+    })
+  }
+  
+  try {
+    // Fetch show data from TVMaze
+    const show = await $fetch<any>(`https://api.tvmaze.com/shows/${id}`, {
+      headers: {
+        'User-Agent': 'BingeList/1.0'
+      }
+    })
+    
+    const config = useRuntimeConfig()
+    const tmdbApiKey = config.public.tmdbApiKey
+    
+    // Initialize combined response
+    const combinedData = {
+      ...show,
+      tmdb: null as any,
+      streamingAvailability: [] as any[]
+    }
+    
+    // If TMDB API key is available, fetch additional data
+    if (tmdbApiKey) {
+      try {
+        // Search for the show on TMDB
+        const searchUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${encodeURIComponent(show.name)}`
+        const searchResponse = await $fetch<any>(searchUrl)
+        
+        if (searchResponse.results && searchResponse.results.length > 0) {
+          const tmdbShow = searchResponse.results[0]
+          const tmdbId = tmdbShow.id
+          
+          // Fetch watch providers for the user's country
+          const providersUrl = `https://api.themoviedb.org/3/tv/${tmdbId}/watch/providers?api_key=${tmdbApiKey}`
+          const providersResponse = await $fetch<any>(providersUrl)
+          
+          // Add TMDB data to combined response
+          combinedData.tmdb = {
+            id: tmdbId,
+            posterPath: tmdbShow.poster_path,
+            backdropPath: tmdbShow.backdrop_path,
+            overview: tmdbShow.overview,
+            voteAverage: tmdbShow.vote_average,
+            voteCount: tmdbShow.vote_count,
+            popularity: tmdbShow.popularity
+          }
+          
+          // Extract streaming providers for user's country
+          const countryData = providersResponse.results?.[country]
+          if (countryData) {
+            const providers = []
+            
+            // Flatrate (subscription services like Netflix, Disney+)
+            if (countryData.flatrate) {
+              providers.push(...countryData.flatrate.map((p: any) => ({
+                ...p,
+                type: 'subscription'
+              })))
+            }
+            
+            // Buy options
+            if (countryData.buy) {
+              providers.push(...countryData.buy.map((p: any) => ({
+                ...p,
+                type: 'buy'
+              })))
+            }
+            
+            // Rent options
+            if (countryData.rent) {
+              providers.push(...countryData.rent.map((p: any) => ({
+                ...p,
+                type: 'rent'
+              })))
+            }
+            
+            combinedData.streamingAvailability = providers
+          }
+        }
+      } catch (tmdbError) {
+        console.error(`Error fetching TMDB data for show ${id}:`, tmdbError)
+        // Continue without TMDB data
+      }
+    }
+    
+    return combinedData
+  } catch (error) {
+    console.error(`Error fetching show ${id}:`, error)
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Show not found'
+    })
+  }
+})
+

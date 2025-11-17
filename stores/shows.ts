@@ -52,7 +52,19 @@ export const useShowsStore = defineStore('shows', () => {
 
   // Actions
   /**
+   * Set shows directly (used when data comes from server-side fetching)
+   */
+  function setShows(shows: Show[]): void {
+    allShows.value = shows
+    showsByGenre.value = groupShowsByGenre(shows)
+    loading.value = false
+    error.value = null
+    logger.debug(`[Store] Set ${shows.length} shows across ${genres.value.length} genres`)
+  }
+
+  /**
    * Fetch all shows from the API and group them by genre
+   * Note: Prefer using server-side fetching with setShows() instead
    */
   async function fetchAllShows(): Promise<void> {
     // Don't fetch if we already have data
@@ -65,16 +77,13 @@ export const useShowsStore = defineStore('shows', () => {
 
     try {
       const shows = await tvMazeAPI.fetchAllShows()
-      allShows.value = shows
-      showsByGenre.value = groupShowsByGenre(shows)
-      logger.debug(`[Store] Loaded ${shows.length} shows across ${genres.value.length} genres`)
+      setShows(shows)
     } catch (err) {
       error.value = err as ApiError
       if (toast) {
         toast.error('Failed to load TV shows. Please try again later.')
       }
       logger.error('[Store] Failed to fetch shows:', err)
-    } finally {
       loading.value = false
     }
   }
@@ -170,6 +179,7 @@ export const useShowsStore = defineStore('shows', () => {
     topRatedShows,
 
     // Actions
+    setShows,
     fetchAllShows,
     fetchShowById,
     getShowById,

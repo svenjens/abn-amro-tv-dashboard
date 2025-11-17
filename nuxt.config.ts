@@ -3,6 +3,49 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   
   devtools: { enabled: true },
+
+  // Nitro configuration
+  nitro: {
+    prerender: {
+      failOnError: false, // Don't fail build on prerender errors
+      crawlLinks: false,   // Don't automatically discover links
+      routes: ['/legal/privacy', '/legal/disclaimer'] // Only prerender these specific routes
+    }
+  },
+
+  // Route rules for SSG and caching
+  routeRules: {
+    // Homepage - SSR with SWR cache (needs API data)
+    '/': { swr: 3600 }, // Cache for 1 hour
+    '/en': { swr: 3600 },
+    '/nl': { swr: 3600 },
+    '/es': { swr: 3600 },
+    // Search - SSR with short cache (dynamic)
+    '/search': { swr: 3600 },
+    '/*/search': { swr: 3600 },
+    // Watchlist - client-side only (localStorage)
+    '/watchlist': { ssr: false },
+    '/*/watchlist': { ssr: false },
+    // Static pages - prerender at build time
+    '/roadmap': { prerender: true },
+    '/*/roadmap': { prerender: true },
+    '/accessibility': { prerender: true },
+    '/*/accessibility': { prerender: true },
+    '/disclaimer': { prerender: true },
+    '/*/disclaimer': { prerender: true },
+    '/privacy': { prerender: true },
+    '/*/privacy': { prerender: true },
+    '/terms': { prerender: true },
+    '/*/terms': { prerender: true },
+    // Genre pages - SSR with SWR cache
+    '/genre/**': { swr: 3600 },
+    '/*/genre/**': { swr: 3600 },
+    // Show pages - SSR with 1 week cache (shows don't change often)
+    '/show/**': { swr: 604800 }, // 7 days
+    '/*/show/**': { swr: 604800 },
+    // API routes - no caching
+    '/api/**': { cache: false }
+  },
   
   // Color mode configuration
   colorMode: {
@@ -13,7 +56,16 @@ export default defineNuxtConfig({
   
   // Robots configuration
   robots: {
-    disallow: []
+    allow: '/',
+    disallow: [],
+    sitemap: 'https://bingelist.app/sitemap.xml',
+    // Allow AI crawlers
+    groups: [
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai', 'ClaudeBot'],
+        allow: '/'
+      }
+    ]
   },
   
   // Sitemap configuration
@@ -70,6 +122,37 @@ export default defineNuxtConfig({
       }
     }
   },
+
+  // Security configuration
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
+      contentSecurityPolicy: {
+        'base-uri': ["'self'"],
+        'font-src': ["'self'", 'https:', 'data:'],
+        'form-action': ["'self'"],
+        'frame-ancestors': ["'self'"],
+        'img-src': ["'self'", 'data:', 'https:', 'https://*.tmdb.org', 'https://*.googletagmanager.com', 'https://*.google-analytics.com'],
+        'object-src': ["'none'"],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+        'script-src': ["'self'", 'https:', "'unsafe-inline'", "'strict-dynamic'", "'nonce-{{nonce}}'", 'https://*.googletagmanager.com', 'https://*.google-analytics.com', 'https://pagead2.googlesyndication.com'],
+        'upgrade-insecure-requests': true
+      },
+      xFrameOptions: 'SAMEORIGIN',
+      xContentTypeOptions: 'nosniff',
+      xXSSProtection: '1; mode=block',
+      strictTransportSecurity: {
+        maxAge: 31536000,
+        includeSubdomains: true
+      }
+    },
+    rateLimiter: {
+      tokensPerInterval: 150,
+      interval: 300000,
+      headers: true
+    }
+  },
   
   modules: [
     '@nuxtjs/tailwindcss',
@@ -81,7 +164,9 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxtjs/color-mode',
     '@nuxtjs/robots',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/fontaine',
+    'nuxt-security'
   ],
   
   // Runtime config for env variables

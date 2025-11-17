@@ -309,22 +309,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 
 const route = useRoute()
-const router = useRouter()
 const showsStore = useShowsStore()
-
-const show = ref<Show | null>(null)
-const loading = ref(true)
-const error = ref<ApiError | null>(null)
-
-// Episodes state
-const episodes = ref<Episode[]>([])
-const episodesLoading = ref(false)
-const episodesError = ref<ApiError | null>(null)
-
-// Cast state
-const cast = ref<CastMember[]>([])
-const castLoading = ref(false)
-const castError = ref<ApiError | null>(null)
 
 // Active tab
 const activeTab = ref('overview')
@@ -336,67 +321,55 @@ const tabs = [
   { id: 'cast', label: 'tabs.cast' },
 ]
 
-// SafeHtml component handles sanitization
+// Extract ID from slug (format: show-name-123)
+const slug = computed(() => route.params.slug as string)
+const showId = computed(() => extractIdFromSlug(slug.value))
 
+// Get user's country from location middleware
+const { country } = useLocation()
+const userCountry = computed(() => country.value || 'US')
+
+// Server-side data fetching with useAsyncData
+// This runs on the server during SSR and provides instant content
+const { data: show, error, pending: loading } = await useAsyncData(
+  `show-${showId.value}`,
+  () => $fetch(`/api/shows/${showId.value}`, {
+    query: { country: userCountry.value }
+  }),
+  {
+    key: `show-${showId.value}-${userCountry.value}`,
+    watch: [showId, userCountry]
+  }
+)
+
+// Streaming availability comes from server now
+const streamingAvailability = computed(() => show.value?.streamingAvailability || [])
+
+// Related shows
 const relatedShows = computed(() => {
   if (!show.value) return []
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// Streaming availability state
-const streamingAvailability = ref<StreamingAvailabilityType[]>([])
-
-// Fetch streaming availability
-async function fetchStreamingAvailability() {
-  if (!show.value) return
-
-  // Get user's country from location middleware
-  const { country } = useLocation()
-  const userCountry = country.value || 'NL'
-
-  try {
-    const availability = await streamingService.getStreamingAvailability(show.value, userCountry)
-    streamingAvailability.value = availability
-  } catch (err) {
-    logger.error('Error fetching streaming availability:', err)
-    // Fall back to webChannel only
-    streamingAvailability.value = streamingService.getStreamingFromWebChannel(
-      show.value.webChannel || null
-    )
+// Episodes - lazy loaded via server API when tab is opened
+const { data: episodes, error: episodesError, pending: episodesLoading, execute: fetchEpisodes } = await useLazyAsyncData(
+  `episodes-${showId.value}`,
+  () => $fetch(`/api/shows/${showId.value}/episodes`),
+  {
+    immediate: false,
+    server: false // Only fetch on client when needed
   }
-}
+)
 
-// Fetch episodes
-async function fetchEpisodes() {
-  if (!show.value) return
-
-  episodesLoading.value = true
-  episodesError.value = null
-
-  try {
-    episodes.value = await tvMazeAPI.fetchEpisodes(show.value.id)
-  } catch (err) {
-    episodesError.value = err as ApiError
-  } finally {
-    episodesLoading.value = false
+// Cast - lazy loaded via server API when tab is opened
+const { data: cast, error: castError, pending: castLoading, execute: fetchCast } = await useLazyAsyncData(
+  `cast-${showId.value}`,
+  () => $fetch(`/api/shows/${showId.value}/cast`),
+  {
+    immediate: false,
+    server: false // Only fetch on client when needed
   }
-}
-
-// Fetch cast
-async function fetchCast() {
-  if (!show.value) return
-
-  castLoading.value = true
-  castError.value = null
-
-  try {
-    cast.value = await tvMazeAPI.fetchCast(show.value.id)
-  } catch (err) {
-    castError.value = err as ApiError
-  } finally {
-    castLoading.value = false
-  }
-}
+)
 
 // Update SEO when show changes (multilingual)
 watch(
@@ -422,81 +395,21 @@ function formatDate(dateString: string): string {
   })
 }
 
-async function loadShow() {
-  // Extract ID from slug (format: show-name-123)
-  const slug = route.params.slug as string
-  const id = extractIdFromSlug(slug)
-
-  if (!id) {
-    error.value = { message: 'Invalid show URL' }
-    loading.value = false
-    return
-  }
-
-  loading.value = true
-  error.value = null
-
-  // Reset episodes and cast data when loading a new show
-  episodes.value = []
-  episodesError.value = null
-  cast.value = []
-  castError.value = null
-  streamingAvailability.value = []
-
-  try {
-    // First try to get from store
-    let showData = showsStore.getShowById(id)
-
-    // If not in store, fetch from API
-    if (!showData) {
-      showData = await showsStore.fetchShowById(id)
-    }
-
-    show.value = showData
-
-    // Fetch streaming availability
-    fetchStreamingAvailability()
-
-    // Validate slug and redirect if incorrect (for SEO and old URLs)
-    if (showData) {
-      const correctSlug = createShowSlug(showData.name, showData.id)
-      if (slug !== correctSlug) {
-        navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
-        return
-      }
-    }
-
-    // If user is already on episodes/cast tab, trigger fetch for new show
-    if (activeTab.value === 'episodes') {
-      await fetchEpisodes()
-    } else if (activeTab.value === 'cast') {
-      await fetchCast()
-    }
-  } catch (err) {
-    error.value = err as ApiError
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  loadShow()
-})
-
-watch(
-  () => route.params.slug,
-  (newSlug, oldSlug) => {
-    if (newSlug !== oldSlug) {
-      loadShow()
+// Validate slug and redirect if incorrect (for SEO)
+watch(show, (showData) => {
+  if (showData && showId.value) {
+    const correctSlug = createShowSlug(showData.name, showId.value)
+    if (slug.value !== correctSlug) {
+      navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
     }
   }
-)
+}, { immediate: true })
 
 // Lazy load episodes and cast when tabs are opened
 watch(activeTab, (newTab) => {
-  if (newTab === 'episodes' && episodes.value.length === 0 && !episodesLoading.value) {
+  if (newTab === 'episodes' && !episodes.value && !episodesLoading.value) {
     fetchEpisodes()
-  } else if (newTab === 'cast' && cast.value.length === 0 && !castLoading.value) {
+  } else if (newTab === 'cast' && !cast.value && !castLoading.value) {
     fetchCast()
   }
 })

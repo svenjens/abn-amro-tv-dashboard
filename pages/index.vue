@@ -351,8 +351,21 @@ watch(
   { deep: true }
 )
 
-onMounted(async () => {
-  await showsStore.fetchAllShows()
+// Server-side data fetching - runs on server during SSR
+const { data: shows, error: fetchError } = await useAsyncData(
+  'all-shows',
+  () => $fetch('/api/shows'),
+  {
+    dedupe: 'defer' // Dedupe requests during SSR
+  }
+)
+
+// Populate store with server-fetched data
+if (shows.value) {
+  showsStore.setShows(shows.value)
+}
+
+onMounted(() => {
   // Setup infinite scroll after genres are loaded
   setTimeout(() => setupInfiniteScroll(), 100)
 })
