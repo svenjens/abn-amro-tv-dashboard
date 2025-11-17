@@ -80,17 +80,23 @@ export default cachedEventHandler(
               const providers = []
 
               // Helper function to transform TMDB provider to our StreamingAvailability format
-              const transformProvider = (p: any, type: string) => ({
-                service: {
-                  id: String(p.provider_id),
-                  name: p.provider_name,
-                  logo: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : '',
-                  type,
-                },
-                link: countryData.link || `https://www.themoviedb.org/tv/${tmdbId}`,
-                availableFrom: undefined,
-                availableUntil: undefined,
-              })
+              const transformProvider = (p: any, type: string) => {
+                // Try to get provider-specific deep link, fallback to generic TMDB page
+                // TMDB doesn't provide direct provider links, so we only use the general JustWatch link
+                const link = countryData.link || `https://www.themoviedb.org/tv/${tmdbId}`
+
+                return {
+                  service: {
+                    id: String(p.provider_id),
+                    name: p.provider_name,
+                    logo: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : '',
+                    type,
+                  },
+                  link, // Generic link (usually JustWatch aggregator)
+                  availableFrom: undefined,
+                  availableUntil: undefined,
+                }
+              }
 
               // Flatrate (subscription services like Netflix, Disney+)
               if (Array.isArray(countryData.flatrate)) {

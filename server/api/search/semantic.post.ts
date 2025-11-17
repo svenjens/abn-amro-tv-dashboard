@@ -48,26 +48,37 @@ export default defineEventHandler(async (event) => {
 Your task:
 1. Extract show names, genres, moods, and themes from the query
 2. Generate 3-5 optimized search terms that will find matching shows
-3. Return as JSON with these fields:
-   - searchTerms: array of strings to search
+3. For each search term, provide a clear reason why it matches the query
+4. Return as JSON with these fields:
+   - searches: array of objects with {term: string, reason: string}
    - intent: object describing what user is looking for
 
 Examples:
 
 Query: "dark sci-fi shows like Black Mirror"
 Response: {
-  "searchTerms": ["Black Mirror", "Westworld", "Twilight Zone", "sci-fi anthology", "dystopian"],
+  "searches": [
+    {"term": "Black Mirror", "reason": "similar show"},
+    {"term": "Westworld", "reason": "dark sci-fi"},
+    {"term": "Twilight Zone", "reason": "anthology format"},
+    {"term": "sci-fi anthology", "reason": "genre match"},
+    {"term": "dystopian", "reason": "dark themes"}
+  ],
   "intent": {
     "genres": ["science-fiction", "thriller"],
     "mood": ["dark", "dystopian"],
-    "similar": "Black Mirror",
-    "type": "series"
+    "similar": "Black Mirror"
   }
 }
 
 Query: "funny workplace comedies"
 Response: {
-  "searchTerms": ["The Office", "Parks and Recreation", "workplace comedy", "sitcom office"],
+  "searches": [
+    {"term": "The Office", "reason": "classic workplace comedy"},
+    {"term": "Parks and Recreation", "reason": "mockumentary style"},
+    {"term": "workplace comedy", "reason": "theme match"},
+    {"term": "sitcom office", "reason": "genre + setting"}
+  ],
   "intent": {
     "genres": ["comedy"],
     "mood": ["funny", "light-hearted"],
@@ -77,14 +88,20 @@ Response: {
 
 Query: "mystery series with strong female leads"
 Response: {
-  "searchTerms": ["Killing Eve", "Mare of Easttown", "mystery female lead", "thriller woman"],
+  "searches": [
+    {"term": "Killing Eve", "reason": "female-led thriller"},
+    {"term": "Mare of Easttown", "reason": "detective mystery"},
+    {"term": "mystery female lead", "reason": "genre + character type"},
+    {"term": "thriller woman", "reason": "strong female protagonist"}
+  ],
   "intent": {
     "genres": ["mystery", "thriller"],
     "theme": "strong female lead"
   }
 }
 
-Always return valid JSON. Be creative with search terms to maximize results.`,
+Always return valid JSON. Be creative with search terms to maximize results.
+IMPORTANT: The "reason" should explain WHY the search term matches the query, NOT just repeat the show title.`,
         },
         {
           role: 'user',
@@ -99,12 +116,21 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
     const gptResult = JSON.parse(response.choices?.[0]?.message?.content || '{}')
 
     // Step 2: Search TVMaze with generated terms
-    const searchTerms = Array.isArray(gptResult.searchTerms) ? gptResult.searchTerms : [query]
+    // Support both new format (searches) and old format (searchTerms) for backward compatibility
+    const searches = Array.isArray(gptResult.searches)
+      ? gptResult.searches
+      : Array.isArray(gptResult.searchTerms)
+        ? gptResult.searchTerms.map((term: string) => ({ term, reason: 'relevant match' }))
+        : [{ term: query, reason: 'search query' }]
+
     const allResults = new Map() // Deduplicate by show ID
 
     // Search with each term
-    for (const term of searchTerms.slice(0, 5)) {
+    for (const search of searches.slice(0, 5)) {
       // Limit to 5 terms to avoid too many API calls
+      const term = typeof search === 'string' ? search : search.term
+      const reason = typeof search === 'string' ? 'relevant match' : search.reason
+
       try {
         const shows = await $fetch<Array<{ show: any; score: number }>>(
           `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(term)}`,
@@ -128,7 +154,7 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
             allResults.set(result.show.id, {
               show: result.show,
               score: result.score,
-              matchedTerm: term,
+              matchedTerm: reason, // Use the reason instead of the term
             })
           }
         }
@@ -146,7 +172,7 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
     return {
       query,
       intent: gptResult.intent,
-      searchTerms: gptResult.searchTerms,
+      searchTerms: gptResult.searchTerms || searches.map((s: any) => s.term || s),
       results,
       total: results.length,
     }
