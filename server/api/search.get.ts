@@ -41,7 +41,8 @@ export default cachedEventHandler(
     getKey: (event) => {
       const query = getQuery(event)
       const searchQuery = query.q as string
-      return `search-${searchQuery.toLowerCase()}`
+      // Protect against undefined/null values
+      return `search-${(searchQuery || '').toLowerCase()}`
     },
     swr: true,
   }

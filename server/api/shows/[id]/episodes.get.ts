@@ -45,7 +45,7 @@ export default cachedEventHandler(
     maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
     name: 'show-episodes',
     getKey: (event) => {
-      const id = getRouterParam(event, 'id')
+      const id = getRouterParam(event, 'id') || 'unknown'
       return `show-${id}-episodes`
     },
     swr: true,

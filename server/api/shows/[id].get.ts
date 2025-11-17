@@ -128,7 +128,7 @@ export default cachedEventHandler(
     maxAge: 60 * 60 * 24, // 24 hours in seconds
     name: 'show-details',
     getKey: (event) => {
-      const id = getRouterParam(event, 'id')
+      const id = getRouterParam(event, 'id') || 'unknown'
       const query = getQuery(event)
       const country = (query.country as string) || 'US'
       return `show-${id}-${country}`
