@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/svenjens/tv-show-dashboard/compare/v3.0.0...v3.0.1) (2025-11-17)
+
+
+### Bug Fixes
+
+* resolve CSP and OG image issues ([617c2a5](https://github.com/svenjens/tv-show-dashboard/commit/617c2a539a90989157b1daf6cdbeae9501d9a066))
+
 ## [3.0.0](https://github.com/svenjens/tv-show-dashboard/compare/v2.0.0...v3.0.0) (2025-11-17)
 
 ### ⚠ BREAKING CHANGES

@@ -1,6 +1,6 @@
 {
   "name": "bingelist",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "module",
   "private": true,
   "description": "BingeList - Your ultimate TV show discovery and tracking platform",
