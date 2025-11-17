@@ -109,7 +109,7 @@ export function generateShowStructuredData(show: Show) {
     script: [
       {
         type: 'application/ld+json',
-        children: JSON.stringify(structuredData)
+        innerHTML: JSON.stringify(structuredData)
       }
     ]
   })
