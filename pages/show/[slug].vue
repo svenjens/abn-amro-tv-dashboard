@@ -17,7 +17,7 @@
       :message="error.message || 'Failed to load show details'"
       :retry="true"
       :full-screen="true"
-      @retry="loadShow"
+      @retry="() => navigateTo(localePath(`/show/${route.params.slug}`))"
     />
 
     <!-- Show Details -->
@@ -251,7 +251,7 @@
           <!-- Episodes Tab -->
           <div v-else-if="activeTab === 'episodes'">
             <SeasonList
-              :episodes="episodes"
+              :episodes="episodes || []"
               :show-id="show.id"
               :loading="episodesLoading"
               :error="episodesError"
@@ -261,7 +261,7 @@
 
           <!-- Cast Tab -->
           <div v-else-if="activeTab === 'cast'">
-            <CastList :cast="cast" :loading="castLoading" :error="castError" @retry="fetchCast" />
+            <CastList :cast="(cast as any) || []" :loading="castLoading" :error="castError" @retry="fetchCast" />
           </div>
         </div>
       </main>
@@ -334,7 +334,6 @@ const { data: show, error, pending: loading } = await useAsyncData(
     query: { country: userCountry.value }
   }),
   {
-    key: `show-${showId.value}-${userCountry.value}`,
     watch: [showId, userCountry]
   }
 )

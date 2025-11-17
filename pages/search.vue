@@ -306,7 +306,7 @@ async function handleSearch(query: string) {
   } else {
     // Regular keyword search
     semanticIntent.value = null
-    await searchStore.search(query)
+  await searchStore.search(query)
   }
 }
 
@@ -366,7 +366,7 @@ onMounted(() => {
     if (isSemanticMode.value) {
       handleSemanticSearch(query)
     } else {
-      searchStore.search(query)
+    searchStore.search(query)
     }
   }
 

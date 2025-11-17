@@ -3,20 +3,21 @@ import { useLocation } from '@/composables/useLocation'
 import type { UserLocation } from '@/composables/useLocation'
 
 // Mock $fetch
-global.$fetch = vi.fn()
+global.$fetch = vi.fn() as any
 
 describe('useLocation', () => {
   let mockFetch: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     mockFetch = vi.fn()
-    global.$fetch = mockFetch
+    global.$fetch = mockFetch as any
     
     // Clear all state
     vi.clearAllMocks()
     
     // Reset useState by clearing the global state
     // This is a workaround for Nuxt's useState in tests
+    // @ts-ignore - Nuxt global is not fully typed in test environment
     if (global.nuxt) {
       // @ts-ignore - Nuxt global is not fully typed in test environment
       global.nuxt.payload.state = {}
@@ -241,14 +242,11 @@ describe('useLocation', () => {
       
       expect(country.value).toBe('US')
       
-      // Manually update location (simulating state change)
-      // @ts-ignore - Manipulating internal state for test
-      location.value.country = 'CA'
-      location.value.detected = false
-      
+      // Fetch a new location (state change)
       mockFetch.mockResolvedValueOnce({ country: 'CA', detected: true })
-      await fetchLocation()
+      const result = await fetchLocation()
       
+      expect(result.country).toBe('CA')
       expect(country.value).toBe('CA')
     })
   })

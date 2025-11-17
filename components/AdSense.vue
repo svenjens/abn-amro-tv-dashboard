@@ -1,18 +1,18 @@
 <template>
   <ClientOnly>
-    <div v-if="shouldShowAd" class="ad-container my-8">
-      <!-- Ad Label -->
+  <div v-if="shouldShowAd" class="ad-container my-8">
+    <!-- Ad Label -->
       <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">{{ t('ads.sponsored') }}</p>
 
-      <!-- AdSense Ad Unit -->
-      <div class="ad-wrapper flex justify-center">
-        <ins
-          class="adsbygoogle"
-          :style="adStyle"
-          :data-ad-client="adClient"
-          v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
-          :data-ad-format="format"
-          data-full-width-responsive="true"
+    <!-- AdSense Ad Unit -->
+    <div class="ad-wrapper flex justify-center">
+      <ins
+        class="adsbygoogle"
+        :style="adStyle"
+        :data-ad-client="adClient"
+        v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
+        :data-ad-format="format"
+        data-full-width-responsive="true"
         />
       </div>
     </div>
@@ -89,10 +89,10 @@ onMounted(async () => {
 
   // Load script using Nuxt's useScript
   await load()
-  
+
   // Wait a bit for script to initialize, then push ad
-  setTimeout(() => {
-    pushAd()
+      setTimeout(() => {
+        pushAd()
   }, 100)
 })
 

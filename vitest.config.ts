@@ -19,26 +19,6 @@ export default defineVitestConfig({
               { code: 'nl', iso: 'nl-NL', name: 'Nederlands' },
               { code: 'es', iso: 'es-ES', name: 'Español' }
             ],
-          },
-          // Configure color-mode for tests
-          colorMode: {
-            preference: 'system',
-            fallback: 'light',
-            classSuffix: '',
-            dataValue: 'theme',
-            storageKey: 'nuxt-color-mode'
-          },
-          // Add runtime config for color mode
-          runtimeConfig: {
-            public: {
-              colorMode: {
-                preference: 'system',
-                fallback: 'light',
-                classSuffix: '',
-                dataValue: 'theme',
-                storageKey: 'nuxt-color-mode'
-              }
-            }
           }
         },
       },

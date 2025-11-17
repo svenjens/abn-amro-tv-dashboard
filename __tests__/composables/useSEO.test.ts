@@ -53,7 +53,7 @@ describe('getShowSEO', () => {
     expect(seo.keywords).toContain('Breaking Bad')
     expect(seo.keywords).toContain('Drama')
     expect(seo.keywords).toContain('Crime')
-    expect(seo.image).toBe(mockShow.image.original)
+    expect(seo.image).toBe(mockShow.image?.original)
   })
 
   it('should handle show without summary', () => {
@@ -94,7 +94,8 @@ describe('getShowSEO', () => {
 
     const seo = getShowSEO(showWithLongSummary)
 
-    expect(seo.description.length).toBeLessThanOrEqual(163) // 160 + '...'
+    expect(seo.description).toBeDefined()
+    expect(seo.description!.length).toBeLessThanOrEqual(163) // 160 + '...'
     expect(seo.description).toMatch(/\.\.\.$/)
   })
 

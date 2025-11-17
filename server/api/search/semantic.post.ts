@@ -85,7 +85,7 @@ Always return valid JSON. Be creative with search terms to maximize results.`
       max_tokens: 300
     })
     
-    const gptResult = JSON.parse(response.choices[0].message.content || '{}')
+    const gptResult = JSON.parse(response.choices?.[0]?.message?.content || '{}')
     
     // Step 2: Search TVMaze with generated terms
     const searchTerms = gptResult.searchTerms || [query]

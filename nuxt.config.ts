@@ -69,9 +69,10 @@ export default defineNuxtConfig({
   },
   
   // Sitemap configuration
+  site: {
+    url: 'https://bingelist.app',
+  },
   sitemap: {
-    hostname: 'https://bingelist.app',
-    gzip: true,
     exclude: [
       '/api/**'
     ],
@@ -92,7 +93,7 @@ export default defineNuxtConfig({
           genreUrls.push({
             loc: `/${locale}/genre/${genre}`,
             changefreq: 'weekly' as const,
-            priority: 0.7
+            priority: 0.7 as const
           })
         }
       }

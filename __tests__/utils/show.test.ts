@@ -72,9 +72,9 @@ describe('Show Utils', () => {
       expect(grouped.Drama).toBeDefined()
       const dramaShows = grouped.Drama
       if (dramaShows) {
-        expect(dramaShows[0].rating.average).toBe(9.0)
-        expect(dramaShows[1].rating.average).toBe(8.0)
-        expect(dramaShows[2].rating.average).toBe(7.5)
+        expect(dramaShows[0]?.rating?.average).toBe(9.0)
+        expect(dramaShows[1]?.rating?.average).toBe(8.0)
+        expect(dramaShows[2]?.rating?.average).toBe(7.5)
       }
     })
 
