@@ -159,6 +159,13 @@ export default defineNuxtConfig({
         'font-src': ["'self'", 'https:', 'data:'],
         'form-action': ["'self'"],
         'frame-ancestors': ["'self'"],
+        'connect-src': [
+          "'self'",
+          'https://*.vercel-insights.com',
+          'https://vitals.vercel-insights.com',
+          'https://*.google-analytics.com',
+          'https://*.googletagmanager.com',
+        ],
         'img-src': [
           "'self'",
           'data:',
@@ -179,6 +186,9 @@ export default defineNuxtConfig({
           'https://*.googletagmanager.com',
           'https://*.google-analytics.com',
           'https://pagead2.googlesyndication.com',
+          'https://*.vercel.app',
+          'https://vercel.live',
+          'https://*.vercel.live',
         ],
         'upgrade-insecure-requests': true,
       },
