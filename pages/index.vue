@@ -170,13 +170,13 @@
               /optimized/empty-state-illustration.webp     512w
             "
             sizes="192px"
-          />
+          >
           <img
             src="/optimized/empty-state-illustration.png"
             alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
-          />
+          >
         </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ t('home.noShows') }}

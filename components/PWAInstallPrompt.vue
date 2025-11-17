@@ -11,12 +11,12 @@
         <div class="flex items-start gap-4">
           <!-- App Icon -->
           <picture class="flex-shrink-0">
-            <source type="image/webp" srcset="/optimized/logo-main-64.webp" sizes="48px" />
+            <source type="image/webp" srcset="/optimized/logo-main-64.webp" sizes="48px" >
             <img
               src="/optimized/logo-main.png"
               alt="TV Show Dashboard"
               class="h-12 w-12 rounded-lg"
-            />
+            >
           </picture>
 
           <!-- Content -->

@@ -71,7 +71,7 @@
             :alt="episode.name"
             class="w-full h-full object-cover"
             loading="lazy"
-          />
+          >
         </div>
 
         <!-- Episode info -->
