@@ -25,10 +25,11 @@ export const useLocation = () => {
   /**
    * Fetch user location from server API
    * This should be called on app initialization or when needed
+   * @param testCountry - Optional country code for testing (only in dev/preview)
    */
-  const fetchLocation = async () => {
-    // Skip if already loaded
-    if (location.value.detected) {
+  const fetchLocation = async (testCountry?: string) => {
+    // Skip if already loaded (unless testing)
+    if (location.value.detected && !testCountry) {
       return location.value
     }
 
@@ -36,7 +37,9 @@ export const useLocation = () => {
     error.value = null
 
     try {
-      const data = await $fetch<UserLocation>('/api/location')
+      const data = await $fetch<UserLocation>('/api/location', {
+        query: testCountry ? { country: testCountry } : undefined,
+      })
       location.value = data
       return data
     } catch (e) {

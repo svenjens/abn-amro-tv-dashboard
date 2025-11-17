@@ -94,7 +94,7 @@ describe('useLocation', () => {
 
       const result = await fetchLocation()
 
-      expect(mockFetch).toHaveBeenCalledWith('/api/location')
+      expect(mockFetch).toHaveBeenCalledWith('/api/location', { query: undefined })
       expect(mockFetch).toHaveBeenCalledTimes(1)
       expect(location.value).toEqual(mockLocation)
       expect(country.value).toBe('US')
@@ -157,7 +157,7 @@ describe('useLocation', () => {
 
       const result = await fetchLocation()
 
-      expect(mockFetch).toHaveBeenCalledWith('/api/location')
+      expect(mockFetch).toHaveBeenCalledWith('/api/location', { query: undefined })
       expect(error.value).toBe('Failed to detect location')
       // Console.error might not be captured consistently in all test environments
       // so we make this optional
@@ -220,6 +220,49 @@ describe('useLocation', () => {
       expect(location.value).toEqual(mockLocation)
       expect(location.value.city).toBeUndefined()
       expect(location.value.region).toBeUndefined()
+    })
+
+    it('should support test country parameter for testing', async () => {
+      const mockLocation: UserLocation = {
+        country: 'US',
+        detected: true,
+      }
+
+      mockFetch.mockResolvedValueOnce(mockLocation)
+
+      const { resetLocation, fetchLocation, location } = useLocation()
+      resetLocation()
+
+      await fetchLocation('US')
+
+      expect(mockFetch).toHaveBeenCalledWith('/api/location', { query: { country: 'US' } })
+      expect(location.value.country).toBe('US')
+    })
+
+    it('should re-fetch when test country is provided even if already loaded', async () => {
+      const mockLocation1: UserLocation = {
+        country: 'NL',
+        detected: true,
+      }
+      const mockLocation2: UserLocation = {
+        country: 'US',
+        detected: true,
+      }
+
+      mockFetch.mockResolvedValueOnce(mockLocation1)
+      mockFetch.mockResolvedValueOnce(mockLocation2)
+
+      const { resetLocation, fetchLocation, location } = useLocation()
+      resetLocation()
+
+      // First fetch (normal)
+      await fetchLocation()
+      expect(location.value.country).toBe('NL')
+
+      // Second fetch with test country (should not skip)
+      await fetchLocation('US')
+      expect(location.value.country).toBe('US')
+      expect(mockFetch).toHaveBeenCalledTimes(2)
     })
   })
 
