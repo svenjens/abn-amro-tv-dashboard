@@ -340,7 +340,7 @@ function handleSearchFocus() {
   if (searchQuery.value.trim()) {
     navigateTo(localePath(`/search?q=${encodeURIComponent(searchQuery.value)}`))
   } else {
-    navigateTo(localePath('/search'))
+  navigateTo(localePath('/search'))
   }
 }
 

@@ -9,13 +9,17 @@
  */
 
 export default defineNitroPlugin(async (_nitroApp) => {
-  // Only warm cache in production builds
-  if (import.meta.dev) {
-    console.log('[Cache Warming] Skipped in development mode')
+  // Skip cache warming during build time (Vercel build has no network access)
+  // Only run in actual runtime (after deployment)
+  if (import.meta.dev || import.meta.prerender) {
+    console.log('[Cache Warming] Skipped - not in production runtime')
     return
   }
 
   console.log('[Cache Warming] Starting cache warming...')
+
+  // Add a small delay to allow the server to fully initialize
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
   try {
     // Pre-fetch all shows list (homepage needs this)

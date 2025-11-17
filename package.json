@@ -28,7 +28,6 @@
     "@vueuse/motion": "^3.0.3",
     "@vueuse/nuxt": "^14.0.0",
     "axios": "^1.13.2",
-    "isomorphic-dompurify": "^2.32.0",
     "nuxt": "^4.2.1",
     "openai": "^6.9.0",
     "pinia": "^3.0.4",
