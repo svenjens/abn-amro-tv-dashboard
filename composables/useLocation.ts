@@ -61,13 +61,27 @@ export const useLocation = () => {
     return location.value.country === countryCode.toUpperCase()
   }
 
+  /**
+   * Reset location state (primarily for testing)
+   * @internal
+   */
+  const resetLocation = () => {
+    location.value = {
+      country: 'NL',
+      detected: false
+    }
+    isLoading.value = false
+    error.value = null
+  }
+
   return {
     location: readonly(location),
     country,
     isLoading: readonly(isLoading),
     error: readonly(error),
     fetchLocation,
-    isInCountry
+    isInCountry,
+    resetLocation
   }
 }
 
