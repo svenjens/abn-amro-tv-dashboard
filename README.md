@@ -306,7 +306,8 @@ tv-show-dashboard/
 │   ├── i18n/             # Internationalization
 │   │   ├── locales/
 │   │   │   ├── en.json   # English translations
-│   │   │   └── nl.json   # Dutch translations
+│   │   │   ├── nl.json   # Dutch translations
+│   │   │   └── es.json   # Spanish translations
 │   │   ├── helpers.ts    # i18n helper functions
 │   │   └── index.ts      # i18n configuration
 │   ├── router/           # Vue Router configuration
@@ -549,14 +550,14 @@ Potential features for future iterations:
 - [x] Season and episode details - ✅ **Implemented**
 - [x] Cast and crew information - ✅ **Implemented**
 - [ ] Show recommendations based on viewing history
-- [ ] Dark mode toggle
-- [x] Internationalization (i18n) - ✅ **Implemented**
+- [x] Dark mode toggle - ✅ **Implemented**
+- [x] Internationalization (i18n) - ✅ **Implemented** (English, Dutch, Spanish)
 - [x] SEO optimization with hreflang - ✅ **Implemented**
 - [x] Accessibility improvements - ✅ **Implemented**
 - [x] Infinite scroll for genres - ✅ **Implemented** (better UX than pagination)
 - [x] Watchlist functionality - ✅ **Implemented**
 - [x] Progressive Web App (PWA) support - ✅ **Implemented**
-- [ ] More language options (German, French, Spanish)
+- [ ] More language options (German, French, Italian)
 
 ### Node Version
 
