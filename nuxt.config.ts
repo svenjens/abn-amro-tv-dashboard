@@ -236,7 +236,14 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Discover your next favorite TV show with BingeList' }
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
+        // Default favicon (fallback)
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        // Light mode - use dark icon for visibility
+        { rel: 'icon', type: 'image/png', href: '/favicon-dark.png', media: '(prefers-color-scheme: light)' },
+        // Dark mode - use light icon for visibility
+        { rel: 'icon', type: 'image/png', href: '/favicon-light.png', media: '(prefers-color-scheme: dark)' },
+        // Apple touch icon
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }
       ]
     }
   }
