@@ -243,27 +243,42 @@ const filteredShows = computed(() => {
   return shows
 })
 
-// Get genres from filtered shows
+// Get genres from store's pre-sorted showsByGenre (server-side sorted by rating)
 const filteredGenres = computed(() => {
-  const genreMap = new Map<string, Show[]>()
+  // Use pre-sorted showsByGenre from store (already sorted by rating on server)
+  const serverSortedGenres = showsStore.showsByGenre
 
-  filteredShows.value.forEach((show: Show) => {
-    if (show.genres && show.genres.length > 0) {
-      show.genres.forEach((genre: string) => {
-        if (!genreMap.has(genre)) {
-          genreMap.set(genre, [])
-        }
-        genreMap.get(genre)!.push(show)
-      })
-    }
-  })
+  // If filters are applied, filter the shows within each genre
+  if (filters.value.status || filters.value.network || filters.value.year) {
+    const genreMap = new Map<string, Show[]>()
 
-  return Array.from(genreMap.entries())
+    filteredShows.value.forEach((show: Show) => {
+      if (show.genres && show.genres.length > 0) {
+        show.genres.forEach((genre: string) => {
+          if (!genreMap.has(genre)) {
+            genreMap.set(genre, [])
+          }
+          genreMap.get(genre)!.push(show)
+        })
+      }
+    })
+
+    // Sort by genre size (number of shows per genre)
+    return Array.from(genreMap.entries())
+      .map(([genre, shows]) => ({
+        name: genre,
+        shows: shows, // These are filtered but preserve original order
+      }))
+      .sort((a, b) => b.shows.length - a.shows.length)
+  }
+
+  // No filters: use server-sorted data (already sorted by rating within each genre)
+  return Object.entries(serverSortedGenres)
     .map(([genre, shows]) => ({
       name: genre,
       shows: shows,
     }))
-    .sort((a, b) => b.shows.length - a.shows.length)
+    .sort((a, b) => b.shows.length - a.shows.length) // Sort genres by size
 })
 
 // Performance: Lazy load genres with infinite scroll
