@@ -162,6 +162,7 @@ export default defineNuxtConfig({
           'https://vitals.vercel-insights.com',
           'https://*.google-analytics.com',
           'https://*.googletagmanager.com',
+          'https://vercel.live', // Vercel Live feedback (preview only)
         ],
         'img-src': [
           "'self'",
@@ -178,14 +179,12 @@ export default defineNuxtConfig({
           "'self'",
           'https:',
           "'unsafe-inline'",
-          "'strict-dynamic'",
-          "'nonce-{{nonce}}'",
+          // Note: 'strict-dynamic' disables host-based allowlisting
+          // Removed for compatibility with Vercel Live (preview deployments)
           'https://*.googletagmanager.com',
           'https://*.google-analytics.com',
           'https://pagead2.googlesyndication.com',
-          'https://*.vercel.app',
-          'https://vercel.live',
-          'https://*.vercel.live',
+          'https://*.vercel-insights.com',
         ],
         'upgrade-insecure-requests': true,
       },

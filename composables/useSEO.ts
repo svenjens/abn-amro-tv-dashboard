@@ -20,7 +20,7 @@ export function useSEO(config: SEOConfig = {}) {
   const {
     title = 'BingeList - Your Ultimate TV Show Discovery Platform',
     description = 'Discover and explore thousands of TV shows organized by genre. Find streaming availability and full details.',
-    image = '/og-image.png',
+    image = 'https://bingelist.app/og-image.png', // Must be absolute URL for social media
     url,
     type = 'website',
     keywords = ['tv shows', 'series', 'streaming', 'entertainment', 'bingelist'],
