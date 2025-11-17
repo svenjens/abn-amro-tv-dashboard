@@ -340,6 +340,7 @@ const {
 } = await useAsyncData(
   `show-${showId.value}`,
   () =>
+    // @ts-ignore - Type recursion issue with Nuxt routes
     $fetch(`/api/shows/${showId.value}`, {
       query: { country: userCountry.value },
     }),
