@@ -23,8 +23,8 @@
 const route = useRoute()
 
 const showDebug = computed(() => {
-  if (!process.client) return false
-  const isDev = process.dev
+  if (!import.meta.client) return false
+  const isDev = import.meta.dev
   const hasDebugParam = route.query.debug !== undefined
   return isDev || hasDebugParam
 })

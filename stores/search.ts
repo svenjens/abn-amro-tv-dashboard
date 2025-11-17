@@ -11,7 +11,7 @@ import type { Show, SearchResult, ApiError } from '@/types'
 
 export const useSearchStore = defineStore('search', () => {
   // Only initialize toast on client-side
-  const toast = process.client ? useToast() : null
+  const toast = import.meta.client ? useToast() : null
 
   // State
   const searchQuery = ref<string>('')
@@ -147,7 +147,7 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   // Load recent searches on store initialization (client-side only)
-  if (process.client) {
+  if (import.meta.client) {
     loadRecentSearches()
   }
 

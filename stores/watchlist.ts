@@ -163,7 +163,7 @@ export const useWatchlistStore = defineStore('watchlist', () => {
   const totalWatchedEpisodes = computed(() => watchedEpisodes.value.length)
 
   // Initialize on store creation (client-side only)
-  if (process.client) {
+  if (import.meta.client) {
     loadFromStorage()
   }
 

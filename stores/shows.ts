@@ -12,7 +12,7 @@ import type { Show, ShowsByGenre, ApiError } from '@/types'
 
 export const useShowsStore = defineStore('shows', () => {
   // Only initialize toast on client-side
-  const toast = process.client ? useToast() : null
+  const toast = import.meta.client ? useToast() : null
 
   // State
   const allShows = ref<Show[]>([])
@@ -77,8 +77,13 @@ export const useShowsStore = defineStore('shows', () => {
     error.value = null
 
     try {
-      const shows = await $fetch<Show[]>('/api/shows')
-      setShows(shows)
+      const response = await $fetch<{ shows: Show[]; showsByGenre: ShowsByGenre }>('/api/shows')
+      // Use the pre-sorted data from the server
+      allShows.value = response.shows
+      showsByGenre.value = response.showsByGenre
+      loading.value = false
+      error.value = null
+      logger.debug(`[Store] Set ${response.shows.length} shows across ${genres.value.length} genres`)
     } catch (err) {
       error.value = err as ApiError
       if (toast) {

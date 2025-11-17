@@ -1,20 +1,22 @@
 <template>
-  <div v-if="shouldShowAd" class="ad-container my-8">
-    <!-- Ad Label -->
-    <p class="text-xs text-gray-500 text-center mb-2">{{ t('ads.sponsored') }}</p>
+  <ClientOnly>
+    <div v-if="shouldShowAd" class="ad-container my-8">
+      <!-- Ad Label -->
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">{{ t('ads.sponsored') }}</p>
 
-    <!-- AdSense Ad Unit -->
-    <div class="ad-wrapper flex justify-center">
-      <ins
-        class="adsbygoogle"
-        :style="adStyle"
-        :data-ad-client="adClient"
-        v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
-        :data-ad-format="format"
-        data-full-width-responsive="true"
-      ></ins>
+      <!-- AdSense Ad Unit -->
+      <div class="ad-wrapper flex justify-center">
+        <ins
+          class="adsbygoogle"
+          :style="adStyle"
+          :data-ad-client="adClient"
+          v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
+          :data-ad-format="format"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -34,9 +36,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useI18n()
+const config = useRuntimeConfig()
 
-// Get AdSense client ID from environment
-const adClient = import.meta.env.VITE_GOOGLE_ADSENSE_ID || ''
+// Get AdSense client ID from runtime config
+const adClient = config.public.googleAdsenseId || ''
 
 // Only show ads in production and if client ID is configured
 const shouldShowAd = computed(() => {
@@ -51,38 +54,21 @@ const adStyle = computed(() => {
 })
 
 const adPushed = ref(false)
-const scriptLoaded = ref(false)
 
-// Load AdSense script dynamically
-const loadAdSenseScript = () => {
-  if (!shouldShowAd.value || scriptLoaded.value) return
-
-  // Check if script already exists
-  const existingScript = document.querySelector(`script[src*="pagead2.googlesyndication.com"]`)
-  if (existingScript) {
-    scriptLoaded.value = true
-    return
+// Use Nuxt's useScript composable for better script management
+const { load, status } = useScript({
+  src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`,
+  async: true,
+  crossorigin: 'anonymous',
+}, {
+  use() {
+    return { adsbygoogle: window.adsbygoogle }
   }
-
-  // Create and inject script
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`
-  script.crossOrigin = 'anonymous'
-  script.onerror = () => {
-    logger.error('[AdSense] Failed to load script')
-  }
-  script.onload = () => {
-    scriptLoaded.value = true
-    logger.debug('[AdSense] Script loaded successfully')
-  }
-
-  document.head.appendChild(script)
-}
+})
 
 // Push ad to AdSense queue
 const pushAd = () => {
-  if (!shouldShowAd.value || adPushed.value || !scriptLoaded.value) return
+  if (!shouldShowAd.value || adPushed.value) return
 
   try {
     if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
@@ -95,29 +81,19 @@ const pushAd = () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (!shouldShowAd.value) {
     logger.debug('[AdSense] Ads disabled (not in production or no client ID)')
     return
   }
 
-  // Load script first
-  loadAdSenseScript()
-
-  // Wait for script to load, then push ad
-  const checkInterval = setInterval(() => {
-    if (scriptLoaded.value) {
-      clearInterval(checkInterval)
-      setTimeout(() => {
-        pushAd()
-      }, 100)
-    }
-  }, 100)
-
-  // Cleanup after 10 seconds
+  // Load script using Nuxt's useScript
+  await load()
+  
+  // Wait a bit for script to initialize, then push ad
   setTimeout(() => {
-    clearInterval(checkInterval)
-  }, 10000)
+    pushAd()
+  }, 100)
 })
 
 // Re-push ad if props change

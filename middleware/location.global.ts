@@ -4,7 +4,7 @@
  */
 export default defineNuxtRouteMiddleware(async () => {
   // Only run on server and if not already loaded
-  if (process.server) {
+  if (import.meta.server) {
     const { fetchLocation } = useLocation()
     
     try {

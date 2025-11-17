@@ -74,6 +74,9 @@ import { logger } from '@/utils'
 const { t } = useI18n()
 const showPrompt = ref(false)
 
+// Storage key for dismissal tracking
+const STORAGE_KEY = 'pwa-install-dismissed'
+
 // Check browser-only values on client
 const isAlreadyInstalled = ref(false)
 const dismissedRecently = ref(false)
@@ -83,7 +86,6 @@ onMounted(() => {
   isAlreadyInstalled.value = isPWA()
   
   // Check if user previously dismissed
-  const STORAGE_KEY = 'pwa-install-dismissed'
   const dismissedAt = localStorage.getItem(STORAGE_KEY)
   dismissedRecently.value =
     !!dismissedAt && Date.now() - parseInt(dismissedAt) < 7 * 24 * 60 * 60 * 1000 // 7 days

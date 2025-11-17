@@ -66,10 +66,10 @@ async function changeLanguage(newLocale: string) {
   }
   
   // Use Nuxt i18n's setLocale to change language
-  await setLocale(newLocale)
+  await setLocale(newLocale as 'en' | 'nl' | 'es')
   
   // Navigate to the same page in the new locale
-  const newPath = switchLocalePath(newLocale)
+  const newPath = switchLocalePath(newLocale as 'en' | 'nl' | 'es')
   await navigateTo(newPath)
   
   isOpen.value = false
