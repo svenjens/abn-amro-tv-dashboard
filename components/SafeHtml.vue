@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
 interface Props {
   content: string
@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 /**
- * Sanitize HTML content using DOMPurify to prevent XSS attacks
+ * Sanitize HTML content using isomorphic-dompurify (SSR-compatible)
  */
 const sanitizedHtml = computed(() => {
   if (!props.content) return ''
