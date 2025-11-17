@@ -89,12 +89,15 @@
           <div class="flex flex-col md:flex-row gap-8">
             <!-- Poster -->
             <div v-if="getShowImage(show, 'original')" class="flex-shrink-0">
-              <img
+              <NuxtImg
                 :src="getShowImage(show, 'original')!"
                 :alt="`${show.name} poster`"
                 class="w-64 rounded-lg shadow-2xl"
                 loading="eager"
                 fetchpriority="high"
+                format="webp"
+                :quality="90"
+                width="256"
               />
             </div>
 

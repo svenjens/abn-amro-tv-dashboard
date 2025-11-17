@@ -20,7 +20,33 @@ export default defineNuxtConfig({
   sitemap: {
     hostname: 'https://bingelist.app',
     gzip: true,
-    routes: []
+    exclude: [
+      '/api/**'
+    ],
+    urls: async () => {
+      // Generate dynamic genre URLs
+      const genres = [
+        'drama', 'comedy', 'action', 'thriller', 'horror', 'crime', 'romance',
+        'science-fiction', 'fantasy', 'mystery', 'adventure', 'supernatural',
+        'family', 'anime', 'music', 'western', 'war', 'history', 'sports',
+        'legal', 'medical', 'nature', 'travel', 'food'
+      ]
+      
+      const locales = ['en', 'nl', 'es']
+      const genreUrls = []
+      
+      for (const locale of locales) {
+        for (const genre of genres) {
+          genreUrls.push({
+            loc: `/${locale}/genre/${genre}`,
+            changefreq: 'weekly',
+            priority: 0.7
+          })
+        }
+      }
+      
+      return genreUrls
+    }
   },
   
   // Image optimization configuration
@@ -36,6 +62,15 @@ export default defineNuxtConfig({
     }
   },
   
+  // Scripts configuration for third-party services
+  scripts: {
+    registry: {
+      googleAnalytics: {
+        id: process.env.VITE_GOOGLE_ADS_ID || ''
+      }
+    }
+  },
+  
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
@@ -43,6 +78,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/icon',
     '@nuxt/image',
+    '@nuxt/scripts',
     '@nuxtjs/color-mode',
     '@nuxtjs/robots',
     '@nuxtjs/sitemap'

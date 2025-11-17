@@ -47,7 +47,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useDarkMode } from '@/composables'
 
 interface Props {
   showLabel?: boolean
@@ -60,7 +59,15 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useI18n()
-const { isDark, theme, toggle } = useDarkMode()
+const colorMode = useColorMode()
+
+// Map @nuxtjs/color-mode to our interface
+const isDark = computed(() => colorMode.value === 'dark')
+const theme = computed(() => colorMode.preference as 'light' | 'dark' | 'system')
+
+function toggle() {
+  colorMode.preference = isDark.value ? 'light' : 'dark'
+}
 
 const themeLabel = computed(() => {
   if (theme.value === 'system') {
