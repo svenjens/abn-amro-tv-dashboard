@@ -97,7 +97,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history for better secret detection
+          fetch-depth: 0 # Full history for better secret detection
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
@@ -281,34 +281,34 @@ jobs:
             const previewUrl = process.env.PREVIEW_URL || 'URL not available';
             const fullUrl = previewUrl.startsWith('http') ? previewUrl : `https://${previewUrl}`;
             const coverage = process.env.COVERAGE;
-            
+
             // Start building comment
             let commentBody = '## 🚀 Deployment Preview\n\n';
             commentBody += `✅ **Preview deployed successfully!**\n\n`;
             commentBody += `🔗 **Preview URL:** ${fullUrl}\n\n`;
             commentBody += `---\n\n`;
-            
+
             // Add coverage info
             if (coverage !== 'N/A') {
               commentBody += `### 📊 Test Coverage\n\n`;
               commentBody += `Current coverage: **${coverage}%**\n\n`;
             }
-            
+
             commentBody += `\n---\n\n`;
             commentBody += `<sub>⚡ Build completed in workflow [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})</sub>`;
-            
+
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
+
             const botComment = comments.find(comment => 
               comment.user.type === 'Bot' && 
               comment.body.includes('🚀 Deployment Preview')
             );
-            
+
             if (botComment) {
               // Update existing comment
               await github.rest.issues.updateComment({
@@ -326,4 +326,3 @@ jobs:
                 body: commentBody
               });
             }
-

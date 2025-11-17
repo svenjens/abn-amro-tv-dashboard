@@ -74,17 +74,17 @@ describe('useWatchlistStore', () => {
   beforeEach(() => {
     // Setup pinia
     setActivePinia(createPinia())
-    
+
     // Setup localStorage mock
     Object.defineProperty(global, 'localStorage', {
       value: localStorageMock,
       writable: true,
     })
-    
+
     // Clear localStorage
     localStorageMock.clear()
     vi.clearAllMocks()
-    
+
     // Create store instance
     store = useWatchlistStore()
   })
@@ -102,7 +102,7 @@ describe('useWatchlistStore', () => {
 
     it('should add a show to watchlist', () => {
       store.addToWatchlist(mockShow)
-      
+
       expect(store.watchlist).toHaveLength(1)
       expect(store.watchlist[0]).toEqual(mockShow)
       expect(store.watchlistCount).toBe(1)
@@ -116,15 +116,15 @@ describe('useWatchlistStore', () => {
     it('should not add duplicate shows', () => {
       store.addToWatchlist(mockShow)
       store.addToWatchlist(mockShow)
-      
+
       expect(store.watchlist).toHaveLength(1)
     })
 
     it('should check if show is in watchlist', () => {
       expect(store.isInWatchlist(mockShow.id)).toBe(false)
-      
+
       store.addToWatchlist(mockShow)
-      
+
       expect(store.isInWatchlist(mockShow.id)).toBe(true)
       expect(store.isInWatchlist(999)).toBe(false)
     })
@@ -132,11 +132,11 @@ describe('useWatchlistStore', () => {
     it('should remove a show from watchlist', () => {
       store.addToWatchlist(mockShow)
       store.addToWatchlist(mockShow2)
-      
+
       expect(store.watchlist).toHaveLength(2)
-      
+
       store.removeFromWatchlist(mockShow.id)
-      
+
       expect(store.watchlist).toHaveLength(1)
       expect(store.watchlist[0]?.id).toBe(mockShow2.id)
       expect(localStorageMock.setItem).toHaveBeenCalled()
@@ -145,18 +145,18 @@ describe('useWatchlistStore', () => {
     it('should handle removing non-existent show', () => {
       store.addToWatchlist(mockShow)
       const initialLength = store.watchlist.length
-      
+
       store.removeFromWatchlist(999)
-      
+
       expect(store.watchlist).toHaveLength(initialLength)
     })
 
     it('should toggle show in watchlist', () => {
       expect(store.isInWatchlist(mockShow.id)).toBe(false)
-      
+
       store.toggleWatchlist(mockShow)
       expect(store.isInWatchlist(mockShow.id)).toBe(true)
-      
+
       store.toggleWatchlist(mockShow)
       expect(store.isInWatchlist(mockShow.id)).toBe(false)
     })
@@ -164,11 +164,11 @@ describe('useWatchlistStore', () => {
     it('should clear entire watchlist', () => {
       store.addToWatchlist(mockShow)
       store.addToWatchlist(mockShow2)
-      
+
       expect(store.watchlist).toHaveLength(2)
-      
+
       store.clearWatchlist()
-      
+
       expect(store.watchlist).toHaveLength(0)
       expect(store.watchlistCount).toBe(0)
       expect(store.hasShows).toBe(false)
@@ -192,18 +192,18 @@ describe('useWatchlistStore', () => {
 
     it('should mark episode as watched', () => {
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
-      
+
       expect(store.watchedEpisodes).toHaveLength(1)
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(true)
       expect(store.totalWatchedEpisodes).toBe(1)
-      
+
       const watchedEpisode = store.watchedEpisodes[0]
       expect(watchedEpisode?.showId).toBe(showId)
       expect(watchedEpisode?.episodeId).toBe(episodeId)
       expect(watchedEpisode?.season).toBe(season)
       expect(watchedEpisode?.episode).toBe(episode)
       expect(watchedEpisode?.watchedAt).toBeDefined()
-      
+
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'tv-dashboard-watched-episodes',
         expect.any(String)
@@ -213,15 +213,15 @@ describe('useWatchlistStore', () => {
     it('should not mark same episode twice', () => {
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
-      
+
       expect(store.watchedEpisodes).toHaveLength(1)
     })
 
     it('should check if episode is watched', () => {
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(false)
-      
+
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
-      
+
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(true)
       expect(store.isEpisodeWatched(showId, 999)).toBe(false)
       expect(store.isEpisodeWatched(999, episodeId)).toBe(false)
@@ -230,9 +230,9 @@ describe('useWatchlistStore', () => {
     it('should unmark episode as watched', () => {
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(true)
-      
+
       store.unmarkEpisodeAsWatched(showId, episodeId)
-      
+
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(false)
       expect(store.watchedEpisodes).toHaveLength(0)
       expect(localStorageMock.setItem).toHaveBeenCalled()
@@ -241,18 +241,18 @@ describe('useWatchlistStore', () => {
     it('should handle unmarking non-existent episode', () => {
       store.markEpisodeAsWatched(showId, episodeId, season, episode)
       const initialLength = store.watchedEpisodes.length
-      
+
       store.unmarkEpisodeAsWatched(999, 999)
-      
+
       expect(store.watchedEpisodes).toHaveLength(initialLength)
     })
 
     it('should toggle episode watched status', () => {
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(false)
-      
+
       store.toggleEpisodeWatched(showId, episodeId, season, episode)
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(true)
-      
+
       store.toggleEpisodeWatched(showId, episodeId, season, episode)
       expect(store.isEpisodeWatched(showId, episodeId)).toBe(false)
     })
@@ -261,10 +261,10 @@ describe('useWatchlistStore', () => {
       store.markEpisodeAsWatched(1, 101, 1, 1)
       store.markEpisodeAsWatched(1, 102, 1, 2)
       store.markEpisodeAsWatched(2, 201, 1, 1)
-      
+
       const show1Episodes = store.getWatchedEpisodesForShow(1)
       const show2Episodes = store.getWatchedEpisodesForShow(2)
-      
+
       expect(show1Episodes).toHaveLength(2)
       expect(show2Episodes).toHaveLength(1)
       expect(show1Episodes[0]?.episodeId).toBe(101)
@@ -276,7 +276,7 @@ describe('useWatchlistStore', () => {
       store.markEpisodeAsWatched(1, 101, 1, 1)
       store.markEpisodeAsWatched(1, 102, 1, 2)
       store.markEpisodeAsWatched(2, 201, 1, 1)
-      
+
       expect(store.getWatchedEpisodesCount(1)).toBe(2)
       expect(store.getWatchedEpisodesCount(2)).toBe(1)
       expect(store.getWatchedEpisodesCount(999)).toBe(0)
@@ -292,11 +292,11 @@ describe('useWatchlistStore', () => {
     it('should load watchlist from localStorage on init', () => {
       const storedShows = [mockShow, mockShow2]
       localStorageMock.getItem.mockReturnValue(JSON.stringify(storedShows))
-      
+
       // Create new pinia instance and store
       setActivePinia(createPinia())
       const newStore = useWatchlistStore()
-      
+
       expect(newStore.watchlist).toEqual(storedShows)
       expect(newStore.watchlistCount).toBe(2)
     })
@@ -306,30 +306,30 @@ describe('useWatchlistStore', () => {
         { showId: 1, episodeId: 101, season: 1, episode: 1, watchedAt: Date.now() },
         { showId: 1, episodeId: 102, season: 1, episode: 2, watchedAt: Date.now() },
       ]
-      
+
       localStorageMock.getItem.mockImplementation((key: string) => {
         if (key === 'tv-dashboard-watchlist') return null
         if (key === 'tv-dashboard-watched-episodes') return JSON.stringify(storedEpisodes)
         return null
       })
-      
+
       // Create new pinia instance and store
       setActivePinia(createPinia())
       const newStore = useWatchlistStore()
-      
+
       expect(newStore.watchedEpisodes).toEqual(storedEpisodes)
       expect(newStore.totalWatchedEpisodes).toBe(2)
     })
 
     it('should handle corrupted localStorage data', () => {
       localStorageMock.getItem.mockReturnValue('invalid json')
-      
+
       // Create new pinia instance and store
       setActivePinia(createPinia())
-      
+
       // Should not throw, just log error
       const newStore = useWatchlistStore()
-      
+
       expect(newStore.watchlist).toEqual([])
     })
 
@@ -339,9 +339,9 @@ describe('useWatchlistStore', () => {
         value: undefined,
         writable: true,
       })
-      
+
       const newStore = useWatchlistStore()
-      
+
       // Should not throw
       newStore.addToWatchlist(mockShow)
       expect(newStore.watchlist).toHaveLength(1)
@@ -349,7 +349,7 @@ describe('useWatchlistStore', () => {
 
     it('should save to localStorage on add', () => {
       store.addToWatchlist(mockShow)
-      
+
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'tv-dashboard-watchlist',
         JSON.stringify([mockShow])
@@ -359,9 +359,9 @@ describe('useWatchlistStore', () => {
     it('should save to localStorage on remove', () => {
       store.addToWatchlist(mockShow)
       vi.clearAllMocks()
-      
+
       store.removeFromWatchlist(mockShow.id)
-      
+
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'tv-dashboard-watchlist',
         JSON.stringify([])
@@ -370,7 +370,7 @@ describe('useWatchlistStore', () => {
 
     it('should save episodes to localStorage', () => {
       store.markEpisodeAsWatched(1, 101, 1, 1)
-      
+
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'tv-dashboard-watched-episodes',
         expect.any(String)
@@ -381,7 +381,7 @@ describe('useWatchlistStore', () => {
       localStorageMock.setItem.mockImplementationOnce(() => {
         throw new Error('Storage full')
       })
-      
+
       // Should not throw
       expect(() => store.addToWatchlist(mockShow)).not.toThrow()
       expect(store.watchlist).toHaveLength(1)
@@ -391,39 +391,38 @@ describe('useWatchlistStore', () => {
   describe('Computed Properties', () => {
     it('should track watchlist count reactively', () => {
       expect(store.watchlistCount).toBe(0)
-      
+
       store.addToWatchlist(mockShow)
       expect(store.watchlistCount).toBe(1)
-      
+
       store.addToWatchlist(mockShow2)
       expect(store.watchlistCount).toBe(2)
-      
+
       store.removeFromWatchlist(mockShow.id)
       expect(store.watchlistCount).toBe(1)
     })
 
     it('should track hasShows reactively', () => {
       expect(store.hasShows).toBe(false)
-      
+
       store.addToWatchlist(mockShow)
       expect(store.hasShows).toBe(true)
-      
+
       store.clearWatchlist()
       expect(store.hasShows).toBe(false)
     })
 
     it('should track total watched episodes reactively', () => {
       expect(store.totalWatchedEpisodes).toBe(0)
-      
+
       store.markEpisodeAsWatched(1, 101, 1, 1)
       expect(store.totalWatchedEpisodes).toBe(1)
-      
+
       store.markEpisodeAsWatched(1, 102, 1, 2)
       expect(store.totalWatchedEpisodes).toBe(2)
-      
+
       store.unmarkEpisodeAsWatched(1, 101)
       expect(store.totalWatchedEpisodes).toBe(1)
     })
   })
 })
-

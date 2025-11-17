@@ -10,7 +10,7 @@
 <script setup lang="ts">
 /**
  * SafeHtml component
- * 
+ *
  * Note: HTML sanitization now happens server-side in API routes for better performance
  * This component is kept for backwards compatibility and as a semantic wrapper
  */

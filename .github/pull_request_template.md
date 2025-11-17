@@ -1,12 +1,13 @@
 # Pull Request
 
 ## 📋 Description
+
 <!-- Provide a clear description of what this PR does -->
 
-
-
 ## 🎯 Type of Change
+
 <!-- Check what applies -->
+
 - [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
 - [ ] ✨ New feature (non-breaking change that adds functionality)
 - [ ] 💥 Breaking change (fix or feature that breaks existing functionality)
@@ -18,12 +19,16 @@
 - [ ] 🔧 Configuration change
 
 ## 🔗 Related Issues
+
 <!-- Link to related issues -->
+
 Closes #
 Related to #
 
 ## ✅ Checklist
+
 <!-- Check what you have done -->
+
 - [ ] My code follows the code style of this project
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -37,24 +42,22 @@ Related to #
 - [ ] Type check passes (`npx vue-tsc --noEmit`)
 
 ## 🧪 How Has This Been Tested?
+
 <!-- Describe the tests you ran -->
 
-
-
 ## 📸 Screenshots (if applicable)
+
 <!-- Add screenshots for UI changes -->
 
-
-
 ## 📝 Notes for Reviewers
+
 <!-- Any additional information reviewers should know -->
 
-
-
 ## 🚀 Deployment Notes
+
 <!-- Any special steps needed for deployment? -->
+
 - [ ] No special deployment steps needed
 - [ ] Environment variables need to be added/changed
 - [ ] Database migration needed
 - [ ] Other: <!-- specify -->
-

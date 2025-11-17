@@ -83,7 +83,9 @@ export const useShowsStore = defineStore('shows', () => {
       showsByGenre.value = response.showsByGenre
       loading.value = false
       error.value = null
-      logger.debug(`[Store] Set ${response.shows.length} shows across ${genres.value.length} genres`)
+      logger.debug(
+        `[Store] Set ${response.shows.length} shows across ${genres.value.length} genres`
+      )
     } catch (err) {
       error.value = err as ApiError
       if (toast) {

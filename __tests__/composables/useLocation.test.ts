@@ -11,10 +11,10 @@ describe('useLocation', () => {
   beforeEach(() => {
     mockFetch = vi.fn()
     global.$fetch = mockFetch as any
-    
+
     // Clear all state
     vi.clearAllMocks()
-    
+
     // Reset useState by clearing the global state
     // This is a workaround for Nuxt's useState in tests
     // @ts-ignore - Nuxt global is not fully typed in test environment
@@ -22,7 +22,7 @@ describe('useLocation', () => {
       // @ts-ignore - Nuxt global is not fully typed in test environment
       global.nuxt.payload.state = {}
     }
-    
+
     // Also reset the location state using the composable's reset method
     try {
       const { resetLocation } = useLocation()
@@ -39,7 +39,7 @@ describe('useLocation', () => {
   describe('Initialization', () => {
     it('should initialize with default values', () => {
       const { location, country, isLoading, error } = useLocation()
-      
+
       expect(location.value).toEqual({
         country: 'NL',
         detected: false,
@@ -51,7 +51,7 @@ describe('useLocation', () => {
 
     it('should return location state', () => {
       const { location } = useLocation()
-      
+
       // location should be defined and have the expected shape
       expect(location.value).toBeDefined()
       expect(location.value.country).toBe('NL')
@@ -60,7 +60,7 @@ describe('useLocation', () => {
 
     it('should return loading state', () => {
       const { isLoading } = useLocation()
-      
+
       // isLoading should be defined
       expect(isLoading.value).toBeDefined()
       expect(typeof isLoading.value).toBe('boolean')
@@ -68,7 +68,7 @@ describe('useLocation', () => {
 
     it('should return error state', () => {
       const { error } = useLocation()
-      
+
       // error should be defined
       expect(error.value).toBeNull()
     })
@@ -85,15 +85,15 @@ describe('useLocation', () => {
         timezone: 'America/New_York',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, location, country, isLoading } = useLocation()
-      
+
       expect(isLoading.value).toBe(false)
-      
+
       const result = await fetchLocation()
-      
+
       expect(mockFetch).toHaveBeenCalledWith('/api/location')
       expect(mockFetch).toHaveBeenCalledTimes(1)
       expect(location.value).toEqual(mockLocation)
@@ -107,24 +107,24 @@ describe('useLocation', () => {
         country: 'GB',
         detected: true,
       }
-      
+
       let resolvePromise: (value: UserLocation) => void
       const promise = new Promise<UserLocation>((resolve) => {
         resolvePromise = resolve
       })
-      
+
       mockFetch.mockReturnValueOnce(promise)
-      
+
       const { fetchLocation, isLoading } = useLocation()
-      
+
       const fetchPromise = fetchLocation()
-      
+
       // Should be loading during fetch
       expect(isLoading.value).toBe(true)
-      
+
       resolvePromise!(mockLocation)
       await fetchPromise
-      
+
       // Should not be loading after fetch
       expect(isLoading.value).toBe(false)
     })
@@ -134,16 +134,16 @@ describe('useLocation', () => {
         country: 'US',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, location } = useLocation()
-      
+
       // First call - should fetch
       await fetchLocation()
       expect(mockFetch).toHaveBeenCalledTimes(1)
       expect(location.value.detected).toBe(true)
-      
+
       // Second call - should skip
       await fetchLocation()
       expect(mockFetch).toHaveBeenCalledTimes(1) // Still 1, not called again
@@ -152,16 +152,16 @@ describe('useLocation', () => {
     it('should handle API errors gracefully', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
-      
+
       const { fetchLocation, location, error, isLoading } = useLocation()
-      
+
       const result = await fetchLocation()
-      
+
       expect(mockFetch).toHaveBeenCalledWith('/api/location')
       expect(error.value).toBe('Failed to detect location')
       // Console.error might not be captured consistently in all test environments
       // so we make this optional
-      
+
       // Should return default location
       expect(result).toEqual({
         country: 'NL',
@@ -172,35 +172,35 @@ describe('useLocation', () => {
         detected: false,
       })
       expect(isLoading.value).toBe(false)
-      
+
       consoleErrorSpy.mockRestore()
     })
 
     it('should clear previous errors on successful fetch', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      
+
       const { fetchLocation, error } = useLocation()
-      
+
       // First call fails
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
       await fetchLocation()
       expect(error.value).toBe('Failed to detect location')
-      
+
       // Second call succeeds
       const mockLocation: UserLocation = {
         country: 'US',
         detected: true,
       }
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       // Need to reset the detected flag for second fetch
       const { location } = useLocation()
       // @ts-ignore - Manipulating internal state for test
       location.value.detected = false
-      
+
       await fetchLocation()
       expect(error.value).toBeNull()
-      
+
       consoleErrorSpy.mockRestore()
     })
 
@@ -210,13 +210,13 @@ describe('useLocation', () => {
         detected: true,
         // city, region, etc. are optional
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, location } = useLocation()
-      
+
       await fetchLocation()
-      
+
       expect(location.value).toEqual(mockLocation)
       expect(location.value.city).toBeUndefined()
       expect(location.value.region).toBeUndefined()
@@ -229,33 +229,33 @@ describe('useLocation', () => {
         country: 'DE',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, country } = useLocation()
-      
+
       expect(country.value).toBe('NL') // Default
-      
+
       await fetchLocation()
-      
+
       expect(country.value).toBe('DE')
     })
 
     it('should be reactive to location changes', async () => {
-      const { resetLocation, fetchLocation, country, location } = useLocation()
-      
+      const { resetLocation, fetchLocation, country } = useLocation()
+
       expect(country.value).toBe('NL')
-      
+
       mockFetch.mockResolvedValueOnce({ country: 'US', detected: true })
       await fetchLocation()
-      
+
       expect(country.value).toBe('US')
-      
+
       // Reset and fetch a new location (state change)
       resetLocation()
       mockFetch.mockResolvedValueOnce({ country: 'CA', detected: true })
       const result = await fetchLocation()
-      
+
       expect(result.country).toBe('CA')
       expect(country.value).toBe('CA')
     })
@@ -267,13 +267,13 @@ describe('useLocation', () => {
         country: 'US',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, isInCountry } = useLocation()
-      
+
       await fetchLocation()
-      
+
       expect(isInCountry('US')).toBe(true)
       expect(isInCountry('GB')).toBe(false)
       expect(isInCountry('NL')).toBe(false)
@@ -284,13 +284,13 @@ describe('useLocation', () => {
         country: 'US',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       const { fetchLocation, isInCountry } = useLocation()
-      
+
       await fetchLocation()
-      
+
       expect(isInCountry('us')).toBe(true)
       expect(isInCountry('US')).toBe(true)
       expect(isInCountry('Us')).toBe(true)
@@ -298,7 +298,7 @@ describe('useLocation', () => {
 
     it('should work with default location', () => {
       const { isInCountry } = useLocation()
-      
+
       expect(isInCountry('NL')).toBe(true)
       expect(isInCountry('nl')).toBe(true)
       expect(isInCountry('US')).toBe(false)
@@ -306,7 +306,7 @@ describe('useLocation', () => {
 
     it('should handle empty or invalid country codes', () => {
       const { isInCountry } = useLocation()
-      
+
       expect(isInCountry('')).toBe(false)
       expect(isInCountry('INVALID')).toBe(false)
     })
@@ -318,19 +318,19 @@ describe('useLocation', () => {
         country: 'US',
         detected: true,
       }
-      
+
       mockFetch.mockResolvedValueOnce(mockLocation)
-      
+
       // First composable instance
       const location1 = useLocation()
       await location1.fetchLocation()
-      
+
       // Second composable instance - should share state
       const location2 = useLocation()
-      
+
       expect(location2.location.value).toEqual(mockLocation)
       expect(location2.country.value).toBe('US')
-      
+
       // Should not fetch again (already detected)
       await location2.fetchLocation()
       expect(mockFetch).toHaveBeenCalledTimes(1)
@@ -340,60 +340,60 @@ describe('useLocation', () => {
   describe('Edge Cases', () => {
     it('should handle empty response from API', async () => {
       mockFetch.mockResolvedValueOnce({})
-      
+
       const { fetchLocation, location } = useLocation()
-      
+
       await fetchLocation()
-      
+
       // Should handle gracefully
       expect(location.value).toBeDefined()
     })
 
     it('should handle null response from API', async () => {
       mockFetch.mockResolvedValueOnce(null)
-      
+
       const { fetchLocation, location } = useLocation()
-      
+
       await fetchLocation()
-      
+
       expect(location.value).toBeDefined()
     })
 
     it('should handle timeout errors', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       mockFetch.mockRejectedValueOnce(new Error('Request timeout'))
-      
+
       const { fetchLocation, error, location } = useLocation()
-      
+
       await fetchLocation()
-      
+
       expect(error.value).toBe('Failed to detect location')
       expect(location.value.country).toBe('NL') // Falls back to default
-      
+
       consoleErrorSpy.mockRestore()
     })
   })
 
   describe('Multiple Countries', () => {
     const countries = ['US', 'GB', 'NL', 'DE', 'FR', 'CA', 'AU', 'JP']
-    
+
     countries.forEach((countryCode) => {
       it(`should handle ${countryCode} location`, async () => {
         const { resetLocation, fetchLocation, country, isInCountry } = useLocation()
         resetLocation() // Reset before each country test
-        
+
         const mockLocation: UserLocation = {
           country: countryCode,
           detected: true,
         }
-        
+
         mockFetch.mockResolvedValueOnce(mockLocation)
-        
+
         await fetchLocation()
-        
+
         expect(country.value).toBe(countryCode)
         expect(isInCountry(countryCode)).toBe(true)
-        
+
         // Check that other countries return false
         const otherCountries = countries.filter((c) => c !== countryCode)
         otherCountries.forEach((otherCountry) => {
@@ -403,4 +403,3 @@ describe('useLocation', () => {
     })
   })
 })
-

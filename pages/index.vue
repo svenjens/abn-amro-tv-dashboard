@@ -7,44 +7,31 @@
       class="relative bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white overflow-hidden"
     >
       <!-- Hero Background -->
-      <picture class="absolute inset-0 opacity-10 dark:opacity-20" aria-hidden="true">
-        <source
-          type="image/webp"
-          srcset="
-            /optimized/hero-background-768.webp   768w,
-            /optimized/hero-background-1280.webp 1280w,
-            /optimized/hero-background.webp      1920w
-          "
-          sizes="100vw"
-        >
-        <img
-          src="/optimized/hero-background.png"
-          alt=""
-          class="w-full h-full object-cover"
-          aria-hidden="true"
-        >
-      </picture>
+      <NuxtPicture
+        src="/optimized/hero-background.png"
+        alt=""
+        class="absolute inset-0 opacity-10 dark:opacity-20 w-full h-full object-cover"
+        aria-hidden="true"
+        loading="eager"
+        fetchpriority="high"
+        :img-attrs="{
+          class: 'w-full h-full object-cover',
+        }"
+      />
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo (hidden on mobile) -->
-            <picture class="hidden md:block">
-              <source
-                type="image/webp"
-                srcset="
-                  /optimized/logo-main-64.webp   64w,
-                  /optimized/logo-main-128.webp 128w,
-                  /optimized/logo-main-256.webp 256w
-                "
-                sizes="64px"
-              >
-              <img
-                src="/optimized/logo-main.png"
-                alt="BingeList Logo"
-                class="h-16 w-16 object-contain"
-              >
-            </picture>
+            <NuxtImg
+              src="/optimized/logo-main.png"
+              alt="BingeList Logo"
+              class="hidden md:block h-16 w-16 object-contain"
+              width="64"
+              height="64"
+              loading="eager"
+              fetchpriority="high"
+            />
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-primary-100 mb-8">
@@ -183,13 +170,13 @@
               /optimized/empty-state-illustration.webp     512w
             "
             sizes="192px"
-          >
+          />
           <img
             src="/optimized/empty-state-illustration.png"
             alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
-          >
+          />
         </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ t('home.noShows') }}
@@ -358,7 +345,7 @@ const { data: showsData } = await useAsyncData(
   'all-shows',
   () => $fetch<{ shows: Show[]; showsByGenre: Record<string, Show[]> }>('/api/shows'),
   {
-    dedupe: 'defer' // Dedupe requests during SSR
+    dedupe: 'defer', // Dedupe requests during SSR
   }
 )
 

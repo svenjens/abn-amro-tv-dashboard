@@ -15,7 +15,13 @@
         />
       </svg>
       <span class="uppercase">{{ currentLocale }}</span>
-      <svg class="h-4 w-4 transition-transform" :class="{ 'rotate-180': isOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        class="h-4 w-4 transition-transform"
+        :class="{ 'rotate-180': isOpen }"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
@@ -64,14 +70,14 @@ async function changeLanguage(newLocale: string) {
     isOpen.value = false
     return
   }
-  
+
   // Use Nuxt i18n's setLocale to change language
   await setLocale(newLocale as 'en' | 'nl' | 'es')
-  
+
   // Navigate to the same page in the new locale
   const newPath = switchLocalePath(newLocale as 'en' | 'nl' | 'es')
   await navigateTo(newPath)
-  
+
   isOpen.value = false
 }
 

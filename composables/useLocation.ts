@@ -16,7 +16,7 @@ export interface UserLocation {
 export const useLocation = () => {
   const location = useState<UserLocation>('userLocation', () => ({
     country: 'NL',
-    detected: false
+    detected: false,
   }))
 
   const isLoading = useState('locationLoading', () => false)
@@ -68,7 +68,7 @@ export const useLocation = () => {
   const resetLocation = () => {
     location.value = {
       country: 'NL',
-      detected: false
+      detected: false,
     }
     isLoading.value = false
     error.value = null
@@ -81,7 +81,6 @@ export const useLocation = () => {
     error: readonly(error),
     fetchLocation,
     isInCountry,
-    resetLocation
+    resetLocation,
   }
 }
-

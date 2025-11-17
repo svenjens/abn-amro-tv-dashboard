@@ -49,23 +49,23 @@ export default cachedEventHandler(
     try {
       const shows = await $fetch<Show[]>('https://api.tvmaze.com/shows', {
         headers: {
-          'User-Agent': 'BingeList/1.0'
-        }
+          'User-Agent': 'BingeList/1.0',
+        },
       })
-      
+
       // Group and sort shows by genre on the server
       const groupedShows = groupShowsByGenreAndSort(shows)
-      
+
       // Return both the raw shows array and the grouped/sorted data
       return {
         shows,
-        showsByGenre: groupedShows
+        showsByGenre: groupedShows,
       }
     } catch (error) {
       console.error('Error fetching shows:', error)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch shows'
+        statusMessage: 'Failed to fetch shows',
       })
     }
   },
@@ -75,7 +75,6 @@ export default cachedEventHandler(
     name: 'shows-all',
     getKey: () => 'all-shows',
     // Add stale-while-revalidate for better UX
-    swr: true
+    swr: true,
   }
 )
-

@@ -9,19 +9,19 @@ import { sanitizeEpisodeSummary } from '~/server/utils/sanitize'
 export default cachedEventHandler(
   async (event) => {
     const id = getRouterParam(event, 'id')
-  
+
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Show ID is required'
+        statusMessage: 'Show ID is required',
       })
     }
-  
+
     try {
       const episodes = await $fetch<any[]>(`https://api.tvmaze.com/shows/${id}/episodes`, {
         headers: {
-          'User-Agent': 'BingeList/1.0'
-        }
+          'User-Agent': 'BingeList/1.0',
+        },
       })
 
       // Sanitize episode summaries server-side
@@ -30,13 +30,13 @@ export default cachedEventHandler(
           episode.summary = sanitizeEpisodeSummary(episode.summary)
         }
       })
-    
+
       return episodes
     } catch (error) {
       console.error(`Error fetching episodes for show ${id}:`, error)
       throw createError({
         statusCode: 404,
-        statusMessage: 'Episodes not found'
+        statusMessage: 'Episodes not found',
       })
     }
   },
@@ -48,7 +48,6 @@ export default cachedEventHandler(
       const id = getRouterParam(event, 'id')
       return `show-${id}-episodes`
     },
-    swr: true
+    swr: true,
   }
 )
-

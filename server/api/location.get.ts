@@ -4,7 +4,7 @@
  */
 export default defineEventHandler((event) => {
   const headers = getHeaders(event)
-  
+
   // Vercel automatically adds these headers with geo-location data
   const country = headers['x-vercel-ip-country'] || 'NL'
   const city = headers['x-vercel-ip-city']
@@ -12,7 +12,7 @@ export default defineEventHandler((event) => {
   const latitude = headers['x-vercel-ip-latitude']
   const longitude = headers['x-vercel-ip-longitude']
   const timezone = headers['x-vercel-ip-timezone']
-  
+
   return {
     country,
     city,
@@ -20,7 +20,6 @@ export default defineEventHandler((event) => {
     latitude,
     longitude,
     timezone,
-    detected: country !== 'NL' // True if we detected a non-default country
+    detected: country !== 'NL', // True if we detected a non-default country
   }
 })
-

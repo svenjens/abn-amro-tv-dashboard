@@ -81,29 +81,19 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16 px-4" role="status">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              /optimized/empty-state-illustration-256.webp 256w,
-              /optimized/empty-state-illustration.webp     512w
-            "
-            sizes="192px"
-          >
-          <img
-            src="/optimized/empty-state-illustration.png"
-            alt=""
-            class="mx-auto h-48 w-48 object-contain opacity-50"
-            aria-hidden="true"
-          >
-        </picture>
+        <NuxtImg
+          src="/optimized/empty-state-illustration.png"
+          alt=""
+          class="mx-auto h-48 w-48 object-contain opacity-50"
+          aria-hidden="true"
+          width="192"
+          height="192"
+          loading="lazy"
+        />
         <h2 class="mt-6 text-lg font-medium text-gray-900">{{ t('watchlist.empty') }}</h2>
         <p class="mt-2 text-sm text-gray-500">{{ t('watchlist.emptyMessage') }}</p>
         <div class="mt-6">
-          <button
-            class="btn-primary"
-            @click="navigateTo(localePath('/'))"
-          >
+          <button class="btn-primary" @click="navigateTo(localePath('/'))">
             {{ t('navigation.home') }}
           </button>
         </div>

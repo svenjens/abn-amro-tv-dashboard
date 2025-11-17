@@ -1,5 +1,7 @@
 <template>
-  <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 transition-colors">
+  <footer
+    class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 transition-colors"
+  >
     <div class="max-w-7xl mx-auto px-4 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         <!-- Brand -->
@@ -41,7 +43,9 @@
 
         <!-- Navigation -->
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">{{ t('footer.navigation') }}</h3>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">
+            {{ t('footer.navigation') }}
+          </h3>
           <ul class="space-y-3">
             <li>
               <NuxtLink
@@ -72,7 +76,9 @@
 
         <!-- Resources -->
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">{{ t('footer.resources') }}</h3>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">
+            {{ t('footer.resources') }}
+          </h3>
           <ul class="space-y-3">
             <li>
               <NuxtLink
@@ -130,7 +136,9 @@
 
         <!-- Legal & Languages -->
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">{{ t('footer.languages') }}</h3>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-4">
+            {{ t('footer.languages') }}
+          </h3>
           <ul class="space-y-3 mb-6">
             <li>
               <button

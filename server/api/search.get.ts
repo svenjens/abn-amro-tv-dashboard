@@ -7,27 +7,30 @@ export default cachedEventHandler(
   async (event) => {
     const query = getQuery(event)
     const searchQuery = query.q as string
-  
+
     if (!searchQuery) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Search query is required'
+        statusMessage: 'Search query is required',
       })
     }
-  
+
     try {
-      const response = await $fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchQuery)}`, {
-        headers: {
-          'User-Agent': 'BingeList/1.0'
+      const response = await $fetch(
+        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchQuery)}`,
+        {
+          headers: {
+            'User-Agent': 'BingeList/1.0',
+          },
         }
-      })
-    
+      )
+
       return response
     } catch (error) {
       console.error('Error searching shows:', error)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to search shows'
+        statusMessage: 'Failed to search shows',
       })
     }
   },
@@ -40,7 +43,6 @@ export default cachedEventHandler(
       const searchQuery = query.q as string
       return `search-${searchQuery.toLowerCase()}`
     },
-    swr: true
+    swr: true,
   }
 )
-

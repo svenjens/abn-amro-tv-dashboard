@@ -1,4 +1,3 @@
-
 # TV Show Dashboard - Brand Assets
 
 Generated: 2025-11-16T14:53:31.893Z
@@ -21,22 +20,27 @@ Model: gpt-image-1
 ## Usage
 
 ### Favicon
+
 ```html
-<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" type="image/png" href="/favicon.png" />
 ```
 
 ### Apple Touch Icon
+
 ```html
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 ```
 
 ### Open Graph Image
+
 ```html
-<meta property="og:image" content="/og-image.png">
+<meta property="og:image" content="/og-image.png" />
 ```
 
 ### PWA Icons
+
 Add to manifest.json:
+
 ```json
 {
   "icons": [

@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-push checks..."
+
+# Check code formatting
+echo "💅 Checking Prettier formatting..."
+npx prettier --check . || {
+  echo "❌ Code is not formatted. Run 'npm run format' to fix."
+  exit 1
+}
+
+# Run linter
+echo "📝 Running ESLint..."
+npm run lint || exit 1
+
+# Run TypeScript type check
+echo "🔷 Running TypeScript check..."
+npx nuxi typecheck || exit 1
+
+# Run tests
+echo "🧪 Running tests..."
+npm run test || exit 1
+
+echo "✅ All pre-push checks passed!"
+

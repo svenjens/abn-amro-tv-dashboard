@@ -1,28 +1,45 @@
 /**
  * Nitro plugin to warm the cache with popular/important shows at server startup
  * This improves initial load times by pre-caching frequently accessed data
- * 
+ *
  * Strategy:
  * 1. Cache the all shows list (needed for homepage)
  * 2. Cache the first 6 shows from the top 5 genres (most visible on homepage)
  * 3. These are the shows users see first and click most often
  */
 
+/**
+ * Retry helper with exponential backoff
+ */
+async function fetchWithRetry(url: string, maxRetries = 3, baseDelay = 500): Promise<any> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await $fetch(url)
+    } catch (err) {
+      if (i === maxRetries - 1) throw err
+      // Exponential backoff: 500ms, 1000ms, 2000ms
+      const delay = baseDelay * Math.pow(2, i)
+      await new Promise((resolve) => setTimeout(resolve, delay))
+    }
+  }
+}
+
 export default defineNitroPlugin(async (_nitroApp) => {
-  // Only warm cache in production builds
-  if (import.meta.dev) {
-    console.log('[Cache Warming] Skipped in development mode')
+  // Skip cache warming during build time (Vercel build has no network access)
+  // Only run in actual runtime (after deployment)
+  if (import.meta.dev || import.meta.prerender) {
+    console.log('[Cache Warming] Skipped - not in production runtime')
     return
   }
 
   console.log('[Cache Warming] Starting cache warming...')
 
   try {
-    // Pre-fetch all shows list (homepage needs this)
-    const response = await $fetch<{ shows: any[]; showsByGenre: Record<string, any[]> }>('/api/shows').catch((err) => {
-      console.warn('[Cache Warming] Failed to warm shows list:', err.message)
+    // Pre-fetch all shows list (homepage needs this) with retry logic
+    const response = (await fetchWithRetry('/api/shows').catch((err) => {
+      console.warn('[Cache Warming] Failed to warm shows list after retries:', err.message)
       return null
-    })
+    })) as { shows: any[]; showsByGenre: Record<string, any[]> } | null
 
     if (!response || !response.shows || response.shows.length === 0) {
       console.warn('[Cache Warming] No shows data available')
@@ -32,8 +49,7 @@ export default defineNitroPlugin(async (_nitroApp) => {
     const showsByGenre = response.showsByGenre
 
     // Use pre-sorted genres from server response
-    const sortedGenres = Object.entries(showsByGenre)
-      .sort((a, b) => b[1].length - a[1].length)
+    const sortedGenres = Object.entries(showsByGenre).sort((a, b) => b[1].length - a[1].length)
 
     // Get the first 6 shows from the top 5 genres (these are visible on homepage)
     const showsToCache = new Set()
@@ -55,7 +71,7 @@ export default defineNitroPlugin(async (_nitroApp) => {
       335, // Sherlock
       67, // Westworld
     ]
-    alwaysPopular.forEach(id => showsToCache.add(id))
+    alwaysPopular.forEach((id) => showsToCache.add(id))
 
     // Warm cache for all selected shows with most common countries
     const countries = ['US', 'GB', 'NL'] // Most common visitor countries
@@ -64,8 +80,8 @@ export default defineNitroPlugin(async (_nitroApp) => {
     showsToCache.forEach((id) => {
       countries.forEach((country) => {
         warmPromises.push(
-          $fetch(`/api/shows/${id}?country=${country}`).catch(() => {
-            // Silently fail for individual shows
+          fetchWithRetry(`/api/shows/${id}?country=${country}`, 2, 300).catch(() => {
+            // Silently fail for individual shows after retries
           })
         )
       })
@@ -80,4 +96,3 @@ export default defineNitroPlugin(async (_nitroApp) => {
     console.error('[Cache Warming] Error during cache warming:', error)
   }
 })
-

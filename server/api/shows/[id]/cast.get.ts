@@ -6,27 +6,27 @@
 export default cachedEventHandler(
   async (event) => {
     const id = getRouterParam(event, 'id')
-  
+
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Show ID is required'
+        statusMessage: 'Show ID is required',
       })
     }
-  
+
     try {
       const response = await $fetch(`https://api.tvmaze.com/shows/${id}/cast`, {
         headers: {
-          'User-Agent': 'BingeList/1.0'
-        }
+          'User-Agent': 'BingeList/1.0',
+        },
       })
-    
+
       return response
     } catch (error) {
       console.error(`Error fetching cast for show ${id}:`, error)
       throw createError({
         statusCode: 404,
-        statusMessage: 'Cast not found'
+        statusMessage: 'Cast not found',
       })
     }
   },
@@ -38,7 +38,6 @@ export default cachedEventHandler(
       const id = getRouterParam(event, 'id')
       return `show-${id}-cast`
     },
-    swr: true
+    swr: true,
   }
 )
-

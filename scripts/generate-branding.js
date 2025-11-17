@@ -1,9 +1,9 @@
 /**
  * Brand Asset Generator using OpenAI gpt-image-1
- * 
+ *
  * Generates logo and brand assets for BingeList
  * Usage: OPENAI_API_KEY=your-key node scripts/generate-branding.js
- * 
+ *
  * Requires: OPENAI_API_KEY environment variable
  */
 
@@ -155,7 +155,7 @@ async function generateImage(config) {
   console.log(`\n🎨 Generating: ${config.name}...`)
   console.log(`   Size: ${config.size} | Quality: ${config.quality}`)
   console.log(`   Prompt: ${config.prompt.substring(0, 100)}...`)
-  
+
   try {
     const response = await openai.images.generate({
       model: 'gpt-image-1',
@@ -166,13 +166,13 @@ async function generateImage(config) {
     })
 
     const imageData = response.data[0]
-    
+
     if (!imageData) {
       throw new Error('No image data returned from API')
     }
-    
+
     let buffer
-    
+
     // gpt-image-1 returns base64, DALL-E returns URL
     if (imageData.b64_json) {
       // Base64 response
@@ -182,28 +182,28 @@ async function generateImage(config) {
       // URL response
       console.log(`   🌐 Downloading from URL...`)
       const imageResponse = await fetch(imageData.url)
-      
+
       if (!imageResponse.ok) {
         throw new Error(`Failed to download image: ${imageResponse.statusText}`)
       }
-      
+
       const arrayBuffer = await imageResponse.arrayBuffer()
       buffer = Buffer.from(arrayBuffer)
     } else {
       throw new Error('No image URL or base64 data returned from API')
     }
-    
+
     const filename = `${config.name}.png`
     const filepath = path.join(ASSETS_DIR, filename)
-    
+
     await fs.writeFile(filepath, buffer)
-    
+
     console.log(`   ✅ Saved: ${filename} (${(buffer.length / 1024).toFixed(2)} KB)`)
-    
+
     if (imageData.revised_prompt) {
       console.log(`   📝 Revised: ${imageData.revised_prompt.substring(0, 80)}...`)
     }
-    
+
     return {
       name: config.name,
       filename,
@@ -228,7 +228,7 @@ async function generateAllAssets() {
   console.log(`\n📁 Output directory: ${ASSETS_DIR}`)
   console.log(`🎨 Brand color: ${BRAND_STYLE.primary}`)
   console.log(`📊 Total assets to generate: ${ASSET_PROMPTS.length}\n`)
-  
+
   // Check for API key
   if (!process.env.OPENAI_API_KEY) {
     console.error('❌ Error: OPENAI_API_KEY environment variable is not set')
@@ -236,22 +236,22 @@ async function generateAllAssets() {
     console.error('   Or run: OPENAI_API_KEY=your-key node scripts/generate-branding.js')
     process.exit(1)
   }
-  
+
   // Create public directory if it doesn't exist
   await fs.mkdir(ASSETS_DIR, { recursive: true })
-  
+
   // Generate each asset
   const results = []
   const failed = []
-  
+
   for (let i = 0; i < ASSET_PROMPTS.length; i++) {
     const config = ASSET_PROMPTS[i]
     console.log(`\n[${i + 1}/${ASSET_PROMPTS.length}]`)
-    
+
     try {
       const result = await generateImage(config)
       results.push(result)
-      
+
       // Rate limiting - wait 2 seconds between requests
       if (i < ASSET_PROMPTS.length - 1) {
         console.log('   ⏳ Waiting 2s before next request...')
@@ -262,30 +262,30 @@ async function generateAllAssets() {
       failed.push(config.name)
     }
   }
-  
+
   // Summary
   console.log('\n' + '='.repeat(60))
   console.log('✨ Brand Asset Generation Complete!')
   console.log('='.repeat(60))
-  
+
   if (results.length > 0) {
     console.log(`\n📊 Successfully generated ${results.length}/${ASSET_PROMPTS.length} assets:\n`)
-    
+
     results.forEach((result) => {
       console.log(`   ✅ ${result.filename.padEnd(30)} ${(result.size / 1024).toFixed(2)} KB`)
     })
-    
+
     const totalSize = results.reduce((sum, r) => sum + r.size, 0)
     console.log(`\n💾 Total size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`)
   }
-  
+
   if (failed.length > 0) {
     console.log(`\n⚠️  Failed to generate ${failed.length} asset(s):`)
     failed.forEach((name) => console.log(`   ❌ ${name}`))
   }
-  
+
   console.log(`\n📂 Assets saved to: ${ASSETS_DIR}`)
-  
+
   // Create a metadata file
   const metadata = {
     generated_at: new Date().toISOString(),
@@ -301,14 +301,14 @@ async function generateAllAssets() {
       path: r.path, // Already relative from generateImage()
     })),
   }
-  
+
   await fs.writeFile(
     path.join(ASSETS_DIR, 'branding-metadata.json'),
     JSON.stringify(metadata, null, 2)
   )
-  
+
   console.log('\n✅ Metadata saved to public/branding-metadata.json')
-  
+
   // Generate usage instructions
   const instructions = `
 # TV Show Dashboard - Brand Assets
@@ -355,9 +355,9 @@ Add to manifest.json:
 - Primary Dark: ${BRAND_STYLE.primaryDark}
 - Accent: ${BRAND_STYLE.accent}
 `
-  
+
   await fs.writeFile(path.join(ASSETS_DIR, 'BRANDING.md'), instructions)
-  
+
   console.log('📝 Usage instructions saved to public/BRANDING.md')
   console.log('\n🎉 Done! Your TV Show Dashboard now has professional branding!\n')
 }

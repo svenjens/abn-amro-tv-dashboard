@@ -37,7 +37,7 @@
               'px-4 py-2 rounded-lg font-medium transition-all',
               !isSemanticMode
                 ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
             ]"
             @click="isSemanticMode = false"
           >
@@ -48,12 +48,17 @@
               'px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2',
               isSemanticMode
                 ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
             ]"
             @click="isSemanticMode = true"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              />
             </svg>
             {{ t('search.smart') }}
           </button>
@@ -82,7 +87,12 @@
             v-for="example in exampleQueries"
             :key="example"
             class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-sm"
-            @click="searchQuery = example; handleSearch(example)"
+            @click="
+              () => {
+                searchQuery = example
+                handleSearch(example)
+              }
+            "
           >
             {{ example }}
           </button>
@@ -90,10 +100,23 @@
       </div>
 
       <!-- Semantic Intent Display -->
-      <div v-if="semanticIntent && !semanticIntent.fallback" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+      <div
+        v-if="semanticIntent && !semanticIntent.fallback"
+        class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
+      >
         <div class="flex items-start gap-3">
-          <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <div class="flex-1">
             <p class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
@@ -202,22 +225,15 @@
 
       <!-- Initial State -->
       <div v-else class="text-center py-16">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              /optimized/empty-state-illustration-256.webp 256w,
-              /optimized/empty-state-illustration.webp     512w
-            "
-            sizes="192px"
-          >
-          <img
-            src="/optimized/empty-state-illustration.png"
-            alt=""
-            class="mx-auto h-48 w-48 object-contain opacity-50"
-            aria-hidden="true"
-          >
-        </picture>
+        <NuxtImg
+          src="/optimized/empty-state-illustration.png"
+          alt=""
+          class="mx-auto h-48 w-48 object-contain opacity-50"
+          aria-hidden="true"
+          width="192"
+          height="192"
+          loading="lazy"
+        />
         <h3 class="mt-6 text-lg font-medium text-gray-900">Start searching</h3>
         <p class="mt-2 text-gray-500">
           Enter a TV show name to search through our extensive database.
@@ -256,7 +272,7 @@ const exampleQueries = [
   'funny workplace comedies',
   'mystery series with strong female leads',
   'intense crime dramas',
-  'feel-good family shows'
+  'feel-good family shows',
 ]
 
 // Apply filters to search results
@@ -297,7 +313,11 @@ async function handleSearch(query: string) {
 
   // Update URL query parameter
   if (query) {
-    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}&mode=${isSemanticMode.value ? 'smart' : 'regular'}`))
+    navigateTo(
+      localePath(
+        `/search?q=${encodeURIComponent(query)}&mode=${isSemanticMode.value ? 'smart' : 'regular'}`
+      )
+    )
   }
 
   if (isSemanticMode.value) {
@@ -306,27 +326,26 @@ async function handleSearch(query: string) {
   } else {
     // Regular keyword search
     semanticIntent.value = null
-  await searchStore.search(query)
+    await searchStore.search(query)
   }
 }
 
 async function handleSemanticSearch(query: string) {
   isSemanticLoading.value = true
   semanticIntent.value = null
-  
+
   try {
     const response = await $fetch<{ results: any[]; intent: any }>('/api/search/semantic', {
       method: 'POST',
-      body: { query }
+      body: { query },
     })
-    
+
     // Store intent for display
     semanticIntent.value = response.intent
-    
+
     // Update search store with results
     const shows = response.results.map((r: any) => r.show)
     searchStore.setResults(shows)
-    
   } catch (error) {
     console.error('Semantic search failed:', error)
     // Fallback to regular search
@@ -352,21 +371,21 @@ onMounted(() => {
   // Load search from URL query parameter
   const query = route.query.q
   const mode = route.query.mode
-  
+
   // Set search mode from URL parameter
   if (mode === 'smart') {
     isSemanticMode.value = true
   } else {
     isSemanticMode.value = false
   }
-  
+
   if (typeof query === 'string' && query) {
     searchQuery.value = query
     // Trigger search with the appropriate mode
     if (isSemanticMode.value) {
       handleSemanticSearch(query)
     } else {
-    searchStore.search(query)
+      searchStore.search(query)
     }
   }
 

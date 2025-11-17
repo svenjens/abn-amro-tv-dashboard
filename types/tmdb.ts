@@ -1,6 +1,6 @@
 /**
  * TMDB API Types
- * 
+ *
  * Types for The Movie Database API integration
  * Used for fetching multi-platform streaming availability
  */
@@ -68,4 +68,3 @@ export interface TMDBError {
   status_message: string
   success: boolean
 }
-

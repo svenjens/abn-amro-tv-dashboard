@@ -15,6 +15,7 @@ Your ultimate TV show discovery and tracking platform. Built with **Nuxt 4**, Ty
 ## ⚡ Performance & Architecture
 
 This version uses **Nuxt 4** with:
+
 - 🚀 **Server-Side Rendering (SSR)** for better SEO and initial load
 - 💾 **Multi-layer caching** (Server + Route + Client) with 48x faster response times
 - 🔥 **Cache warming** for instant first-page loads
@@ -28,36 +29,39 @@ This version uses **Nuxt 4** with:
 The application includes subtle, performant micro-animations that enhance UX:
 
 - **Page Load Animations**: Smooth fade-in and slide-up transitions using VueUse Motion
-- **Card Hover Effects**: 
+- **Card Hover Effects**:
   - Scale and lift effect on show cards with isolated hover states
   - Image zoom on hover
   - Rating badge rotation and scale
   - Title color transition
-- **Search Bar**: 
+- **Search Bar**:
   - Smooth dropdown transitions for recent searches
   - Focus state with shadow effect
   - Slide animation on list items
-- **Button Interactions**: 
+- **Button Interactions**:
   - Active scale-down effect on clicks
   - Hover shadow transitions
-- **Loading States**: 
+- **Loading States**:
   - Fade-in animations
   - Shimmer skeleton loaders for content placeholders
 - **Staggered Animations**: Sequential fade-in for lists
 - **Smooth Scrolling**: HTML scroll-behavior for anchor links
 
 **Animation Principles:**
+
 - ⚡ **Performance-first**: GPU-accelerated transforms and opacity
 - ♿ **Accessible**: Respects `prefers-reduced-motion` where applicable
 - 🎯 **Purposeful**: Every animation serves a UX purpose
 - ⏱️ **Timing**: Carefully tuned duration (150-400ms) for responsiveness
 
 **Libraries Used:**
+
 - **@vueuse/motion**: Declarative animation directives (`v-motion`)
 - **Tailwind CSS Transitions**: Utility-based micro-interactions
 - **Custom CSS Keyframes**: Specialized animations (shimmer, bounce, fade-in)
 
 **Implementation Example:**
+
 ```vue
 <!-- Animated show card with isolated hover using named groups -->
 <div
@@ -72,6 +76,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 ```
 
 ### Core Functionality
+
 - **Genre-Based Browsing**: Browse TV shows organized by genre with horizontal scrollable lists
 - **Show Details**: View comprehensive information about each show including ratings, schedule, and summary
 - **Search Functionality**: Search for TV shows by name with real-time results
@@ -82,6 +87,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Monetization**: Google AdSense integration for sustainable development
 
 ### Internationalization (i18n)
+
 - **Multi-language Support**: Full support for English, Dutch, and Spanish
 - **Locale-based Routing**: SEO-friendly URLs with locale prefixes (`/en/`, `/nl/`, `/es/`)
 - **Browser Language Detection**: Automatically detects and redirects to user's preferred language
@@ -89,6 +95,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Translated Content**: All UI elements, labels, and messages in three languages
 
 ### Accessibility (a11y)
+
 - **WCAG 2.1 AA Compliant**: Follows web accessibility standards
 - **Keyboard Navigation**: Full keyboard support with visible focus indicators
 - **Screen Reader Support**: ARIA labels, roles, and landmarks throughout
@@ -97,6 +104,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Focus Management**: Logical tab order and focus trapping where needed
 
 ### SEO Optimization
+
 - **Locale-based URLs**: Clean URLs with language prefixes for better indexing
 - **Hreflang Tags**: Automatic hreflang tags for multilingual content
 - **Meta Tags**: Complete Open Graph and Twitter Card support
@@ -105,6 +113,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Dynamic Meta Updates**: Page-specific meta tags for each route
 
 ### Technical Excellence
+
 - **Responsive Design**: Fully responsive UI that works seamlessly on all devices
 - **Performance Optimized**: API caching, lazy loading, code splitting
 - **Type-Safe**: Full TypeScript implementation with strict mode
@@ -162,12 +171,14 @@ VITE_AMAZON_ASSOCIATE_TAG=your-tag-20
 ```
 
 **Get your free TMDB API key:**
+
 1. Sign up at [themoviedb.org](https://www.themoviedb.org/)
 2. Go to Settings → API
 3. Request an API key (free, no credit card required)
 4. Copy your API key to `.env`
 
-> **Note**: 
+> **Note**:
+>
 > - TMDB API is free with 40 requests per 10 seconds
 > - Without TMDB key, only webChannel streaming data will be shown
 > - Ads only appear in production builds (`npm run build && npm run preview`)
@@ -224,21 +235,23 @@ The streaming availability feature shows where shows can be watched online. Curr
 
 **Test Cases:**
 
-| Show | webChannel | Result | Use Case |
-|------|------------|--------|----------|
-| **Stranger Things** | Netflix | ✅ Shows Netflix | Netflix Original |
-| **The Boys** | Amazon Prime Video | ✅ Shows Amazon Prime | Prime Original |
-| **The Mandalorian** | Disney+ | ✅ Shows Disney+ | Disney+ Original |
-| **Game of Thrones** | HBO Max | ✅ Shows HBO Max | HBO Original |
-| **Under the Dome** | CBS | ❌ No streaming | Network TV (no webChannel streaming) |
-| **Breaking Bad** | AMC | ❌ No streaming | Network TV (requires external API) |
+| Show                | webChannel         | Result                | Use Case                             |
+| ------------------- | ------------------ | --------------------- | ------------------------------------ |
+| **Stranger Things** | Netflix            | ✅ Shows Netflix      | Netflix Original                     |
+| **The Boys**        | Amazon Prime Video | ✅ Shows Amazon Prime | Prime Original                       |
+| **The Mandalorian** | Disney+            | ✅ Shows Disney+      | Disney+ Original                     |
+| **Game of Thrones** | HBO Max            | ✅ Shows HBO Max      | HBO Original                         |
+| **Under the Dome**  | CBS                | ❌ No streaming       | Network TV (no webChannel streaming) |
+| **Breaking Bad**    | AMC                | ❌ No streaming       | Network TV (requires external API)   |
 
 **Empty State Testing:**
+
 - Navigate to shows without a `webChannel` property to test the "not available" message
 - Example shows: "Breaking Bad", "The Office", "Friends"
 
 **Future Enhancement:**
 To show multi-platform availability (e.g., a show on both Netflix and Hulu), we would need to integrate with:
+
 - Streaming Availability API
 - JustWatch API (deprecated)
 - TMDB (limited streaming data)
@@ -247,22 +260,22 @@ To show multi-platform availability (e.g., a show on both Netflix and Hulu), we 
 
 ### Technology Stack
 
-| Technology | Purpose | Justification |
-|------------|---------|---------------|
-| **Nuxt 4** | Meta-framework | SSR, file-based routing, auto-imports, and better SEO out of the box |
-| **Vue 3** | Frontend framework | Latest version with Composition API for better TypeScript support and code reusability |
-| **TypeScript** | Type safety | Ensures code quality, better IDE support, and fewer runtime errors |
-| **Vite** | Build tool | Fast development server, optimized builds, and native ES modules support |
-| **Tailwind CSS** | Styling | Utility-first approach enables rapid development with consistent design |
-| **Pinia** | State management | Official Vue 3 store with simpler API than Vuex and excellent TypeScript support |
-| **@nuxtjs/i18n** | Internationalization | Official Nuxt module with automatic route generation and SSR support |
-| **@nuxt/image** | Image optimization | Automatic WebP conversion, lazy loading, and responsive images |
-| **@nuxtjs/color-mode** | Dark mode | Automatic dark mode with system preference detection |
-| **@nuxt/icon** | Icons | Access to 200,000+ icons from Iconify |
-| **@nuxtjs/sitemap** | SEO | Automatic sitemap generation for better search engine indexing |
-| **@nuxtjs/robots** | SEO | Automatic robots.txt management |
-| **@nuxt/scripts** | Third-party scripts | Optimized loading of Google Analytics and other external scripts |
-| **Vitest** | Testing framework | Fast, Vite-native testing with excellent Vue component testing support |
+| Technology             | Purpose              | Justification                                                                          |
+| ---------------------- | -------------------- | -------------------------------------------------------------------------------------- |
+| **Nuxt 4**             | Meta-framework       | SSR, file-based routing, auto-imports, and better SEO out of the box                   |
+| **Vue 3**              | Frontend framework   | Latest version with Composition API for better TypeScript support and code reusability |
+| **TypeScript**         | Type safety          | Ensures code quality, better IDE support, and fewer runtime errors                     |
+| **Vite**               | Build tool           | Fast development server, optimized builds, and native ES modules support               |
+| **Tailwind CSS**       | Styling              | Utility-first approach enables rapid development with consistent design                |
+| **Pinia**              | State management     | Official Vue 3 store with simpler API than Vuex and excellent TypeScript support       |
+| **@nuxtjs/i18n**       | Internationalization | Official Nuxt module with automatic route generation and SSR support                   |
+| **@nuxt/image**        | Image optimization   | Automatic WebP conversion, lazy loading, and responsive images                         |
+| **@nuxtjs/color-mode** | Dark mode            | Automatic dark mode with system preference detection                                   |
+| **@nuxt/icon**         | Icons                | Access to 200,000+ icons from Iconify                                                  |
+| **@nuxtjs/sitemap**    | SEO                  | Automatic sitemap generation for better search engine indexing                         |
+| **@nuxtjs/robots**     | SEO                  | Automatic robots.txt management                                                        |
+| **@nuxt/scripts**      | Third-party scripts  | Optimized loading of Google Analytics and other external scripts                       |
+| **Vitest**             | Testing framework    | Fast, Vite-native testing with excellent Vue component testing support                 |
 
 ### Project Structure
 
@@ -353,11 +366,11 @@ Pinia offers a simpler, more intuitive API than Vuex, with better TypeScript sup
 export const useShowsStore = defineStore('shows', () => {
   const allShows = ref<Show[]>([])
   const loading = ref(false)
-  
+
   async function fetchAllShows() {
     // ... implementation
   }
-  
+
   return { allShows, loading, fetchAllShows }
 })
 ```
@@ -365,6 +378,7 @@ export const useShowsStore = defineStore('shows', () => {
 #### 3. **Service Layer Pattern**
 
 API calls are centralized in a service layer, providing:
+
 - Single source of truth for API endpoints
 - Centralized error handling
 - Response caching to minimize API calls
@@ -374,7 +388,7 @@ API calls are centralized in a service layer, providing:
 // Example: API service with caching
 class TVMazeAPI {
   private cache: Map<string, { data: unknown; timestamp: number }>
-  
+
   async fetchAllShows(): Promise<Show[]> {
     // Check cache first, then fetch if needed
   }
@@ -392,6 +406,7 @@ Full type safety throughout the application catches errors at compile time and p
 #### 6. **Component-Based Architecture**
 
 Small, focused, reusable components follow the Single Responsibility Principle:
+
 - `ShowCard` - Display a single show
 - `GenreRow` - Display a row of shows for a genre
 - `SearchBar` - Search input with debouncing
@@ -410,21 +425,19 @@ Since the TVMaze API doesn't provide a dedicated genre endpoint:
 ```typescript
 export function groupShowsByGenre(shows: Show[]): ShowsByGenre {
   const grouped: ShowsByGenre = {}
-  
+
   shows.forEach((show) => {
     show.genres.forEach((genre) => {
       if (!grouped[genre]) grouped[genre] = []
       grouped[genre].push(show)
     })
   })
-  
+
   // Sort by rating within each genre
   Object.keys(grouped).forEach((genre) => {
-    grouped[genre].sort((a, b) => 
-      (b.rating?.average || 0) - (a.rating?.average || 0)
-    )
+    grouped[genre].sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0))
   })
-  
+
   return grouped
 }
 ```
@@ -436,7 +449,7 @@ export function groupShowsByGenre(shows: Show[]): ShowsByGenre {
 - **Mobile-first approach**: Base styles target mobile, with progressive enhancement for larger screens
 - **Horizontal scrolling on desktop**: Natural browsing experience similar to Netflix/Disney+
 - **Grid layout on mobile**: Better touch interaction and visibility
-- **Breakpoints**: 
+- **Breakpoints**:
   - Mobile: < 768px
   - Tablet: 768px - 1024px
   - Desktop: > 1024px
@@ -548,6 +561,7 @@ Potential features for future iterations:
 ### Node Version
 
 This project was developed and tested with:
+
 - Node.js v18.19.0
 - npm v9.8.1
 
@@ -577,12 +591,14 @@ The application supports multiple languages with locale-based routing:
 - **Dutch (nl)**: `https://example.com/nl/`
 
 Language preference is:
+
 1. Detected from URL path
 2. Loaded from localStorage
 3. Falls back to browser language
 4. Defaults to English
 
 ### SEO Benefits
+
 - Locale prefixes in URLs for better indexing
 - Automatic hreflang tags for language variants
 - x-default tag pointing to English version
@@ -595,7 +611,9 @@ The application is built with accessibility as a core principle, following WCAG 
 ### Implemented Accessibility Features
 
 #### 1. **Keyboard Navigation**
+
 All interactive elements are fully accessible via keyboard:
+
 - **Tab**: Navigate to next focusable element
 - **Shift + Tab**: Navigate to previous focusable element
 - **Enter/Space**: Activate buttons and links
@@ -603,47 +621,61 @@ All interactive elements are fully accessible via keyboard:
 - **Escape**: Close modals and overlays
 
 Visible focus indicators with clear outlines:
+
 ```css
 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2
 ```
 
 #### 2. **Skip to Content Link**
+
 A "Skip to main content" link appears when pressing Tab, allowing keyboard users to bypass navigation:
+
 ```vue
 <SkipToContent />
 <!-- Becomes visible on focus, jumps to #main-content -->
 ```
 
 #### 3. **ARIA Labels and Roles**
+
 Comprehensive ARIA implementation throughout:
 
 **Landmarks:**
+
 ```html
-<div role="banner">        <!-- Header/Hero section -->
-<main id="main-content">   <!-- Main content area -->
-<nav aria-label="Pagination navigation">  <!-- Navigation -->
-<section aria-label="Related Shows">      <!-- Content sections -->
+<div role="banner">
+  <!-- Header/Hero section -->
+  <main id="main-content">
+    <!-- Main content area -->
+    <nav aria-label="Pagination navigation">
+      <!-- Navigation -->
+      <section aria-label="Related Shows"><!-- Content sections --></section>
+    </nav>
+  </main>
+</div>
 ```
 
 **Interactive Elements:**
+
 ```html
 <button aria-label="Previous page">
-<button aria-label="Toggle language">
-<a aria-label="Official Website - Opens in new window">
-<div role="status" aria-live="polite">  <!-- For loading states -->
+  <button aria-label="Toggle language">
+    <a aria-label="Official Website - Opens in new window">
+      <div role="status" aria-live="polite"><!-- For loading states --></div></a
+    >
+  </button>
+</button>
 ```
 
 **Form Controls:**
+
 ```html
-<input 
-  type="search" 
-  aria-label="Search TV shows"
-  aria-describedby="search-help"
-/>
+<input type="search" aria-label="Search TV shows" aria-describedby="search-help" />
 ```
 
 #### 4. **Semantic HTML**
+
 Proper use of HTML5 semantic elements:
+
 - `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`
 - `<h1>` through `<h6>` in logical hierarchy
 - `<dl>`, `<dt>`, `<dd>` for definition lists (show details)
@@ -651,6 +683,7 @@ Proper use of HTML5 semantic elements:
 - `<button>` for actions, `<a>` for navigation
 
 #### 5. **Screen Reader Support**
+
 - All images have descriptive `alt` attributes
 - Decorative images use `aria-hidden="true"`
 - Icon-only buttons have `aria-label`
@@ -658,12 +691,9 @@ Proper use of HTML5 semantic elements:
 - Loading states announced to screen readers
 
 Example:
+
 ```vue
-<img 
-  :src="show.image" 
-  :alt="`${show.name} poster`"
-  loading="lazy"
-/>
+<img :src="show.image" :alt="`${show.name} poster`" loading="lazy" />
 
 <svg aria-hidden="true">  <!-- Decorative icon -->
   <path d="..." />
@@ -671,18 +701,22 @@ Example:
 ```
 
 #### 6. **Color Contrast**
+
 All text meets WCAG AA standards:
+
 - **Normal text**: Minimum 4.5:1 contrast ratio
 - **Large text**: Minimum 3:1 contrast ratio
 - **Interactive elements**: Clear visual states (hover, focus, active)
 
 #### 7. **Form Accessibility**
+
 - Labels associated with inputs
 - Error messages linked with `aria-describedby`
 - Required fields marked with `aria-required`
 - Invalid states indicated with `aria-invalid`
 
 #### 8. **Responsive Focus Management**
+
 - Focus moves logically through the page
 - No keyboard traps
 - Focus returns to trigger element when closing modals
@@ -691,6 +725,7 @@ All text meets WCAG AA standards:
 ### Testing Accessibility
 
 #### Automated Testing
+
 ```bash
 # Install axe DevTools browser extension
 # Or use pa11y CLI
@@ -704,6 +739,7 @@ pa11y http://localhost:5173/en/
 #### Manual Testing Checklist
 
 **Keyboard Navigation:**
+
 - [ ] Can navigate entire site with keyboard only
 - [ ] All interactive elements are reachable
 - [ ] Focus indicators are clearly visible
@@ -711,20 +747,23 @@ pa11y http://localhost:5173/en/
 - [ ] Tab order is logical
 
 **Screen Readers:**
+
 - [ ] Test with NVDA (Windows)
-- [ ] Test with JAWS (Windows)  
+- [ ] Test with JAWS (Windows)
 - [ ] Test with VoiceOver (macOS/iOS)
 - [ ] Test with TalkBack (Android)
 - [ ] All content is announced correctly
 - [ ] Landmarks are properly identified
 
 **Visual Testing:**
+
 - [ ] Zoom to 200% - content still readable
 - [ ] High contrast mode works
 - [ ] No content loss at different zoom levels
 - [ ] Focus indicators visible in high contrast mode
 
 **Tools to Use:**
+
 - [axe DevTools](https://www.deque.com/axe/devtools/) - Browser extension
 - [WAVE](https://wave.webaim.org/) - Web accessibility evaluation tool
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse) - Built into Chrome
@@ -733,15 +772,15 @@ pa11y http://localhost:5173/en/
 
 ### Accessibility Keyboard Shortcuts
 
-| Action | Shortcut |
-|--------|----------|
-| Skip to main content | Tab (from top of page) |
-| Navigate forward | Tab |
-| Navigate backward | Shift + Tab |
-| Activate link/button | Enter or Space |
-| Scroll horizontally | Arrow keys (in carousel) |
-| Search | Focus search box + type |
-| Change language | Tab to language switcher + Enter |
+| Action               | Shortcut                         |
+| -------------------- | -------------------------------- |
+| Skip to main content | Tab (from top of page)           |
+| Navigate forward     | Tab                              |
+| Navigate backward    | Shift + Tab                      |
+| Activate link/button | Enter or Space                   |
+| Scroll horizontally  | Arrow keys (in carousel)         |
+| Search               | Focus search box + type          |
+| Change language      | Tab to language switcher + Enter |
 
 ### Known Accessibility Considerations
 
@@ -753,6 +792,7 @@ pa11y http://localhost:5173/en/
 ### Continuous Improvement
 
 We welcome feedback on accessibility! If you encounter any barriers, please:
+
 1. Open an issue on GitHub
 2. Describe the barrier and context
 3. Include your assistive technology (if applicable)
@@ -777,8 +817,6 @@ Quick start for contributors:
 4. Follow conventional commit messages
 5. Ensure all tests pass and build works
 6. Push to your fork and submit a pull request
-
-
 
 ## 📞 Support
 

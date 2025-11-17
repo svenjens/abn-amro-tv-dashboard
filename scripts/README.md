@@ -9,16 +9,19 @@ This directory contains utility scripts for the BingeList project.
 Analyzes the Vite build output and generates a comprehensive bundle size report.
 
 **Usage:**
+
 ```bash
 npm run build
 npm run analyze:bundle
 ```
 
 **Output:**
+
 - Console output with bundle statistics
 - `bundle-report.json` - Detailed JSON report with all metrics
 
 **Features:**
+
 - Total bundle size (raw + gzipped)
 - JavaScript and CSS breakdown
 - Individual chunk sizes
@@ -26,6 +29,7 @@ npm run analyze:bundle
 - File count statistics
 
 **Example Output:**
+
 ```
 📊 Bundle Analysis Summary
 ==================================================
@@ -50,6 +54,7 @@ npm run analyze:bundle
 Compares two bundle reports and generates a diff with visual indicators.
 
 **Usage:**
+
 ```bash
 # Compare current build with base
 npm run compare:bundle [base-report.json] [head-report.json]
@@ -60,10 +65,12 @@ npm run compare:bundle [base-report.json] [head-report.json]
 ```
 
 **Output:**
+
 - Console output with comparison tables
 - `bundle-comparison.md` - Markdown report for PR comments
 
 **Features:**
+
 - Size changes (increases/decreases)
 - Percentage changes
 - Visual indicators (📈 increase, 📉 decrease, ✅ minimal)
@@ -71,16 +78,17 @@ npm run compare:bundle [base-report.json] [head-report.json]
 - Top changed chunks
 
 **Example Output:**
+
 ```markdown
 ## 📦 Bundle Size Report
 
 ### Total Bundle Size
 
-| Metric | Base | Head | Change |
-|--------|------|------|--------|
-| Size | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
-| Gzip | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
-| Files | 27 | 28 | 📈 +1 (3.70%) |
+| Metric | Base      | Head      | Change              |
+| ------ | --------- | --------- | ------------------- |
+| Size   | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
+| Gzip   | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
+| Files  | 27        | 28        | 📈 +1 (3.70%)       |
 ```
 
 ---
@@ -92,16 +100,19 @@ npm run compare:bundle [base-report.json] [head-report.json]
 Generates all branding assets using OpenAI's image generation API.
 
 **Prerequisites:**
+
 ```bash
 export OPENAI_API_KEY="your-api-key"
 ```
 
 **Usage:**
+
 ```bash
 npm run generate:branding
 ```
 
 **Generated Assets:**
+
 - Logo (main icon)
 - Full logo with text
 - Hero background
@@ -114,6 +125,7 @@ npm run generate:branding
 
 **Configuration:**
 Edit `BRAND_STYLE` in the script to customize:
+
 - Primary colors
 - Accent colors
 - Design style
@@ -125,11 +137,13 @@ Edit `BRAND_STYLE` in the script to customize:
 Optimizes images using Sharp (converts to WebP, resizes, etc.).
 
 **Usage:**
+
 ```bash
 npm run optimize:images
 ```
 
 **Features:**
+
 - WebP conversion
 - Multiple size variants (64px, 128px, 256px, original)
 - Preserves original PNG files
@@ -144,20 +158,24 @@ npm run optimize:images
 Generates a dynamic sitemap with all shows and pages.
 
 **Usage:**
+
 ```bash
 npm run generate:sitemap
 ```
 
 **Output:**
+
 - `public/sitemap.xml` - Complete sitemap for search engines
 
 **Features:**
+
 - Dynamic show URLs with SEO-friendly slugs
 - Static pages (home, search, watchlist, roadmap)
 - Multi-language support
 - Priority and update frequency metadata
 
 **Configuration:**
+
 - Base URL: `https://bingelist.app`
 - Languages: `en`, `nl`
 - Update frequency: weekly (shows), daily (static pages)
@@ -174,6 +192,7 @@ The bundle analysis scripts are integrated into the CI/CD pipeline:
 2. **PR Comment Job** - Compares bundle sizes and posts results to PR
 
 **Workflow:**
+
 1. Build application
 2. Run `analyze-bundle.js`
 3. Upload bundle report as artifact
@@ -186,6 +205,7 @@ The bundle analysis scripts are integrated into the CI/CD pipeline:
    - Changed/added/removed chunks
 
 **Example PR Comment:**
+
 ```markdown
 ## 🚀 Deployment Preview
 
@@ -203,16 +223,16 @@ Current coverage: **78.5%**
 
 ### Total Bundle Size
 
-| Metric | Base | Head | Change |
-|--------|------|------|--------|
-| Size | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
-| Gzip | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
+| Metric | Base      | Head      | Change              |
+| ------ | --------- | --------- | ------------------- |
+| Size   | 406.53 KB | 410.25 KB | 📈 +3.72 KB (0.91%) |
+| Gzip   | 143.56 KB | 145.12 KB | 📈 +1.56 KB (1.09%) |
 
 ### 📝 Changed Chunks
 
-| File | Base (gzip) | Head (gzip) | Change |
-|------|-------------|-------------|--------|
-| `ShowDetail-abc123.js` | 5.5 KB | 6.2 KB | 📈 +0.7 KB (12.73%) |
+| File                   | Base (gzip) | Head (gzip) | Change              |
+| ---------------------- | ----------- | ----------- | ------------------- |
+| `ShowDetail-abc123.js` | 5.5 KB      | 6.2 KB      | 📈 +0.7 KB (12.73%) |
 
 ---
 
@@ -237,6 +257,7 @@ Current coverage: **78.5%**
 **Issue:** `dist/` directory not found
 
 **Solution:**
+
 ```bash
 npm run build
 npm run analyze:bundle
@@ -247,6 +268,7 @@ npm run analyze:bundle
 **Issue:** Base report is missing or identical
 
 **Solution:**
+
 ```bash
 # Manually create base report from current build
 cp bundle-report.json base-bundle-report.json
@@ -259,6 +281,7 @@ cp bundle-report.json base-bundle-report.json
 **Issue:** API key not set or invalid
 
 **Solution:**
+
 ```bash
 export OPENAI_API_KEY="your-actual-key"
 npm run generate:branding
