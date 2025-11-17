@@ -1,5 +1,54 @@
 # Changelog
 
+## [3.0.0](https://github.com/svenjens/tv-show-dashboard/compare/v2.0.0...v3.0.0) (2025-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Replaced custom regex-based HTML sanitizer with proven sanitize-html library
+* Replaced custom regex-based HTML sanitizer with proven sanitize-html library
+* Replaced custom regex-based HTML sanitizer with proven sanitize-html library
+* Replaced custom regex-based HTML sanitizer with proven sanitize-html library
+* Requires Nuxt 4 for import.meta.* support
+
+### Features
+
+* add dynamic favicons based on color scheme ([bd5bb02](https://github.com/svenjens/tv-show-dashboard/commit/bd5bb02a3418152e6db2460434ec3aa1e88309e5))
+* add nuxt eslint configuration and fix linting issues ([78d63f5](https://github.com/svenjens/tv-show-dashboard/commit/78d63f531d3e2a39cbb034ba308ae6bad75deabd))
+* add pre-push git hooks for quality checks ([46340e1](https://github.com/svenjens/tv-show-dashboard/commit/46340e143250ba7d39da54f7e2541321df2b29c5))
+* add pre-push git hooks for quality checks ([60da947](https://github.com/svenjens/tv-show-dashboard/commit/60da947b87f8e141a62a0afd265d7c4bb506e161))
+* add pre-push git hooks for quality checks ([3ee9773](https://github.com/svenjens/tv-show-dashboard/commit/3ee9773e7041e1584c2c66c7fbc15d88058ab8ef))
+* add pre-push git hooks for quality checks ([0fa258c](https://github.com/svenjens/tv-show-dashboard/commit/0fa258cd293199b7450ba44413accb50ba1dbb91))
+* add server-side genre grouping and rating sort ([7ca2623](https://github.com/svenjens/tv-show-dashboard/commit/7ca26234b974a63a13d59965eb2d18201f4c590e))
+* add spanish language option to footer ([25c06a1](https://github.com/svenjens/tv-show-dashboard/commit/25c06a12051abcf4e0f5d9f4b1a5cdb2ae9a54b3))
+* add vercel analytics and speed insights ([b8f8d1d](https://github.com/svenjens/tv-show-dashboard/commit/b8f8d1d169e8e6aa79017873862e5fce2994f144))
+* implement browser language detection with prefix strategy ([#57](https://github.com/svenjens/tv-show-dashboard/issues/57)) ([1c92ed6](https://github.com/svenjens/tv-show-dashboard/commit/1c92ed6312ea61d4737c6a03a7c978ed7e47ccea))
+* preserve search query when navigating to search page ([cd004c6](https://github.com/svenjens/tv-show-dashboard/commit/cd004c6e3f08040631c129d0a68a5035766b4f20))
+
+
+### Bug Fixes
+
+* improve search mode info visibility when switching with existing query ([#56](https://github.com/svenjens/tv-show-dashboard/issues/56)) ([97de1b1](https://github.com/svenjens/tv-show-dashboard/commit/97de1b1f46275a3357556169f9c13a10729ffb92))
+* prevent 500 errors in API cache keys ([#53](https://github.com/svenjens/tv-show-dashboard/issues/53)) ([3ee9773](https://github.com/svenjens/tv-show-dashboard/commit/3ee9773e7041e1584c2c66c7fbc15d88058ab8ef))
+* resolve all eslint warnings and unused variables ([d3f0b5a](https://github.com/svenjens/tv-show-dashboard/commit/d3f0b5a407365c81322865471b9388c9ea4628c4))
+* resolve all remaining TypeScript errors ([81f4ee8](https://github.com/svenjens/tv-show-dashboard/commit/81f4ee85f3e4e24a37576c5bf0671627b68a275f))
+* resolve coverage artifact upload error with invalid filenames ([3db6abe](https://github.com/svenjens/tv-show-dashboard/commit/3db6abee67e0cde267f14b815a71602bff77721f))
+* resolve remaining typescript config errors ([f6a2f32](https://github.com/svenjens/tv-show-dashboard/commit/f6a2f326ef367a9e3f0362c343cf70e626425120))
+* resolve typescript and linting errors ([aaf7a2b](https://github.com/svenjens/tv-show-dashboard/commit/aaf7a2bb4f5e4104ab9c712c63f073a09755cd01))
+* resolve useLocation test failures with resetLocation helper ([6b98e84](https://github.com/svenjens/tv-show-dashboard/commit/6b98e84a497309009b79eddada0cf7a911b84b09))
+* Resolve Vercel serverless environment errors ([#52](https://github.com/svenjens/tv-show-dashboard/issues/52)) ([0fa258c](https://github.com/svenjens/tv-show-dashboard/commit/0fa258cd293199b7450ba44413accb50ba1dbb91))
+* simplify cache warming to prevent TVMaze rate limiting ([#54](https://github.com/svenjens/tv-show-dashboard/issues/54)) ([60da947](https://github.com/svenjens/tv-show-dashboard/commit/60da947b87f8e141a62a0afd265d7c4bb506e161))
+* transform TMDB provider data to correct StreamingAvailability interface ([88ec8b2](https://github.com/svenjens/tv-show-dashboard/commit/88ec8b25ae1db49f4431318061b8f6a342a20bfc))
+* update cache warming to handle new API response structure ([264902b](https://github.com/svenjens/tv-show-dashboard/commit/264902bbc7c0acde5a2df3df834a92474837f15b))
+* update deprecated release-please action ([000ab4d](https://github.com/svenjens/tv-show-dashboard/commit/000ab4d9f4fd0b133255f8e639dc632cb126aff2))
+* update tests for new API response structure and add color mode mock ([1c5a0de](https://github.com/svenjens/tv-show-dashboard/commit/1c5a0deae0e8b165531f8f99f64b02f3ba1c63c1))
+* use innerHTML instead of children for script structured data ([9148eae](https://github.com/svenjens/tv-show-dashboard/commit/9148eaeb9a603f84a1b9d28a34314378172838cb))
+
+
+### Code Refactoring
+
+* upgrade to nuxt 4 patterns ([048c602](https://github.com/svenjens/tv-show-dashboard/commit/048c602b70bc3b9aff5e0672b2f22019d6e6a2f0))
+
 ## [2.0.0](https://github.com/svenjens/tv-show-dashboard/compare/v1.17.0...v2.0.0) (2025-11-17)
 
 ### ⚠ BREAKING CHANGES
