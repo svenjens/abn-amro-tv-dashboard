@@ -151,7 +151,7 @@ Always return valid JSON. Be creative with search terms to maximize results.`
         })),
         total: fallbackResults.length
       }
-    } catch (fallbackError) {
+    } catch {
       throw createError({
         statusCode: 500,
         statusMessage: 'Search failed'

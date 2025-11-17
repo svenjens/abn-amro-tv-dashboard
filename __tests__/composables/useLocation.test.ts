@@ -18,7 +18,7 @@ describe('useLocation', () => {
     // Reset useState by clearing the global state
     // This is a workaround for Nuxt's useState in tests
     if (global.nuxt) {
-      // @ts-ignore
+      // @ts-ignore - Nuxt global is not fully typed in test environment
       global.nuxt.payload.state = {}
     }
   })

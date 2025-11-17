@@ -29,7 +29,6 @@ export default defineNitroPlugin(async (_nitroApp) => {
       return
     }
 
-    const allShows = response.shows
     const showsByGenre = response.showsByGenre
 
     // Use pre-sorted genres from server response

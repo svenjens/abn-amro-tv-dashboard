@@ -287,7 +287,6 @@
 import { ref, computed, watch } from 'vue'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import type { Show, Episode, CastMember } from '@/types'
 import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import RatingBadge from '@/components/RatingBadge.vue'
