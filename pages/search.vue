@@ -353,9 +353,23 @@ watch(
 onMounted(() => {
   // Load search from URL query parameter
   const query = route.query.q
+  const mode = route.query.mode
+  
+  // Set search mode from URL parameter
+  if (mode === 'smart') {
+    isSemanticMode.value = true
+  } else {
+    isSemanticMode.value = false
+  }
+  
   if (typeof query === 'string' && query) {
     searchQuery.value = query
-    searchStore.search(query)
+    // Trigger search with the appropriate mode
+    if (isSemanticMode.value) {
+      handleSemanticSearch(query)
+    } else {
+      searchStore.search(query)
+    }
   }
 
   // Auto-focus search bar when navigating from home page

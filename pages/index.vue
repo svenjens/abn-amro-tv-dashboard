@@ -339,7 +339,12 @@ function handleSearch(query: string) {
 }
 
 function handleSearchFocus() {
-  navigateTo(localePath('/search'))
+  // If user has already typed something, preserve it when navigating to search page
+  if (searchQuery.value.trim()) {
+    navigateTo(localePath(`/search?q=${encodeURIComponent(searchQuery.value)}`))
+  } else {
+    navigateTo(localePath('/search'))
+  }
 }
 
 // Reset visible genres count when filters change
