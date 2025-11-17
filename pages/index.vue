@@ -192,10 +192,10 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import GenreRow from '@/components/GenreRow.vue'
-import SearchBar from '@/components/SearchBar.vue'
+import SearchBar from '@/components/SearchBar.client.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import SkipToContent from '@/components/SkipToContent.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import FilterBar from '@/components/FilterBar.vue'
@@ -349,9 +349,9 @@ const { data: showsData } = await useAsyncData(
   }
 )
 
-// Populate store with server-fetched data
+// Populate store with server-fetched data (including pre-sorted genres)
 if (showsData.value) {
-  showsStore.setShows(showsData.value.shows)
+  showsStore.setShowsWithGenres(showsData.value.shows, showsData.value.showsByGenre)
 }
 
 onMounted(() => {

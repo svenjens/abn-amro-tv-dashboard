@@ -26,9 +26,9 @@ export default defineNuxtConfig({
     '/en': { swr: 3600 },
     '/nl': { swr: 3600 },
     '/es': { swr: 3600 },
-    // Search - SSR with short cache (dynamic)
-    '/search': { swr: 3600 },
-    '/*/search': { swr: 3600 },
+    // Search - client-side only (requires query parameter from user)
+    '/search': { ssr: false },
+    '/*/search': { ssr: false },
     // Watchlist - client-side only (localStorage)
     '/watchlist': { ssr: false },
     '/*/watchlist': { ssr: false },
@@ -159,6 +159,13 @@ export default defineNuxtConfig({
         'font-src': ["'self'", 'https:', 'data:'],
         'form-action': ["'self'"],
         'frame-ancestors': ["'self'"],
+        'connect-src': [
+          "'self'",
+          'https://*.vercel-insights.com',
+          'https://vitals.vercel-insights.com',
+          'https://*.google-analytics.com',
+          'https://*.googletagmanager.com',
+        ],
         'img-src': [
           "'self'",
           'data:',
@@ -179,6 +186,9 @@ export default defineNuxtConfig({
           'https://*.googletagmanager.com',
           'https://*.google-analytics.com',
           'https://pagead2.googlesyndication.com',
+          'https://*.vercel.app',
+          'https://vercel.live',
+          'https://*.vercel.live',
         ],
         'upgrade-insecure-requests': true,
       },
@@ -277,6 +287,14 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Discover your next favorite TV show with BingeList' },
+        // OpenGraph
+        { property: 'og:site_name', content: 'BingeList' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: 'https://bingelist.app/og-image.png' },
+        { property: 'og:url', content: 'https://bingelist.app' },
+        // Twitter Card
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://bingelist.app/og-image.png' },
       ],
       link: [
         // Default favicon (fallback)

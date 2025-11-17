@@ -23,6 +23,8 @@ export const useSearchStore = defineStore('search', () => {
   // Getters
   const results = computed(() => searchResults.value.map((result) => result.show))
 
+  const fullResults = computed(() => searchResults.value) // Returns SearchResult[] with matchedTerm
+
   const hasResults = computed(() => searchResults.value.length > 0)
 
   const isSearching = computed(() => loading.value)
@@ -136,10 +138,25 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   /**
+   * Type predicate to check if an item is a SearchResult
+   */
+  function isSearchResult(item: Show | SearchResult): item is SearchResult {
+    return 'show' in item && 'score' in item
+  }
+
+  /**
    * Set search results directly (used for semantic search)
    */
-  function setResults(shows: Show[]): void {
-    searchResults.value = shows.map((show) => ({ show, score: 1 }))
+  function setResults(results: Show[] | SearchResult[]): void {
+    // Support both Show[] (legacy) and SearchResult[] (with matchedTerm)
+    searchResults.value = results.map((item) => {
+      if (isSearchResult(item)) {
+        // Already a SearchResult
+        return item
+      }
+      // Convert Show to SearchResult
+      return { show: item, score: 1 }
+    })
     loading.value = false
     error.value = null
   }
@@ -170,6 +187,7 @@ export const useSearchStore = defineStore('search', () => {
 
     // Getters
     results,
+    fullResults, // SearchResult[] with matchedTerm
     hasResults,
     isSearching,
     hasError,

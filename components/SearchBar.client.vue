@@ -122,12 +122,14 @@ interface Props {
   placeholder?: string
   recentSearches?: string[]
   debounce?: number
+  disableTypeAhead?: boolean // Disable automatic search on input (for Smart Search)
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: 'Search TV shows...',
   recentSearches: () => [],
   debounce: 300,
+  disableTypeAhead: false,
 })
 
 const emit = defineEmits<{
@@ -159,6 +161,11 @@ watch(
 
 function handleInput() {
   emit('update:modelValue', localQuery.value)
+
+  // Skip type-ahead for Smart Search (user must press Enter)
+  if (props.disableTypeAhead) {
+    return
+  }
 
   if (debounceTimeout) {
     clearTimeout(debounceTimeout)

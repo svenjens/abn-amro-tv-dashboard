@@ -107,7 +107,7 @@ import { onMounted } from 'vue'
 import { useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
-import SkipToContent from '@/components/SkipToContent.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 

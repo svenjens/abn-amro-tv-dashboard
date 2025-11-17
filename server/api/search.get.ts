@@ -8,10 +8,18 @@ export default cachedEventHandler(
     const query = getQuery(event)
     const searchQuery = query.q as string
 
-    if (!searchQuery) {
+    if (!searchQuery || searchQuery.trim().length === 0) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Search query is required',
+      })
+    }
+
+    // Require at least 2 characters for better search results
+    if (searchQuery.trim().length < 2) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Search query must be at least 2 characters',
       })
     }
 

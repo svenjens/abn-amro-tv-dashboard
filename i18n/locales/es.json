@@ -31,11 +31,15 @@
     "searching": "Buscando...",
     "regular": "Regular",
     "smart": "Búsqueda Inteligente",
+    "regularInfo": "Busca por títulos exactos de series. Escribe mientras buscas para obtener resultados instantáneos.",
+    "smartInfo": "Usa IA para entender consultas en lenguaje natural como 'series de ciencia ficción oscura' o 'comedias sobre amistad'.",
+    "smartInfoAction": "Presiona Enter o haz clic en Buscar para enviar.",
     "semanticPlaceholder": "Prueba: 'series de ciencia ficción oscura como Black Mirror'",
     "tryAsking": "Prueba preguntando:",
     "searchingFor": "Buscando:",
     "similarTo": "Similar a {show}",
-    "aiSearching": "Entendiendo tu consulta..."
+    "aiSearching": "Entendiendo tu consulta...",
+    "matchedBy": "Coincide por"
   },
   "show": {
     "rating": "Calificación",

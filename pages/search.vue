@@ -31,7 +31,7 @@
         </div>
 
         <!-- Search Mode Toggle -->
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-3">
           <button
             :class="[
               'px-4 py-2 rounded-lg font-medium transition-all',
@@ -64,14 +64,66 @@
           </button>
         </div>
 
-        <SearchBar
-          ref="searchBarRef"
-          v-model="searchQuery"
-          :placeholder="isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')"
-          :recent-searches="searchStore.recentSearches"
-          @search="handleSearch"
-          @clear-recent="searchStore.clearRecentSearches()"
-        />
+        <!-- Info Bar explaining search modes -->
+        <div
+          class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+        >
+          <div class="flex items-start gap-2">
+            <svg
+              class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div class="text-sm text-blue-800 dark:text-blue-200">
+              <span v-if="!isSemanticMode">
+                {{ t('search.regularInfo') }}
+              </span>
+              <span v-else>
+                {{ t('search.smartInfo') }}
+                <strong class="font-semibold">{{ t('search.smartInfoAction') }}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar with Submit Button -->
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <SearchBar
+              ref="searchBarRef"
+              v-model="searchQuery"
+              :placeholder="
+                isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')
+              "
+              :recent-searches="searchStore.recentSearches"
+              :disable-type-ahead="isSemanticMode"
+              @search="handleSearch"
+              @clear-recent="searchStore.clearRecentSearches()"
+            />
+          </div>
+          <button
+            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="!searchQuery.trim() || searchQuery.trim().length < 2"
+            @click="handleSearch(searchQuery)"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -194,7 +246,12 @@
           <div
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr mb-8"
           >
-            <ShowCard v-for="show in filteredResults" :key="show.id" :show="show" />
+            <ShowCard
+              v-for="result in filteredResults"
+              :key="result.show.id"
+              :show="result.show"
+              :match-reason="isSemanticMode ? result.matchedTerm : undefined"
+            />
           </div>
 
           <!-- Advertisement -->
@@ -247,7 +304,7 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
-import SearchBar from '@/components/SearchBar.vue'
+import SearchBar from '@/components/SearchBar.client.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
@@ -277,23 +334,23 @@ const exampleQueries = [
 
 // Apply filters to search results
 const filteredResults = computed(() => {
-  let results = searchStore.results
+  let results = searchStore.fullResults
 
   if (filters.value.status) {
-    results = results.filter((show) => show.status === filters.value.status)
+    results = results.filter((result) => result.show.status === filters.value.status)
   }
 
   if (filters.value.network) {
-    results = results.filter((show) => {
-      const networkName = show.network?.name || show.webChannel?.name
+    results = results.filter((result) => {
+      const networkName = result.show.network?.name || result.show.webChannel?.name
       return networkName === filters.value.network
     })
   }
 
   if (filters.value.year) {
-    results = results.filter((show) => {
-      if (!show.premiered) return false
-      const year = new Date(show.premiered).getFullYear()
+    results = results.filter((result) => {
+      if (!result.show.premiered) return false
+      const year = new Date(result.show.premiered).getFullYear()
       return year.toString() === filters.value.year
     })
   }
@@ -310,6 +367,11 @@ useSEO({
 
 async function handleSearch(query: string) {
   searchQuery.value = query
+
+  // Validate minimum query length (at least 2 characters)
+  if (!query || query.trim().length < 2) {
+    return // Don't search with queries shorter than 2 characters
+  }
 
   // Update URL query parameter
   if (query) {
@@ -343,9 +405,13 @@ async function handleSemanticSearch(query: string) {
     // Store intent for display
     semanticIntent.value = response.intent
 
-    // Update search store with results
-    const shows = response.results.map((r: any) => r.show)
-    searchStore.setResults(shows)
+    // Update search store with results (including matchedTerm for each result)
+    const searchResults = response.results.map((r: any) => ({
+      show: r.show,
+      score: r.score,
+      matchedTerm: r.matchedTerm,
+    }))
+    searchStore.setResults(searchResults)
   } catch (error) {
     console.error('Semantic search failed:', error)
     // Fallback to regular search

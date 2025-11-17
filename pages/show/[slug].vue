@@ -297,7 +297,7 @@ import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'
 import ShowCard from '@/components/ShowCard.vue'
-import SkipToContent from '@/components/SkipToContent.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import WatchlistButton from '@/components/WatchlistButton.vue'
@@ -340,6 +340,7 @@ const {
 } = await useAsyncData(
   `show-${showId.value}`,
   () =>
+    // @ts-ignore - Type recursion issue with Nuxt routes
     $fetch(`/api/shows/${showId.value}`, {
       query: { country: userCountry.value },
     }),

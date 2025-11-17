@@ -147,7 +147,7 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { useSEO } from '@/composables'
-import SkipToContent from '@/components/SkipToContent.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
 import LegalArticle from '@/components/LegalArticle.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 

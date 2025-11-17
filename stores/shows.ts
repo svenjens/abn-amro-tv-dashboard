@@ -64,6 +64,19 @@ export const useShowsStore = defineStore('shows', () => {
   }
 
   /**
+   * Set shows with pre-sorted genre data from server (SSR)
+   */
+  function setShowsWithGenres(shows: Show[], sortedShowsByGenre: ShowsByGenre): void {
+    allShows.value = shows
+    showsByGenre.value = sortedShowsByGenre // Use server-sorted data
+    loading.value = false
+    error.value = null
+    logger.debug(
+      `[Store] Set ${shows.length} shows across ${Object.keys(sortedShowsByGenre).length} genres (server-sorted)`
+    )
+  }
+
+  /**
    * Fetch all shows from server API
    * Note: Prefer using useAsyncData directly in pages for better SSR
    */
@@ -189,6 +202,7 @@ export const useShowsStore = defineStore('shows', () => {
 
     // Actions
     setShows,
+    setShowsWithGenres,
     fetchAllShows,
     fetchShowById,
     getShowById,

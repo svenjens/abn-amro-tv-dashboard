@@ -45,6 +45,16 @@
       <div class="absolute top-2 left-2 opacity-0 group-hover/card:opacity-100 transition-opacity">
         <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
       </div>
+
+      <!-- Match Reason Badge (for Smart Search) -->
+      <div
+        v-if="matchReason"
+        class="absolute bottom-2 left-2 right-2 bg-gradient-to-r from-blue-500/90 to-purple-500/90 backdrop-blur-sm px-2 py-1 rounded-md shadow-lg"
+      >
+        <p class="text-xs text-white font-medium truncate">
+          🎯 {{ $t('search.matchedBy') }}: {{ matchReason }}
+        </p>
+      </div>
     </div>
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
@@ -82,10 +92,12 @@ import WatchlistButton from './WatchlistButton.vue'
 interface Props {
   show: Show
   lazy?: boolean
+  matchReason?: string // Show why this result matched (for Smart Search)
 }
 
 const props = withDefaults(defineProps<Props>(), {
   lazy: true,
+  matchReason: undefined,
 })
 
 const localePath = useLocalePath()

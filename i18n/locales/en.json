@@ -31,11 +31,15 @@
     "searching": "Searching...",
     "regular": "Regular",
     "smart": "Smart Search",
+    "regularInfo": "Search by exact show titles. Type as you go for instant results.",
+    "smartInfo": "Use AI to understand natural language queries like 'dark sci-fi shows' or 'comedies about friendship'.",
+    "smartInfoAction": "Press Enter or click Search to submit.",
     "semanticPlaceholder": "Try: 'dark sci-fi shows like Black Mirror'",
     "tryAsking": "Try asking:",
     "searchingFor": "Searching for:",
     "similarTo": "Similar to {show}",
-    "aiSearching": "Understanding your query..."
+    "aiSearching": "Understanding your query...",
+    "matchedBy": "Matched by"
   },
   "show": {
     "rating": "Rating",

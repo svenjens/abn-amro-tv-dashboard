@@ -80,6 +80,7 @@ export interface Link {
 export interface SearchResult {
   score: number
   show: Show
+  matchedTerm?: string // For Smart Search: shows which term matched this result
 }
 
 export interface ShowsByGenre {
