@@ -4,7 +4,7 @@
  * Sanitizes HTML summaries server-side
  */
 
-import { sanitizeEpisodeSummary } from '../../utils/sanitize'
+import { sanitizeEpisodeSummary } from '~/server/utils/sanitize'
 
 export default cachedEventHandler(
   async (event) => {

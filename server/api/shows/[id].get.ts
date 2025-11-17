@@ -5,7 +5,7 @@
  * Sanitizes HTML content server-side before sending to client
  */
 
-import { sanitizeShowSummary } from '../utils/sanitize'
+import { sanitizeShowSummary } from '~/server/utils/sanitize'
 
 export default cachedEventHandler(
   async (event) => {
