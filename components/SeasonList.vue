@@ -71,7 +71,7 @@
             :alt="episode.name"
             class="w-full h-full object-cover"
             loading="lazy"
-          />
+          >
         </div>
 
         <!-- Episode info -->
@@ -129,7 +129,7 @@
           <div
             class="bg-primary-600 h-2 rounded-full transition-all duration-300"
             :style="{ width: `${seasonProgress.percentage}%` }"
-          ></div>
+          />
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@
           v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
           :data-ad-format="format"
           data-full-width-responsive="true"
-        ></ins>
+        />
       </div>
     </div>
   </ClientOnly>
@@ -56,7 +56,7 @@ const adStyle = computed(() => {
 const adPushed = ref(false)
 
 // Use Nuxt's useScript composable for better script management
-const { load, status } = useScript({
+const { load } = useScript({
   src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`,
   async: true,
   crossorigin: 'anonymous',

@@ -34,7 +34,7 @@
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }"
-        ></div>
+        />
 
         <div class="relative max-w-7xl mx-auto px-4 py-12">
           <div class="flex items-center justify-between mb-6">

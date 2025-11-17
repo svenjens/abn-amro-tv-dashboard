@@ -10,7 +10,7 @@
  * - Visual indicators (emojis for increases/decreases)
  */
 
-import { readFileSync, existsSync } from 'fs'
+import { readFileSync, existsSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
 /**
@@ -274,9 +274,6 @@ const comparison = compareReports(baseReport, headReport)
 const markdown = generateMarkdownReport(comparison)
 
 console.log(markdown)
-
-// Save to file
-import { writeFileSync } from 'fs'
 const outputPath = join(process.cwd(), 'bundle-comparison.md')
 writeFileSync(outputPath, markdown)
 console.log(`\n✅ Comparison saved to: bundle-comparison.md\n`)

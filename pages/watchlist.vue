@@ -89,13 +89,13 @@
               /optimized/empty-state-illustration.webp     512w
             "
             sizes="192px"
-          />
+          >
           <img
             src="/optimized/empty-state-illustration.png"
             alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
-          />
+          >
         </picture>
         <h2 class="mt-6 text-lg font-medium text-gray-900">{{ t('watchlist.empty') }}</h2>
         <p class="mt-2 text-sm text-gray-500">{{ t('watchlist.emptyMessage') }}</p>

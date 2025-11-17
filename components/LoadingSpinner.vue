@@ -10,7 +10,7 @@
       class="animate-spin rounded-full border-b-2"
       :class="spinnerClass"
       :style="{ width: size, height: size }"
-    ></div>
+    />
     <span v-if="text" class="ml-3 text-gray-600 fade-in">{{ text }}</span>
   </div>
 </template>

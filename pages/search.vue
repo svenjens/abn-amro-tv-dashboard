@@ -33,24 +33,24 @@
         <!-- Search Mode Toggle -->
         <div class="flex items-center gap-3 mb-4">
           <button
-            @click="isSemanticMode = false"
             :class="[
               'px-4 py-2 rounded-lg font-medium transition-all',
               !isSemanticMode
                 ? 'bg-primary-600 text-white shadow-sm'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             ]"
+            @click="isSemanticMode = false"
           >
             {{ t('search.regular') }}
           </button>
           <button
-            @click="isSemanticMode = true"
             :class="[
               'px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2',
               isSemanticMode
                 ? 'bg-primary-600 text-white shadow-sm'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             ]"
+            @click="isSemanticMode = true"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -81,8 +81,8 @@
           <button
             v-for="example in exampleQueries"
             :key="example"
-            @click="searchQuery = example; handleSearch(example)"
             class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-sm"
+            @click="searchQuery = example; handleSearch(example)"
           >
             {{ example }}
           </button>
@@ -101,16 +101,16 @@
             </p>
             <div class="flex flex-wrap gap-2">
               <span
-                v-if="semanticIntent.genres"
                 v-for="genre in semanticIntent.genres"
+                v-if="semanticIntent.genres"
                 :key="genre"
                 class="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded text-xs font-medium"
               >
                 {{ genre }}
               </span>
               <span
-                v-if="semanticIntent.mood"
                 v-for="mood in semanticIntent.mood"
+                v-if="semanticIntent.mood"
                 :key="mood"
                 class="px-2 py-1 bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 rounded text-xs font-medium"
               >
@@ -210,13 +210,13 @@
               /optimized/empty-state-illustration.webp     512w
             "
             sizes="192px"
-          />
+          >
           <img
             src="/optimized/empty-state-illustration.png"
             alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
-          />
+          >
         </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900">Start searching</h3>
         <p class="mt-2 text-gray-500">

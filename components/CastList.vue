@@ -22,7 +22,7 @@
               :alt="member.person.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
-            />
+            >
             <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
               <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
                 <path

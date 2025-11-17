@@ -111,7 +111,6 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-const route = useRoute()
 
 const scrollContainer = ref<HTMLElement | null>(null)
 const canScrollLeft = ref(false)
