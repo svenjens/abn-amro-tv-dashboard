@@ -253,7 +253,7 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
-import SearchBar from '@/components/SearchBar.vue'
+import SearchBar from '@/components/SearchBar.client.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
