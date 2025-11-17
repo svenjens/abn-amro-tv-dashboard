@@ -9,7 +9,14 @@ export default defineNuxtConfig({
     prerender: {
       failOnError: false, // Don't fail build on prerender errors
       crawlLinks: false, // Don't automatically discover links
-      routes: ['/legal/privacy', '/legal/disclaimer'], // Only prerender these specific routes
+      routes: [
+        '/en/legal/privacy',
+        '/en/legal/disclaimer',
+        '/nl/legal/privacy',
+        '/nl/legal/disclaimer',
+        '/es/legal/privacy',
+        '/es/legal/disclaimer',
+      ], // Only prerender these specific routes with locale prefixes
       ignore: [
         '/show/**', // Never prerender show pages (need API data)
         '/genre/**', // Never prerender genre pages (need API data)
@@ -22,33 +29,23 @@ export default defineNuxtConfig({
   // Route rules for SSG and caching
   routeRules: {
     // Homepage - SSR with SWR cache (needs API data)
-    '/': { swr: 3600 }, // Cache for 1 hour
     '/en': { swr: 3600 },
     '/nl': { swr: 3600 },
     '/es': { swr: 3600 },
     // Search - client-side only (requires query parameter from user)
-    '/search': { ssr: false },
     '/*/search': { ssr: false },
     // Watchlist - client-side only (localStorage)
-    '/watchlist': { ssr: false },
     '/*/watchlist': { ssr: false },
     // Static pages - prerender at build time
-    '/roadmap': { prerender: true },
     '/*/roadmap': { prerender: true },
-    '/legal/accessibility': { prerender: true },
     '/*/legal/accessibility': { prerender: true },
-    '/legal/disclaimer': { prerender: true },
     '/*/legal/disclaimer': { prerender: true },
-    '/legal/privacy': { prerender: true },
     '/*/legal/privacy': { prerender: true },
-    '/legal/terms': { prerender: true },
     '/*/legal/terms': { prerender: true },
     // Genre pages - SSR with SWR cache
-    '/genre/**': { swr: 3600 },
     '/*/genre/**': { swr: 3600 },
     // Show pages - SSR with 1 week cache (shows don't change often)
-    '/show/**': { ssr: true, swr: 604800 }, // 7 days
-    '/*/show/**': { ssr: true, swr: 604800 },
+    '/*/show/**': { ssr: true, swr: 604800 }, // 7 days
     // API routes - no caching
     '/api/**': { cache: false },
   },
@@ -245,13 +242,13 @@ export default defineNuxtConfig({
       { code: 'es', iso: 'es-ES', file: 'es.json', name: 'Español' },
     ],
     defaultLocale: 'en',
-    strategy: 'prefix_except_default',
+    strategy: 'prefix', // All locales get a prefix (/en, /nl, /es)
     langDir: 'locales',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      alwaysRedirect: true,
+      redirectOn: 'root', // Redirect on root access
+      alwaysRedirect: false, // Don't redirect if user explicitly chose a locale
       fallbackLocale: 'en',
     },
   },
