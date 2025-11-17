@@ -349,9 +349,9 @@ const { data: showsData } = await useAsyncData(
   }
 )
 
-// Populate store with server-fetched data
+// Populate store with server-fetched data (including pre-sorted genres)
 if (showsData.value) {
-  showsStore.setShows(showsData.value.shows)
+  showsStore.setShowsWithGenres(showsData.value.shows, showsData.value.showsByGenre)
 }
 
 onMounted(() => {
