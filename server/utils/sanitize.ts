@@ -58,7 +58,7 @@ function sanitizeUrl(url: string): string {
   // Check if it has a protocol
   if (decoded.includes(':')) {
     // Extract and lowercase the protocol
-    const protocol = decoded.split(':')[0].toLowerCase() + ':'
+    const protocol = (decoded.split(':')[0] || '').toLowerCase() + ':'
     
     // Reject dangerous protocols
     const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']
@@ -97,7 +97,7 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
       if (lowerTag === 'a') {
         // Extract, sanitize, and validate href
         const hrefMatch = match.match(/href\s*=\s*["']([^"']*)["']/i)
-        const rawHref = hrefMatch ? hrefMatch[1] : ''
+        const rawHref = hrefMatch?.[1] || ''
         const sanitizedHref = sanitizeUrl(rawHref)
         
         // Only create link if href is safe, otherwise strip the tag
