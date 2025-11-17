@@ -95,7 +95,7 @@
         </div>
 
         <!-- Search Bar with Submit Button -->
-        <div class="flex gap-2">
+        <div class="flex">
           <div class="flex-1">
             <SearchBar
               ref="searchBarRef"
@@ -110,7 +110,7 @@
             />
           </div>
           <button
-            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-r-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed -ml-px"
             :disabled="!searchQuery.trim() || searchQuery.trim().length < 2"
             @click="handleSearch(searchQuery)"
           >
