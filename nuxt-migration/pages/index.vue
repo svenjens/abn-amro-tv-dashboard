@@ -54,7 +54,7 @@
           </div>
           <div class="flex items-center gap-4">
             <!-- Watchlist Link -->
-            <router-link
+            <NuxtLink
               :to="{ name: 'watchlist', params: { locale: route.params.locale || 'en' } }"
               class="relative inline-flex items-center gap-2 text-white hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg px-3 py-2"
               :aria-label="t('watchlist.title')"
@@ -74,7 +74,7 @@
               >
                 {{ watchlistStore.watchlistCount }}
               </span>
-            </router-link>
+            </NuxtLink>
 
             <!-- Dark Mode Toggle -->
             <DarkModeToggle variant="header" />
@@ -202,8 +202,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import GenreRow from '@/components/GenreRow.vue'
@@ -335,14 +333,12 @@ useSEO({
 
 function handleSearch(query: string) {
   if (query.trim()) {
-    const locale = route.params.locale || 'en'
-    router.push({ name: 'search', params: { locale }, query: { q: query } })
+    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}`))
   }
 }
 
 function handleSearchFocus() {
-  const locale = route.params.locale || 'en'
-  router.push({ name: 'search', params: { locale } })
+  navigateTo(localePath('/search'))
 }
 
 // Reset visible genres count when filters change

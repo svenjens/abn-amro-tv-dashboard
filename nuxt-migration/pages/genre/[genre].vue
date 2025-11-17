@@ -11,7 +11,7 @@
           <button
             class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-primary-800 rounded-lg px-2 py-1"
             :aria-label="t('navigation.back')"
-            @click="router.back()"
+            @click="useRouter().back()"
           >
             <svg
               class="h-5 w-5"
@@ -35,9 +35,7 @@
             <button
               class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-primary-800 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
               :aria-label="t('navigation.home')"
-              @click="
-                router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })
-              "
+              @click="navigateTo(localePath('/'))"
             >
               <svg
                 class="h-5 w-5"
@@ -113,8 +111,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useShowsStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'

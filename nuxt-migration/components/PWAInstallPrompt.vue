@@ -68,7 +68,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { showInstallPrompt, isPWA } from '@/utils'
 import { logger } from '@/utils'
 

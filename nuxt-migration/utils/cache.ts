@@ -276,6 +276,11 @@ export class Cache<T = unknown> {
   }
 
   private loadFromStorage(): void {
+    // Skip on server-side
+    if (typeof localStorage === 'undefined') {
+      return
+    }
+    
     try {
       const keys = Object.keys(localStorage)
       const prefix = `${this.namespace}:`
@@ -304,6 +309,11 @@ export class Cache<T = unknown> {
   }
 
   private getFromStorage(fullKey: string): CacheEntry<T> | null {
+    // Skip on server-side
+    if (typeof localStorage === 'undefined') {
+      return null
+    }
+    
     try {
       const item = localStorage.getItem(fullKey)
       if (item) {
@@ -316,6 +326,11 @@ export class Cache<T = unknown> {
   }
 
   private saveToStorage(fullKey: string, entry: CacheEntry<T>): void {
+    // Skip on server-side
+    if (typeof localStorage === 'undefined') {
+      return
+    }
+    
     try {
       localStorage.setItem(fullKey, JSON.stringify(entry))
     } catch (error) {

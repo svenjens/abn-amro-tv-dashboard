@@ -71,7 +71,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import type { Show } from '@/types'
 import { getShowImage, createShowSlug } from '@/utils'
 import RatingBadge from './RatingBadge.vue'
@@ -87,7 +86,6 @@ const props = withDefaults(defineProps<Props>(), {
   lazy: true,
 })
 
-const router = useRouter()
 const imageLoaded = ref(!props.lazy)
 const imageError = ref(false)
 
@@ -104,10 +102,8 @@ const premieredYear = computed(() => {
 })
 
 function navigateToShow() {
-  const currentRoute = router.currentRoute.value
-  const locale = currentRoute.params.locale || 'en'
   const slug = createShowSlug(props.show.name, props.show.id)
-  router.push({ name: 'show-detail', params: { locale, slug } })
+  navigateTo(localePath(`/show/${slug}`))
 }
 
 function handleImageError() {

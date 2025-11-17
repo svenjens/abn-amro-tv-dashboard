@@ -75,7 +75,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import type { StreamingAvailability } from '@/types'
 import { STREAMING_PLATFORMS } from '@/types'
 import { trackStreamingClick } from '@/utils'

@@ -12,7 +12,7 @@
             <button
               class="inline-flex items-center gap-2 hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg px-2 py-1"
               :aria-label="t('navigation.back')"
-              @click="router.back()"
+              @click="useRouter().back()"
             >
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -102,7 +102,7 @@
         <div class="mt-6">
           <button
             class="btn-primary"
-            @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
+            @click="navigateTo(localePath('/'))"
           >
             {{ t('navigation.home') }}
           </button>
@@ -114,8 +114,6 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'

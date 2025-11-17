@@ -143,7 +143,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 import SafeHtml from '@/components/SafeHtml.vue'
 import type { Episode, EpisodesBySeason, ApiError } from '@/types'
 import { useWatchlistStore } from '@/stores'

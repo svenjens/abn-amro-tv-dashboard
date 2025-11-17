@@ -9,7 +9,7 @@
     <AppFooter />
 
     <!-- Cache Debug Component (only in dev mode or with ?debug param) -->
-    <LazyCache Debug v-if="showDebug" />
+    <LazyCacheDebug v-if="showDebug" />
 
     <!-- Toast Notifications -->
     <ToastNotification />
@@ -23,6 +23,7 @@
 const route = useRoute()
 
 const showDebug = computed(() => {
+  if (!process.client) return false
   const isDev = process.dev
   const hasDebugParam = route.query.debug !== undefined
   return isDev || hasDebugParam

@@ -44,28 +44,28 @@
           <h3 class="text-white font-semibold mb-4">{{ t('footer.navigation') }}</h3>
           <ul class="space-y-3">
             <li>
-              <router-link
-                :to="{ name: 'home', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('navigation.home') }}
-              </router-link>
+              </NuxtLink>
             </li>
             <li>
-              <router-link
-                :to="{ name: 'search', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/search')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('search.title') }}
-              </router-link>
+              </NuxtLink>
             </li>
             <li>
-              <router-link
-                :to="{ name: 'watchlist', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/watchlist')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('watchlist.title') }}
-              </router-link>
+              </NuxtLink>
             </li>
           </ul>
         </div>
@@ -74,9 +74,10 @@
         <div>
           <h3 class="text-white font-semibold mb-4">{{ t('footer.resources') }}</h3>
           <ul class="space-y-3">
-            <li>
-              <router-link
-                :to="{ name: 'roadmap', params: { locale: currentLocale } }"
+            <!-- Roadmap feature coming soon -->
+            <!-- <li>
+              <NuxtLink
+                :to="localePath('/roadmap')"
                 class="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-2"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,8 +89,8 @@
                   />
                 </svg>
                 {{ t('roadmap.title') }}
-              </router-link>
-            </li>
+              </NuxtLink>
+            </li> -->
             <li>
               <a
                 href="https://github.com/svenjens/tv-show-dashboard"
@@ -153,36 +154,36 @@
           <h3 class="text-white font-semibold mb-4">{{ t('footer.legal') }}</h3>
           <ul class="space-y-3">
             <li>
-              <router-link
-                :to="{ name: 'terms', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/legal/terms')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('legal.termsOfService') }}
-              </router-link>
+              </NuxtLink>
             </li>
             <li>
-              <router-link
-                :to="{ name: 'privacy', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/legal/privacy')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('legal.privacyPolicy') }}
-              </router-link>
+              </NuxtLink>
             </li>
             <li>
-              <router-link
-                :to="{ name: 'disclaimer', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/legal/disclaimer')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('legal.disclaimerTitle') }}
-              </router-link>
+              </NuxtLink>
             </li>
             <li>
-              <router-link
-                :to="{ name: 'accessibility-statement', params: { locale: currentLocale } }"
+              <NuxtLink
+                :to="localePath('/legal/accessibility')"
                 class="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {{ t('legal.accessibilityTitle') }}
-              </router-link>
+              </NuxtLink>
             </li>
           </ul>
         </div>
@@ -222,8 +223,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const route = useRoute()

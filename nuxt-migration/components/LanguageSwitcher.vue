@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-motion
-    :initial="{ opacity: 0, scale: 0.9 }"
-    :visible="{ opacity: 1, scale: 1, transition: { duration: 300, delay: 100 } }"
-    class="relative"
-  >
+  <div class="relative">
     <button
       class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-300 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 transition-all duration-200 active:scale-95"
       :aria-label="t('accessibility.toggleLanguage')"
@@ -24,26 +19,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
-import { setCurrentLocale } from '@/i18n/helpers'
-
-const { t, locale } = useI18n()
-const router = useRouter()
-const route = useRoute()
+const { t, locale, setLocale } = useI18n()
+const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
 
 const currentLocale = computed(() => locale.value)
 
-function toggleLanguage() {
+async function toggleLanguage() {
   const newLocale = currentLocale.value === 'en' ? 'nl' : 'en'
-  setCurrentLocale(newLocale as 'en' | 'nl')
-
-  // Update route path to reflect new locale, preserving query params
-  const pathWithoutLocale = route.path.replace(/^\/(en|nl)/, '') || '/'
-  router.push({
-    path: `/${newLocale}${pathWithoutLocale}`,
-    query: route.query,
-  })
+  
+  // Use Nuxt i18n's setLocale to change language
+  await setLocale(newLocale)
+  
+  // Navigate to the same page in the new locale
+  const newPath = switchLocalePath(newLocale)
+  await navigateTo(newPath)
 }
 </script>

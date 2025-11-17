@@ -93,8 +93,6 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useSEO } from '@/composables'
 import SkipToContent from '@/components/SkipToContent.vue'
 import LegalArticle from '@/components/LegalArticle.vue'

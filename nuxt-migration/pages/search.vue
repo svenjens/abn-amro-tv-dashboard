@@ -9,7 +9,7 @@
           <button
             class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Go back"
-            @click="router.push({ name: 'home', params: { locale: route.params.locale || 'en' } })"
+            @click="navigateTo(localePath('/'))"
           >
             <svg
               class="h-6 w-6 text-gray-600 dark:text-gray-400"
@@ -145,8 +145,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
 import SearchBar from '@/components/SearchBar.vue'
@@ -203,8 +201,7 @@ async function handleSearch(query: string) {
 
   // Update URL query parameter
   if (query) {
-    const locale = route.params.locale || 'en'
-    router.push({ name: 'search', params: { locale }, query: { q: query } })
+    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}`))
   }
 
   // Perform search

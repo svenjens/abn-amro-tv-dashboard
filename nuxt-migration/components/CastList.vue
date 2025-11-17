@@ -88,7 +88,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import type { CastMember, ApiError } from '@/types'
 import LoadingSpinner from './LoadingSpinner.vue'
 import ErrorMessage from './ErrorMessage.vue'

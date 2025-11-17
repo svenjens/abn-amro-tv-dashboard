@@ -99,8 +99,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import type { Show } from '@/types'
 import ShowCard from './ShowCard.vue'
 
@@ -112,7 +110,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const { t } = useI18n()
-const router = useRouter()
 const route = useRoute()
 
 const scrollContainer = ref<HTMLElement | null>(null)
@@ -154,8 +151,7 @@ function expandMobile() {
 }
 
 function navigateToGenre() {
-  const locale = route.params.locale || 'en'
-  router.push({ name: 'genre-overview', params: { locale, genre: props.genre.toLowerCase() } })
+  navigateTo(localePath(`/genre/${props.genre.toLowerCase()}`))
 }
 
 onMounted(() => {
