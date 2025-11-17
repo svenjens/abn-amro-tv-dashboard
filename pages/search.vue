@@ -241,7 +241,6 @@ import FilterBar from '@/components/FilterBar.vue'
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
-const router = useRouter()
 const searchStore = useSearchStore()
 
 const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
@@ -316,7 +315,7 @@ async function handleSemanticSearch(query: string) {
   semanticIntent.value = null
   
   try {
-    const response = await $fetch('/api/search/semantic', {
+    const response = await $fetch<{ results: any[]; intent: any }>('/api/search/semantic', {
       method: 'POST',
       body: { query }
     })
@@ -325,9 +324,8 @@ async function handleSemanticSearch(query: string) {
     semanticIntent.value = response.intent
     
     // Update search store with results
-    searchStore.results = response.results.map((r: any) => r.show)
-    searchStore.isSearching = false
-    searchStore.error = null
+    const shows = response.results.map((r: any) => r.show)
+    searchStore.setResults(shows)
     
   } catch (error) {
     console.error('Semantic search failed:', error)

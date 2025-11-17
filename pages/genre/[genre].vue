@@ -122,7 +122,6 @@ import DarkModeToggle from '@/components/DarkModeToggle.vue'
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
-const router = useRouter()
 const showsStore = useShowsStore()
 
 const genreName = computed(() => {

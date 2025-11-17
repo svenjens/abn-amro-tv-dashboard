@@ -284,11 +284,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import type { Show, ApiError, Episode, CastMember, StreamingAvailability as StreamingAvailabilityType } from '@/types'
-import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug, logger } from '@/utils'
+import type { Show, Episode, CastMember } from '@/types'
+import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'

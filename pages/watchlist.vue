@@ -123,8 +123,6 @@ import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-const router = useRouter()
-const route = useRoute()
 const watchlistStore = useWatchlistStore()
 
 // SEO (multilingual)

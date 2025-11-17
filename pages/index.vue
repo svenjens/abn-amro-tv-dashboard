@@ -216,9 +216,6 @@ import type { Show } from '@/types'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-
-const router = useRouter()
-const route = useRoute()
 const showsStore = useShowsStore()
 const searchStore = useSearchStore()
 const watchlistStore = useWatchlistStore()
@@ -357,17 +354,17 @@ watch(
 )
 
 // Server-side data fetching - runs on server during SSR
-const { data: shows, error: fetchError } = await useAsyncData(
+const { data: showsData } = await useAsyncData(
   'all-shows',
-  () => $fetch('/api/shows'),
+  () => $fetch<{ shows: Show[]; showsByGenre: Record<string, Show[]> }>('/api/shows'),
   {
     dedupe: 'defer' // Dedupe requests during SSR
   }
 )
 
 // Populate store with server-fetched data
-if (shows.value) {
-  showsStore.setShows(shows.value)
+if (showsData.value) {
+  showsStore.setShows(showsData.value.shows)
 }
 
 onMounted(() => {

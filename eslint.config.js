@@ -1,7 +1,7 @@
 // @ts-check
 import { createConfigForNuxt } from '@nuxt/eslint-config/flat'
 
-export default createConfigForNuxt({
+export default createConfigForNuxt().append({
   rules: {
     // Nuxt/Vue specific rules
     'vue/multi-word-component-names': 'off',

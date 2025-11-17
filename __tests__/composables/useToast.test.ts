@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { useToast } from '@/composables/useToast'
-import type { Toast, ToastType } from '@/composables/useToast'
+import type { ToastType } from '@/composables/useToast'
 
 describe('useToast', () => {
   beforeEach(() => {

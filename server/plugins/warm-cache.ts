@@ -32,26 +32,8 @@ export default defineNitroPlugin(async (_nitroApp) => {
     const allShows = response.shows
     const showsByGenre = response.showsByGenre
 
-    // Use pre-sorted genres from server
+    // Use pre-sorted genres from server response
     const sortedGenres = Object.entries(showsByGenre)
-      .sort((a, b) => b[1].length - a[1].length)
-
-    // Since we already have genres grouped, we can skip the manual grouping
-    // Group shows by genre and sort genres by show count (keeping for backwards compat if needed)
-    const genreMap = new Map()
-    allShows.forEach((show: any) => {
-      if (show.genres && show.genres.length > 0) {
-        show.genres.forEach((genre: string) => {
-          if (!genreMap.has(genre)) {
-            genreMap.set(genre, [])
-          }
-          genreMap.get(genre).push(show)
-        })
-      }
-    })
-
-    // Sort genres by number of shows (same as homepage logic)
-    const sortedGenres = Array.from(genreMap.entries())
       .sort((a, b) => b[1].length - a[1].length)
 
     // Get the first 6 shows from the top 5 genres (these are visible on homepage)

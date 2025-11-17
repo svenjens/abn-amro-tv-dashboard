@@ -136,6 +136,15 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   /**
+   * Set search results directly (used for semantic search)
+   */
+  function setResults(shows: Show[]): void {
+    searchResults.value = shows.map((show) => ({ show, score: 1 }))
+    loading.value = false
+    error.value = null
+  }
+
+  /**
    * Reset store state
    */
   function $reset(): void {
@@ -167,6 +176,7 @@ export const useSearchStore = defineStore('search', () => {
 
     // Actions
     search,
+    setResults,
     clearSearch,
     clearError,
     clearRecentSearches,
