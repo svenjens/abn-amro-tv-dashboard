@@ -4,11 +4,48 @@ export default defineNuxtConfig({
   
   devtools: { enabled: true },
   
+  // Color mode configuration
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light'
+  },
+  
+  // Robots configuration
+  robots: {
+    disallow: []
+  },
+  
+  // Sitemap configuration
+  sitemap: {
+    hostname: 'https://bingelist.app',
+    gzip: true,
+    routes: []
+  },
+  
+  // Image optimization configuration
+  image: {
+    formats: ['webp', 'avif', 'png', 'jpg'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    }
+  },
+  
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap'
   ],
   
   // Runtime config for env variables
