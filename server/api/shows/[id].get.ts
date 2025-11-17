@@ -51,7 +51,11 @@ export default cachedEventHandler(
           const searchUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${encodeURIComponent(show.name)}`
           const searchResponse = await $fetch<any>(searchUrl)
 
-          if (searchResponse.results && searchResponse.results.length > 0) {
+          if (
+            searchResponse.results &&
+            Array.isArray(searchResponse.results) &&
+            searchResponse.results.length > 0
+          ) {
             const tmdbShow = searchResponse.results[0]
             const tmdbId = tmdbShow.id
 
@@ -89,19 +93,19 @@ export default cachedEventHandler(
               })
 
               // Flatrate (subscription services like Netflix, Disney+)
-              if (countryData.flatrate) {
+              if (Array.isArray(countryData.flatrate)) {
                 providers.push(
                   ...countryData.flatrate.map((p: any) => transformProvider(p, 'subscription'))
                 )
               }
 
               // Buy options
-              if (countryData.buy) {
+              if (Array.isArray(countryData.buy)) {
                 providers.push(...countryData.buy.map((p: any) => transformProvider(p, 'buy')))
               }
 
               // Rent options
-              if (countryData.rent) {
+              if (Array.isArray(countryData.rent)) {
                 providers.push(...countryData.rent.map((p: any) => transformProvider(p, 'rent')))
               }
 

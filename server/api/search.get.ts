@@ -25,6 +25,12 @@ export default cachedEventHandler(
         }
       )
 
+      // Validate response is an array
+      if (!Array.isArray(response)) {
+        console.error('Invalid search response:', response)
+        return []
+      }
+
       return response
     } catch (error) {
       console.error('Error searching shows:', error)

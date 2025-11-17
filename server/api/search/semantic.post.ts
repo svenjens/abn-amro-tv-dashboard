@@ -91,7 +91,7 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
     const gptResult = JSON.parse(response.choices?.[0]?.message?.content || '{}')
 
     // Step 2: Search TVMaze with generated terms
-    const searchTerms = gptResult.searchTerms || [query]
+    const searchTerms = Array.isArray(gptResult.searchTerms) ? gptResult.searchTerms : [query]
     const allResults = new Map() // Deduplicate by show ID
 
     // Search with each term
@@ -106,6 +106,12 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
             },
           }
         )
+
+        // Validate response is an array
+        if (!Array.isArray(shows)) {
+          console.error(`Invalid shows response for term: ${term}`, shows)
+          continue
+        }
 
         // Add to results (TVMaze returns [{score, show}])
         for (const result of shows.slice(0, 10)) {
@@ -149,6 +155,14 @@ Always return valid JSON. Be creative with search terms to maximize results.`,
           },
         }
       )
+
+      // Validate response is an array
+      if (!Array.isArray(fallbackResults)) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Invalid search results',
+        })
+      }
 
       return {
         query,

@@ -53,6 +53,15 @@ export default cachedEventHandler(
         },
       })
 
+      // Validate response is an array
+      if (!Array.isArray(shows)) {
+        console.error('Invalid shows response:', shows)
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Invalid shows data received from API',
+        })
+      }
+
       // Group and sort shows by genre on the server
       const groupedShows = groupShowsByGenreAndSort(shows)
 

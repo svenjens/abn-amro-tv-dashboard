@@ -24,6 +24,12 @@ export default cachedEventHandler(
         },
       })
 
+      // Validate response is an array
+      if (!Array.isArray(episodes)) {
+        console.error(`Invalid episodes response for show ${id}:`, episodes)
+        return []
+      }
+
       // Sanitize episode summaries server-side
       episodes.forEach((episode) => {
         if (episode.summary) {
