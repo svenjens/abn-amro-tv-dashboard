@@ -36,6 +36,7 @@
     "smartInfoAction": "Press Enter or click Search to submit.",
     "semanticPlaceholder": "Try: 'dark sci-fi shows like Black Mirror'",
     "tryAsking": "Try asking:",
+    "orTryAsking": "Or try these examples:",
     "searchingFor": "Searching for:",
     "similarTo": "Similar to {show}",
     "aiSearching": "Understanding your query...",

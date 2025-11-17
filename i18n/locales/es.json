@@ -36,6 +36,7 @@
     "smartInfoAction": "Presiona Enter o haz clic en Buscar para enviar.",
     "semanticPlaceholder": "Prueba: 'series de ciencia ficción oscura como Black Mirror'",
     "tryAsking": "Prueba preguntando:",
+    "orTryAsking": "O prueba estos ejemplos:",
     "searchingFor": "Buscando:",
     "similarTo": "Similar a {show}",
     "aiSearching": "Entendiendo tu consulta...",

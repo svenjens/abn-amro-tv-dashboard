@@ -65,34 +65,37 @@
         </div>
 
         <!-- Info Bar explaining search modes -->
-        <div
-          class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-        >
-          <div class="flex items-start gap-2">
-            <svg
-              class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div class="text-sm text-blue-800 dark:text-blue-200">
-              <span v-if="!isSemanticMode">
-                {{ t('search.regularInfo') }}
-              </span>
-              <span v-else>
-                {{ t('search.smartInfo') }}
-                <strong class="font-semibold">{{ t('search.smartInfoAction') }}</strong>
-              </span>
+        <Transition name="fade" mode="out-in">
+          <div
+            :key="isSemanticMode ? 'smart' : 'regular'"
+            class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+          >
+            <div class="flex items-start gap-2">
+              <svg
+                class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div class="text-sm text-blue-800 dark:text-blue-200">
+                <span v-if="!isSemanticMode">
+                  {{ t('search.regularInfo') }}
+                </span>
+                <span v-else>
+                  {{ t('search.smartInfo') }}
+                  <strong class="font-semibold">{{ t('search.smartInfoAction') }}</strong>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        </Transition>
 
         <!-- Search Bar with Submit Button -->
         <div class="flex gap-2">
@@ -129,10 +132,15 @@
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Example Queries (only in semantic mode, no search yet) -->
-      <div v-if="isSemanticMode && !searchQuery" class="mb-8">
+      <!-- Example Queries (in semantic mode when no search performed) -->
+      <div
+        v-if="
+          isSemanticMode && (!searchQuery || !searchStore.hasResults) && !searchStore.isSearching
+        "
+        class="mb-8"
+      >
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          {{ t('search.tryAsking') }}
+          {{ searchQuery ? t('search.orTryAsking') : t('search.tryAsking') }}
         </h3>
         <div class="flex flex-wrap gap-3">
           <button
@@ -461,3 +469,16 @@ onMounted(() => {
   })
 })
 </script>
+
+<style scoped>
+/* Fade transition for info bar when switching modes */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
