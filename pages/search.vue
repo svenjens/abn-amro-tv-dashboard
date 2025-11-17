@@ -31,7 +31,7 @@
         </div>
 
         <!-- Search Mode Toggle -->
-        <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-3">
           <button
             :class="[
               'px-4 py-2 rounded-lg font-medium transition-all',
@@ -64,15 +64,66 @@
           </button>
         </div>
 
-        <SearchBar
-          ref="searchBarRef"
-          v-model="searchQuery"
-          :placeholder="isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')"
-          :recent-searches="searchStore.recentSearches"
-          :disable-type-ahead="isSemanticMode"
-          @search="handleSearch"
-          @clear-recent="searchStore.clearRecentSearches()"
-        />
+        <!-- Info Bar explaining search modes -->
+        <div
+          class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+        >
+          <div class="flex items-start gap-2">
+            <svg
+              class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <div class="text-sm text-blue-800 dark:text-blue-200">
+              <span v-if="!isSemanticMode">
+                {{ t('search.regularInfo') }}
+              </span>
+              <span v-else>
+                {{ t('search.smartInfo') }}
+                <strong class="font-semibold">{{ t('search.smartInfoAction') }}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar with Submit Button -->
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <SearchBar
+              ref="searchBarRef"
+              v-model="searchQuery"
+              :placeholder="
+                isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')
+              "
+              :recent-searches="searchStore.recentSearches"
+              :disable-type-ahead="isSemanticMode"
+              @search="handleSearch"
+              @clear-recent="searchStore.clearRecentSearches()"
+            />
+          </div>
+          <button
+            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="!searchQuery.trim() || searchQuery.trim().length < 2"
+            @click="handleSearch(searchQuery)"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
