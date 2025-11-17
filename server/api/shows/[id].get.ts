@@ -1,12 +1,14 @@
 /**
  * Server API route to fetch a single show by ID
  * Combines TVMaze data with TMDB streaming availability and extra metadata
+ * Uses Nitro caching for improved performance
  */
 
-export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id')
-  const query = getQuery(event)
-  const country = (query.country as string) || 'US'
+export default cachedEventHandler(
+  async (event) => {
+    const id = getRouterParam(event, 'id')
+    const query = getQuery(event)
+    const country = (query.country as string) || 'US'
   
   if (!id) {
     throw createError({
@@ -105,5 +107,20 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Show not found'
     })
   }
-})
+  },
+  {
+    // Cache for 24 hours (show data rarely changes)
+    maxAge: 60 * 60 * 24, // 24 hours in seconds
+    name: 'show-details',
+    getKey: (event) => {
+      const id = getRouterParam(event, 'id')
+      const query = getQuery(event)
+      const country = (query.country as string) || 'US'
+      return `show-${id}-${country}`
+    },
+    swr: true,
+    // Vary cache by country for streaming availability
+    varies: ['country']
+  }
+)
 

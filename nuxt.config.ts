@@ -159,6 +159,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@vueuse/nuxt',
+    '@vueuse/motion/nuxt',
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/scripts',

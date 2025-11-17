@@ -1,5 +1,6 @@
 /**
  * PWA utilities for service worker registration and install prompt
+ * .client.ts suffix ensures this only runs on the client-side
  */
 
 import { logger } from './logger'
@@ -147,3 +148,4 @@ export async function clearPWACache(): Promise<void> {
     logger.debug('[PWA] Cache clear requested')
   }
 }
+

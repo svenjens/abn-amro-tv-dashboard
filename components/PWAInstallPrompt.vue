@@ -74,18 +74,24 @@ import { logger } from '@/utils'
 const { t } = useI18n()
 const showPrompt = ref(false)
 
-// Don't show if already installed as PWA
-const isAlreadyInstalled = isPWA()
+// Check browser-only values on client
+const isAlreadyInstalled = ref(false)
+const dismissedRecently = ref(false)
 
-// Check if user previously dismissed
-const STORAGE_KEY = 'pwa-install-dismissed'
-const dismissedAt = localStorage.getItem(STORAGE_KEY)
-const dismissedRecently =
-  dismissedAt && Date.now() - parseInt(dismissedAt) < 7 * 24 * 60 * 60 * 1000 // 7 days
+onMounted(() => {
+  // Don't show if already installed as PWA
+  isAlreadyInstalled.value = isPWA()
+  
+  // Check if user previously dismissed
+  const STORAGE_KEY = 'pwa-install-dismissed'
+  const dismissedAt = localStorage.getItem(STORAGE_KEY)
+  dismissedRecently.value =
+    !!dismissedAt && Date.now() - parseInt(dismissedAt) < 7 * 24 * 60 * 60 * 1000 // 7 days
+})
 
 function handleInstallAvailable() {
   // Show prompt if not already installed and not recently dismissed
-  if (!isAlreadyInstalled && !dismissedRecently) {
+  if (!isAlreadyInstalled.value && !dismissedRecently.value) {
     // Show after a short delay to not be too intrusive
     setTimeout(() => {
       showPrompt.value = true
