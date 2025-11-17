@@ -15,6 +15,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Require at least 2 characters (consistent with regular search)
+  if (query.trim().length < 2) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Search query must be at least 2 characters',
+    })
+  }
+
   const config = useRuntimeConfig()
 
   if (!config.openaiApiKey) {
