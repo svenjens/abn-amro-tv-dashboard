@@ -154,8 +154,7 @@ describe('sanitizeHtml', () => {
 
   describe('Complex XSS vectors', () => {
     it('should handle multiple encoded characters', () => {
-      const input =
-        '<a href="j&#97;v&#97;script&#58;alert(&#39;XSS&#39;)">Click</a>'
+      const input = '<a href="j&#97;v&#97;script&#58;alert(&#39;XSS&#39;)">Click</a>'
       const result = sanitizeHtml(input)
       expect(result).not.toContain('javascript:')
       expect(result).toContain('Click')
