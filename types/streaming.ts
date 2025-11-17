@@ -37,7 +37,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   netflix: {
     id: 'netflix',
     name: 'Netflix',
-    logo: '🎬',
+    logo: '',
     homePage: 'https://www.netflix.com',
     searchUrl: 'https://www.netflix.com/search?q={query}',
     themeColorCode: '#E50914',
@@ -46,7 +46,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   prime: {
     id: 'prime',
     name: 'Amazon Prime Video',
-    logo: '📺',
+    logo: '',
     homePage: 'https://www.primevideo.com',
     searchUrl: 'https://www.primevideo.com/search?phrase={query}',
     themeColorCode: '#00A8E1',
@@ -55,7 +55,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   disney: {
     id: 'disney',
     name: 'Disney+',
-    logo: '🏰',
+    logo: '',
     homePage: 'https://www.disneyplus.com',
     searchUrl: 'https://www.disneyplus.com/search?q={query}',
     themeColorCode: '#113CCF',
@@ -64,7 +64,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   hbo: {
     id: 'hbo',
     name: 'HBO Max',
-    logo: '🎭',
+    logo: '',
     homePage: 'https://www.max.com',
     searchUrl: 'https://www.max.com/search?q={query}',
     themeColorCode: '#002BE7',
@@ -73,7 +73,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   hulu: {
     id: 'hulu',
     name: 'Hulu',
-    logo: '📱',
+    logo: '',
     homePage: 'https://www.hulu.com',
     searchUrl: 'https://www.hulu.com/search?q={query}',
     themeColorCode: '#1CE783',
@@ -82,7 +82,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   apple: {
     id: 'apple',
     name: 'Apple TV+',
-    logo: '🍎',
+    logo: '',
     homePage: 'https://tv.apple.com',
     searchUrl: 'https://tv.apple.com/search?q={query}',
     themeColorCode: '#000000',
@@ -91,7 +91,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   paramount: {
     id: 'paramount',
     name: 'Paramount+',
-    logo: '⛰️',
+    logo: '',
     homePage: 'https://www.paramountplus.com',
     searchUrl: 'https://www.paramountplus.com/search?query={query}',
     themeColorCode: '#0064FF',
@@ -100,7 +100,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   peacock: {
     id: 'peacock',
     name: 'Peacock',
-    logo: '🦚',
+    logo: '',
     homePage: 'https://www.peacocktv.com',
     searchUrl: 'https://www.peacocktv.com/search?q={query}',
     themeColorCode: '#000000',
@@ -109,7 +109,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   skyshowtime: {
     id: 'skyshowtime',
     name: 'SkyShowtime',
-    logo: '🌟',
+    logo: '',
     homePage: 'https://www.skyshowtime.com',
     searchUrl: 'https://www.skyshowtime.com/search?q={query}',
     themeColorCode: '#5433FF',
@@ -118,7 +118,7 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
   videoland: {
     id: 'videoland',
     name: 'Videoland',
-    logo: '📹',
+    logo: '',
     homePage: 'https://www.videoland.com',
     searchUrl: 'https://www.videoland.com/zoeken?q={query}',
     themeColorCode: '#FF0000',

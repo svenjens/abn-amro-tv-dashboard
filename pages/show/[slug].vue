@@ -347,8 +347,12 @@ const streamingAvailability = ref<StreamingAvailabilityType[]>([])
 async function fetchStreamingAvailability() {
   if (!show.value) return
 
+  // Get user's country from location middleware
+  const { country } = useLocation()
+  const userCountry = country.value || 'NL'
+
   try {
-    const availability = await streamingService.getStreamingAvailability(show.value, 'NL')
+    const availability = await streamingService.getStreamingAvailability(show.value, userCountry)
     streamingAvailability.value = availability
   } catch (err) {
     logger.error('Error fetching streaming availability:', err)

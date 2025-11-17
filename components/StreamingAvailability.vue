@@ -19,11 +19,16 @@
           @click="handleStreamingClick($event, option.service, option.link)"
         >
           <!-- Service Logo/Icon -->
-          <div
+          <div 
             class="streaming-icon"
-            :style="{ backgroundColor: getServiceColor(option.service.id) }"
+            :style="{ 
+              backgroundColor: getServiceColor(option.service.id),
+              borderColor: getServiceColor(option.service.id)
+            }"
           >
-            <span class="text-3xl">{{ option.service.logo }}</span>
+            <div class="streaming-brand-text">
+              {{ getServiceBrandName(option.service.id) }}
+            </div>
           </div>
 
           <!-- Service Info -->
@@ -127,6 +132,25 @@ const getServiceColor = (serviceId: string): string => {
 }
 
 /**
+ * Get brand name to display for a streaming service
+ */
+const getServiceBrandName = (serviceId: string): string => {
+  const brandNames: Record<string, string> = {
+    netflix: 'NETFLIX',
+    prime: 'prime video',
+    disney: 'Disney+',
+    hbo: 'Max',
+    hulu: 'hulu',
+    apple: 'tv+',
+    paramount: 'Paramount+',
+    peacock: 'Peacock',
+    skyshowtime: 'SkyShowtime',
+    videoland: 'Videoland'
+  }
+  return brandNames[serviceId] || serviceId.toUpperCase()
+}
+
+/**
  * Check if a service has an affiliate program
  */
 const hasAffiliate = (serviceId: string): boolean => {
@@ -147,6 +171,7 @@ const formatPrice = (price: number, currency?: string): string => {
     currency: curr,
   }).format(price)
 }
+
 </script>
 
 <style scoped>
@@ -194,7 +219,17 @@ const formatPrice = (price: number, currency?: string): string => {
 }
 
 .streaming-icon {
-  @apply w-16 h-16 rounded-lg flex items-center justify-center shadow-sm;
+  @apply w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden border-2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.streaming-brand-text {
+  @apply text-white font-bold text-center px-1;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .affiliate-badge {
