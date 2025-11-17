@@ -91,7 +91,7 @@ export default defineNuxtConfig({
         for (const genre of genres) {
           genreUrls.push({
             loc: `/${locale}/genre/${genre}`,
-            changefreq: 'weekly',
+            changefreq: 'weekly' as const,
             priority: 0.7
           })
         }
@@ -103,7 +103,7 @@ export default defineNuxtConfig({
   
   // Image optimization configuration
   image: {
-    formats: ['webp', 'avif', 'png', 'jpg'],
+    format: ['webp', 'avif', 'png', 'jpg'],
     screens: {
       xs: 320,
       sm: 640,
@@ -194,7 +194,6 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
     strategy: 'prefix_except_default',
     langDir: 'locales',
-    lazy: true,
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',

@@ -14,8 +14,6 @@ export default defineVitestConfig({
         overrides: {
           // Disable i18n lazy loading for tests
           i18n: {
-            lazy: false,
-            langDir: null,
             locales: [
               { code: 'en', iso: 'en-US', name: 'English' },
               { code: 'nl', iso: 'nl-NL', name: 'Nederlands' },
