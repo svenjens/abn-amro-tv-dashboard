@@ -65,14 +65,17 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Show Details**: View comprehensive information about each show including ratings, schedule, and summary
 - **Search Functionality**: Search for TV shows by name with real-time results
 - **Watchlist**: Save your favorite shows and track what you want to watch
+- **Streaming Availability**: See where shows are available to watch, with country-specific results
+- **Dark Mode**: System-aware dark mode with manual toggle
 - **Progressive Web App**: Install as a native app with offline support
 - **Monetization**: Google AdSense integration for sustainable development
 
 ### Internationalization (i18n)
-- **Multi-language Support**: Full support for English and Dutch
-- **Locale-based Routing**: SEO-friendly URLs with locale prefixes (`/en/`, `/nl/`)
-- **Language Switcher**: Easy language switching with persistent preferences
-- **Translated Content**: All UI elements, labels, and messages in both languages
+- **Multi-language Support**: Full support for English, Dutch, and Spanish
+- **Locale-based Routing**: SEO-friendly URLs with locale prefixes (`/en/`, `/nl/`, `/es/`)
+- **Browser Language Detection**: Automatically detects and redirects to user's preferred language
+- **Language Switcher**: Dropdown menu for easy language switching with persistent preferences
+- **Translated Content**: All UI elements, labels, and messages in three languages
 
 ### Accessibility (a11y)
 - **WCAG 2.1 AA Compliant**: Follows web accessibility standards
@@ -235,14 +238,19 @@ To show multi-platform availability (e.g., a show on both Netflix and Hulu), we 
 
 | Technology | Purpose | Justification |
 |------------|---------|---------------|
+| **Nuxt 4** | Meta-framework | SSR, file-based routing, auto-imports, and better SEO out of the box |
 | **Vue 3** | Frontend framework | Latest version with Composition API for better TypeScript support and code reusability |
 | **TypeScript** | Type safety | Ensures code quality, better IDE support, and fewer runtime errors |
 | **Vite** | Build tool | Fast development server, optimized builds, and native ES modules support |
 | **Tailwind CSS** | Styling | Utility-first approach enables rapid development with consistent design |
 | **Pinia** | State management | Official Vue 3 store with simpler API than Vuex and excellent TypeScript support |
-| **Vue Router** | Routing | Official router with declarative routing, navigation guards, and locale support |
-| **Vue I18n** | Internationalization | Official i18n plugin with full TypeScript support and composition API |
-| **Axios** | HTTP client | Promise-based HTTP client with interceptors for centralized error handling |
+| **@nuxtjs/i18n** | Internationalization | Official Nuxt module with automatic route generation and SSR support |
+| **@nuxt/image** | Image optimization | Automatic WebP conversion, lazy loading, and responsive images |
+| **@nuxtjs/color-mode** | Dark mode | Automatic dark mode with system preference detection |
+| **@nuxt/icon** | Icons | Access to 200,000+ icons from Iconify |
+| **@nuxtjs/sitemap** | SEO | Automatic sitemap generation for better search engine indexing |
+| **@nuxtjs/robots** | SEO | Automatic robots.txt management |
+| **@nuxt/scripts** | Third-party scripts | Optimized loading of Google Analytics and other external scripts |
 | **Vitest** | Testing framework | Fast, Vite-native testing with excellent Vue component testing support |
 
 ### Project Structure
