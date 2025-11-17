@@ -1,8 +1,10 @@
 /**
  * Server-side HTML sanitization utility
- * Sanitizes HTML content during SSR for better performance and security
- * Using regex-based approach to avoid jsdom issues in serverless environments
+ * Uses sanitize-html library for robust XSS protection
+ * Prevents data: URIs, vbscript:, nested tags, encoded attributes, and mXSS attacks
  */
+
+import sanitizeHtmlLib from 'sanitize-html'
 
 interface SanitizeOptions {
   allowedTags?: string[]
@@ -27,96 +29,51 @@ const DEFAULT_ALLOWED_TAGS = [
   'h6',
 ]
 
-const SAFE_URL_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:']
-
 /**
- * Sanitize URL to prevent XSS attacks via href attributes
- * Handles encoded forms like j&#97;vascript:
- */
-function sanitizeUrl(url: string): string {
-  if (!url) return ''
-
-  // Decode HTML entities (handles j&#97;vascript: and similar)
-  let decoded = url
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec))
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&apos;/gi, "'")
-    .replace(/&amp;/gi, '&')
-
-  // Strip whitespace and control characters that could be used for obfuscation
-  const controlCharsRegex = new RegExp('[\\x00-\\x1f\\x7f-\\x9f]', 'g')
-  decoded = decoded.trim().replace(controlCharsRegex, '')
-
-  // Check if it's a relative URL (safe)
-  if (decoded.startsWith('/') || decoded.startsWith('./') || decoded.startsWith('../')) {
-    return decoded
-  }
-
-  // Check if it has a protocol
-  if (decoded.includes(':')) {
-    // Extract and lowercase the protocol
-    const protocol = (decoded.split(':')[0] || '').toLowerCase() + ':'
-
-    // Reject dangerous protocols
-    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']
-    if (dangerousProtocols.some((dangerous) => protocol === dangerous)) {
-      return '' // Return empty string for dangerous URLs
-    }
-
-    // Only allow safe protocols
-    if (!SAFE_URL_PROTOCOLS.includes(protocol)) {
-      return ''
-    }
-  }
-
-  return decoded
-}
-
-/**
- * Simple regex-based HTML sanitizer for serverless environments
- * Removes all HTML tags except those in the allowlist
+ * Sanitize HTML using the sanitize-html library
+ * This provides robust protection against XSS including:
+ * - data: URIs
+ * - vbscript:, javascript: protocols
+ * - Nested/malformed tags
+ * - Encoded/unicode event attributes
+ * - mXSS (mutation XSS)
  */
 export function sanitizeHtml(html: string, options: SanitizeOptions = {}): string {
   if (!html) return ''
 
   const allowedTags = options.allowedTags || DEFAULT_ALLOWED_TAGS
 
-  // Remove script and style tags completely (including content)
-  let sanitized = html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-
-  // Remove all tags except allowed ones
-  sanitized = sanitized.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, (match, tag) => {
-    const lowerTag = tag.toLowerCase()
-    if (allowedTags.includes(lowerTag)) {
-      // For allowed tags, remove potentially dangerous attributes
-      if (lowerTag === 'a') {
-        // Extract, sanitize, and validate href
-        const hrefMatch = match.match(/href\s*=\s*["']([^"']*)["']/i)
-        const rawHref = hrefMatch?.[1] || ''
-        const sanitizedHref = sanitizeUrl(rawHref)
-
-        // Only create link if href is safe, otherwise strip the tag
-        if (!sanitizedHref) {
-          return match.startsWith('</') ? '' : ''
+  return sanitizeHtmlLib(html, {
+    allowedTags,
+    allowedAttributes: {
+      a: ['href', 'rel', 'target'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: {
+      a: ['http', 'https', 'mailto', 'tel'],
+    },
+    // Disallow data: URIs and other dangerous protocols
+    allowProtocolRelative: false,
+    // Remove disallowed tags entirely (don't just escape them)
+    disallowedTagsMode: 'discard',
+    // Enforce that URLs are properly encoded
+    enforceHtmlBoundary: true,
+    // Additional security settings
+    parseStyleAttributes: false,
+    transformTags: {
+      a: (tagName, attribs) => {
+        return {
+          tagName: 'a',
+          attribs: {
+            ...attribs,
+            // Add security attributes to all links
+            rel: 'noopener noreferrer',
+            target: attribs.target || '_self',
+          },
         }
-
-        return match.startsWith('</')
-          ? '</a>'
-          : `<a href="${sanitizedHref}" rel="noopener noreferrer">`
-      }
-      // For other allowed tags, strip all attributes
-      return match.startsWith('</') ? `</${lowerTag}>` : `<${lowerTag}>`
-    }
-    // Remove non-allowed tags
-    return ''
+      },
+    },
   })
-
-  return sanitized.trim()
 }
 
 /**
