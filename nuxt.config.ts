@@ -9,7 +9,13 @@ export default defineNuxtConfig({
     prerender: {
       failOnError: false, // Don't fail build on prerender errors
       crawlLinks: false,   // Don't automatically discover links
-      routes: ['/legal/privacy', '/legal/disclaimer'] // Only prerender these specific routes
+      routes: ['/legal/privacy', '/legal/disclaimer'], // Only prerender these specific routes
+      ignore: [
+        '/show/**', // Never prerender show pages (need API data)
+        '/genre/**', // Never prerender genre pages (need API data)
+        '/search', // Never prerender search page (client-side only)
+        '/api/**' // Never prerender API routes
+      ]
     }
   },
 
@@ -41,8 +47,8 @@ export default defineNuxtConfig({
     '/genre/**': { swr: 3600 },
     '/*/genre/**': { swr: 3600 },
     // Show pages - SSR with 1 week cache (shows don't change often)
-    '/show/**': { swr: 604800 }, // 7 days
-    '/*/show/**': { swr: 604800 },
+    '/show/**': { ssr: true, swr: 604800 }, // 7 days
+    '/*/show/**': { ssr: true, swr: 604800 },
     // API routes - no caching
     '/api/**': { cache: false }
   },
