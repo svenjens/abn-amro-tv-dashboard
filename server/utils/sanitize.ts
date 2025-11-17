@@ -27,6 +27,53 @@ const DEFAULT_ALLOWED_TAGS = [
   'h6',
 ]
 
+const SAFE_URL_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:']
+
+/**
+ * Sanitize URL to prevent XSS attacks via href attributes
+ * Handles encoded forms like j&#97;vascript:
+ */
+function sanitizeUrl(url: string): string {
+  if (!url) return ''
+  
+  // Decode HTML entities (handles j&#97;vascript: and similar)
+  let decoded = url
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'")
+    .replace(/&amp;/gi, '&')
+  
+  // Strip whitespace and control characters that could be used for obfuscation
+  decoded = decoded.trim().replace(/[\x00-\x1f\x7f-\x9f]/g, '')
+  
+  // Check if it's a relative URL (safe)
+  if (decoded.startsWith('/') || decoded.startsWith('./') || decoded.startsWith('../')) {
+    return decoded
+  }
+  
+  // Check if it has a protocol
+  if (decoded.includes(':')) {
+    // Extract and lowercase the protocol
+    const protocol = decoded.split(':')[0].toLowerCase() + ':'
+    
+    // Reject dangerous protocols
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']
+    if (dangerousProtocols.some(dangerous => protocol === dangerous)) {
+      return '' // Return empty string for dangerous URLs
+    }
+    
+    // Only allow safe protocols
+    if (!SAFE_URL_PROTOCOLS.includes(protocol)) {
+      return ''
+    }
+  }
+  
+  return decoded
+}
+
 /**
  * Simple regex-based HTML sanitizer for serverless environments
  * Removes all HTML tags except those in the allowlist
@@ -35,9 +82,6 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
   if (!html) return ''
 
   const allowedTags = options.allowedTags || DEFAULT_ALLOWED_TAGS
-  
-  // Create regex pattern for allowed tags
-  const allowedPattern = allowedTags.join('|')
   
   // Remove script and style tags completely (including content)
   let sanitized = html
@@ -50,10 +94,17 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
     if (allowedTags.includes(lowerTag)) {
       // For allowed tags, remove potentially dangerous attributes
       if (lowerTag === 'a') {
-        // Keep only href for links, add rel="noopener noreferrer" for safety
+        // Extract, sanitize, and validate href
         const hrefMatch = match.match(/href\s*=\s*["']([^"']*)["']/i)
-        const href = hrefMatch ? hrefMatch[1] : ''
-        return match.startsWith('</') ? '</a>' : `<a href="${href}" rel="noopener noreferrer">`
+        const rawHref = hrefMatch ? hrefMatch[1] : ''
+        const sanitizedHref = sanitizeUrl(rawHref)
+        
+        // Only create link if href is safe, otherwise strip the tag
+        if (!sanitizedHref) {
+          return match.startsWith('</') ? '' : ''
+        }
+        
+        return match.startsWith('</') ? '</a>' : `<a href="${sanitizedHref}" rel="noopener noreferrer">`
       }
       // For other allowed tags, strip all attributes
       return match.startsWith('</') ? `</${lowerTag}>` : `<${lowerTag}>`
@@ -61,11 +112,6 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
     // Remove non-allowed tags
     return ''
   })
-  
-  // Remove any remaining HTML entities that could be dangerous
-  sanitized = sanitized
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
   
   return sanitized.trim()
 }
