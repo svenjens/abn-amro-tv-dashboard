@@ -1,14 +1,25 @@
 # BingeList
 
-Your ultimate TV show discovery and tracking platform. Built with Vue 3, TypeScript, and modern web technologies.
+Your ultimate TV show discovery and tracking platform. Built with **Nuxt 4**, TypeScript, and modern web technologies.
 
 🌐 **Live:** [bingelist.app](https://bingelist.app)
 
 [![Deploy Pipeline](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml)
-![Vue 3](https://img.shields.io/badge/Vue-3.5-brightgreen)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
-![Vite](https://img.shields.io/badge/Vite-7.2-purple)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-cyan)
+![Nuxt](https://img.shields.io/badge/Nuxt-4.0-00DC82?logo=nuxt.js)
+![Vue 3](https://img.shields.io/badge/Vue-3.5-brightgreen?logo=vue.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-cyan?logo=tailwindcss)
+
+> **📦 Looking for the old Vue 3 version?** Check out the [`deprecated-vue3`](https://github.com/svenjens/tv-show-dashboard/tree/deprecated-vue3) branch.
+
+## ⚡ Performance & Architecture
+
+This version uses **Nuxt 4** with:
+- 🚀 **Server-Side Rendering (SSR)** for better SEO and initial load
+- 💾 **Multi-layer caching** (Server + Route + Client) with 48x faster response times
+- 🔥 **Cache warming** for instant first-page loads
+- 🎯 **Smart prefetching** for popular shows
+- 📦 **Automatic code splitting** and optimization
 
 ## 🚀 Features
 
