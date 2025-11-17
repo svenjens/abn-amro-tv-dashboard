@@ -8,6 +8,22 @@
  * 3. These are the shows users see first and click most often
  */
 
+/**
+ * Retry helper with exponential backoff
+ */
+async function fetchWithRetry(url: string, maxRetries = 3, baseDelay = 500): Promise<any> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await $fetch(url)
+    } catch (err) {
+      if (i === maxRetries - 1) throw err
+      // Exponential backoff: 500ms, 1000ms, 2000ms
+      const delay = baseDelay * Math.pow(2, i)
+      await new Promise(resolve => setTimeout(resolve, delay))
+    }
+  }
+}
+
 export default defineNitroPlugin(async (_nitroApp) => {
   // Skip cache warming during build time (Vercel build has no network access)
   // Only run in actual runtime (after deployment)
@@ -18,15 +34,12 @@ export default defineNitroPlugin(async (_nitroApp) => {
 
   console.log('[Cache Warming] Starting cache warming...')
 
-  // Add a small delay to allow the server to fully initialize
-  await new Promise(resolve => setTimeout(resolve, 1000))
-
   try {
-    // Pre-fetch all shows list (homepage needs this)
-    const response = await $fetch<{ shows: any[]; showsByGenre: Record<string, any[]> }>('/api/shows').catch((err) => {
-      console.warn('[Cache Warming] Failed to warm shows list:', err.message)
+    // Pre-fetch all shows list (homepage needs this) with retry logic
+    const response = await fetchWithRetry('/api/shows').catch((err) => {
+      console.warn('[Cache Warming] Failed to warm shows list after retries:', err.message)
       return null
-    })
+    }) as { shows: any[]; showsByGenre: Record<string, any[]> } | null
 
     if (!response || !response.shows || response.shows.length === 0) {
       console.warn('[Cache Warming] No shows data available')
@@ -68,8 +81,8 @@ export default defineNitroPlugin(async (_nitroApp) => {
     showsToCache.forEach((id) => {
       countries.forEach((country) => {
         warmPromises.push(
-          $fetch(`/api/shows/${id}?country=${country}`).catch(() => {
-            // Silently fail for individual shows
+          fetchWithRetry(`/api/shows/${id}?country=${country}`, 2, 300).catch(() => {
+            // Silently fail for individual shows after retries
           })
         )
       })
