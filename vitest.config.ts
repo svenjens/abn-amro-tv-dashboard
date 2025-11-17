@@ -17,9 +17,9 @@ export default defineVitestConfig({
             locales: [
               { code: 'en', iso: 'en-US', name: 'English' },
               { code: 'nl', iso: 'nl-NL', name: 'Nederlands' },
-              { code: 'es', iso: 'es-ES', name: 'Español' }
+              { code: 'es', iso: 'es-ES', name: 'Español' },
             ],
-          }
+          },
         },
       },
     },
@@ -43,4 +43,3 @@ export default defineVitestConfig({
     },
   },
 })
-

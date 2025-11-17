@@ -57,8 +57,8 @@ describe('Shows Store', () => {
         shows: mockShows,
         showsByGenre: {
           Drama: [mockShow],
-          Action: [mockShow]
-        }
+          Action: [mockShow],
+        },
       }
       mockFetch.mockResolvedValue(mockResponse)
 

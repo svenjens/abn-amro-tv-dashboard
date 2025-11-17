@@ -33,9 +33,7 @@ export function useSEO(config: SEOConfig = {}) {
       { name: 'description', content: description },
       { name: 'keywords', content: keywords.join(', ') },
     ],
-    link: url ? [
-      { rel: 'canonical', href: url }
-    ] : []
+    link: url ? [{ rel: 'canonical', href: url }] : [],
   })
 
   // Use Nuxt's useSeoMeta for OpenGraph and Twitter tags
@@ -109,9 +107,9 @@ export function generateShowStructuredData(show: Show) {
     script: [
       {
         type: 'application/ld+json',
-        innerHTML: JSON.stringify(structuredData)
-      }
-    ]
+        innerHTML: JSON.stringify(structuredData),
+      },
+    ],
   })
 }
 

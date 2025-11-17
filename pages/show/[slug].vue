@@ -261,7 +261,12 @@
 
           <!-- Cast Tab -->
           <div v-else-if="activeTab === 'cast'">
-            <CastList :cast="(cast as any) || []" :loading="castLoading" :error="castError" @retry="fetchCast" />
+            <CastList
+              :cast="(cast as any) || []"
+              :loading="castLoading"
+              :error="castError"
+              @retry="fetchCast"
+            />
           </div>
         </div>
       </main>
@@ -328,13 +333,18 @@ const userCountry = computed(() => country.value || 'US')
 
 // Server-side data fetching with useAsyncData
 // This runs on the server during SSR and provides instant content
-const { data: show, error, pending: loading } = await useAsyncData(
+const {
+  data: show,
+  error,
+  pending: loading,
+} = await useAsyncData(
   `show-${showId.value}`,
-  () => $fetch(`/api/shows/${showId.value}`, {
-    query: { country: userCountry.value }
-  }),
+  () =>
+    $fetch(`/api/shows/${showId.value}`, {
+      query: { country: userCountry.value },
+    }),
   {
-    watch: [showId, userCountry]
+    watch: [showId, userCountry],
   }
 )
 
@@ -348,22 +358,32 @@ const relatedShows = computed(() => {
 })
 
 // Episodes - lazy loaded via server API when tab is opened
-const { data: episodes, error: episodesError, pending: episodesLoading, execute: fetchEpisodes } = await useLazyAsyncData(
+const {
+  data: episodes,
+  error: episodesError,
+  pending: episodesLoading,
+  execute: fetchEpisodes,
+} = await useLazyAsyncData(
   `episodes-${showId.value}`,
   () => $fetch(`/api/shows/${showId.value}/episodes`),
   {
     immediate: false,
-    server: false // Only fetch on client when needed
+    server: false, // Only fetch on client when needed
   }
 )
 
 // Cast - lazy loaded via server API when tab is opened
-const { data: cast, error: castError, pending: castLoading, execute: fetchCast } = await useLazyAsyncData(
+const {
+  data: cast,
+  error: castError,
+  pending: castLoading,
+  execute: fetchCast,
+} = await useLazyAsyncData(
   `cast-${showId.value}`,
   () => $fetch(`/api/shows/${showId.value}/cast`),
   {
     immediate: false,
-    server: false // Only fetch on client when needed
+    server: false, // Only fetch on client when needed
   }
 )
 
@@ -392,14 +412,18 @@ function formatDate(dateString: string): string {
 }
 
 // Validate slug and redirect if incorrect (for SEO)
-watch(show, (showData) => {
-  if (showData && showId.value) {
-    const correctSlug = createShowSlug(showData.name, showId.value)
-    if (slug.value !== correctSlug) {
-      navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
+watch(
+  show,
+  (showData) => {
+    if (showData && showId.value) {
+      const correctSlug = createShowSlug(showData.name, showId.value)
+      if (slug.value !== correctSlug) {
+        navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
+      }
     }
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+)
 
 // Lazy load episodes and cast when tabs are opened
 watch(activeTab, (newTab) => {
@@ -411,34 +435,36 @@ watch(activeTab, (newTab) => {
 })
 
 // SEO: Update meta tags when show data changes
-watch(show, (showData) => {
-  if (showData) {
-    const description = showData.summary 
-      ? showData.summary.replace(/<[^>]*>/g, '').substring(0, 160) 
-      : `Watch ${showData.name} - Find streaming availability and full details on BingeList`
-    
-    const title = `${showData.name} - BingeList`
-    const image = showData.image?.original || showData.image?.medium
-    
-    useHead({
-      title,
-      meta: [
-        { name: 'description', content: description },
-      ]
-    })
-    
-    useSeoMeta({
-      title,
-      description,
-      ogTitle: title,
-      ogDescription: description,
-      ogImage: image,
-      ogType: 'video.tv_show',
-      twitterCard: 'summary_large_image',
-      twitterTitle: title,
-      twitterDescription: description,
-      twitterImage: image,
-    })
-  }
-}, { immediate: true })
+watch(
+  show,
+  (showData) => {
+    if (showData) {
+      const description = showData.summary
+        ? showData.summary.replace(/<[^>]*>/g, '').substring(0, 160)
+        : `Watch ${showData.name} - Find streaming availability and full details on BingeList`
+
+      const title = `${showData.name} - BingeList`
+      const image = showData.image?.original || showData.image?.medium
+
+      useHead({
+        title,
+        meta: [{ name: 'description', content: description }],
+      })
+
+      useSeoMeta({
+        title,
+        description,
+        ogTitle: title,
+        ogDescription: description,
+        ogImage: image,
+        ogType: 'video.tv_show',
+        twitterCard: 'summary_large_image',
+        twitterTitle: title,
+        twitterDescription: description,
+        twitterImage: image,
+      })
+    }
+  },
+  { immediate: true }
+)
 </script>

@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-
 const { t } = useI18n()
 
 function skipToContent(event: Event) {

@@ -16,13 +16,13 @@
             /optimized/hero-background.webp      1920w
           "
           sizes="100vw"
-        >
+        />
         <img
           src="/optimized/hero-background.png"
           alt=""
           class="w-full h-full object-cover"
           aria-hidden="true"
-        >
+        />
       </picture>
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
@@ -38,12 +38,12 @@
                   /optimized/logo-main-256.webp 256w
                 "
                 sizes="64px"
-              >
+              />
               <img
                 src="/optimized/logo-main.png"
                 alt="BingeList Logo"
                 class="h-16 w-16 object-contain"
-              >
+              />
             </picture>
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
@@ -183,13 +183,13 @@
               /optimized/empty-state-illustration.webp     512w
             "
             sizes="192px"
-          >
+          />
           <img
             src="/optimized/empty-state-illustration.png"
             alt=""
             class="mx-auto h-48 w-48 object-contain opacity-50"
             aria-hidden="true"
-          >
+          />
         </picture>
         <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ t('home.noShows') }}
@@ -340,7 +340,7 @@ function handleSearchFocus() {
   if (searchQuery.value.trim()) {
     navigateTo(localePath(`/search?q=${encodeURIComponent(searchQuery.value)}`))
   } else {
-  navigateTo(localePath('/search'))
+    navigateTo(localePath('/search'))
   }
 }
 
@@ -358,7 +358,7 @@ const { data: showsData } = await useAsyncData(
   'all-shows',
   () => $fetch<{ shows: Show[]; showsByGenre: Record<string, Show[]> }>('/api/shows'),
   {
-    dedupe: 'defer' // Dedupe requests during SSR
+    dedupe: 'defer', // Dedupe requests during SSR
   }
 )
 

@@ -15,11 +15,7 @@
         { "type": "ci", "section": "Continuous Integration", "hidden": false },
         { "type": "chore", "section": "Miscellaneous", "hidden": true }
       ],
-      "extra-files": [
-        "package.json",
-        "package-lock.json"
-      ]
+      "extra-files": ["package.json", "package-lock.json"]
     }
   }
 }
-

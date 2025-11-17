@@ -26,6 +26,7 @@ This document explains how to set up and deploy the TV Show Dashboard to Vercel.
 You need three secrets for GitHub Actions:
 
 #### A. Vercel Token
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -38,6 +39,7 @@ vercel login
 ```
 
 #### B. Vercel Organization ID
+
 ```bash
 # In your project directory
 vercel link
@@ -48,6 +50,7 @@ cat .vercel/project.json
 ```
 
 #### C. Vercel Project ID
+
 ```bash
 # Get projectId from the same file
 cat .vercel/project.json
@@ -58,6 +61,7 @@ cat .vercel/project.json
 Go to your GitHub repository → Settings → Secrets and variables → Actions
 
 Add these secrets:
+
 - `VERCEL_TOKEN` - Your Vercel token
 - `VERCEL_ORG_ID` - Your organization ID
 - `VERCEL_PROJECT_ID` - Your project ID
@@ -74,42 +78,50 @@ The deployment happens automatically:
 The deployment pipeline includes 8 jobs:
 
 ### 1. **Lint & Type Check**
+
 - ✅ Runs ESLint
 - ✅ TypeScript type checking
 - ✅ Checks for console.log statements
 
 ### 2. **Unit Tests**
+
 - ✅ Runs all unit tests with Vitest
 - ✅ Generates coverage report
 - ✅ Uploads to Codecov
 
 ### 3. **Build & Bundle Size**
+
 - ✅ Builds production bundle
 - ✅ Checks bundle sizes
 - ✅ Warns if bundles are too large
 - ✅ Uploads build artifacts
 
 ### 4. **Accessibility Tests**
+
 - ✅ Runs Pa11y CI for WCAG2AA compliance
 - ✅ Tests with axe-core
 - ✅ Checks multiple pages
 
 ### 5. **Lighthouse Performance**
+
 - ✅ Performance audits
 - ✅ Accessibility score
 - ✅ Best practices check
 - ✅ SEO validation
 
 ### 6. **Security Audit**
+
 - ✅ npm audit for vulnerabilities
 - ✅ Dependency checks
 
 ### 7. **Deploy to Production**
+
 - ✅ Only on `main` branch
 - ✅ After all checks pass
 - ✅ Automatic deployment to Vercel
 
 ### 8. **Deploy to Preview**
+
 - ✅ On pull requests
 - ✅ Comments PR with preview URL
 - ✅ Temporary preview environment
@@ -118,19 +130,19 @@ The deployment pipeline includes 8 jobs:
 
 The pipeline enforces these quality standards:
 
-| Check | Requirement |
-|-------|------------|
-| Lint | No ESLint errors |
-| Type Check | No TypeScript errors |
-| Console Logs | No console statements in src/ |
-| Unit Tests | All tests pass |
-| Build | Successful build |
-| Bundle Size | Main bundle < 500KB |
-| Performance | Lighthouse score > 80 |
-| Accessibility | Lighthouse score > 90 |
-| Best Practices | Lighthouse score > 85 |
-| SEO | Lighthouse score > 90 |
-| Security | No moderate+ vulnerabilities |
+| Check          | Requirement                   |
+| -------------- | ----------------------------- |
+| Lint           | No ESLint errors              |
+| Type Check     | No TypeScript errors          |
+| Console Logs   | No console statements in src/ |
+| Unit Tests     | All tests pass                |
+| Build          | Successful build              |
+| Bundle Size    | Main bundle < 500KB           |
+| Performance    | Lighthouse score > 80         |
+| Accessibility  | Lighthouse score > 90         |
+| Best Practices | Lighthouse score > 85         |
+| SEO            | Lighthouse score > 90         |
+| Security       | No moderate+ vulnerabilities  |
 
 ## Manual Deployment
 
@@ -164,20 +176,24 @@ To rollback a deployment:
 ## Monitoring
 
 ### Performance Monitoring
+
 - Check Lighthouse reports in GitHub Actions
 - Monitor Web Vitals in Vercel Analytics
 
 ### Error Tracking
+
 - Check browser console in production
 - Review deployment logs in Vercel
 
 ### Accessibility
+
 - Pa11y CI reports in GitHub Actions
 - Manual testing with screen readers
 
 ## Troubleshooting
 
 ### Build Fails
+
 ```bash
 # Check build locally
 npm run build
@@ -190,6 +206,7 @@ npm run lint
 ```
 
 ### Tests Fail
+
 ```bash
 # Run tests locally
 npm run test
@@ -202,12 +219,14 @@ npm run test:coverage
 ```
 
 ### Deployment Fails
+
 1. Check GitHub Actions logs
 2. Verify Vercel secrets are correct
 3. Check Vercel deployment logs
 4. Ensure `vercel.json` is correct
 
 ### Accessibility Issues
+
 ```bash
 # Run accessibility tests locally
 npm run test:a11y
@@ -235,6 +254,7 @@ npx pa11y http://localhost:4173
 ## Support
 
 For issues with:
+
 - **Pipeline**: Check GitHub Actions logs
 - **Vercel**: Check Vercel deployment logs
 - **Application**: Check browser console
@@ -246,4 +266,3 @@ Add this to your README.md:
 ```markdown
 [![Deploy Pipeline](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml)
 ```
-

@@ -19,11 +19,11 @@
           @click="handleStreamingClick($event, option.service, option.link)"
         >
           <!-- Service Logo/Icon -->
-          <div 
+          <div
             class="streaming-icon"
-            :style="{ 
+            :style="{
               backgroundColor: getServiceColor(option.service.id),
-              borderColor: getServiceColor(option.service.id)
+              borderColor: getServiceColor(option.service.id),
             }"
           >
             <div class="streaming-brand-text">
@@ -47,7 +47,10 @@
           </div>
 
           <!-- Price if available -->
-          <div v-if="option.price !== undefined && option.price !== null" class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center">
+          <div
+            v-if="option.price !== undefined && option.price !== null"
+            class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center"
+          >
             {{ formatPrice(option.price, option.currency) }}
           </div>
         </a>
@@ -145,7 +148,7 @@ const getServiceBrandName = (serviceId: string): string => {
     paramount: 'Paramount+',
     peacock: 'Peacock',
     skyshowtime: 'SkyShowtime',
-    videoland: 'Videoland'
+    videoland: 'Videoland',
   }
   return brandNames[serviceId] || serviceId.toUpperCase()
 }
@@ -171,7 +174,6 @@ const formatPrice = (price: number, currency?: string): string => {
     currency: curr,
   }).format(price)
 }
-
 </script>
 
 <style scoped>

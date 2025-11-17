@@ -35,7 +35,7 @@ const SAFE_URL_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:']
  */
 function sanitizeUrl(url: string): string {
   if (!url) return ''
-  
+
   // Decode HTML entities (handles j&#97;vascript: and similar)
   let decoded = url
     .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec))
@@ -45,33 +45,33 @@ function sanitizeUrl(url: string): string {
     .replace(/&quot;/gi, '"')
     .replace(/&apos;/gi, "'")
     .replace(/&amp;/gi, '&')
-  
+
   // Strip whitespace and control characters that could be used for obfuscation
   // eslint-disable-next-line no-control-regex -- Intentionally removing control chars for security
   decoded = decoded.trim().replace(/[\x00-\x1f\x7f-\x9f]/g, '')
-  
+
   // Check if it's a relative URL (safe)
   if (decoded.startsWith('/') || decoded.startsWith('./') || decoded.startsWith('../')) {
     return decoded
   }
-  
+
   // Check if it has a protocol
   if (decoded.includes(':')) {
     // Extract and lowercase the protocol
     const protocol = (decoded.split(':')[0] || '').toLowerCase() + ':'
-    
+
     // Reject dangerous protocols
     const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']
-    if (dangerousProtocols.some(dangerous => protocol === dangerous)) {
+    if (dangerousProtocols.some((dangerous) => protocol === dangerous)) {
       return '' // Return empty string for dangerous URLs
     }
-    
+
     // Only allow safe protocols
     if (!SAFE_URL_PROTOCOLS.includes(protocol)) {
       return ''
     }
   }
-  
+
   return decoded
 }
 
@@ -83,12 +83,12 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
   if (!html) return ''
 
   const allowedTags = options.allowedTags || DEFAULT_ALLOWED_TAGS
-  
+
   // Remove script and style tags completely (including content)
   let sanitized = html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-  
+
   // Remove all tags except allowed ones
   sanitized = sanitized.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, (match, tag) => {
     const lowerTag = tag.toLowerCase()
@@ -99,13 +99,15 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
         const hrefMatch = match.match(/href\s*=\s*["']([^"']*)["']/i)
         const rawHref = hrefMatch?.[1] || ''
         const sanitizedHref = sanitizeUrl(rawHref)
-        
+
         // Only create link if href is safe, otherwise strip the tag
         if (!sanitizedHref) {
           return match.startsWith('</') ? '' : ''
         }
-        
-        return match.startsWith('</') ? '</a>' : `<a href="${sanitizedHref}" rel="noopener noreferrer">`
+
+        return match.startsWith('</')
+          ? '</a>'
+          : `<a href="${sanitizedHref}" rel="noopener noreferrer">`
       }
       // For other allowed tags, strip all attributes
       return match.startsWith('</') ? `</${lowerTag}>` : `<${lowerTag}>`
@@ -113,7 +115,7 @@ export function sanitizeHtml(html: string, options: SanitizeOptions = {}): strin
     // Remove non-allowed tags
     return ''
   })
-  
+
   return sanitized.trim()
 }
 
@@ -132,6 +134,3 @@ export function sanitizeEpisodeSummary(summary: string | null): string {
   if (!summary) return ''
   return sanitizeHtml(summary)
 }
-
-
-

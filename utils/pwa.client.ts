@@ -148,6 +148,3 @@ export async function clearPWACache(): Promise<void> {
     logger.debug('[PWA] Cache clear requested')
   }
 }
-
-
-

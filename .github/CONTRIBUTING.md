@@ -66,6 +66,7 @@ We follow a Pull Request workflow for all changes:
 ### PR Template Checklist
 
 Make sure to complete all applicable items in the PR template:
+
 - Code follows project style
 - Self-review performed
 - Documentation updated
@@ -88,11 +89,13 @@ To enable branch protection for the `main` branch:
 3. Enable the following settings:
 
 #### ✅ Require a pull request before merging
+
 - **Require approvals**: 1 (at minimum)
 - **Dismiss stale pull request approvals when new commits are pushed**: ✅
 - **Require review from Code Owners**: ✅ (if CODEOWNERS file exists)
 
 #### ✅ Require status checks to pass before merging
+
 - **Require branches to be up to date before merging**: ✅
 - **Required status checks**:
   - `Lint & Type Check`
@@ -100,30 +103,38 @@ To enable branch protection for the `main` branch:
   - `Build & Bundle Size`
 
 #### ✅ Require conversation resolution before merging
+
 - All conversations must be resolved before merging
 
 #### ✅ Require signed commits (optional but recommended)
+
 - Commits must be signed with GPG/SSH keys
 
 #### ✅ Require linear history (optional)
+
 - Prevents merge commits, enforces rebase or squash
 
 #### ✅ Do not allow bypassing the above settings
+
 - Even administrators must follow these rules
 
 ### Additional Protection Settings
 
 #### Include administrators
+
 - ✅ **Recommended**: Include administrators in these restrictions
 - Ensures everyone follows the same process
 
 #### Restrict who can push to matching branches
+
 - Limit push access to specific teams or users
 
 #### Allow force pushes
+
 - ❌ **Disabled**: Force pushes are not allowed
 
 #### Allow deletions
+
 - ❌ **Disabled**: Branch deletion is not allowed
 
 ### Quick Setup
@@ -280,9 +291,9 @@ Update your code to use the new format.
 ## 🎉 Recognition
 
 Contributors will be recognized in:
+
 - The project README
 - Release notes
 - Our contributors page
 
 Thank you for contributing! 🚀
-

@@ -10,10 +10,5 @@
     "ignore": ["color-contrast"],
     "runners": ["axe"]
   },
-  "urls": [
-    "http://localhost:4173/",
-    "http://localhost:4173/en",
-    "http://localhost:4173/en/search"
-  ]
+  "urls": ["http://localhost:4173/", "http://localhost:4173/en", "http://localhost:4173/en/search"]
 }
-

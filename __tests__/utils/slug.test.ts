@@ -176,9 +176,9 @@ describe('Slug Utilities', () => {
     })
 
     it('should validate with special characters', () => {
-      expect(validateSlug('marvels-agents-of-shield-123', "Marvel's Agents of S.H.I.E.L.D.", 123)).toBe(
-        true
-      )
+      expect(
+        validateSlug('marvels-agents-of-shield-123', "Marvel's Agents of S.H.I.E.L.D.", 123)
+      ).toBe(true)
       expect(validateSlug('the-office-us-456', 'The Office (US)', 456)).toBe(true)
     })
 
@@ -196,7 +196,7 @@ describe('Slug Utilities', () => {
       // If someone has an old URL with just the ID or different format
       const slug = 'old-url-format-123'
       const correctSlug = createShowSlug('Old URL Format', 123)
-      
+
       expect(validateSlug(slug, 'Old URL Format', 123)).toBe(slug === correctSlug)
     })
 
@@ -210,10 +210,10 @@ describe('Slug Utilities', () => {
     it('should handle roundtrip: name -> slug -> extract ID', () => {
       const name = 'Breaking Bad'
       const id = 169
-      
+
       const slug = createShowSlug(name, id)
       const extractedId = extractIdFromSlug(slug)
-      
+
       expect(extractedId).toBe(id)
       expect(validateSlug(slug, name, id)).toBe(true)
     })
@@ -225,11 +225,11 @@ describe('Slug Utilities', () => {
         { name: 'How I Met Your Mother', id: 75 },
         { name: '13 Reasons Why', id: 1837 },
       ]
-      
+
       testCases.forEach(({ name, id }) => {
         const slug = createShowSlug(name, id)
         const extractedId = extractIdFromSlug(slug)
-        
+
         expect(extractedId).toBe(id)
         expect(validateSlug(slug, name, id)).toBe(true)
       })
@@ -241,12 +241,12 @@ describe('Slug Utilities', () => {
         { name: 'Kingdom', id: 999 },
         { name: 'The Kingdom', id: 888 },
       ]
-      
+
       const slugs = shows.map(({ name, id }) => createShowSlug(name, id))
-      
+
       // All slugs should be unique
       expect(new Set(slugs).size).toBe(slugs.length)
-      
+
       // Each slug should validate correctly
       shows.forEach(({ name, id }, index) => {
         expect(validateSlug(slugs[index]!, name, id)).toBe(true)
@@ -257,7 +257,7 @@ describe('Slug Utilities', () => {
     it('should handle extremely long show names', () => {
       const longName = 'This Is An Extremely Long Show Name That Goes On And On And On And On'
       const id = 12345
-      
+
       const slug = createShowSlug(longName, id)
       expect(extractIdFromSlug(slug)).toBe(id)
       expect(validateSlug(slug, longName, id)).toBe(true)
@@ -266,10 +266,9 @@ describe('Slug Utilities', () => {
     it('should be URL-safe', () => {
       const name = "Test Show: Special Edition (2023) - Director's Cut!"
       const slug = createSlug(name)
-      
+
       // Should not contain any characters that need URL encoding
       expect(slug).toMatch(/^[a-z0-9-]*$/)
     })
   })
 })
-

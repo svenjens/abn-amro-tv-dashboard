@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async () => {
   // Only run on server and if not already loaded
   if (import.meta.server) {
     const { fetchLocation } = useLocation()
-    
+
     try {
       await fetchLocation()
     } catch (error) {
@@ -15,4 +15,3 @@ export default defineNuxtRouteMiddleware(async () => {
     }
   }
 })
-

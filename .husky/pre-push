@@ -3,6 +3,13 @@
 
 echo "🔍 Running pre-push checks..."
 
+# Check code formatting
+echo "💅 Checking Prettier formatting..."
+npx prettier --check . || {
+  echo "❌ Code is not formatted. Run 'npm run format' to fix."
+  exit 1
+}
+
 # Run linter
 echo "📝 Running ESLint..."
 npm run lint || exit 1

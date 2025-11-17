@@ -2,7 +2,7 @@
 
 /**
  * Bundle Size Analyzer
- * 
+ *
  * Analyzes the Vite build output and generates a JSON report with:
  * - Total bundle size
  * - Individual chunk sizes
@@ -36,7 +36,7 @@ function getFileSizes(filePath) {
   const content = readFileSync(filePath)
   const size = statSync(filePath).size
   const gzipSize = gzipSync(content).length
-  
+
   return {
     size,
     gzipSize,
@@ -51,29 +51,29 @@ function getFileSizes(filePath) {
 function analyzeDirectory(dirPath, filePattern = null) {
   const files = readdirSync(dirPath)
   const results = []
-  
+
   for (const file of files) {
     const filePath = join(dirPath, file)
     const stat = statSync(filePath)
-    
+
     if (stat.isDirectory()) {
       continue // Skip directories
     }
-    
+
     if (filePattern && !filePattern.test(file)) {
       continue // Skip files that don't match pattern
     }
-    
+
     const ext = extname(file)
     const sizes = getFileSizes(filePath)
-    
+
     results.push({
       name: file,
       type: ext.slice(1), // Remove leading dot
       ...sizes,
     })
   }
-  
+
   return results
 }
 
@@ -95,27 +95,25 @@ function calculateTotals(files) {
  */
 function analyzeBuild() {
   console.log('📦 Analyzing bundle...\n')
-  
+
   // Analyze JavaScript chunks
   const jsFiles = analyzeDirectory(ASSETS_DIR, /\.js$/)
   const jsTotals = calculateTotals(jsFiles)
-  
+
   // Analyze CSS files
   const cssFiles = analyzeDirectory(ASSETS_DIR, /\.css$/)
   const cssTotals = calculateTotals(cssFiles)
-  
+
   // Analyze all assets
   const allAssets = analyzeDirectory(ASSETS_DIR)
   const allTotals = calculateTotals(allAssets)
-  
+
   // Find main chunks (largest files)
-  const mainChunks = jsFiles
-    .sort((a, b) => b.gzipSize - a.gzipSize)
-    .slice(0, 5)
-  
+  const mainChunks = jsFiles.sort((a, b) => b.gzipSize - a.gzipSize).slice(0, 5)
+
   // Find vendor chunks
-  const vendorChunks = jsFiles.filter(f => f.name.includes('vendor'))
-  
+  const vendorChunks = jsFiles.filter((f) => f.name.includes('vendor'))
+
   // Generate report
   const report = {
     timestamp: new Date().toISOString(),
@@ -139,12 +137,12 @@ function analyzeBuild() {
         count: cssFiles.length,
       },
     },
-    mainChunks: mainChunks.map(chunk => ({
+    mainChunks: mainChunks.map((chunk) => ({
       name: chunk.name,
       size: chunk.sizeFormatted,
       gzip: chunk.gzipSizeFormatted,
     })),
-    vendorChunks: vendorChunks.map(chunk => ({
+    vendorChunks: vendorChunks.map((chunk) => ({
       name: chunk.name,
       size: chunk.sizeFormatted,
       gzip: chunk.gzipSizeFormatted,
@@ -154,7 +152,7 @@ function analyzeBuild() {
       css: cssFiles,
     },
   }
-  
+
   // Print summary to console
   console.log('📊 Bundle Analysis Summary')
   console.log('='.repeat(50))
@@ -167,18 +165,18 @@ function analyzeBuild() {
   console.log(`\n🎨 CSS: ${report.totals.css.count} files`)
   console.log(`   Size: ${report.totals.css.sizeFormatted}`)
   console.log(`   Gzip: ${report.totals.css.gzipSizeFormatted}`)
-  
+
   console.log(`\n🏆 Top 5 Chunks (by gzip size):`)
   mainChunks.forEach((chunk, i) => {
     console.log(`   ${i + 1}. ${chunk.name}`)
     console.log(`      ${chunk.sizeFormatted} → ${chunk.gzipSizeFormatted} (gzip)`)
   })
-  
+
   // Save report to file
   const reportPath = join(process.cwd(), 'bundle-report.json')
   writeFileSync(reportPath, JSON.stringify(report, null, 2))
   console.log(`\n✅ Report saved to: bundle-report.json\n`)
-  
+
   return report
 }
 
@@ -189,9 +187,3 @@ try {
   console.error('❌ Error analyzing bundle:', error.message)
   process.exit(1)
 }
-
-
-
-
-
-
