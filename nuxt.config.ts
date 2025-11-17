@@ -26,9 +26,9 @@ export default defineNuxtConfig({
     '/en': { swr: 3600 },
     '/nl': { swr: 3600 },
     '/es': { swr: 3600 },
-    // Search - SSR with short cache (dynamic)
-    '/search': { swr: 3600 },
-    '/*/search': { swr: 3600 },
+    // Search - client-side only (requires query parameter from user)
+    '/search': { ssr: false },
+    '/*/search': { ssr: false },
     // Watchlist - client-side only (localStorage)
     '/watchlist': { ssr: false },
     '/*/watchlist': { ssr: false },
