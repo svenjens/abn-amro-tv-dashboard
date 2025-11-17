@@ -25,16 +25,19 @@ export default defineNuxtConfig({
   i18n: {
     locales: [
       { code: 'en', iso: 'en-US', file: 'en.json', name: 'English' },
-      { code: 'nl', iso: 'nl-NL', file: 'nl.json', name: 'Nederlands' }
+      { code: 'nl', iso: 'nl-NL', file: 'nl.json', name: 'Nederlands' },
+      { code: 'es', iso: 'es-ES', file: 'es.json', name: 'Español' }
     ],
-    defaultLocale: 'nl',
+    defaultLocale: 'en',
     strategy: 'prefix_except_default',
     langDir: 'locales',
     lazy: true,
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      redirectOn: 'root'
+      redirectOn: 'root',
+      alwaysRedirect: true,
+      fallbackLocale: 'en'
     }
   },
   
@@ -63,7 +66,7 @@ export default defineNuxtConfig({
     head: {
       title: 'BingeList - Your Ultimate TV Show Discovery Platform',
       htmlAttrs: {
-        lang: 'nl'
+        lang: 'en'
       },
       meta: [
         { charset: 'utf-8' },
