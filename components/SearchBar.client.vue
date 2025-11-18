@@ -9,18 +9,10 @@
       <div
         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-transform duration-200"
       >
-        <svg
+        <Icon
+          name="heroicons:magnifying-glass-20-solid"
           class="h-5 w-5 text-gray-400 transition-colors"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        />
       </div>
       <label for="tv-show-search" class="sr-only">{{ placeholder }}</label>
       <input
@@ -37,23 +29,14 @@
       />
       <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
-          class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
           aria-label="Clear search"
           @click="clearSearch"
         >
-          <svg
+          <Icon
+            name="heroicons:x-mark"
             class="h-5 w-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          />
         </button>
       </div>
     </div>

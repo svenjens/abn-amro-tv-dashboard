@@ -7,12 +7,6 @@
     >
       {{ genre }}
     </span>
-    <span
-      v-if="hasMore"
-      class="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-700 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300"
-    >
-      +{{ remainingCount }}
-    </span>
   </div>
 </template>
 
@@ -30,13 +24,5 @@ const props = withDefaults(defineProps<Props>(), {
 
 const displayGenres = computed(() => {
   return props.genres.slice(0, props.maxDisplay)
-})
-
-const hasMore = computed(() => {
-  return props.genres.length > props.maxDisplay
-})
-
-const remainingCount = computed(() => {
-  return props.genres.length - props.maxDisplay
 })
 </script>

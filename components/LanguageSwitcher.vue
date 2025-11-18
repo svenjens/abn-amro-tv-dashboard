@@ -6,24 +6,13 @@
       :aria-expanded="isOpen"
       @click="isOpen = !isOpen"
     >
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-        />
-      </svg>
+      <Icon name="heroicons:language" class="h-5 w-5" />
       <span class="uppercase">{{ currentLocale }}</span>
-      <svg
+      <Icon
+        name="heroicons:chevron-down"
         class="h-4 w-4 transition-transform"
         :class="{ 'rotate-180': isOpen }"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
+      />
     </button>
 
     <!-- Dropdown menu -->

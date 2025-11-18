@@ -7,6 +7,7 @@
 
 import type { H3Event } from 'h3'
 import { sanitizeShowSummary } from '~/server/utils/sanitize'
+import { TMDB_PROVIDER_MAP, STREAMING_PLATFORMS } from '~/types/streaming'
 
 export default cachedEventHandler(
   async (event: H3Event) => {
@@ -81,18 +82,27 @@ export default cachedEventHandler(
 
               // Helper function to transform TMDB provider to our StreamingAvailability format
               const transformProvider = (p: any, type: string) => {
-                // Try to get provider-specific deep link, fallback to generic TMDB page
-                // TMDB doesn't provide direct provider links, so we only use the general JustWatch link
-                const link = countryData.link || `https://www.themoviedb.org/tv/${tmdbId}`
+                const tmdbProviderId = String(p.provider_id)
+                // Map TMDB provider ID to our internal service ID
+                const serviceId = TMDB_PROVIDER_MAP[tmdbProviderId] || tmdbProviderId
+                const platform = STREAMING_PLATFORMS[serviceId]
+
+                // Use our platform's homepage or fallback to TMDB/JustWatch link
+                const link =
+                  platform?.homePage ||
+                  countryData.link ||
+                  `https://www.themoviedb.org/tv/${tmdbId}`
 
                 return {
                   service: {
-                    id: String(p.provider_id),
-                    name: p.provider_name,
-                    logo: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : '',
+                    id: serviceId, // Use our internal service ID
+                    name: platform?.name || p.provider_name,
+                    logo:
+                      platform?.logo ||
+                      (p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : ''),
                     type,
                   },
-                  link, // Generic link (usually JustWatch aggregator)
+                  link,
                   availableFrom: undefined,
                   availableUntil: undefined,
                 }
@@ -141,7 +151,7 @@ export default cachedEventHandler(
       const id = getRouterParam(event, 'id') || 'unknown'
       const query = getQuery(event)
       const country = (query.country as string) || 'US'
-      return `show-${id}-${country}`
+      return `show-v2-${id}-${country}` // v2: includes TMDB_PROVIDER_MAP
     },
     swr: true,
     // Vary cache by country for streaming availability

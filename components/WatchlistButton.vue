@@ -6,30 +6,8 @@
     @click.prevent="handleClick"
   >
     <!-- Bookmark Icon (filled when in watchlist) -->
-    <svg
-      v-if="isInWatchlist"
-      class="h-5 w-5"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M5 3C3.89543 3 3 3.89543 3 5V21L12 17L21 21V5C21 3.89543 20.1046 3 19 3H5Z" />
-    </svg>
-    <svg
-      v-else
-      class="h-5 w-5"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M5 3H19C20.1046 3 21 3.89543 21 5V21L12 17L3 21V5C3 3.89543 3.89543 3 5 3Z"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+    <Icon v-if="isInWatchlist" name="heroicons:bookmark-solid" class="h-5 w-5" />
+    <Icon v-else name="heroicons:bookmark" class="h-5 w-5" />
     <span v-if="showText" class="ml-2">{{ buttonText }}</span>
   </button>
 </template>

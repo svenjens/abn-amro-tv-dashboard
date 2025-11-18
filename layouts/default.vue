@@ -11,7 +11,9 @@
     <AppFooter />
 
     <!-- Cache Debug Component (only in dev mode or with ?debug param) -->
-    <LazyCacheDebug v-if="showDebug" />
+    <ClientOnly>
+      <LazyCacheDebug v-if="showDebug" />
+    </ClientOnly>
 
     <!-- Toast Notifications -->
     <ToastNotification />

@@ -22,13 +22,19 @@
           <div
             class="streaming-icon"
             :style="{
-              backgroundColor: getServiceColor(option.service.id),
-              borderColor: getServiceColor(option.service.id),
+              background: getServiceGradient(option.service.id),
             }"
           >
-            <div class="streaming-brand-text">
+            <img
+              v-if="getServiceLogo(option.service.id)"
+              :src="getServiceLogo(option.service.id)"
+              :alt="`${option.service.name} logo`"
+              class="streaming-logo"
+              @error="handleImageError"
+            />
+            <span v-else class="streaming-brand-text">
               {{ getServiceBrandName(option.service.id) }}
-            </div>
+            </span>
           </div>
 
           <!-- Service Info -->
@@ -60,14 +66,7 @@
     <!-- Not Available State -->
     <div v-else class="not-available-state">
       <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <Icon name="heroicons:information-circle" class="w-6 h-6" />
         <p class="text-sm">{{ t('streaming.not_available') }}</p>
       </div>
       <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
@@ -86,6 +85,7 @@
 import type { StreamingAvailability } from '@/types'
 import { STREAMING_PLATFORMS } from '@/types'
 import { trackStreamingClick } from '@/utils'
+import { getServiceGradient } from '@/utils/streaming'
 
 interface Props {
   availability: StreamingAvailability[]
@@ -127,11 +127,11 @@ const handleStreamingClick = (
 }
 
 /**
- * Get the theme color for a streaming service
+ * Get logo path for a streaming service
  */
-const getServiceColor = (serviceId: string): string => {
+const getServiceLogo = (serviceId: string): string => {
   const platform = STREAMING_PLATFORMS[serviceId]
-  return platform?.themeColorCode || '#6B7280'
+  return platform?.logo || ''
 }
 
 /**
@@ -159,6 +159,15 @@ const getServiceBrandName = (serviceId: string): string => {
 const hasAffiliate = (serviceId: string): boolean => {
   const platform = STREAMING_PLATFORMS[serviceId]
   return platform?.hasAffiliateProgram || false
+}
+
+/**
+ * Handle image loading errors
+ */
+const handleImageError = (event: Event) => {
+  const target = event.target as HTMLImageElement
+  // Hide the image if it fails to load
+  target.style.display = 'none'
 }
 
 /**
@@ -221,8 +230,15 @@ const formatPrice = (price: number, currency?: string): string => {
 }
 
 .streaming-icon {
-  @apply w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden border-2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  @apply w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+}
+
+.streaming-logo {
+  @apply w-full h-full object-contain;
+  /* Make SVG logos white on colored backgrounds */
+  filter: brightness(0) invert(1);
 }
 
 .streaming-brand-text {

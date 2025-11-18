@@ -98,8 +98,8 @@
         </Transition>
 
         <!-- Search Bar with Submit Button -->
-        <div class="flex">
-          <div class="flex-1">
+        <div class="flex gap-0">
+          <div class="flex-1 search-input-wrapper">
             <SearchBar
               ref="searchBarRef"
               v-model="searchQuery"
@@ -113,7 +113,7 @@
             />
           </div>
           <button
-            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-r-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed -ml-px"
+            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-r-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed border-l-0"
             :disabled="!searchQuery.trim() || searchQuery.trim().length < 2"
             @click="handleSearch(searchQuery)"
           >
@@ -211,7 +211,11 @@
       </div>
 
       <!-- Filters -->
-      <FilterBar v-if="searchStore.hasResults" v-model="filters" :shows="searchStore.results" />
+      <FilterBar
+        v-model="filters"
+        :shows="searchStore.results"
+        :show-streaming-filter="hasStreamingData"
+      />
 
       <!-- Loading State -->
       <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
@@ -312,6 +316,7 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
+import { STREAMING_PLATFORMS } from '@/types/streaming'
 import SearchBar from '@/components/SearchBar.client.vue'
 import ShowCard from '@/components/ShowCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
@@ -326,7 +331,7 @@ const searchStore = useSearchStore()
 
 const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
 const searchQuery = ref('')
-const filters = ref({ status: '', network: '', year: '' })
+const filters = ref({ status: '', network: '', year: '', streaming: [] as string[] })
 const isSemanticMode = ref(false)
 const semanticIntent = ref<any>(null)
 const isSemanticLoading = ref(false)
@@ -339,6 +344,14 @@ const exampleQueries = [
   'intense crime dramas',
   'feel-good family shows',
 ]
+
+// Check if any search results have streaming data or if we're loading it
+const hasStreamingData = computed(() => {
+  return (
+    searchStore.loadingStreamingData ||
+    searchStore.fullResults.some((result) => result.show.streamingAvailability)
+  )
+})
 
 // Apply filters to search results
 const filteredResults = computed(() => {
@@ -360,6 +373,16 @@ const filteredResults = computed(() => {
       if (!result.show.premiered) return false
       const year = new Date(result.show.premiered).getFullYear()
       return year.toString() === filters.value.year
+    })
+  }
+
+  if (filters.value.streaming.length > 0) {
+    results = results.filter((result) => {
+      if (!result.show.streamingAvailability) return false
+      return result.show.streamingAvailability.some((option) => {
+        const platform = STREAMING_PLATFORMS[option.service.id]
+        return platform?.name && filters.value.streaming.includes(platform.name)
+      })
     })
   }
 
@@ -398,6 +421,11 @@ async function handleSearch(query: string) {
     semanticIntent.value = null
     await searchStore.search(query)
   }
+
+  // Enrich results with streaming data (runs in background)
+  if (searchStore.hasResults) {
+    searchStore.enrichWithStreamingData()
+  }
 }
 
 async function handleSemanticSearch(query: string) {
@@ -420,11 +448,21 @@ async function handleSemanticSearch(query: string) {
       matchedTerm: r.matchedTerm,
     }))
     searchStore.setResults(searchResults)
+
+    // Enrich results with streaming data (runs in background)
+    if (searchStore.hasResults) {
+      searchStore.enrichWithStreamingData()
+    }
   } catch (error) {
     console.error('Semantic search failed:', error)
     // Fallback to regular search
     semanticIntent.value = null
     await searchStore.search(query)
+
+    // Enrich fallback results with streaming data
+    if (searchStore.hasResults) {
+      searchStore.enrichWithStreamingData()
+    }
   } finally {
     isSemanticLoading.value = false
   }
@@ -480,5 +518,18 @@ onMounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Make search input connect seamlessly with button on desktop */
+@media (min-width: 640px) {
+  .search-input-wrapper :deep(input) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* Ensure SearchBar takes full width */
+  .search-input-wrapper :deep(.relative) {
+    max-width: none;
+  }
 }
 </style>

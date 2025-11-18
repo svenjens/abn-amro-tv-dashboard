@@ -58,21 +58,45 @@
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
       <h3
-        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
       >
         {{ show.name }}
       </h3>
 
-      <div class="mt-auto space-y-2">
-        <div class="h-[2rem] flex items-start">
+      <div class="space-y-3">
+        <div class="min-h-[2rem]">
           <GenreTags
             v-if="show.genres && show.genres.length > 0"
             :genres="show.genres"
-            :max-display="2"
+            :max-display="4"
           />
         </div>
 
-        <div class="text-sm text-gray-500 dark:text-gray-400 h-5">
+        <!-- Streaming Availability Badges -->
+        <div v-if="streamingLogos.length > 0" class="flex gap-1.5 flex-wrap">
+          <div
+            v-for="logo in streamingLogos.slice(0, 5)"
+            :key="logo.id"
+            class="w-7 h-7 rounded overflow-hidden border border-gray-200 dark:border-gray-700"
+            :style="{ background: logo.gradient }"
+            :title="logo.name"
+          >
+            <img
+              :src="logo.path"
+              :alt="logo.name"
+              class="w-full h-full object-contain p-1 filter brightness-0 invert"
+            />
+          </div>
+          <div
+            v-if="streamingLogos.length > 5"
+            class="w-7 h-7 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
+            :title="`+${streamingLogos.length - 5} more services`"
+          >
+            +{{ streamingLogos.length - 5 }}
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-500 dark:text-gray-400">
           {{ premieredYear || '\u00A0' }}
         </div>
       </div>
@@ -84,6 +108,8 @@
 import { ref, computed, onMounted } from 'vue'
 import type { Show } from '@/types'
 import { getShowImage, createShowSlug } from '@/utils'
+import { getServiceGradient } from '@/utils/streaming'
+import { STREAMING_PLATFORMS } from '@/types/streaming'
 import RatingBadge from './RatingBadge.vue'
 import GenreTags from './GenreTags.vue'
 import WatchlistButton from './WatchlistButton.vue'
@@ -113,6 +139,29 @@ const showImage = computed(() => {
 const premieredYear = computed(() => {
   if (!props.show.premiered) return ''
   return new Date(props.show.premiered).getFullYear()
+})
+
+// Get streaming logos with gradients
+const streamingLogos = computed(() => {
+  if (!props.show.streamingAvailability) return []
+
+  const uniqueServices = new Map()
+
+  props.show.streamingAvailability.forEach((availability) => {
+    const serviceId = availability.service.id
+    const platform = STREAMING_PLATFORMS[serviceId]
+
+    if (platform && !uniqueServices.has(serviceId)) {
+      uniqueServices.set(serviceId, {
+        id: serviceId,
+        name: platform.name,
+        path: platform.logo,
+        gradient: getServiceGradient(serviceId, platform.themeColorCode),
+      })
+    }
+  })
+
+  return Array.from(uniqueServices.values())
 })
 
 function navigateToShow() {

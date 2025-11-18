@@ -13,10 +13,11 @@
         {{ genre }}
       </h2>
       <button
-        class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 rounded px-2 py-1"
+        class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 rounded px-2 py-1"
         @click="navigateToGenre"
       >
-        {{ t('genre.viewAll') }} →
+        <span>{{ t('genre.viewAll') }}</span>
+        <Icon name="heroicons:arrow-right" class="h-4 w-4" />
       </button>
     </div>
 
@@ -29,25 +30,13 @@
           aria-label="Scroll left"
           @click="scrollLeft"
         >
-          <svg
-            class="h-6 w-6 text-gray-800 dark:text-gray-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <Icon name="heroicons:chevron-left" class="h-6 w-6 text-gray-800 dark:text-gray-200" />
         </button>
 
         <div
           ref="scrollContainer"
-          class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-4 md:px-0 py-2"
-          style="overflow-y: visible"
+          class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-4 md:px-0 py-4"
+          style="overflow-y: clip"
           role="region"
           :aria-label="`${genre} shows, scroll horizontally`"
           tabindex="0"
@@ -64,19 +53,7 @@
           aria-label="Scroll right"
           @click="scrollRight"
         >
-          <svg
-            class="h-6 w-6 text-gray-800 dark:text-gray-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <Icon name="heroicons:chevron-right" class="h-6 w-6 text-gray-800 dark:text-gray-200" />
         </button>
       </div>
     </div>

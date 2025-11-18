@@ -63,11 +63,16 @@ const { load } = useScript(
     src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`,
     async: true,
     crossorigin: 'anonymous',
+    // Disable onload/onerror attributes as AdSense doesn't support them
+    'data-onload': undefined,
+    'data-onerror': undefined,
   },
   {
     use() {
       return { adsbygoogle: window.adsbygoogle }
     },
+    // Use manual trigger to avoid automatic event handler injection
+    trigger: 'manual',
   }
 )
 

@@ -7,15 +7,13 @@
         <!-- Brand -->
         <div class="col-span-1 md:col-span-1">
           <div class="flex items-center gap-3 mb-4">
-            <div
-              class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center"
-            >
-              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
-                />
-              </svg>
-            </div>
+            <img
+              src="/optimized/logo-main.png"
+              alt="BingeList Logo"
+              class="h-10 w-10 object-contain"
+              width="40"
+              height="40"
+            />
             <span class="text-xl font-bold text-gray-900 dark:text-white">BingeList</span>
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -85,14 +83,7 @@
                 :to="localePath('/roadmap')"
                 class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm inline-flex items-center gap-2"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                  />
-                </svg>
+                <Icon name="heroicons:light-bulb" class="w-4 h-4" />
                 {{ t('roadmap.title') }}
               </NuxtLink>
             </li>
@@ -103,13 +94,7 @@
                 rel="noopener noreferrer external"
                 class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm inline-flex items-center gap-2"
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fill-rule="evenodd"
-                    d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
+                <Icon name="heroicons:code-bracket" class="w-4 h-4" />
                 {{ t('footer.sourceCode') }}
               </a>
             </li>
@@ -120,14 +105,7 @@
                 rel="noopener noreferrer external"
                 class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm inline-flex items-center gap-2"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                  />
-                </svg>
+                <Icon name="heroicons:link" class="w-4 h-4" />
                 {{ t('footer.apiProvider') }}
               </a>
             </li>

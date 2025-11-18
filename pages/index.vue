@@ -14,9 +14,6 @@
         aria-hidden="true"
         loading="eager"
         fetchpriority="high"
-        :img-attrs="{
-          class: 'w-full h-full object-cover',
-        }"
       />
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
@@ -214,6 +211,7 @@ const filters = ref({
   status: '',
   network: '',
   year: '',
+  streaming: [] as string[],
 })
 
 // Filter shows based on selected filters

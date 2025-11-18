@@ -16,7 +16,7 @@ describe('GenreTags', () => {
     expect(wrapper.text()).not.toContain('+')
   })
 
-  it('should limit displayed genres and show remaining count', () => {
+  it('should limit displayed genres', () => {
     const wrapper = mount(GenreTags, {
       props: {
         genres: ['Drama', 'Action', 'Comedy', 'Thriller'],
@@ -27,7 +27,7 @@ describe('GenreTags', () => {
     expect(wrapper.text()).toContain('Drama')
     expect(wrapper.text()).toContain('Action')
     expect(wrapper.text()).not.toContain('Comedy')
-    expect(wrapper.text()).toContain('+2')
+    expect(wrapper.text()).not.toContain('Thriller')
   })
 
   it('should use default maxDisplay of 3', () => {
@@ -37,7 +37,7 @@ describe('GenreTags', () => {
       },
     })
 
-    expect(wrapper.findAll('span').length).toBe(4) // 3 genres + 1 "+1"
+    expect(wrapper.findAll('span').length).toBe(3) // 3 genres (maxDisplay default)
   })
 
   it('should render empty when no genres provided', () => {

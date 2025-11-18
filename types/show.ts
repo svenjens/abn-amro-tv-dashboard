@@ -26,6 +26,7 @@ export interface Show {
   summary: string | null
   updated: number
   _links: Links
+  streamingAvailability?: import('./streaming').StreamingAvailability[]
 }
 
 export interface Schedule {

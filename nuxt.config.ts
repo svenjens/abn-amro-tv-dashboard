@@ -124,17 +124,18 @@ export default defineNuxtConfig({
   },
 
   // Image optimization configuration
+  // In production: use Vercel's image optimization for caching & stability
+  // In development: use 'none' to avoid IPX errors with external images
   image: {
-    format: ['webp', 'avif', 'png', 'jpg'],
-    screens: {
-      xs: 320,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-      xxl: 1536,
-    },
+    provider: process.env.NODE_ENV === 'production' ? 'ipx' : 'none',
     domains: ['static.tvmaze.com', 'image.tmdb.org'],
+  },
+
+  // Icon configuration - bundle icons locally to avoid CORS issues
+  icon: {
+    serverBundle: {
+      collections: ['heroicons'], // Bundle heroicons locally
+    },
   },
 
   // Scripts configuration for third-party services
@@ -163,6 +164,7 @@ export default defineNuxtConfig({
           'https://*.google.com', // Google Funding Choices (fundingchoicesmessages.google.com)
           'https://*.google-analytics.com', // Google Analytics
           'https://*.googletagmanager.com', // Google Tag Manager
+          'https://*.adtrafficquality.google', // Google Ad Traffic Quality
           'https://vercel.live', // Vercel Live feedback (preview only)
         ],
         'img-src': [
@@ -173,7 +175,7 @@ export default defineNuxtConfig({
           'https://*.googletagmanager.com', // Google Tag Manager
         ],
         'object-src': ["'none'"],
-        'script-src-attr': ["'none'"],
+        'script-src-attr': ["'unsafe-inline'"], // Allow inline event handlers for Vue components
         'style-src': ["'self'", 'https:', "'unsafe-inline'"],
         'script-src': [
           "'self'",
@@ -186,6 +188,7 @@ export default defineNuxtConfig({
           'https://*.googlesyndication.com', // Google AdSense
           'https://*.vercel-insights.com',
         ],
+        'worker-src': ["'self'", 'blob:'], // Allow Web Workers from same origin and blob URLs
         'upgrade-insecure-requests': true,
       },
       xFrameOptions: 'SAMEORIGIN',
