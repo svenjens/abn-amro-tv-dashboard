@@ -124,6 +124,15 @@ export default cachedEventHandler(
         ).catch(() => [] as CastCredit[]),
       ])
 
+      // Debug log to check if biography is present
+      logger.debug('Person data fetched from TVMaze', {
+        module: 'api/people/[id]',
+        action: 'fetchPersonById',
+        personId: id,
+        hasBiography: !!(personResponse as any).biography,
+        biographyLength: ((personResponse as any).biography as string)?.length || 0,
+      })
+
       // Validate person response
       if (!isTVMazePerson(personResponse)) {
         logger.error(
