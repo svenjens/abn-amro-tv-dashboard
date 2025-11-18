@@ -81,19 +81,15 @@ export function formatRating(rating: number | null): string {
 export function transformImageUrl(imageUrl: string | null | undefined): string | undefined {
   if (!imageUrl) return undefined
 
-  // TODO: Re-enable after adding cdn.bingelist.app in Vercel Dashboard → Settings → Domains
-  // For now, return original URL to avoid 404s
-  return imageUrl
-
   // Proxy TVMaze images through our CDN subdomain
-  // if (
-  //   imageUrl.startsWith('https://static.tvmaze.com') ||
-  //   imageUrl.startsWith('http://static.tvmaze.com')
-  // ) {
-  //   return imageUrl.replace(/^https?:\/\/static\.tvmaze\.com/, 'https://cdn.bingelist.app')
-  // }
+  if (
+    imageUrl.startsWith('https://static.tvmaze.com') ||
+    imageUrl.startsWith('http://static.tvmaze.com')
+  ) {
+    return imageUrl.replace(/^https?:\/\/static\.tvmaze\.com/, 'https://cdn.bingelist.app/_image')
+  }
 
-  // return imageUrl
+  return imageUrl
 }
 
 /**
