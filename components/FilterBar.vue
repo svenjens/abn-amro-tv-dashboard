@@ -88,25 +88,47 @@
         </select>
       </div>
 
-      <!-- Streaming Service Filter -->
-      <div>
-        <label
-          for="filter-streaming"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
+      <!-- Streaming Service Filter (Multi-select) -->
+      <div class="relative">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {{ t('filters.streaming') }}
         </label>
-        <select
-          id="filter-streaming"
-          v-model="localFilters.streaming"
-          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:border-primary-600 dark:focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-500"
-          @change="emitFilters"
+        <button
+          type="button"
+          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm text-left focus:border-primary-600 dark:focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-500 flex items-center justify-between"
+          @click="toggleStreamingDropdown"
         >
-          <option value="">{{ t('filters.allStreaming') }}</option>
-          <option v-for="service in availableStreamingServices" :key="service" :value="service">
-            {{ service }}
-          </option>
-        </select>
+          <span v-if="localFilters.streaming.length === 0" class="text-gray-500 dark:text-gray-400">
+            {{ t('filters.allStreaming') }}
+          </span>
+          <span v-else class="truncate">
+            {{ localFilters.streaming.length }} {{ t('filters.selected') }}
+          </span>
+          <Icon
+            name="heroicons:chevron-down"
+            class="h-4 w-4 transition-transform flex-shrink-0 ml-2"
+            :class="{ 'rotate-180': showStreamingDropdown }"
+          />
+        </button>
+        <div
+          v-if="showStreamingDropdown"
+          class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto"
+        >
+          <label
+            v-for="service in availableStreamingServices"
+            :key="service"
+            class="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+          >
+            <input
+              type="checkbox"
+              :value="service"
+              :checked="localFilters.streaming.includes(service)"
+              class="rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-primary-600 dark:focus:ring-primary-500"
+              @change="toggleStreamingService(service)"
+            />
+            <span class="ml-2 text-sm text-gray-900 dark:text-gray-100">{{ service }}</span>
+          </label>
+        </div>
       </div>
     </div>
 
@@ -163,11 +185,12 @@
         </button>
       </span>
       <span
-        v-if="localFilters.streaming"
+        v-for="service in localFilters.streaming"
+        :key="service"
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
-        {{ t('filters.streaming') }}: {{ localFilters.streaming }}
-        <button @click="clearStreaming">
+        {{ service }}
+        <button @click="removeStreamingService(service)">
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -190,7 +213,7 @@ interface Filters {
   status: string
   network: string
   year: string
-  streaming: string
+  streaming: string[]
 }
 
 interface Props {
@@ -199,7 +222,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: () => ({ status: '', network: '', year: '', streaming: '' }),
+  modelValue: () => ({ status: '', network: '', year: '', streaming: [] }),
 })
 
 const emit = defineEmits<{
@@ -210,6 +233,7 @@ const { t } = useI18n()
 
 const localFilters = ref<Filters>({ ...props.modelValue })
 const isExpanded = ref(false)
+const showStreamingDropdown = ref(false)
 
 // Check if desktop on mount and set expanded state accordingly
 const checkIsDesktop = () => {
@@ -219,10 +243,12 @@ const checkIsDesktop = () => {
 onMounted(() => {
   checkIsDesktop()
   window.addEventListener('resize', checkIsDesktop)
+  document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkIsDesktop)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // Toggle filters (only works on mobile)
@@ -282,13 +308,14 @@ const hasActiveFilters = computed(() => {
     localFilters.value.status ||
     localFilters.value.network ||
     localFilters.value.year ||
-    localFilters.value.streaming
+    localFilters.value.streaming.length > 0
   )
 })
 
 // Clear all filters
 function clearFilters() {
-  localFilters.value = { status: '', network: '', year: '', streaming: '' }
+  localFilters.value = { status: '', network: '', year: '', streaming: [] }
+  showStreamingDropdown.value = false
   emitFilters()
 }
 
@@ -313,9 +340,35 @@ function clearYear() {
   emitFilters()
 }
 
-function clearStreaming() {
-  localFilters.value.streaming = ''
+// Multi-select streaming functions
+function toggleStreamingDropdown() {
+  showStreamingDropdown.value = !showStreamingDropdown.value
+}
+
+function toggleStreamingService(service: string) {
+  const index = localFilters.value.streaming.indexOf(service)
+  if (index === -1) {
+    localFilters.value.streaming.push(service)
+  } else {
+    localFilters.value.streaming.splice(index, 1)
+  }
   emitFilters()
+}
+
+function removeStreamingService(service: string) {
+  const index = localFilters.value.streaming.indexOf(service)
+  if (index !== -1) {
+    localFilters.value.streaming.splice(index, 1)
+  }
+  emitFilters()
+}
+
+// Close dropdown when clicking outside
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  if (!target.closest('.relative')) {
+    showStreamingDropdown.value = false
+  }
 }
 
 // Watch for external filter changes

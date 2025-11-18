@@ -211,7 +211,7 @@
       </div>
 
       <!-- Filters -->
-      <FilterBar v-if="searchStore.hasResults" v-model="filters" :shows="searchStore.results" />
+      <FilterBar v-model="filters" :shows="searchStore.results" />
 
       <!-- Loading State -->
       <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
@@ -327,7 +327,7 @@ const searchStore = useSearchStore()
 
 const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
 const searchQuery = ref('')
-const filters = ref({ status: '', network: '', year: '', streaming: '' })
+const filters = ref({ status: '', network: '', year: '', streaming: [] as string[] })
 const isSemanticMode = ref(false)
 const semanticIntent = ref<any>(null)
 const isSemanticLoading = ref(false)
@@ -364,12 +364,12 @@ const filteredResults = computed(() => {
     })
   }
 
-  if (filters.value.streaming) {
+  if (filters.value.streaming.length > 0) {
     results = results.filter((result) => {
       if (!result.show.streamingAvailability) return false
       return result.show.streamingAvailability.some((option) => {
         const platform = STREAMING_PLATFORMS[option.service.id]
-        return platform?.name === filters.value.streaming
+        return platform?.name && filters.value.streaming.includes(platform.name)
       })
     })
   }
