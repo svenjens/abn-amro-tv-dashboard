@@ -19,14 +19,13 @@ test.describe('Watchlist Functionality', () => {
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
     await expect(watchlistButton).toBeVisible({ timeout: 5000 })
 
-    // Click and wait for Vue reactivity to update
-    await watchlistButton.click()
-    await page.waitForTimeout(2000) // Increased for SPA state update
-
-    // Check that watchlist count increased - it should appear in header
+    // Click and wait for watchlist count to appear (deterministic wait)
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    await expect(watchlistCount).toBeVisible({ timeout: 15000 })
-    await expect(watchlistCount).toContainText('1')
+    await watchlistButton.click()
+
+    // Wait for watchlist count to appear and show correct value
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
+    await expect(watchlistCount).toContainText('1', { timeout: 5000 })
   })
 
   test('should navigate to watchlist page', async ({ page }) => {
@@ -37,10 +36,10 @@ test.describe('Watchlist Functionality', () => {
 
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
     await watchlistButton.click()
-    await page.waitForTimeout(2000)
 
-    // Wait for watchlist count to appear
-    await page.waitForSelector('[data-testid="watchlist-count"]', { timeout: 15000 })
+    // Wait for watchlist count to appear (deterministic wait)
+    const watchlistCount = page.locator('[data-testid="watchlist-count"]')
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
 
     // Navigate to watchlist page using SPA helper
     await navigateSPA(page, /.*\/en\/watchlist/, async () => {
@@ -64,17 +63,15 @@ test.describe('Watchlist Functionality', () => {
     const id = showId?.replace('show-card-', '')
 
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
-    await watchlistButton.click()
-
-    // Wait a bit for state update
-    await page.waitForTimeout(500)
-
-    // Remove it
-    await watchlistButton.click()
-
-    // Watchlist count should not be visible (empty)
+    
+    // Add to watchlist and wait for count to appear
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    await expect(watchlistCount).not.toBeVisible()
+    await watchlistButton.click()
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
+
+    // Remove from watchlist and wait for count to disappear
+    await watchlistButton.click()
+    await expect(watchlistCount).not.toBeVisible({ timeout: 5000 })
   })
 
   test('should persist watchlist in localStorage', async ({ page }) => {
@@ -84,21 +81,20 @@ test.describe('Watchlist Functionality', () => {
     const id = showId?.replace('show-card-', '')
 
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
-    await watchlistButton.click()
-    await page.waitForTimeout(2000)
-
-    // Wait for watchlist count to appear
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    await expect(watchlistCount).toBeVisible({ timeout: 15000 })
-    await expect(watchlistCount).toContainText('1')
+    
+    // Add to watchlist and wait for count to appear with correct value
+    await watchlistButton.click()
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
+    await expect(watchlistCount).toContainText('1', { timeout: 5000 })
 
     // Reload the page and wait for hydration
     await page.reload({ waitUntil: 'networkidle' })
     await waitForHydration(page)
     await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 15000 })
 
-    // Watchlist count should still be visible after reload
-    await expect(watchlistCount).toBeVisible({ timeout: 15000 })
-    await expect(watchlistCount).toContainText('1')
+    // Watchlist count should still be visible after reload with correct value
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
+    await expect(watchlistCount).toContainText('1', { timeout: 5000 })
   })
 })
