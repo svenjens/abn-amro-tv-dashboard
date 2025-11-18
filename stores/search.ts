@@ -20,7 +20,7 @@ export const useSearchStore = defineStore('search', () => {
   const error = ref<ApiError | null>(null)
   const recentSearches = ref<string[]>([])
   const loadingStreamingData = ref<boolean>(false)
-  
+
   // AbortController for streaming data enrichment
   let enrichmentController: AbortController | null = null
 
