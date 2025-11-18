@@ -35,8 +35,6 @@
             :alt="`${show.name} background`"
             class="w-full h-full object-cover"
             preload
-            format="webp"
-            :quality="85"
           />
         </div>
 
@@ -72,8 +70,6 @@
                 :alt="`${show.name} poster`"
                 class="w-64 rounded-lg shadow-2xl"
                 preload
-                format="webp"
-                :quality="85"
                 width="256"
                 height="384"
               />
