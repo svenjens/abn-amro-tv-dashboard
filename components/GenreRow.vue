@@ -35,8 +35,8 @@
 
         <div
           ref="scrollContainer"
-          class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-4 md:px-0 py-2"
-          style="overflow-y: visible"
+          class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-4 md:px-0 py-4"
+          style="overflow-y: clip"
           role="region"
           :aria-label="`${genre} shows, scroll horizontally`"
           tabindex="0"
