@@ -163,6 +163,7 @@ export default defineNuxtConfig({
           'https://*.google-analytics.com',
           'https://*.googletagmanager.com',
           'https://vercel.live', // Vercel Live feedback (preview only)
+          'https://fundingchoicesmessages.google.com', // Google Funding Choices (AdSense GDPR)
         ],
         'img-src': [
           "'self'",
