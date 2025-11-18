@@ -210,8 +210,12 @@
         </div>
       </div>
 
-        <!-- Filters -->
-        <FilterBar v-model="filters" :shows="searchStore.results" :show-streaming-filter="hasStreamingData" />
+      <!-- Filters -->
+      <FilterBar
+        v-model="filters"
+        :shows="searchStore.results"
+        :show-streaming-filter="hasStreamingData"
+      />
 
       <!-- Loading State -->
       <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
@@ -522,7 +526,7 @@ onMounted(() => {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
-  
+
   /* Ensure SearchBar takes full width */
   .search-input-wrapper :deep(.relative) {
     max-width: none;

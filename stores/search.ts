@@ -96,7 +96,7 @@ export const useSearchStore = defineStore('search', () => {
             try {
               // Fetch show details which includes streaming availability
               const showDetails = await $fetch<Show>(`/api/shows/${result.show.id}`)
-              
+
               // Update the show with streaming data
               if (showDetails.streamingAvailability) {
                 result.show.streamingAvailability = showDetails.streamingAvailability

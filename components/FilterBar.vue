@@ -308,7 +308,7 @@ const availableYears = computed(() => {
 // Extract unique streaming services from shows, or show all available platforms
 const availableStreamingServices = computed(() => {
   const services = new Set<string>()
-  
+
   // If we have shows, extract services from them
   if (props.shows && props.shows.length > 0) {
     props.shows.forEach((show) => {
@@ -322,14 +322,14 @@ const availableStreamingServices = computed(() => {
       }
     })
   }
-  
+
   // If no services found from shows, show all available platforms
   if (services.size === 0) {
     Object.values(STREAMING_PLATFORMS).forEach((platform) => {
       services.add(platform.name)
     })
   }
-  
+
   return Array.from(services).sort()
 })
 

@@ -30,15 +30,15 @@
           class="absolute inset-0 opacity-20 dark:opacity-30"
           :aria-label="`${show.name} background`"
         >
-      <NuxtImg
-        :src="show.image.original"
-        :alt="`${show.name} background`"
-        class="w-full h-full object-cover"
-        loading="eager"
-        preload
-        format="webp"
-        :quality="85"
-      />
+          <NuxtImg
+            :src="show.image.original"
+            :alt="`${show.name} background`"
+            class="w-full h-full object-cover"
+            loading="eager"
+            preload
+            format="webp"
+            :quality="85"
+          />
         </div>
 
         <div class="relative max-w-7xl mx-auto px-4 py-12">
