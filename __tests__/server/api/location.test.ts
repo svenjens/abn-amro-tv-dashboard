@@ -105,7 +105,7 @@ describe('Location API', () => {
     })
 
     it('should normalize country code to uppercase', () => {
-      const mockEvent = {
+      const _mockEvent = {
         node: {
           req: {
             headers: {},
