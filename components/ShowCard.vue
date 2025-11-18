@@ -47,9 +47,17 @@
         <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
       </div>
 
-      <!-- Streaming Availability Badges -->
+      <!-- Match Reason Badge (for Smart Search) - takes priority over streaming badges -->
       <div
-        v-if="streamingLogos.length > 0"
+        v-if="matchReason"
+        class="absolute bottom-2 left-2 right-2 bg-blue-600 dark:bg-blue-700 px-3 py-2 rounded-md shadow-lg border border-blue-500 dark:border-blue-600"
+      >
+        <p class="text-sm text-white font-semibold">🎯 {{ matchReason }}</p>
+      </div>
+
+      <!-- Streaming Availability Badges - show when no match reason -->
+      <div
+        v-else-if="streamingLogos.length > 0"
         class="absolute bottom-2 left-2 right-2 flex gap-1 justify-end"
       >
         <div
@@ -70,14 +78,6 @@
         >
           +{{ streamingLogos.length - 4 }}
         </div>
-      </div>
-
-      <!-- Match Reason Badge (for Smart Search) -->
-      <div
-        v-if="matchReason"
-        class="absolute bottom-2 left-2 right-2 bg-blue-600 dark:bg-blue-700 px-3 py-2 rounded-md shadow-lg border border-blue-500 dark:border-blue-600"
-      >
-        <p class="text-sm text-white font-semibold">🎯 {{ matchReason }}</p>
       </div>
     </div>
 
