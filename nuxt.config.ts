@@ -197,9 +197,11 @@ export default defineNuxtConfig({
       },
     },
     rateLimiter: {
-      tokensPerInterval: 150,
-      interval: 300000,
+      tokensPerInterval: 500, // Increased from 150 to allow crawlers (AdSense, Googlebot, etc.)
+      interval: 300000, // 5 minutes
       headers: true,
+      // Note: This applies to ALL requests including static assets
+      // Crawlers load many assets quickly, so we need a higher limit
     },
   },
 
