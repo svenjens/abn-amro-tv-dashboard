@@ -13,7 +13,9 @@ describe('server/utils/shows', () => {
       genres: ['Drama', 'Thriller'],
       status: 'Running',
       runtime: 60,
+      averageRuntime: 60,
       premiered: '2020-01-01',
+      ended: null,
       officialSite: null,
       schedule: { time: '20:00', days: ['Monday'] },
       rating: { average: 8.5 },
@@ -22,8 +24,11 @@ describe('server/utils/shows', () => {
         id: 1,
         name: 'HBO',
         country: { name: 'US', code: 'US', timezone: 'America/New_York' },
+        officialSite: 'https://hbo.com',
       },
       webChannel: null,
+      dvdCountry: null,
+      externals: { tvrage: null, thetvdb: null, imdb: null },
       image: {
         medium: 'https://example.com/medium.jpg',
         original: 'https://example.com/original.jpg',
@@ -75,9 +80,9 @@ describe('server/utils/shows', () => {
 
       // Drama should have all three shows, sorted by rating
       expect(grouped.Drama).toHaveLength(3)
-      expect(grouped.Drama[0].rating.average).toBe(9.0) // mockShow3
-      expect(grouped.Drama[1].rating.average).toBe(8.5) // mockShow1
-      expect(grouped.Drama[2].rating.average).toBe(7.2) // mockShow2
+      expect(grouped.Drama![0].rating.average).toBe(9.0) // mockShow3
+      expect(grouped.Drama![1].rating.average).toBe(8.5) // mockShow1
+      expect(grouped.Drama![2].rating.average).toBe(7.2) // mockShow2
     })
 
     it('should handle shows without genres', () => {
@@ -92,7 +97,7 @@ describe('server/utils/shows', () => {
 
       // Should only include mockShow1's genres
       expect(grouped.Drama).toHaveLength(1)
-      expect(grouped.Drama[0].id).toBe(1)
+      expect(grouped.Drama![0].id).toBe(1)
     })
 
     it('should handle shows with null/undefined genres gracefully', () => {
@@ -107,7 +112,7 @@ describe('server/utils/shows', () => {
 
       // Should only include mockShow1's genres
       expect(grouped.Drama).toHaveLength(1)
-      expect(grouped.Drama[0].id).toBe(1)
+      expect(grouped.Drama![0].id).toBe(1)
     })
 
     it('should handle empty shows array', () => {
@@ -127,9 +132,9 @@ describe('server/utils/shows', () => {
 
       // Shows with null rating should be sorted as 0
       expect(grouped.Drama).toHaveLength(3)
-      expect(grouped.Drama[0].rating.average).toBe(9.0)
-      expect(grouped.Drama[1].rating.average).toBe(8.5)
-      expect(grouped.Drama[2].rating.average).toBe(null)
+      expect(grouped.Drama![0].rating.average).toBe(9.0)
+      expect(grouped.Drama![1].rating.average).toBe(8.5)
+      expect(grouped.Drama![2].rating.average).toBe(null)
     })
 
     it('should handle shows with multiple genres correctly', () => {
@@ -145,8 +150,8 @@ describe('server/utils/shows', () => {
       expect(grouped).toHaveProperty('Action')
       expect(grouped).toHaveProperty('Adventure')
       expect(grouped).toHaveProperty('Sci-Fi')
-      expect(grouped.Action[0].id).toBe(8)
-      expect(grouped.Adventure[0].id).toBe(8)
+      expect(grouped.Action![0].id).toBe(8)
+      expect(grouped.Adventure![0].id).toBe(8)
       expect(grouped['Sci-Fi'][0].id).toBe(8)
     })
 
@@ -154,10 +159,10 @@ describe('server/utils/shows', () => {
       const shows = [mockShow1] // Has both Drama and Thriller
       const grouped = groupShowsByGenre(shows)
 
-      expect(grouped.Drama[0].id).toBe(1)
-      expect(grouped.Thriller[0].id).toBe(1)
+      expect(grouped.Drama![0].id).toBe(1)
+      expect(grouped.Thriller![0].id).toBe(1)
       // Should be the same show object
-      expect(grouped.Drama[0]).toBe(grouped.Thriller[0])
+      expect(grouped.Drama![0]).toBe(grouped.Thriller![0])
     })
 
     it('should maintain correct sort order across different genres', () => {
@@ -165,13 +170,13 @@ describe('server/utils/shows', () => {
       const grouped = groupShowsByGenre(shows)
 
       // Comedy: mockShow2 (7.2) and mockShow4 (6.5)
-      expect(grouped.Comedy[0].rating.average).toBe(7.2)
-      expect(grouped.Comedy[1].rating.average).toBe(6.5)
+      expect(grouped.Comedy![0].rating.average).toBe(7.2)
+      expect(grouped.Comedy![1].rating.average).toBe(6.5)
 
       // Drama: mockShow3 (9.0), mockShow1 (8.5), mockShow2 (7.2)
-      expect(grouped.Drama[0].rating.average).toBe(9.0)
-      expect(grouped.Drama[1].rating.average).toBe(8.5)
-      expect(grouped.Drama[2].rating.average).toBe(7.2)
+      expect(grouped.Drama![0].rating.average).toBe(9.0)
+      expect(grouped.Drama![1].rating.average).toBe(8.5)
+      expect(grouped.Drama![2].rating.average).toBe(7.2)
     })
 
     it('should handle shows with same rating', () => {
@@ -188,7 +193,7 @@ describe('server/utils/shows', () => {
 
       expect(grouped.Drama).toHaveLength(2)
       // Both should have rating 8.5, order may vary but both should be present
-      expect(grouped.Drama.every((s) => s.rating.average === 8.5)).toBe(true)
+      expect(grouped.Drama!.every((s) => s.rating.average === 8.5)).toBe(true)
     })
 
     it('should create new genre entry if not exists', () => {

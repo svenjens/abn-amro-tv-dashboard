@@ -92,7 +92,7 @@ describe('useIntersectionObserver', () => {
         time: Date.now(),
       } as IntersectionObserverEntry
 
-      observeCallback([mockEntry], mockIntersectionObserver() as any)
+      observeCallback([mockEntry], {} as any)
     }
 
     await nextTick()

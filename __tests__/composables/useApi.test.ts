@@ -226,7 +226,7 @@ describe('useApi', () => {
     await execute()
 
     expect(error.value).toBe(mockError)
-    expect(error.value?.stack).toBe('Error: Test error\n  at test.ts:123')
+    expect((error.value as any)?.stack).toBe('Error: Test error\n  at test.ts:123')
   })
 
   it('should handle custom error objects', async () => {

@@ -214,9 +214,9 @@ describe('ShowCard', () => {
   })
 
   it('should handle show without premiered date', () => {
-    const showWithoutPremiered = {
+    const showWithoutPremiered: Show = {
       ...mockShow,
-      premiered: undefined,
+      premiered: null,
     }
 
     const wrapper = mount(ShowCard, {
@@ -231,7 +231,7 @@ describe('ShowCard', () => {
   })
 
   it('should render streaming availability logos', () => {
-    const showWithStreaming = {
+    const showWithStreaming: Show = {
       ...mockShow,
       streamingAvailability: [
         {
@@ -240,8 +240,12 @@ describe('ShowCard', () => {
             name: 'Netflix',
             logo: '/logos/streaming/netflix.svg',
             type: 'subscription',
+            link: 'https://netflix.com',
+            country: 'US',
           },
           link: 'https://netflix.com',
+          availableFrom: undefined,
+          availableUntil: undefined,
         },
       ],
     }

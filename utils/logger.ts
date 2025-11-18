@@ -146,20 +146,26 @@ export const logger = {
    * @example
    * logger.warn('Rate limit approaching', { remaining: 5, limit: 100 })
    */
-  warn: (message: string, context?: LogContext) => {
+  warn: (message: string, context?: LogContext | unknown) => {
     if (!shouldLog(LogLevel.WARN)) return
+
+    // Ensure context is LogContext or undefined
+    const logContext =
+      context && typeof context === 'object' && !Array.isArray(context)
+        ? (context as LogContext)
+        : undefined
 
     const entry: LogEntry = {
       level: 'WARN',
       timestamp: getTimestamp(),
       message,
-      context,
+      context: logContext,
     }
 
     if (isServer) {
       console.warn(formatLogEntry(entry))
     } else {
-      console.warn(`[WARN] ${message}`, context || '')
+      console.warn(`[WARN] ${message}`, logContext || '')
     }
   },
 
@@ -170,21 +176,27 @@ export const logger = {
    * @example
    * logger.error('API request failed', { endpoint: '/api/shows' }, error)
    */
-  error: (message: string, context?: LogContext, error?: unknown) => {
+  error: (message: string, context?: LogContext | unknown, error?: unknown) => {
     if (!shouldLog(LogLevel.ERROR)) return
+
+    // Ensure context is LogContext or undefined
+    const logContext =
+      context && typeof context === 'object' && !Array.isArray(context)
+        ? (context as LogContext)
+        : undefined
 
     const entry: LogEntry = {
       level: 'ERROR',
       timestamp: getTimestamp(),
       message,
-      context,
+      context: logContext,
       error: serializeError(error),
     }
 
     if (isServer) {
       console.error(formatLogEntry(entry))
     } else {
-      console.error(`[ERROR] ${message}`, context || '', error || '')
+      console.error(`[ERROR] ${message}`, logContext || '', error || '')
     }
   },
 }
