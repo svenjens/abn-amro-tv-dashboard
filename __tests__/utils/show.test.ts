@@ -128,9 +128,9 @@ describe('Show Utils', () => {
       expect(getShowImage(mockShow, 'original')).toBe('http://example.com/original.jpg')
     })
 
-    it('should return null when image is not available', () => {
+    it('should return undefined when image is not available', () => {
       const showWithoutImage = { ...mockShow, image: null }
-      expect(getShowImage(showWithoutImage)).toBe(null)
+      expect(getShowImage(showWithoutImage)).toBeUndefined()
     })
   })
 

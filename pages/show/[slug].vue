@@ -31,7 +31,7 @@
           :aria-label="`${show.name} background`"
         >
           <NuxtImg
-            :src="transformImageUrl(show.image.original) || show.image.original"
+            :src="transformImageUrl(show.image.original)"
             :alt="`${show.name} background`"
             class="w-full h-full object-cover"
             format="webp"

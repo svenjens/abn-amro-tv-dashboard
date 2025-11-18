@@ -67,7 +67,7 @@
           class="flex-shrink-0 w-24 h-16 rounded overflow-hidden bg-gray-100"
         >
           <NuxtImg
-            :src="transformImageUrl(episode.image.medium) || episode.image.medium"
+            :src="transformImageUrl(episode.image.medium)"
             :alt="episode.name"
             class="w-full h-full object-cover"
             loading="lazy"

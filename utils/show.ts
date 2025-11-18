@@ -78,8 +78,8 @@ export function formatRating(rating: number | null): string {
  * @param imageUrl - Original image URL
  * @returns Transformed URL or original if not a TVMaze URL
  */
-export function transformImageUrl(imageUrl: string | null | undefined): string | null {
-  if (!imageUrl) return null
+export function transformImageUrl(imageUrl: string | null | undefined): string | undefined {
+  if (!imageUrl) return undefined
 
   // Proxy TVMaze images through our CDN subdomain
   if (

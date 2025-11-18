@@ -18,7 +18,7 @@
           <div class="aspect-[3/4] bg-gray-100 overflow-hidden relative">
             <NuxtImg
               v-if="member.person.image"
-              :src="transformImageUrl(member.person.image.medium) || member.person.image.medium"
+              :src="transformImageUrl(member.person.image.medium)"
               :alt="member.person.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
