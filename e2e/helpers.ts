@@ -27,11 +27,9 @@ export async function navigateSPA(page: Page, urlPattern: RegExp, action: () => 
   await action()
 
   // Wait for URL to change
-  await page.waitForFunction(
-    (oldUrl) => window.location.href !== oldUrl,
-    currentUrl,
-    { timeout: 15000 }
-  )
+  await page.waitForFunction((oldUrl) => window.location.href !== oldUrl, currentUrl, {
+    timeout: 15000,
+  })
 
   // Wait for the new URL to match the pattern
   await page.waitForURL(urlPattern, { timeout: 15000 })
@@ -39,4 +37,3 @@ export async function navigateSPA(page: Page, urlPattern: RegExp, action: () => 
   // Wait for hydration after navigation
   await waitForHydration(page)
 }
-

@@ -17,11 +17,11 @@ test.describe('Watchlist Functionality', () => {
 
     // Hover over the card to reveal watchlist button
     await firstCard.hover()
-    
+
     // Wait for button to be visible after hover
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
     await expect(watchlistButton).toBeVisible({ timeout: 5000 })
-    
+
     // Click and wait for Vue reactivity to update
     await watchlistButton.click()
     await page.waitForTimeout(2000) // Increased for SPA state update
