@@ -255,6 +255,7 @@ export default defineNuxtConfig({
       alwaysRedirect: false, // Don't redirect if user explicitly chose a locale
       fallbackLocale: 'en',
     },
+    vueI18n: './i18n.config.ts', // Link to datetime formats config
   },
 
   // Auto-imports (migrate composables)
