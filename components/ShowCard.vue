@@ -58,12 +58,12 @@
 
     <div class="p-4 flex-1 flex flex-col min-h-0">
       <h3
-        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
       >
         {{ show.name }}
       </h3>
 
-      <div class="mt-auto space-y-3">
+      <div class="space-y-3">
         <div class="min-h-[2rem]">
           <GenreTags
             v-if="show.genres && show.genres.length > 0"
