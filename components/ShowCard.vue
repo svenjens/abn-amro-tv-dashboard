@@ -47,37 +47,12 @@
         <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
       </div>
 
-      <!-- Match Reason Badge (for Smart Search) - takes priority over streaming badges -->
+      <!-- Match Reason Badge (for Smart Search) -->
       <div
         v-if="matchReason"
         class="absolute bottom-2 left-2 right-2 bg-blue-600 dark:bg-blue-700 px-3 py-2 rounded-md shadow-lg border border-blue-500 dark:border-blue-600"
       >
         <p class="text-sm text-white font-semibold">🎯 {{ matchReason }}</p>
-      </div>
-
-      <!-- Streaming Availability Badges - show when no match reason -->
-      <div
-        v-else-if="streamingLogos.length > 0"
-        class="absolute bottom-2 left-2 right-2 flex gap-1 justify-end"
-      >
-        <div
-          v-for="logo in streamingLogos.slice(0, 4)"
-          :key="logo.id"
-          class="w-8 h-8 rounded-md overflow-hidden shadow-lg border-2 border-white dark:border-gray-800"
-          :style="{ background: logo.gradient }"
-        >
-          <img
-            :src="logo.path"
-            :alt="logo.name"
-            class="w-full h-full object-contain p-1 filter brightness-0 invert"
-          />
-        </div>
-        <div
-          v-if="streamingLogos.length > 4"
-          class="w-8 h-8 rounded-md bg-gray-800 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-white shadow-lg border-2 border-white dark:border-gray-800"
-        >
-          +{{ streamingLogos.length - 4 }}
-        </div>
       </div>
     </div>
 
@@ -95,6 +70,30 @@
             :genres="show.genres"
             :max-display="10"
           />
+        </div>
+
+        <!-- Streaming Availability Badges -->
+        <div v-if="streamingLogos.length > 0" class="flex gap-1.5 flex-wrap">
+          <div
+            v-for="logo in streamingLogos.slice(0, 5)"
+            :key="logo.id"
+            class="w-7 h-7 rounded overflow-hidden border border-gray-200 dark:border-gray-700"
+            :style="{ background: logo.gradient }"
+            :title="logo.name"
+          >
+            <img
+              :src="logo.path"
+              :alt="logo.name"
+              class="w-full h-full object-contain p-1 filter brightness-0 invert"
+            />
+          </div>
+          <div
+            v-if="streamingLogos.length > 5"
+            class="w-7 h-7 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
+            :title="`+${streamingLogos.length - 5} more services`"
+          >
+            +{{ streamingLogos.length - 5 }}
+          </div>
         </div>
 
         <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -143,13 +142,22 @@ const premieredYear = computed(() => {
 
 // Get streaming logos with gradients
 const streamingLogos = computed(() => {
-  if (!props.show.streamingAvailability) return []
+  if (!props.show.streamingAvailability) {
+    console.log(`[ShowCard] No streaming availability for ${props.show.name}`)
+    return []
+  }
+
+  console.log(
+    `[ShowCard] ${props.show.name} has ${props.show.streamingAvailability.length} streaming options`
+  )
 
   const uniqueServices = new Map()
 
   props.show.streamingAvailability.forEach((availability) => {
     const serviceId = availability.service.id
     const platform = STREAMING_PLATFORMS[serviceId]
+
+    console.log(`[ShowCard] Processing service ${serviceId}`, platform)
 
     if (platform && !uniqueServices.has(serviceId)) {
       uniqueServices.set(serviceId, {
@@ -161,7 +169,10 @@ const streamingLogos = computed(() => {
     }
   })
 
-  return Array.from(uniqueServices.values())
+  const logos = Array.from(uniqueServices.values())
+  console.log(`[ShowCard] ${props.show.name} has ${logos.length} unique streaming services`, logos)
+
+  return logos
 })
 
 // Helper function to adjust color brightness

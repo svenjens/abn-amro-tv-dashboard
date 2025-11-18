@@ -78,8 +78,12 @@ export const useSearchStore = defineStore('search', () => {
    * Enrich search results with streaming data from TMDB
    */
   async function enrichWithStreamingData(): Promise<void> {
-    if (searchResults.value.length === 0) return
+    if (searchResults.value.length === 0) {
+      logger.debug('[Search Store] No search results to enrich')
+      return
+    }
 
+    logger.debug(`[Search Store] Starting enrichment for ${searchResults.value.length} results`)
     loadingStreamingData.value = true
 
     try {
@@ -94,12 +98,18 @@ export const useSearchStore = defineStore('search', () => {
         await Promise.all(
           batch.map(async (result) => {
             try {
+              logger.debug(`[Search Store] Fetching streaming data for show ${result.show.id}`)
               // Fetch show details which includes streaming availability
               const showDetails = await $fetch<Show>(`/api/shows/${result.show.id}`)
 
               // Update the show with streaming data
               if (showDetails.streamingAvailability) {
+                logger.debug(
+                  `[Search Store] Found ${showDetails.streamingAvailability.length} streaming options for ${result.show.name}`
+                )
                 result.show.streamingAvailability = showDetails.streamingAvailability
+              } else {
+                logger.debug(`[Search Store] No streaming data for ${result.show.name}`)
               }
             } catch (err) {
               logger.warn(
@@ -117,7 +127,7 @@ export const useSearchStore = defineStore('search', () => {
         }
       }
 
-      logger.debug('[Search Store] Enriched search results with streaming data')
+      logger.debug('[Search Store] Completed enrichment of search results with streaming data')
     } catch (err) {
       logger.error('[Search Store] Failed to enrich with streaming data:', err)
     } finally {
