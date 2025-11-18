@@ -11,7 +11,7 @@
  * - Environment-aware log levels
  */
 
-const isDevelopment = import.meta.DEV
+const isDevelopment = import.meta.dev
 const isServer = import.meta.server
 
 export enum LogLevel {

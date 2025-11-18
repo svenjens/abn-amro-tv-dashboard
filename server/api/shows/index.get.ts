@@ -4,7 +4,7 @@
  * Returns shows grouped by genre and sorted by rating
  */
 
-import type { TVMazeShow } from '~/types'
+import type { Show, TVMazeShow } from '~/types'
 import { isTVMazeShowArray } from '~/types'
 import { logger } from '~/utils/logger'
 import { groupShowsByGenre } from '~/server/utils/shows'
