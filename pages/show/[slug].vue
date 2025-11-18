@@ -184,7 +184,7 @@
       <main id="main-content" class="max-w-7xl mx-auto px-4 py-12" tabindex="-1">
         <!-- Tab Navigation -->
         <div class="border-b border-gray-200 dark:border-gray-700 mb-8">
-          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav class="-mb-px flex space-x-8" role="tablist" aria-label="Tabs">
             <button
               v-for="tab in tabs"
               :key="tab.id"
