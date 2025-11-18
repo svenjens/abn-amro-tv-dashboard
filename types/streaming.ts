@@ -138,6 +138,7 @@ export const TMDB_PROVIDER_MAP: Record<string, string> = {
   '9': 'prime', // Amazon Prime Video
   '10': 'prime', // Amazon Video (buy/rent)
   '119': 'prime', // Amazon Prime Video (alternate ID)
+  '2141': 'prime', // MGM Plus Amazon Channel
   '337': 'disney', // Disney+
   '384': 'hbo', // HBO Max
   '1899': 'hbo', // Max (rebranded HBO Max)
