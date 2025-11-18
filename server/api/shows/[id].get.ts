@@ -151,7 +151,7 @@ export default cachedEventHandler(
       const id = getRouterParam(event, 'id') || 'unknown'
       const query = getQuery(event)
       const country = (query.country as string) || 'US'
-      return `show-${id}-${country}`
+      return `show-v2-${id}-${country}` // v2: includes TMDB_PROVIDER_MAP
     },
     swr: true,
     // Vary cache by country for streaming availability
