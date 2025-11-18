@@ -26,10 +26,15 @@
             }"
           >
             <img
+              v-if="getServiceLogo(option.service.id)"
               :src="getServiceLogo(option.service.id)"
-              :alt="option.service.name"
+              :alt="`${option.service.name} logo`"
               class="streaming-logo"
+              @error="handleImageError"
             />
+            <span v-else class="streaming-brand-text">
+              {{ getServiceBrandName(option.service.id) }}
+            </span>
           </div>
 
           <!-- Service Info -->
@@ -167,11 +172,39 @@ const getServiceGradient = (serviceId: string): string => {
 }
 
 /**
+ * Get brand name to display for a streaming service
+ */
+const getServiceBrandName = (serviceId: string): string => {
+  const brandNames: Record<string, string> = {
+    netflix: 'NETFLIX',
+    prime: 'prime video',
+    disney: 'Disney+',
+    hbo: 'Max',
+    hulu: 'hulu',
+    apple: 'tv+',
+    paramount: 'Paramount+',
+    peacock: 'Peacock',
+    skyshowtime: 'SkyShowtime',
+    videoland: 'Videoland',
+  }
+  return brandNames[serviceId] || serviceId.toUpperCase()
+}
+
+/**
  * Check if a service has an affiliate program
  */
 const hasAffiliate = (serviceId: string): boolean => {
   const platform = STREAMING_PLATFORMS[serviceId]
   return platform?.hasAffiliateProgram || false
+}
+
+/**
+ * Handle image loading errors
+ */
+const handleImageError = (event: Event) => {
+  const target = event.target as HTMLImageElement
+  // Hide the image if it fails to load
+  target.style.display = 'none'
 }
 
 /**
@@ -242,6 +275,15 @@ const formatPrice = (price: number, currency?: string): string => {
 .streaming-logo {
   @apply w-full h-full object-contain;
   filter: brightness(0) invert(1);
+}
+
+.streaming-brand-text {
+  @apply text-white font-bold text-center px-1;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .affiliate-badge {

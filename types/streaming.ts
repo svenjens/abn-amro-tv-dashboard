@@ -130,3 +130,18 @@ export interface AffiliateConfig {
   amazonAssociateTag?: string
   // Future: other affiliate programs can be added here
 }
+
+// TMDB Provider ID to internal service ID mapping
+// https://www.themoviedb.org/talk/5efb0b71d11adf001682f79c
+export const TMDB_PROVIDER_MAP: Record<string, string> = {
+  '8': 'netflix', // Netflix
+  '9': 'prime', // Amazon Prime Video
+  '337': 'disney', // Disney+
+  '384': 'hbo', // HBO Max
+  '15': 'hulu', // Hulu
+  '350': 'apple', // Apple TV+
+  '531': 'paramount', // Paramount+
+  '386': 'peacock', // Peacock
+  '1853': 'skyshowtime', // SkyShowtime
+  '72': 'videoland', // Videoland
+}
