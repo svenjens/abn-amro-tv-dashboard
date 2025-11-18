@@ -208,7 +208,10 @@ export const logger = {
     } else {
       // Called as logger.error('message', context, error) or logger.error('message', context)
       logContext =
-        context && typeof context === 'object' && !Array.isArray(context) && !(context instanceof Error)
+        context &&
+        typeof context === 'object' &&
+        !Array.isArray(context) &&
+        !(context instanceof Error)
           ? (context as LogContext)
           : undefined
       actualError = error
