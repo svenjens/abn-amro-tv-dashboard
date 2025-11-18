@@ -20,8 +20,6 @@
               v-if="member.person.image"
               :src="member.person.image.medium"
               :alt="member.person.name"
-              format="webp"
-              :quality="85"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
             />

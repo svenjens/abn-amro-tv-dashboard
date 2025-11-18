@@ -14,8 +14,6 @@
         :loading="lazy ? 'lazy' : 'eager'"
         :fetchpriority="lazy ? undefined : 'high'"
         decoding="async"
-        format="webp"
-        :quality="85"
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
         @error="handleImageError"
       />

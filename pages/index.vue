@@ -7,16 +7,13 @@
       class="relative bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white overflow-hidden"
     >
       <!-- Hero Background -->
-      <NuxtPicture
+      <img
         src="/optimized/hero-background.png"
         alt=""
         class="absolute inset-0 opacity-10 dark:opacity-20 w-full h-full object-cover"
         aria-hidden="true"
         loading="eager"
         fetchpriority="high"
-        :img-attrs="{
-          class: 'w-full h-full object-cover',
-        }"
       />
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
