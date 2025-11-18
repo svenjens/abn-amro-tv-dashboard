@@ -18,12 +18,10 @@ test.describe('Search Functionality', () => {
     // Use the input ID directly
     const searchInput = page.locator('#tv-show-search')
 
-    // Type search query
-    await searchInput.fill('Game of Thrones')
-
-    // Use SPA navigation helper for form submit
+    // Click the input to focus and trigger navigation
     await navigateSPA(page, /.*\/en\/search\?q=.*/, async () => {
-      await searchInput.press('Enter')
+      await searchInput.click()
+      await searchInput.fill('Game of Thrones')
     })
 
     // Verify URL contains /en/search and the query
@@ -35,12 +33,10 @@ test.describe('Search Functionality', () => {
     // Use the input ID directly
     const searchInput = page.locator('#tv-show-search')
 
-    // Search for a popular show
-    await searchInput.fill('Friends')
-
-    // Use SPA navigation helper
+    // Click and type to trigger navigation
     await navigateSPA(page, /.*\/en\/search\?q=.*/, async () => {
-      await searchInput.press('Enter')
+      await searchInput.click()
+      await searchInput.fill('Friends')
     })
 
     // Wait for show cards to appear
