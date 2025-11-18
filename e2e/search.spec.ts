@@ -19,7 +19,7 @@ test.describe('Search Functionality', () => {
     // Type search query and press Enter
     await searchInput.fill('Game of Thrones')
     await searchInput.press('Enter')
-    
+
     // Wait for navigation to search page
     await page.waitForURL(/.*\/en\/search\?q=.*/, { timeout: 15000 })
 
@@ -35,7 +35,7 @@ test.describe('Search Functionality', () => {
     // Search for a popular show
     await searchInput.fill('Friends')
     await searchInput.press('Enter')
-    
+
     // Wait for navigation to search page
     await page.waitForURL(/.*\/en\/search\?q=.*/, { timeout: 15000 })
 
