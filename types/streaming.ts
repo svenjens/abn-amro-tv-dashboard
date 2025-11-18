@@ -136,12 +136,16 @@ export interface AffiliateConfig {
 export const TMDB_PROVIDER_MAP: Record<string, string> = {
   '8': 'netflix', // Netflix
   '9': 'prime', // Amazon Prime Video
+  '10': 'prime', // Amazon Video (buy/rent)
+  '119': 'prime', // Amazon Prime Video (alternate ID)
   '337': 'disney', // Disney+
   '384': 'hbo', // HBO Max
+  '1899': 'hbo', // Max (rebranded HBO Max)
   '15': 'hulu', // Hulu
   '350': 'apple', // Apple TV+
   '531': 'paramount', // Paramount+
   '386': 'peacock', // Peacock
   '1853': 'skyshowtime', // SkyShowtime
+  '1773': 'skyshowtime', // SkyShowtime (alternate ID)
   '72': 'videoland', // Videoland
 }
