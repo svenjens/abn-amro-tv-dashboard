@@ -23,8 +23,9 @@ describe('streaming utils', () => {
 
     it('should create proper gradient format', () => {
       const gradient = getServiceGradient('netflix', '#E50914')
-      expect(gradient).toMatch(/linear-gradient\(135deg,\s*#[A-F0-9]{6}\s*0%,\s*#[A-F0-9]{6}\s*100%\)/)
+      expect(gradient).toMatch(
+        /linear-gradient\(135deg,\s*#[A-F0-9]{6}\s*0%,\s*#[A-F0-9]{6}\s*100%\)/
+      )
     })
   })
 })
-
