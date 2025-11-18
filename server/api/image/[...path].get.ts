@@ -12,18 +12,27 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  try {
-    // Construct TVMaze image URL
-    const imageUrl = `https://static.tvmaze.com/${path}`
+  // Construct TVMaze image URL
+  const imageUrl = `https://static.tvmaze.com/${path}`
 
-    // Fetch image from TVMaze
-    const response = await fetch(imageUrl)
+  try {
+    // Fetch image from TVMaze with timeout
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10s timeout
+
+    const response = await fetch(imageUrl, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'BingeList/3.0 (Image Proxy)',
+      },
+    })
+
+    clearTimeout(timeoutId)
 
     if (!response.ok) {
-      throw createError({
-        statusCode: response.status,
-        statusMessage: 'Failed to fetch image from source',
-      })
+      console.warn(`Image fetch failed: ${imageUrl} - Status: ${response.status}`)
+      // Redirect to original URL instead of throwing error
+      return sendRedirect(event, imageUrl, 302)
     }
 
     // Get image content
@@ -39,10 +48,15 @@ export default defineEventHandler(async (event) => {
     // Return image buffer
     return buffer
   } catch (error) {
-    console.error('Image proxy error:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to proxy image',
-    })
+    // Log the actual error for debugging
+    if (error instanceof Error) {
+      console.error(`Image proxy error for ${imageUrl}:`, error.message)
+    } else {
+      console.error(`Image proxy error for ${imageUrl}:`, error)
+    }
+
+    // Fallback: redirect to original TVMaze URL
+    // This way images still load even if proxy fails
+    return sendRedirect(event, imageUrl, 302)
   }
 })
