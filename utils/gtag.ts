@@ -109,7 +109,7 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>):
     window.gtag('event', eventName, params)
     logger.debug('[GTM] Event tracked', { eventName, params })
   } catch (error) {
-    logger.error('[GTM] Failed to track event', error)
+    logger.error('[GTM] Failed to track event', { eventName, params }, error)
   }
 }
 

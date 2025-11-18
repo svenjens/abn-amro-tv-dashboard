@@ -57,7 +57,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
     return registration
   } catch (error) {
-    logger.error('[PWA] Service worker registration failed:', error)
+    logger.error('[PWA] Service worker registration failed', {}, error)
     return null
   }
 }
@@ -104,14 +104,14 @@ export async function showInstallPrompt(): Promise<'accepted' | 'dismissed' | nu
 
     // Wait for the user's response
     const { outcome } = await deferredPrompt.userChoice
-    logger.debug('[PWA] User response to install prompt:', outcome)
+    logger.debug('[PWA] User response to install prompt', { outcome })
 
     // Clear the deferred prompt
     deferredPrompt = null
 
     return outcome
   } catch (error) {
-    logger.error('[PWA] Failed to show install prompt:', error)
+    logger.error('[PWA] Failed to show install prompt', {}, error)
     return null
   }
 }

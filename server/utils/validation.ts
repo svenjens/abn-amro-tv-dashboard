@@ -69,7 +69,7 @@ export function validateCountryCode(country: unknown): string {
  * @returns H3 error object
  */
 export function createValidationError(error: z.ZodError) {
-  const issues = error.errors.map((err) => ({
+  const issues = error.issues.map((err) => ({
     path: err.path.join('.'),
     message: err.message,
   }))

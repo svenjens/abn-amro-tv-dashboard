@@ -172,8 +172,8 @@ export default cachedEventHandler(
               action: 'fetchTMDBData',
               showId: id,
               showName: show.name,
-            },
-            tmdbError
+              error: tmdbError instanceof Error ? tmdbError.message : String(tmdbError),
+            }
           )
           // Continue without TMDB data - not critical
         }

@@ -192,7 +192,7 @@ describe('server/utils/validation', () => {
   describe('createValidationError', () => {
     it('should create validation error object with correct structure', () => {
       const mockZodError = {
-        errors: [
+        issues: [
           { path: ['field'], message: 'Invalid value' },
           { path: ['nested', 'field'], message: 'Required' },
         ],
