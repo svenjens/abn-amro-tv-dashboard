@@ -124,10 +124,12 @@ export default defineNuxtConfig({
   },
 
   // Image optimization configuration
-  // Note: Provider set to 'none' to avoid proxying external images through Vercel/server
-  // This prevents 500 errors when fetching images from external sources
+  // Using 'none' provider means NuxtImg acts as a smart <img> wrapper
+  // without server-side processing - perfect for external CDN images
+  // This gives us NuxtImg features (lazy loading, error handling) 
+  // without proxying or 500 errors from external sources
   image: {
-    provider: 'none',
+    provider: 'none', // No server-side image processing
     domains: ['static.tvmaze.com', 'image.tmdb.org'],
   },
 
@@ -182,6 +184,7 @@ export default defineNuxtConfig({
           'https://*.googlesyndication.com', // Google AdSense
           'https://*.vercel-insights.com',
         ],
+        'worker-src': ["'self'", 'blob:'], // Allow Web Workers from same origin and blob URLs
         'upgrade-insecure-requests': true,
       },
       xFrameOptions: 'SAMEORIGIN',
