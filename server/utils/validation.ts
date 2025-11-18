@@ -30,7 +30,12 @@ export const countryCodeSchema = z
  * Schema for show details query parameters
  */
 export const showDetailsQuerySchema = z.object({
-  country: countryCodeSchema.optional(),
+  country: z
+    .string()
+    .length(2)
+    .regex(/^[A-Z]{2}$/, 'Country code must be 2 uppercase letters')
+    .optional()
+    .default('US'),
 })
 
 /**
@@ -42,7 +47,7 @@ export const searchQuerySchema = z.object({
     .min(1, 'Search query must not be empty')
     .max(100, 'Search query must be at most 100 characters')
     .describe('Search query string'),
-  limit: z.coerce.number().int().positive().max(100).default(10).optional(),
+  limit: z.coerce.number().int().positive().max(100).optional().default(10),
 })
 
 /**
