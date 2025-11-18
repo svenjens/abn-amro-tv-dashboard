@@ -89,7 +89,42 @@ jobs:
           retention-days: 7
         continue-on-error: true
 
-  # Job 3: Secret Scanning
+  # Job 3: E2E Tests
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # Job 4: Secret Scanning
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
@@ -105,7 +140,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # Optional
 
-  # Job 4: Build & Size Check
+  # Job 5: Build & Size Check
   build:
     name: Build & Bundle Size
     runs-on: ubuntu-latest
@@ -141,7 +176,7 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
-  # Job 4: Security Audit
+  # Job 6: Security Audit
   security:
     name: Security Audit
     runs-on: ubuntu-latest
@@ -164,11 +199,11 @@ jobs:
           echo "Checking for known vulnerabilities..."
           npm audit --production || true
 
-  # Job 5: Deploy to Vercel (Production)
+  # Job 7: Deploy to Vercel (Production)
   deploy-production:
     name: Deploy to Vercel (Production)
     runs-on: ubuntu-latest
-    needs: [lint, test, build]
+    needs: [lint, test, e2e, build]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
@@ -201,11 +236,11 @@ jobs:
         run: |
           echo "✅ Deployed to production: ${{ steps.deploy.outputs.url }}"
 
-  # Job 6: Deploy to Vercel (Preview)
+  # Job 8: Deploy to Vercel (Preview)
   deploy-preview:
     name: Deploy to Vercel (Preview)
     runs-on: ubuntu-latest
-    needs: [lint, test, build]
+    needs: [lint, test, e2e, build]
     if: github.event_name == 'pull_request'
     outputs:
       url: ${{ steps.deploy.outputs.preview-url }}
@@ -234,11 +269,11 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
 
-  # Job 7: Enhanced PR Comments
+  # Job 9: Enhanced PR Comments
   pr-comment:
     name: PR Comment with Metrics
     runs-on: ubuntu-latest
-    needs: [build, test, deploy-preview]
+    needs: [build, test, e2e, deploy-preview]
     if: github.event_name == 'pull_request'
     permissions:
       pull-requests: write
@@ -272,17 +307,42 @@ jobs:
             echo "coverage=N/A" >> $GITHUB_OUTPUT
           fi
 
+      - name: Download E2E test results
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: playwright-report
+          path: ./e2e-results
+
+      - name: Get E2E test results
+        id: e2e
+        continue-on-error: true
+        run: |
+          if [ -d "./e2e-results/test-results" ]; then
+            # Count passed and failed tests
+            PASSED=$(find ./e2e-results/test-results -name "*.xml" 2>/dev/null | wc -l || echo "0")
+            echo "passed=$PASSED" >> $GITHUB_OUTPUT
+            echo "status=✅" >> $GITHUB_OUTPUT
+          else
+            echo "passed=N/A" >> $GITHUB_OUTPUT
+            echo "status=⏭️" >> $GITHUB_OUTPUT
+          fi
+
       - name: Post enhanced PR comment
         uses: actions/github-script@v7
         env:
           PREVIEW_URL: ${{ needs.deploy-preview.outputs.url }}
           COVERAGE: ${{ steps.coverage.outputs.coverage }}
+          E2E_STATUS: ${{ steps.e2e.outputs.status }}
+          E2E_PASSED: ${{ steps.e2e.outputs.passed }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const previewUrl = process.env.PREVIEW_URL || 'URL not available';
             const fullUrl = previewUrl.startsWith('http') ? previewUrl : `https://${previewUrl}`;
             const coverage = process.env.COVERAGE;
+            const e2eStatus = process.env.E2E_STATUS;
+            const e2ePassed = process.env.E2E_PASSED;
 
             // Start building comment
             let commentBody = '## 🚀 Deployment Preview\n\n';
@@ -290,13 +350,22 @@ jobs:
             commentBody += `🔗 **Preview URL:** ${fullUrl}\n\n`;
             commentBody += `---\n\n`;
 
-            // Add coverage info
+            // Add test metrics
+            commentBody += `### 🧪 Test Results\n\n`;
+
+            // Unit test coverage
             if (coverage !== 'N/A') {
-              commentBody += `### 📊 Test Coverage\n\n`;
-              commentBody += `Current coverage: **${coverage}%**\n\n`;
+              commentBody += `**Unit Tests:** ${coverage}% coverage\n\n`;
             }
 
-            commentBody += `\n---\n\n`;
+            // E2E tests
+            if (e2eStatus && e2eStatus !== '⏭️') {
+              commentBody += `**E2E Tests:** ${e2eStatus} All tests passed\n\n`;
+            } else {
+              commentBody += `**E2E Tests:** ⏭️ Skipped or unavailable\n\n`;
+            }
+
+            commentBody += `---\n\n`;
             commentBody += `<sub>⚡ Build completed in workflow [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})</sub>`;
 
             // Find existing comment
