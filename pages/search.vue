@@ -211,7 +211,7 @@
       </div>
 
         <!-- Filters -->
-        <FilterBar v-model="filters" :shows="searchStore.results" :show-streaming-filter="true" />
+        <FilterBar v-model="filters" :shows="searchStore.results" :show-streaming-filter="hasStreamingData" />
 
       <!-- Loading State -->
       <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
@@ -340,6 +340,11 @@ const exampleQueries = [
   'intense crime dramas',
   'feel-good family shows',
 ]
+
+// Check if any search results have streaming data
+const hasStreamingData = computed(() => {
+  return searchStore.fullResults.some((result) => result.show.streamingAvailability)
+})
 
 // Apply filters to search results
 const filteredResults = computed(() => {
