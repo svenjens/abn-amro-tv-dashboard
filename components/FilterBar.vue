@@ -2,10 +2,18 @@
   <div
     class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6"
   >
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+    <div class="flex items-center justify-between" :class="{ 'mb-4': isExpanded }">
+      <button
+        class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 transition-colors md:pointer-events-none md:hover:text-gray-900 md:dark:hover:text-gray-100"
+        @click="toggleFilters"
+      >
         {{ t('filters.title') }}
-      </h2>
+        <Icon
+          name="heroicons:chevron-down"
+          class="h-4 w-4 transition-transform md:hidden"
+          :class="{ 'rotate-180': isExpanded }"
+        />
+      </button>
       <button
         v-if="hasActiveFilters"
         class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
@@ -15,7 +23,7 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div v-show="isExpanded" class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Status Filter -->
       <div>
         <label
@@ -84,6 +92,7 @@
     <!-- Active Filters Summary -->
     <div
       v-if="hasActiveFilters"
+      v-show="isExpanded"
       class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
     >
       <span class="text-xs text-gray-600 dark:text-gray-400">{{ t('filters.active') }}:</span>
@@ -137,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { Show } from '@/types'
 
 interface Filters {
@@ -162,6 +171,28 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const localFilters = ref<Filters>({ ...props.modelValue })
+const isExpanded = ref(false)
+
+// Check if desktop on mount and set expanded state accordingly
+const checkIsDesktop = () => {
+  isExpanded.value = window.innerWidth >= 768 // md breakpoint
+}
+
+onMounted(() => {
+  checkIsDesktop()
+  window.addEventListener('resize', checkIsDesktop)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkIsDesktop)
+})
+
+// Toggle filters (only works on mobile)
+function toggleFilters() {
+  if (window.innerWidth < 768) {
+    isExpanded.value = !isExpanded.value
+  }
+}
 
 // Extract unique networks from shows
 const availableNetworks = computed(() => {
