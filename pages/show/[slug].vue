@@ -127,19 +127,6 @@
                   <dd>{{ t('show.minutes', { count: show.runtime }) }}</dd>
                 </div>
               </dl>
-
-              <div v-if="show.officialSite" class="mt-6">
-                <a
-                  :href="show.officialSite"
-                  target="_blank"
-                  rel="noopener noreferrer external nofollow"
-                  class="inline-flex items-center gap-2 btn-primary focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                  :aria-label="`${t('show.officialWebsite')} - ${t('accessibility.externalLink')}`"
-                >
-                  {{ t('show.officialWebsite') }}
-                  <Icon name="heroicons:arrow-top-right-on-square" class="h-4 w-4" />
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -206,10 +193,10 @@
                 role="list"
               >
                 <ShowCard
-                  v-for="relatedShow in relatedShows"
+                  v-for="(relatedShow, index) in relatedShows"
                   :key="relatedShow.id"
                   :show="relatedShow"
-                  :lazy="true"
+                  :lazy="false"
                   role="listitem"
                 />
               </div>
