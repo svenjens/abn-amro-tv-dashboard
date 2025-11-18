@@ -67,7 +67,7 @@
           class="flex-shrink-0 w-24 h-16 rounded overflow-hidden bg-gray-100"
         >
           <img
-            :src="episode.image.medium"
+            :src="transformImageUrl(episode.image.medium)"
             :alt="episode.name"
             class="w-full h-full object-cover"
             loading="lazy"
@@ -145,6 +145,7 @@
 import { ref, computed, watch } from 'vue'
 import SafeHtml from '@/components/SafeHtml.vue'
 import type { Episode, EpisodesBySeason, ApiError } from '@/types'
+import { transformImageUrl } from '@/utils/show'
 import { useWatchlistStore } from '@/stores'
 import RatingBadge from './RatingBadge.vue'
 import LoadingSpinner from './LoadingSpinner.vue'

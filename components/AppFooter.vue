@@ -205,18 +205,18 @@
       </div>
 
       <!-- Bottom Bar -->
-      <div class="pt-8 border-t border-gray-800">
+      <div class="pt-8 border-t border-gray-200 dark:border-gray-800">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
             © {{ currentYear }} BingeList. {{ t('footer.rights') }}
           </p>
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
             {{ t('footer.madeWith') }}
             <a
               href="https://vuejs.org"
               target="_blank"
               rel="noopener noreferrer external"
-              class="text-primary-400 hover:text-primary-300 transition-colors"
+              class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
               Vue 3
             </a>
@@ -225,7 +225,7 @@
               href="https://www.typescriptlang.org"
               target="_blank"
               rel="noopener noreferrer external"
-              class="text-primary-400 hover:text-primary-300 transition-colors"
+              class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
               TypeScript
             </a>

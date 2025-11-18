@@ -7,6 +7,7 @@ export default createConfigForNuxt().append({
     'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off', // We use v-html with sanitized content
     'vue/no-use-v-if-with-v-for': 'off', // Sometimes necessary for conditional rendering
+    'vue/html-self-closing': 'off', // Allow self-closing on void elements for consistency
 
     // TypeScript rules
     '@typescript-eslint/no-explicit-any': 'off', // Allow any in server API files with external data

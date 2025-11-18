@@ -169,7 +169,6 @@ export default defineNuxtConfig({
           "'self'",
           'data:',
           'https:',
-          'https://*.tmdb.org',
           'https://*.google-analytics.com', // Google Analytics
           'https://*.googletagmanager.com', // Google Tag Manager
         ],

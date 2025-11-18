@@ -3,9 +3,9 @@
     class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6"
   >
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+      <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
         {{ t('filters.title') }}
-      </h3>
+      </h2>
       <button
         v-if="hasActiveFilters"
         class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"

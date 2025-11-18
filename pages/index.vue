@@ -23,7 +23,7 @@
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
             <!-- Logo (hidden on mobile) -->
-            <NuxtImg
+            <img
               src="/optimized/logo-main.png"
               alt="BingeList Logo"
               class="hidden md:block h-16 w-16 object-contain"

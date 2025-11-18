@@ -18,7 +18,7 @@
           <div class="aspect-[3/4] bg-gray-100 overflow-hidden relative">
             <img
               v-if="member.person.image"
-              :src="member.person.image.medium"
+              :src="transformImageUrl(member.person.image.medium)"
               :alt="member.person.name"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
@@ -89,6 +89,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { CastMember, ApiError } from '@/types'
+import { transformImageUrl } from '@/utils/show'
 import LoadingSpinner from './LoadingSpinner.vue'
 import ErrorMessage from './ErrorMessage.vue'
 

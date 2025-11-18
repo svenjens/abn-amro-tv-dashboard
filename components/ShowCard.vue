@@ -7,14 +7,12 @@
     @click="navigateToShow"
   >
     <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0">
-      <NuxtImg
+      <img
         v-if="imageLoaded && showImage"
         :src="showImage"
         :alt="show.name"
         loading="lazy"
         decoding="async"
-        format="webp"
-        :quality="85"
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
         @error="handleImageError"
       />
