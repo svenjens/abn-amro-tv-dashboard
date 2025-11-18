@@ -76,7 +76,7 @@
 
     <!-- Disclaimer -->
     <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
-      {{ t('streaming.disclaimer') }}
+      {{ disclaimerText }}
     </div>
   </div>
 </template>
@@ -94,6 +94,90 @@ interface Props {
 
 const props = defineProps<Props>()
 const { t, locale } = useI18n()
+const { location } = useLocation()
+
+/**
+ * Get country name from country code for disclaimer
+ */
+type SupportedLocale = 'en' | 'nl' | 'es'
+type CountryCode =
+  | 'US'
+  | 'NL'
+  | 'GB'
+  | 'DE'
+  | 'FR'
+  | 'ES'
+  | 'IT'
+  | 'CA'
+  | 'AU'
+  | 'JP'
+  | 'BR'
+  | 'MX'
+  | 'IN'
+
+const countryNames: Record<SupportedLocale, Record<CountryCode, string>> = {
+  en: {
+    US: 'the United States',
+    NL: 'the Netherlands',
+    GB: 'the United Kingdom',
+    DE: 'Germany',
+    FR: 'France',
+    ES: 'Spain',
+    IT: 'Italy',
+    CA: 'Canada',
+    AU: 'Australia',
+    JP: 'Japan',
+    BR: 'Brazil',
+    MX: 'Mexico',
+    IN: 'India',
+  },
+  nl: {
+    US: 'de Verenigde Staten',
+    NL: 'Nederland',
+    GB: 'het Verenigd Koninkrijk',
+    DE: 'Duitsland',
+    FR: 'Frankrijk',
+    ES: 'Spanje',
+    IT: 'Italië',
+    CA: 'Canada',
+    AU: 'Australië',
+    JP: 'Japan',
+    BR: 'Brazilië',
+    MX: 'Mexico',
+    IN: 'India',
+  },
+  es: {
+    US: 'los Estados Unidos',
+    NL: 'los Países Bajos',
+    GB: 'el Reino Unido',
+    DE: 'Alemania',
+    FR: 'Francia',
+    ES: 'España',
+    IT: 'Italia',
+    CA: 'Canadá',
+    AU: 'Australia',
+    JP: 'Japón',
+    BR: 'Brasil',
+    MX: 'México',
+    IN: 'India',
+  },
+}
+
+/**
+ * Get localized disclaimer text with dynamic country
+ */
+const disclaimerText = computed(() => {
+  const countryCode = location.value.country || 'NL'
+  const localeKey = (
+    ['en', 'nl', 'es'].includes(locale.value) ? locale.value : 'en'
+  ) as SupportedLocale
+  const localeNames = countryNames[localeKey]
+  const countryName =
+    (localeNames[countryCode as CountryCode] || countryNames.en[countryCode as CountryCode]) ??
+    countryCode
+
+  return t('streaming.disclaimer', { country: countryName })
+})
 
 /**
  * Handle streaming link click and track event

@@ -261,7 +261,7 @@
     "title": "Where to Watch",
     "watch_on": "Watch on",
     "affiliate_note": "Affiliate",
-    "disclaimer": "Showing availability for the Netherlands. Prices and streaming options may vary.",
+    "disclaimer": "Showing availability for {country}. Prices and streaming options may vary.",
     "not_available": "Currently not available on streaming services",
     "check_later": "Check back later or visit the official website for more information"
   },

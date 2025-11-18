@@ -261,7 +261,7 @@
     "title": "Dónde Ver",
     "watch_on": "Ver en",
     "affiliate_note": "Afiliado",
-    "disclaimer": "Mostrando disponibilidad para los Países Bajos. Los precios y opciones de streaming pueden variar.",
+    "disclaimer": "Mostrando disponibilidad para {country}. Los precios y opciones de streaming pueden variar.",
     "not_available": "Actualmente no disponible en servicios de streaming",
     "check_later": "Vuelve más tarde o visita el sitio web oficial para más información"
   },

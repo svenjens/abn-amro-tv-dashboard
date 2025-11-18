@@ -261,7 +261,7 @@
     "title": "Waar te Kijken",
     "watch_on": "Bekijk op",
     "affiliate_note": "Affiliate",
-    "disclaimer": "Toont beschikbaarheid voor Nederland. Prijzen en streamingopties kunnen veranderen.",
+    "disclaimer": "Toont beschikbaarheid voor {country}. Prijzen en streamingopties kunnen veranderen.",
     "not_available": "Momenteel niet beschikbaar op streamingdiensten",
     "check_later": "Kom later terug of bezoek de officiële website voor meer informatie"
   },
