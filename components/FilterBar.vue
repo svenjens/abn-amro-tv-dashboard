@@ -298,22 +298,31 @@ const availableYears = computed(() => {
   return Array.from(years).sort((a, b) => b - a) // Newest first
 })
 
-// Extract unique streaming services from shows
+// Extract unique streaming services from shows, or show all available platforms
 const availableStreamingServices = computed(() => {
   const services = new Set<string>()
-  if (!props.shows || props.shows.length === 0) {
-    return []
+  
+  // If we have shows, extract services from them
+  if (props.shows && props.shows.length > 0) {
+    props.shows.forEach((show) => {
+      if (show.streamingAvailability) {
+        show.streamingAvailability.forEach((option) => {
+          const platform = STREAMING_PLATFORMS[option.service.id]
+          if (platform) {
+            services.add(platform.name)
+          }
+        })
+      }
+    })
   }
-  props.shows.forEach((show) => {
-    if (show.streamingAvailability) {
-      show.streamingAvailability.forEach((option) => {
-        const platform = STREAMING_PLATFORMS[option.service.id]
-        if (platform) {
-          services.add(platform.name)
-        }
-      })
-    }
-  })
+  
+  // If no services found from shows, show all available platforms
+  if (services.size === 0) {
+    Object.values(STREAMING_PLATFORMS).forEach((platform) => {
+      services.add(platform.name)
+    })
+  }
+  
   return Array.from(services).sort()
 })
 
