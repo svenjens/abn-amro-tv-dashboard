@@ -63,7 +63,7 @@ test.describe('Watchlist Functionality', () => {
     const id = showId?.replace('show-card-', '')
 
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
-    
+
     // Add to watchlist and wait for count to appear
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
     await watchlistButton.click()
@@ -83,7 +83,7 @@ test.describe('Watchlist Functionality', () => {
 
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    
+
     // Add to watchlist and wait for count to appear with correct value
     await watchlistButton.click()
     await expect(watchlistCount).toBeVisible({ timeout: 5000 })
@@ -92,10 +92,10 @@ test.describe('Watchlist Functionality', () => {
     // Reload the page and wait for full hydration
     await page.reload({ waitUntil: 'networkidle' })
     await waitForHydration(page)
-    
+
     // Wait for shows to be loaded first
     await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 15000 })
-    
+
     // Wait for watchlist link to be present (indicates store is initialized)
     await page.waitForSelector('[data-testid="watchlist-link"]', { timeout: 5000 })
 

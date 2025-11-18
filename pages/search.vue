@@ -259,10 +259,11 @@
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr mb-8"
           >
             <ShowCard
-              v-for="result in filteredResults"
+              v-for="(result, index) in filteredResults"
               :key="result.show.id"
               :show="result.show"
               :match-reason="isSemanticMode ? result.matchedTerm : undefined"
+              :lazy="index >= 10"
             />
           </div>
 
@@ -272,22 +273,15 @@
 
         <!-- Empty State -->
         <div v-else class="text-center py-16">
-          <svg
-            class="mx-auto h-16 w-16 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">No shows found</h3>
-          <p class="mt-2 text-gray-500">
-            Try searching with different keywords or check your spelling.
+          <Icon
+            name="heroicons:magnifying-glass"
+            class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500"
+          />
+          <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
+            {{ t('search.noResultsTitle') }}
+          </h3>
+          <p class="mt-2 text-gray-500 dark:text-gray-400">
+            {{ t('search.noResultsHint') }}
           </p>
         </div>
       </div>
@@ -297,15 +291,17 @@
         <NuxtImg
           src="/optimized/empty-state-illustration.png"
           alt=""
-          class="mx-auto h-48 w-48 object-contain opacity-50"
+          class="mx-auto h-48 w-48 object-contain opacity-50 dark:opacity-30"
           aria-hidden="true"
           width="192"
           height="192"
           loading="lazy"
         />
-        <h3 class="mt-6 text-lg font-medium text-gray-900">Start searching</h3>
-        <p class="mt-2 text-gray-500">
-          Enter a TV show name to search through our extensive database.
+        <h3 class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ t('search.initialStateTitle') }}
+        </h3>
+        <p class="mt-2 text-gray-500 dark:text-gray-400">
+          {{ t('search.initialStateHint') }}
         </p>
       </div>
     </div>
