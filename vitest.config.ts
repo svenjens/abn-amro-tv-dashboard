@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 export default defineVitestConfig({
   test: {
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/dist/**', '**/.output/**'],
     environment: 'nuxt',
     environmentOptions: {
       nuxt: {

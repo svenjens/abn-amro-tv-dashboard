@@ -3,6 +3,7 @@
     :class="buttonClasses"
     :aria-label="ariaLabel"
     :title="title"
+    :data-testid="`watchlist-button-${show.id}`"
     @click.prevent="handleClick"
   >
     <!-- Bookmark Icon (filled when in watchlist) -->

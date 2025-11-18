@@ -42,6 +42,7 @@
               :to="localePath('/watchlist')"
               class="relative inline-flex items-center gap-2 text-white hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg px-3 py-2"
               :aria-label="t('watchlist.title')"
+              data-testid="watchlist-link"
             >
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -55,6 +56,7 @@
               <span
                 v-if="watchlistStore.hasShows"
                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                data-testid="watchlist-count"
               >
                 {{ watchlistStore.watchlistCount }}
               </span>
@@ -71,6 +73,7 @@
           v-model="searchQuery"
           :placeholder="t('home.searchPlaceholder')"
           :recent-searches="searchStore.recentSearches"
+          data-testid="search-bar"
           @search="handleSearch"
           @clear-recent="searchStore.clearRecentSearches()"
           @focus="handleSearchFocus"

@@ -5,6 +5,7 @@
     :initial="{ opacity: 0, y: 20 }"
     :visible="{ opacity: 1, y: 0, transition: { duration: 400, delay: 50 } }"
     class="card group/card cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 hover:-translate-y-1 h-full flex flex-col"
+    :data-testid="`show-card-${show.id}`"
     @click="navigateToShow"
   >
     <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0">
@@ -18,6 +19,7 @@
         format="webp"
         :quality="85"
         class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
+        :data-testid="`show-card-image-${show.id}`"
         @error="handleImageError"
       />
       <div
