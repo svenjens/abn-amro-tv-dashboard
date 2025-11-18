@@ -22,13 +22,14 @@
           <div
             class="streaming-icon"
             :style="{
-              backgroundColor: getServiceColor(option.service.id),
-              borderColor: getServiceColor(option.service.id),
+              background: getServiceGradient(option.service.id),
             }"
           >
-            <div class="streaming-brand-text">
-              {{ getServiceBrandName(option.service.id) }}
-            </div>
+            <img
+              :src="getServiceLogo(option.service.id)"
+              :alt="option.service.name"
+              class="streaming-logo"
+            />
           </div>
 
           <!-- Service Info -->
@@ -135,22 +136,34 @@ const getServiceColor = (serviceId: string): string => {
 }
 
 /**
- * Get brand name to display for a streaming service
+ * Get logo path for a streaming service
  */
-const getServiceBrandName = (serviceId: string): string => {
-  const brandNames: Record<string, string> = {
-    netflix: 'NETFLIX',
-    prime: 'prime video',
-    disney: 'Disney+',
-    hbo: 'Max',
-    hulu: 'hulu',
-    apple: 'tv+',
-    paramount: 'Paramount+',
-    peacock: 'Peacock',
-    skyshowtime: 'SkyShowtime',
-    videoland: 'Videoland',
+const getServiceLogo = (serviceId: string): string => {
+  const platform = STREAMING_PLATFORMS[serviceId]
+  return platform?.logo || ''
+}
+
+/**
+ * Get gradient background for a streaming service
+ */
+const getServiceGradient = (serviceId: string): string => {
+  const color = getServiceColor(serviceId)
+
+  // Create a lighter and darker shade for gradient
+  const gradients: Record<string, string> = {
+    netflix: 'linear-gradient(135deg, #E50914 0%, #B20710 100%)',
+    prime: 'linear-gradient(135deg, #00A8E1 0%, #0779ff 100%)',
+    disney: 'linear-gradient(135deg, #113CCF 0%, #0A2A8F 100%)',
+    hbo: 'linear-gradient(135deg, #002BE7 0%, #001BA0 100%)',
+    hulu: 'linear-gradient(135deg, #1CE783 0%, #16B864 100%)',
+    apple: 'linear-gradient(135deg, #1d1d1f 0%, #000000 100%)',
+    paramount: 'linear-gradient(135deg, #0064FF 0%, #0050CC 100%)',
+    peacock: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+    skyshowtime: 'linear-gradient(135deg, #5433FF 0%, #3D20CC 100%)',
+    videoland: 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)',
   }
-  return brandNames[serviceId] || serviceId.toUpperCase()
+
+  return gradients[serviceId] || `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`
 }
 
 /**
@@ -221,17 +234,14 @@ const formatPrice = (price: number, currency?: string): string => {
 }
 
 .streaming-icon {
-  @apply w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden border-2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  @apply w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
 }
 
-.streaming-brand-text {
-  @apply text-white font-bold text-center px-1;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+.streaming-logo {
+  @apply w-full h-full object-contain;
+  filter: brightness(0) invert(1);
 }
 
 .affiliate-badge {
