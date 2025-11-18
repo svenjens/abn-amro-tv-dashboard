@@ -44,7 +44,7 @@ export default defineVitestConfig({
     setupFiles: ['./vitest.setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'lcov'],
+      reporter: ['text', 'json', 'json-summary', 'lcov'],
       exclude: [
         'node_modules/',
         '__tests__/',
