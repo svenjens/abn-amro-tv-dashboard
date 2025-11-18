@@ -60,12 +60,12 @@ export const useShowsStore = defineStore('shows', () => {
     showsByGenre.value = groupShowsByGenre(shows)
     loading.value = false
     error.value = null
-      logger.debug('Shows loaded and grouped by genre', {
-        module: 'stores/shows',
-        action: 'setShows',
-        showsCount: shows.length,
-        genresCount: genres.value.length,
-      })
+    logger.debug('Shows loaded and grouped by genre', {
+      module: 'stores/shows',
+      action: 'setShows',
+      showsCount: shows.length,
+      genresCount: genres.value.length,
+    })
   }
 
   /**
@@ -115,7 +115,11 @@ export const useShowsStore = defineStore('shows', () => {
       if (toast) {
         toast.error('Failed to load TV shows. Please try again later.')
       }
-      logger.error('Failed to fetch shows', { module: 'stores/shows', action: 'fetchAllShows' }, err)
+      logger.error(
+        'Failed to fetch shows',
+        { module: 'stores/shows', action: 'fetchAllShows' },
+        err
+      )
       loading.value = false
     }
   }
@@ -137,7 +141,11 @@ export const useShowsStore = defineStore('shows', () => {
       if (toast) {
         toast.error('Failed to load show details. Please try again later.')
       }
-      logger.error('Failed to fetch show by ID', { module: 'stores/shows', action: 'fetchShowById', showId: id }, err)
+      logger.error(
+        'Failed to fetch show by ID',
+        { module: 'stores/shows', action: 'fetchShowById', showId: id },
+        err
+      )
       return null
     } finally {
       loading.value = false

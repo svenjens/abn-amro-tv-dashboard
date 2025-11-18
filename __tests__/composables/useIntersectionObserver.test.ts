@@ -23,9 +23,7 @@ const mockIntersectionObserver = vi.fn((callback, options) => {
     takeRecords: vi.fn(() => []),
     root: options?.root || null,
     rootMargin: options?.rootMargin || '0px',
-    thresholds: Array.isArray(options?.threshold)
-      ? options.threshold
-      : [options?.threshold || 0],
+    thresholds: Array.isArray(options?.threshold) ? options.threshold : [options?.threshold || 0],
   }
 })
 
@@ -343,4 +341,3 @@ describe('useIntersectionObserver', () => {
     global.IntersectionObserver = originalIO
   })
 })
-

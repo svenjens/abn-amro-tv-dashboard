@@ -60,9 +60,11 @@ describe('useApi', () => {
   })
 
   it('should set loading state during API call', async () => {
-    const apiCall = vi.fn().mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve({ data: 'test' }), 100))
-    )
+    const apiCall = vi
+      .fn()
+      .mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve({ data: 'test' }), 100))
+      )
 
     const { loading, execute } = useApi(apiCall, false)
 
@@ -249,4 +251,3 @@ describe('useApi', () => {
     expect((error.value as any).code).toBe('CUSTOM_ERROR')
   })
 })
-

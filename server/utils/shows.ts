@@ -48,4 +48,3 @@ export function groupShowsByGenre(shows: Show[]): ShowsByGenre {
 
   return grouped
 }
-

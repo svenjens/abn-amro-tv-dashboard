@@ -38,12 +38,7 @@ export interface UseIntersectionObserverOptions {
  * // isIntersecting will be true when element is visible
  */
 export function useIntersectionObserver(options: UseIntersectionObserverOptions = {}) {
-  const {
-    root = null,
-    rootMargin = '0px',
-    threshold = 0,
-    once = true,
-  } = options
+  const { root = null, rootMargin = '0px', threshold = 0, once = true } = options
 
   const target: Ref<Element | null> = ref(null)
   const isIntersecting = ref(false)
@@ -73,7 +68,7 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             isIntersecting.value = true
-            
+
             // Stop observing if once option is set
             if (once && observer) {
               observer.disconnect()
@@ -105,4 +100,3 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
     isIntersecting,
   }
 }
-

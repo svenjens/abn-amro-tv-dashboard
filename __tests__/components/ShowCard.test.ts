@@ -257,4 +257,3 @@ describe('ShowCard', () => {
     expect(wrapper.findAll('.w-7.h-7').length).toBeGreaterThan(0)
   })
 })
-

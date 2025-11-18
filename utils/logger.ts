@@ -66,11 +66,7 @@ function serializeError(error: unknown): LogEntry['error'] | undefined {
  * Format log entry for output
  */
 function formatLogEntry(entry: LogEntry): string {
-  const parts = [
-    `[${entry.level}]`,
-    entry.timestamp,
-    entry.message,
-  ]
+  const parts = [`[${entry.level}]`, entry.timestamp, entry.message]
 
   if (entry.context && Object.keys(entry.context).length > 0) {
     parts.push(JSON.stringify(entry.context))

@@ -22,9 +22,9 @@ export default cachedEventHandler(
       if (!isTVMazeShowArray(response)) {
         logger.error(
           'Invalid shows response from TVMaze API',
-          { 
-            module: 'api/shows', 
-            action: 'fetchAllShows', 
+          {
+            module: 'api/shows',
+            action: 'fetchAllShows',
             responseType: typeof response,
             isArray: Array.isArray(response),
           },

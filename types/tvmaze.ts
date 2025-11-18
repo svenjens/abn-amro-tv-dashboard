@@ -148,7 +148,7 @@ export interface TVMazeSearchResult {
 export function isTVMazeShow(obj: unknown): obj is TVMazeShow {
   if (!obj || typeof obj !== 'object') return false
   const show = obj as Partial<TVMazeShow>
-  
+
   return (
     typeof show.id === 'number' &&
     typeof show.name === 'string' &&
@@ -164,4 +164,3 @@ export function isTVMazeShow(obj: unknown): obj is TVMazeShow {
 export function isTVMazeShowArray(obj: unknown): obj is TVMazeShow[] {
   return Array.isArray(obj) && (obj.length === 0 || isTVMazeShow(obj[0]))
 }
-

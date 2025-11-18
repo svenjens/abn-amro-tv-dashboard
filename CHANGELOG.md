@@ -2,20 +2,18 @@
 
 ## [3.1.0](https://github.com/svenjens/tv-show-dashboard/compare/v3.0.1...v3.1.0) (2025-11-18)
 
-
 ### Features
 
-* add streaming service logos with gradient backgrounds ([#66](https://github.com/svenjens/tv-show-dashboard/issues/66)) ([024ffb7](https://github.com/svenjens/tv-show-dashboard/commit/024ffb74095e2c98be0209176611137d6a234c36))
-* CDN subdomain image proxy ([#63](https://github.com/svenjens/tv-show-dashboard/issues/63)) ([3b90c3b](https://github.com/svenjens/tv-show-dashboard/commit/3b90c3b9bdaf7ff3582bdc8338bb81b1ced14ced))
-
+- add streaming service logos with gradient backgrounds ([#66](https://github.com/svenjens/tv-show-dashboard/issues/66)) ([024ffb7](https://github.com/svenjens/tv-show-dashboard/commit/024ffb74095e2c98be0209176611137d6a234c36))
+- CDN subdomain image proxy ([#63](https://github.com/svenjens/tv-show-dashboard/issues/63)) ([3b90c3b](https://github.com/svenjens/tv-show-dashboard/commit/3b90c3b9bdaf7ff3582bdc8338bb81b1ced14ced))
 
 ### Bug Fixes
 
-* **a11y:** fix ARIA tab roles and CSP for Google Funding Choices ([d7dc2f5](https://github.com/svenjens/tv-show-dashboard/commit/d7dc2f5d5d9a5dbd87025710124c587da759277b))
-* **a11y:** improve accessibility score to 100/100 ([587017e](https://github.com/svenjens/tv-show-dashboard/commit/587017e93917f1569834fe0bc218aafc4b800af2))
-* **csp:** add Google Funding Choices to CSP connect-src ([43cd392](https://github.com/svenjens/tv-show-dashboard/commit/43cd392aea4edf7d4f6d62f75728c1b5a9b5447f))
-* **csp:** correct Google domains - keep separate TLDs ([eee7bf8](https://github.com/svenjens/tv-show-dashboard/commit/eee7bf8b46f1134f15516cec3b1c1f9add5b6194))
-* increase rate limit for AdSense crawler compatibility ([ead9d77](https://github.com/svenjens/tv-show-dashboard/commit/ead9d770c0e0e3283dd7dfad5984cd36ce81f7cf))
+- **a11y:** fix ARIA tab roles and CSP for Google Funding Choices ([d7dc2f5](https://github.com/svenjens/tv-show-dashboard/commit/d7dc2f5d5d9a5dbd87025710124c587da759277b))
+- **a11y:** improve accessibility score to 100/100 ([587017e](https://github.com/svenjens/tv-show-dashboard/commit/587017e93917f1569834fe0bc218aafc4b800af2))
+- **csp:** add Google Funding Choices to CSP connect-src ([43cd392](https://github.com/svenjens/tv-show-dashboard/commit/43cd392aea4edf7d4f6d62f75728c1b5a9b5447f))
+- **csp:** correct Google domains - keep separate TLDs ([eee7bf8](https://github.com/svenjens/tv-show-dashboard/commit/eee7bf8b46f1134f15516cec3b1c1f9add5b6194))
+- increase rate limit for AdSense crawler compatibility ([ead9d77](https://github.com/svenjens/tv-show-dashboard/commit/ead9d770c0e0e3283dd7dfad5984cd36ce81f7cf))
 
 ## [3.0.1](https://github.com/svenjens/tv-show-dashboard/compare/v3.0.0...v3.0.1) (2025-11-17)
 
