@@ -190,28 +190,42 @@ export const logger = {
    *
    * @example
    * logger.error('API request failed', { endpoint: '/api/shows' }, error)
+   * logger.error('API request failed', error) // Also supported
    */
   error: (message: string, context?: LogContext | unknown, error?: unknown) => {
     if (!shouldLog(LogLevel.ERROR)) return
 
-    // Ensure context is LogContext or undefined
-    const logContext =
-      context && typeof context === 'object' && !Array.isArray(context)
-        ? (context as LogContext)
-        : undefined
+    // Handle flexible signatures:
+    // - (message, error) → treat second param as error
+    // - (message, context, error) → normal flow
+    let logContext: LogContext | undefined
+    let actualError: unknown
+
+    if (context instanceof Error && error === undefined) {
+      // Called as logger.error('message', error)
+      logContext = undefined
+      actualError = context
+    } else {
+      // Called as logger.error('message', context, error) or logger.error('message', context)
+      logContext =
+        context && typeof context === 'object' && !Array.isArray(context) && !(context instanceof Error)
+          ? (context as LogContext)
+          : undefined
+      actualError = error
+    }
 
     const entry: LogEntry = {
       level: 'ERROR',
       timestamp: getTimestamp(),
       message,
       context: logContext,
-      error: serializeError(error),
+      error: serializeError(actualError),
     }
 
     if (isServer) {
       console.error(formatLogEntry(entry))
     } else {
-      console.error(`[ERROR] ${message}`, logContext || '', error || '')
+      console.error(`[ERROR] ${message}`, logContext || '', actualError || '')
     }
   },
 }

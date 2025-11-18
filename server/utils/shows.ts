@@ -3,8 +3,6 @@
  * These utilities can be used in both server API routes and shared with client
  */
 
-// Types are no longer needed here as we use generic types
-
 /**
  * Minimal show interface needed for grouping by genre
  */

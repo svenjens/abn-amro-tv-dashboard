@@ -205,6 +205,7 @@ export default cachedEventHandler(
             action: 'fetchTMDBData',
             showId: id,
             showName: show.name,
+            country,
             error: tmdbError instanceof Error ? tmdbError.message : String(tmdbError),
           })
           // Continue without TMDB data - not critical
@@ -229,6 +230,7 @@ export default cachedEventHandler(
           module: 'api/shows/[id]',
           action: 'fetchShowById',
           showId: rawId,
+          country: query.country ? String(query.country) : 'US',
         },
         error
       )
