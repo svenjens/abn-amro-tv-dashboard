@@ -124,12 +124,10 @@ export default defineNuxtConfig({
   },
 
   // Image optimization configuration
-  // Using 'none' provider means NuxtImg acts as a smart <img> wrapper
-  // without server-side processing - perfect for external CDN images
-  // This gives us NuxtImg features (lazy loading, error handling) 
-  // without proxying or 500 errors from external sources
+  // In production: use Vercel's image optimization for caching & stability
+  // In development: use 'none' to avoid IPX errors with external images
   image: {
-    provider: 'none', // No server-side image processing
+    provider: process.env.NODE_ENV === 'production' ? 'ipx' : 'none',
     domains: ['static.tvmaze.com', 'image.tmdb.org'],
   },
 

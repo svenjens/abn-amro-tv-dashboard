@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import type { StreamingAvailability } from '@/types'
 import { STREAMING_PLATFORMS } from '@/types'
-import { trackStreamingClick, logger } from '@/utils'
+import { trackStreamingClick } from '@/utils'
 
 interface Props {
   availability: StreamingAvailability[]
@@ -138,13 +138,7 @@ const getServiceColor = (serviceId: string): string => {
  */
 const getServiceLogo = (serviceId: string): string => {
   const platform = STREAMING_PLATFORMS[serviceId]
-  const logo = platform?.logo || ''
-  if (!logo) {
-    logger.warn(`No logo found for service: ${serviceId}`, platform)
-  } else {
-    logger.debug(`Logo path for ${serviceId}:`, logo)
-  }
-  return logo
+  return platform?.logo || ''
 }
 
 /**
@@ -202,7 +196,6 @@ const hasAffiliate = (serviceId: string): boolean => {
  */
 const handleImageError = (event: Event) => {
   const target = event.target as HTMLImageElement
-  logger.error('Failed to load streaming logo:', target.src)
   // Hide the image if it fails to load
   target.style.display = 'none'
 }

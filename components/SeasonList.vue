@@ -56,6 +56,8 @@
           <NuxtImg
             :src="episode.image.medium"
             :alt="episode.name"
+            format="webp"
+            :quality="85"
             class="w-full h-full object-cover"
             loading="lazy"
           />
