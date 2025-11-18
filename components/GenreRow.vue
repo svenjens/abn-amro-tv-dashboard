@@ -53,8 +53,8 @@
           tabindex="0"
           @scroll="updateScrollButtons"
         >
-          <div v-for="show in limitedShowsDesktop" :key="show.id" class="flex-none w-48">
-            <ShowCard :show="show" />
+          <div v-for="(show, index) in limitedShowsDesktop" :key="show.id" class="flex-none w-48">
+            <ShowCard :show="show" :lazy="!priority || index >= 6" />
           </div>
         </div>
 
@@ -84,7 +84,12 @@
     <!-- Mobile: Grid -->
     <div class="md:hidden px-4">
       <div class="grid grid-cols-2 gap-4">
-        <ShowCard v-for="show in limitedShows" :key="show.id" :show="show" />
+        <ShowCard
+          v-for="(show, index) in limitedShows"
+          :key="show.id"
+          :show="show"
+          :lazy="!priority || index >= 4"
+        />
       </div>
       <button
         v-if="shows.length > mobileLimit"
@@ -105,9 +110,12 @@ import ShowCard from './ShowCard.vue'
 interface Props {
   genre: string
   shows: Show[]
+  priority?: boolean // If true, first shows load eager for better LCP
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  priority: false,
+})
 
 const { t } = useI18n()
 const localePath = useLocalePath()

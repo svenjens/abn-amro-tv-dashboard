@@ -16,10 +16,12 @@
         >
           <!-- Person image -->
           <div class="aspect-[3/4] bg-gray-100 overflow-hidden relative">
-            <img
+            <NuxtImg
               v-if="member.person.image"
-              :src="transformImageUrl(member.person.image.medium)"
+              :src="member.person.image.medium"
               :alt="member.person.name"
+              format="webp"
+              :quality="85"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
             />
@@ -89,7 +91,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { CastMember, ApiError } from '@/types'
-import { transformImageUrl } from '@/utils/show'
 import LoadingSpinner from './LoadingSpinner.vue'
 import ErrorMessage from './ErrorMessage.vue'
 

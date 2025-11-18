@@ -30,9 +30,11 @@
           class="absolute inset-0 opacity-20 dark:opacity-30"
           :aria-label="`${show.name} background`"
         >
-          <img
-            :src="transformImageUrl(show.image.original)"
+          <NuxtImg
+            :src="show.image.original"
             :alt="`${show.name} background`"
+            format="webp"
+            :quality="85"
             class="w-full h-full object-cover"
             loading="eager"
           />
@@ -91,9 +93,11 @@
           <div class="flex flex-col md:flex-row gap-8">
             <!-- Poster -->
             <div v-if="getShowImage(show, 'original')" class="flex-shrink-0">
-              <img
+              <NuxtImg
                 :src="getShowImage(show, 'original')!"
                 :alt="`${show.name} poster`"
+                format="webp"
+                :quality="85"
                 class="w-64 rounded-lg shadow-2xl"
                 loading="eager"
                 fetchpriority="high"
@@ -292,13 +296,7 @@
 import { ref, computed, watch } from 'vue'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import {
-  getShowImage,
-  transformImageUrl,
-  formatSchedule,
-  extractIdFromSlug,
-  createShowSlug,
-} from '@/utils'
+import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'
@@ -453,24 +451,9 @@ watch(
       const title = `${showData.name} - BingeList`
       const image = showData.image?.original || showData.image?.medium
 
-      // Preload critical images for better performance
-      const links: Array<{ rel: string; as: 'image'; href: string; fetchpriority: 'high' }> = []
-      if (showData.image?.original) {
-        const transformedImage = transformImageUrl(showData.image.original)
-        if (transformedImage) {
-          links.push({
-            rel: 'preload',
-            as: 'image',
-            href: transformedImage,
-            fetchpriority: 'high',
-          })
-        }
-      }
-
       useHead({
         title,
         meta: [{ name: 'description', content: description }],
-        link: links,
       })
 
       useSeoMeta({

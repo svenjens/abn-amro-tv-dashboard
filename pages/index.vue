@@ -122,10 +122,11 @@
         </div>
 
         <GenreRow
-          v-for="genreData in displayedGenres"
+          v-for="(genreData, index) in displayedGenres"
           :key="genreData.name"
           :genre="genreData.name"
           :shows="genreData.shows"
+          :priority="index === 0"
         />
 
         <!-- Infinite Scroll Trigger -->

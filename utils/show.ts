@@ -74,34 +74,13 @@ export function formatRating(rating: number | null): string {
 }
 
 /**
- * Transform TVMaze image URL to use our image proxy
- * @param imageUrl - Original image URL
- * @returns Proxied URL via our domain
- */
-export function transformImageUrl(imageUrl: string | null | undefined): string | undefined {
-  if (!imageUrl) return undefined
-
-  // Proxy TVMaze images through our domain via Edge Function
-  if (
-    imageUrl.startsWith('https://static.tvmaze.com') ||
-    imageUrl.startsWith('http://static.tvmaze.com')
-  ) {
-    // Extract the path after the domain
-    const path = imageUrl.replace(/^https?:\/\/static\.tvmaze\.com\//, '')
-    return `/api/image/${path}`
-  }
-
-  return imageUrl
-}
-
-/**
  * Get show image URL (no fallback)
  * @param show - Show object
  * @param size - Image size ('medium' or 'original')
  * @returns Image URL or null if not available
  */
 export function getShowImage(show: Show, size: 'medium' | 'original' = 'medium'): string | null {
-  return transformImageUrl(show.image?.[size]) ?? null
+  return show.image?.[size] ?? null
 }
 
 /**
