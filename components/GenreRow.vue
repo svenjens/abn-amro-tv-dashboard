@@ -13,10 +13,11 @@
         {{ genre }}
       </h2>
       <button
-        class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 rounded px-2 py-1"
+        class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-500 rounded px-2 py-1"
         @click="navigateToGenre"
       >
-        {{ t('genre.viewAll') }} →
+        <span>{{ t('genre.viewAll') }}</span>
+        <Icon name="heroicons:arrow-right" class="h-4 w-4" />
       </button>
     </div>
 
