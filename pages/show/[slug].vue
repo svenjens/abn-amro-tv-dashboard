@@ -454,7 +454,7 @@ watch(
       const image = showData.image?.original || showData.image?.medium
 
       // Preload critical images for better performance
-      const links: Array<{ rel: string; as?: string; href: string; fetchpriority?: string }> = []
+      const links: Array<{ rel: string; as: 'image'; href: string; fetchpriority: 'high' }> = []
       if (showData.image?.original) {
         const transformedImage = transformImageUrl(showData.image.original)
         if (transformedImage) {
