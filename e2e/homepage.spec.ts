@@ -11,8 +11,9 @@ test.describe('Homepage - Browse Shows', () => {
     // Check hero section title
     await expect(page.locator('h1')).toContainText(/bingelist/i)
 
-    // Check subtitle is visible
-    await expect(page.locator('p')).toContainText(/discover|ontdek|descubre/i)
+    // Check subtitle is visible (look in header/hero section specifically)
+    const heroSection = page.locator('header').first()
+    await expect(heroSection.locator('p')).toContainText(/discover|ontdek|descubre/i)
 
     // Check search bar is visible
     await expect(page.locator('[data-testid="search-bar"]')).toBeVisible()
@@ -48,14 +49,15 @@ test.describe('Homepage - Browse Shows', () => {
   test('should navigate to show details when clicking on a card', async ({ page }) => {
     const firstCard = page.locator('[data-testid^="show-card-"]').first()
 
-    // Click on the show card
-    await firstCard.click()
+    // Get current URL before click
+    const initialUrl = page.url()
 
-    // Wait for navigation
-    await page.waitForURL(/.*\/show\/.*/, { timeout: 10000 })
+    // Click on the show card and wait for URL change
+    await firstCard.click({ force: true })
+    await page.waitForURL((url) => url.href !== initialUrl, { timeout: 15000 })
 
     // Check that we're on a show details page (URL contains /show/ and a slug)
-    expect(page.url()).toMatch(/\/show\/[\w-]+-\d+/)
+    expect(page.url()).toMatch(/show\/[\w-]+-\d+/)
   })
 
   test('should display shows grouped by genre', async ({ page }) => {

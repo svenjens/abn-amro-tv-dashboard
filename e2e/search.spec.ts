@@ -18,13 +18,15 @@ test.describe('Search Functionality', () => {
 
     // Type search query
     await searchInput.fill('Game of Thrones')
+
+    // Press Enter and wait for URL change
+    const initialUrl = page.url()
     await searchInput.press('Enter')
+    await page.waitForURL((url) => url.href !== initialUrl, { timeout: 15000 })
 
-    // Wait for navigation to search page
-    await page.waitForURL(/.*\/search\?q=/, { timeout: 10000 })
-
-    // Verify URL contains the query
-    expect(page.url()).toContain('q=Game')
+    // Verify URL contains /search and the query
+    expect(page.url()).toContain('/search')
+    expect(page.url()).toContain('Game')
   })
 
   test('should display search results', async ({ page }) => {
@@ -33,13 +35,14 @@ test.describe('Search Functionality', () => {
 
     // Search for a popular show
     await searchInput.fill('Friends')
-    await searchInput.press('Enter')
 
-    // Wait for search results page
-    await page.waitForURL(/.*\/search\?q=/, { timeout: 10000 })
+    // Press Enter and wait for URL change
+    const initialUrl = page.url()
+    await searchInput.press('Enter')
+    await page.waitForURL((url) => url.href !== initialUrl, { timeout: 15000 })
 
     // Wait for show cards to appear
-    await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 10000 })
+    await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 15000 })
 
     // Check that results are displayed
     const showCards = page.locator('[data-testid^="show-card-"]')

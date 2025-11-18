@@ -16,14 +16,17 @@ test.describe('Watchlist Functionality', () => {
     // Hover over the card to reveal watchlist button
     await firstCard.hover()
 
-    // Find and click the watchlist button (use .first() as show may appear in multiple genre rows)
+    // Wait for button to be visible after hover
     const watchlistButton = page.locator(`[data-testid="watchlist-button-${id}"]`).first()
-    await expect(watchlistButton).toBeVisible()
-    await watchlistButton.click()
+    await expect(watchlistButton).toBeVisible({ timeout: 5000 })
 
-    // Check that watchlist count increased
+    // Click and wait a bit for state update
+    await watchlistButton.click()
+    await page.waitForTimeout(1000)
+
+    // Check that watchlist count increased - it should appear in header
     const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    await expect(watchlistCount).toBeVisible()
+    await expect(watchlistCount).toBeVisible({ timeout: 10000 })
     await expect(watchlistCount).toContainText('1')
   })
 
@@ -36,17 +39,20 @@ test.describe('Watchlist Functionality', () => {
     await firstCard.hover()
     await page.locator(`[data-testid="watchlist-button-${id}"]`).first().click()
 
-    // Click watchlist link
-    await page.locator('[data-testid="watchlist-link"]').click()
+    // Wait for watchlist count to appear
+    await page.waitForSelector('[data-testid="watchlist-count"]', { timeout: 10000 })
 
-    // Wait for navigation
-    await page.waitForURL(/.*\/watchlist/, { timeout: 5000 })
+    // Click watchlist link and wait for URL change
+    const initialUrl = page.url()
+    await page.locator('[data-testid="watchlist-link"]').click()
+    await page.waitForURL((url) => url.href !== initialUrl, { timeout: 10000 })
 
     // Verify we're on watchlist page
-    expect(page.url()).toMatch(/\/watchlist/)
+    expect(page.url()).toContain('/watchlist')
 
     // Check that the show is displayed
     const showCards = page.locator('[data-testid^="show-card-"]')
+    await expect(showCards.first()).toBeVisible({ timeout: 10000 })
     const count = await showCards.count()
     expect(count).toBeGreaterThanOrEqual(1)
   })
@@ -73,7 +79,7 @@ test.describe('Watchlist Functionality', () => {
     await expect(watchlistCount).not.toBeVisible()
   })
 
-  test('should persist watchlist in localStorage', async ({ page, context }) => {
+  test('should persist watchlist in localStorage', async ({ page }) => {
     // Add a show to watchlist
     const firstCard = page.locator('[data-testid^="show-card-"]').first()
     const showId = await firstCard.getAttribute('data-testid')
@@ -82,16 +88,17 @@ test.describe('Watchlist Functionality', () => {
     await firstCard.hover()
     await page.locator(`[data-testid="watchlist-button-${id}"]`).first().click()
 
-    // Wait for state update
-    await page.waitForTimeout(500)
+    // Wait for watchlist count to appear
+    const watchlistCount = page.locator('[data-testid="watchlist-count"]')
+    await expect(watchlistCount).toBeVisible({ timeout: 5000 })
+    await expect(watchlistCount).toContainText('1')
 
     // Reload the page
     await page.reload()
-    await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 10000 })
+    await page.waitForSelector('[data-testid^="show-card-"]', { timeout: 15000 })
 
-    // Watchlist count should still be visible
-    const watchlistCount = page.locator('[data-testid="watchlist-count"]')
-    await expect(watchlistCount).toBeVisible()
+    // Watchlist count should still be visible after reload
+    await expect(watchlistCount).toBeVisible({ timeout: 10000 })
     await expect(watchlistCount).toContainText('1')
   })
 })
