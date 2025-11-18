@@ -29,7 +29,7 @@
       />
       <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
-          class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
           aria-label="Clear search"
           @click="clearSearch"
         >

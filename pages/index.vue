@@ -211,6 +211,7 @@ const filters = ref({
   status: '',
   network: '',
   year: '',
+  streaming: [] as string[],
 })
 
 // Filter shows based on selected filters

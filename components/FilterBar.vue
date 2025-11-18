@@ -189,8 +189,8 @@
         </button>
       </span>
       <span
-        v-if="showStreamingFilter"
         v-for="service in localFilters.streaming"
+        v-if="showStreamingFilter"
         :key="service"
         class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
       >
