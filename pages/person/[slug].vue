@@ -256,7 +256,7 @@ if (person.value) {
           country: person.value.country.name,
         })
       : `${person.value.name} - ${t('person.fallbackDescription')}`,
-    keywords: `${person.value.name}, actor, actress, tv shows, cast`,
+    keywords: [person.value.name, 'actor', 'actress', 'tv shows', 'cast'],
     image: person.value.image?.original,
   })
 }
