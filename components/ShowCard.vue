@@ -142,22 +142,13 @@ const premieredYear = computed(() => {
 
 // Get streaming logos with gradients
 const streamingLogos = computed(() => {
-  if (!props.show.streamingAvailability) {
-    console.log(`[ShowCard] No streaming availability for ${props.show.name}`)
-    return []
-  }
-
-  console.log(
-    `[ShowCard] ${props.show.name} has ${props.show.streamingAvailability.length} streaming options`
-  )
+  if (!props.show.streamingAvailability) return []
 
   const uniqueServices = new Map()
 
   props.show.streamingAvailability.forEach((availability) => {
     const serviceId = availability.service.id
     const platform = STREAMING_PLATFORMS[serviceId]
-
-    console.log(`[ShowCard] Processing service ${serviceId}`, platform)
 
     if (platform && !uniqueServices.has(serviceId)) {
       uniqueServices.set(serviceId, {
@@ -169,10 +160,7 @@ const streamingLogos = computed(() => {
     }
   })
 
-  const logos = Array.from(uniqueServices.values())
-  console.log(`[ShowCard] ${props.show.name} has ${logos.length} unique streaming services`, logos)
-
-  return logos
+  return Array.from(uniqueServices.values())
 })
 
 // Helper function to adjust color brightness
