@@ -160,18 +160,18 @@ export default defineNuxtConfig({
           "'self'",
           'https://*.vercel-insights.com',
           'https://vitals.vercel-insights.com',
-          'https://*.google-analytics.com',
-          'https://*.googletagmanager.com',
+          'https://*.google.com', // Google Funding Choices (fundingchoicesmessages.google.com)
+          'https://*.google-analytics.com', // Google Analytics
+          'https://*.googletagmanager.com', // Google Tag Manager
           'https://vercel.live', // Vercel Live feedback (preview only)
-          'https://fundingchoicesmessages.google.com', // Google Funding Choices (AdSense GDPR)
         ],
         'img-src': [
           "'self'",
           'data:',
           'https:',
           'https://*.tmdb.org',
-          'https://*.googletagmanager.com',
-          'https://*.google-analytics.com',
+          'https://*.google-analytics.com', // Google Analytics
+          'https://*.googletagmanager.com', // Google Tag Manager
         ],
         'object-src': ["'none'"],
         'script-src-attr': ["'none'"],
@@ -182,9 +182,9 @@ export default defineNuxtConfig({
           "'unsafe-inline'",
           // Note: 'strict-dynamic' disables host-based allowlisting
           // Removed for compatibility with Vercel Live (preview deployments)
-          'https://*.googletagmanager.com',
-          'https://*.google-analytics.com',
-          'https://pagead2.googlesyndication.com',
+          'https://*.google-analytics.com', // Google Analytics
+          'https://*.googletagmanager.com', // Google Tag Manager
+          'https://*.googlesyndication.com', // Google AdSense
           'https://*.vercel-insights.com',
         ],
         'upgrade-insecure-requests': true,
