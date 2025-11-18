@@ -8,7 +8,11 @@
     >
       <Icon name="heroicons:language" class="h-5 w-5" />
       <span class="uppercase">{{ currentLocale }}</span>
-      <Icon name="heroicons:chevron-down" class="h-4 w-4 transition-transform" :class="{ 'rotate-180': isOpen }" />
+      <Icon
+        name="heroicons:chevron-down"
+        class="h-4 w-4 transition-transform"
+        :class="{ 'rotate-180': isOpen }"
+      />
     </button>
 
     <!-- Dropdown menu -->

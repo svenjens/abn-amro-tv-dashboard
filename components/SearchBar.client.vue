@@ -9,7 +9,10 @@
       <div
         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-transform duration-200"
       >
-        <Icon name="heroicons:magnifying-glass-20-solid" class="h-5 w-5 text-gray-400 transition-colors" />
+        <Icon
+          name="heroicons:magnifying-glass-20-solid"
+          class="h-5 w-5 text-gray-400 transition-colors"
+        />
       </div>
       <label for="tv-show-search" class="sr-only">{{ placeholder }}</label>
       <input
