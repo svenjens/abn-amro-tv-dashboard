@@ -1,18 +1,3 @@
-<template>
-  <button
-    :class="buttonClasses"
-    :aria-label="ariaLabel"
-    :title="title"
-    :data-testid="`watchlist-button-${show.id}`"
-    @click.prevent="handleClick"
-  >
-    <!-- Bookmark Icon (filled when in watchlist) -->
-    <Icon v-if="isInWatchlist" name="heroicons:bookmark-solid" class="h-5 w-5" />
-    <Icon v-else name="heroicons:bookmark" class="h-5 w-5" />
-    <span v-if="showText" class="ml-2">{{ buttonText }}</span>
-  </button>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useWatchlistStore } from '@/stores'
@@ -80,3 +65,18 @@ function handleClick() {
   }
 }
 </script>
+
+<template>
+  <button
+    :class="buttonClasses"
+    :aria-label="ariaLabel"
+    :title="title"
+    :data-testid="`watchlist-button-${show.id}`"
+    @click.prevent="handleClick"
+  >
+    <!-- Bookmark Icon (filled when in watchlist) -->
+    <Icon v-if="isInWatchlist" name="heroicons:bookmark-solid" class="h-5 w-5" />
+    <Icon v-else name="heroicons:bookmark" class="h-5 w-5" />
+    <span v-if="showText" class="ml-2">{{ buttonText }}</span>
+  </button>
+</template>

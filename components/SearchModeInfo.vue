@@ -1,3 +1,13 @@
+<script setup lang="ts">
+const { t } = useI18n()
+
+interface Props {
+  isSemanticMode: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <Transition name="fade" mode="out-in">
     <div
@@ -22,16 +32,6 @@
     </div>
   </Transition>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-
-interface Props {
-  isSemanticMode: boolean
-}
-
-defineProps<Props>()
-</script>
 
 <style scoped>
 .fade-enter-active,

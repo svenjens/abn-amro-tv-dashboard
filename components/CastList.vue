@@ -1,3 +1,39 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import type { CastMember, ApiError } from '@/types'
+import { createSlugWithId } from '~/utils/slug'
+import LoadingSpinner from './LoadingSpinner.vue'
+import ErrorMessage from './ErrorMessage.vue'
+
+interface Props {
+  cast: CastMember[]
+  loading?: boolean
+  error?: ApiError | null
+  initialDisplayCount?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+  error: null,
+  initialDisplayCount: 10,
+})
+
+const emit = defineEmits<{
+  retry: []
+}>()
+
+const { t } = useI18n()
+const localePath = useLocalePath()
+const showAll = ref(false)
+
+const displayedCast = computed(() => {
+  if (showAll.value) {
+    return props.cast
+  }
+  return props.cast.slice(0, props.initialDisplayCount)
+})
+</script>
+
 <template>
   <div>
     <!-- Loading state -->
@@ -86,39 +122,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { CastMember, ApiError } from '@/types'
-import { createSlugWithId } from '~/utils/slug'
-import LoadingSpinner from './LoadingSpinner.vue'
-import ErrorMessage from './ErrorMessage.vue'
-
-interface Props {
-  cast: CastMember[]
-  loading?: boolean
-  error?: ApiError | null
-  initialDisplayCount?: number
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  error: null,
-  initialDisplayCount: 10,
-})
-
-const emit = defineEmits<{
-  retry: []
-}>()
-
-const { t } = useI18n()
-const localePath = useLocalePath()
-const showAll = ref(false)
-
-const displayedCast = computed(() => {
-  if (showAll.value) {
-    return props.cast
-  }
-  return props.cast.slice(0, props.initialDisplayCount)
-})
-</script>

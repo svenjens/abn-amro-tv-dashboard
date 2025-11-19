@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+
+interface Props {
+  title: string
+  subtitle?: string
+  icon?: string // SVG path for icon
+  compact?: boolean // Use smaller padding
+}
+
+defineProps<Props>()
+
+const { t } = useI18n()
+const router = useRouter()
+
+const handleBack = () => {
+  router.back()
+}
+</script>
+
 <template>
   <header
     class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
@@ -55,25 +77,3 @@
     </div>
   </header>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-
-interface Props {
-  title: string
-  subtitle?: string
-  icon?: string // SVG path for icon
-  compact?: boolean // Use smaller padding
-}
-
-defineProps<Props>()
-
-const { t } = useI18n()
-const router = useRouter()
-
-const handleBack = () => {
-  router.back()
-}
-</script>

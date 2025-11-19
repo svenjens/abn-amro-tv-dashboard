@@ -1,3 +1,15 @@
+<script setup lang="ts">
+interface Props {
+  title: string
+  message: string
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4'
+}
+
+withDefaults(defineProps<Props>(), {
+  headingLevel: 'h2',
+})
+</script>
+
 <template>
   <div class="text-center py-16 px-4" role="status">
     <NuxtImg
@@ -18,15 +30,3 @@
     <slot name="action" />
   </div>
 </template>
-
-<script setup lang="ts">
-interface Props {
-  title: string
-  message: string
-  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4'
-}
-
-withDefaults(defineProps<Props>(), {
-  headingLevel: 'h2',
-})
-</script>

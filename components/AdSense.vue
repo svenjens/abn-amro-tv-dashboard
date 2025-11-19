@@ -1,26 +1,3 @@
-<template>
-  <ClientOnly>
-    <div v-if="shouldShowAd" class="ad-container my-8">
-      <!-- Ad Label -->
-      <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">
-        {{ t('ads.sponsored') }}
-      </p>
-
-      <!-- AdSense Ad Unit -->
-      <div class="ad-wrapper flex justify-center">
-        <ins
-          class="adsbygoogle"
-          :style="adStyle"
-          :data-ad-client="adClient"
-          v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
-          :data-ad-format="format"
-          data-full-width-responsive="true"
-        />
-      </div>
-    </div>
-  </ClientOnly>
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, watch, ref } from 'vue'
 import { logger } from '@/utils'
@@ -117,6 +94,29 @@ watch(
   }
 )
 </script>
+
+<template>
+  <ClientOnly>
+    <div v-if="shouldShowAd" class="ad-container my-8">
+      <!-- Ad Label -->
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">
+        {{ t('ads.sponsored') }}
+      </p>
+
+      <!-- AdSense Ad Unit -->
+      <div class="ad-wrapper flex justify-center">
+        <ins
+          class="adsbygoogle"
+          :style="adStyle"
+          :data-ad-client="adClient"
+          v-bind="adSlot ? { 'data-ad-slot': adSlot } : {}"
+          :data-ad-format="format"
+          data-full-width-responsive="true"
+        />
+      </div>
+    </div>
+  </ClientOnly>
+</template>
 
 <style scoped>
 .ad-container {

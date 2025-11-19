@@ -1,3 +1,211 @@
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import type { Show } from '@/types'
+import { STREAMING_PLATFORMS } from '@/types/streaming'
+
+interface Filters {
+  status: string
+  network: string
+  year: string
+  streaming: string[]
+}
+
+interface Props {
+  shows: Show[]
+  modelValue?: Filters
+  showStreamingFilter?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: () => ({ status: '', network: '', year: '', streaming: [] }),
+  showStreamingFilter: false,
+})
+
+const emit = defineEmits<{
+  'update:modelValue': [filters: Filters]
+}>()
+
+const { t } = useI18n()
+
+const localFilters = ref<Filters>({
+  status: props.modelValue.status || '',
+  network: props.modelValue.network || '',
+  year: props.modelValue.year || '',
+  streaming: props.modelValue.streaming || [],
+})
+const isExpanded = ref(false)
+const showStreamingDropdown = ref(false)
+const streamingDropdownRef = ref<HTMLElement | null>(null)
+
+// Check if desktop on mount and set expanded state accordingly
+const checkIsDesktop = () => {
+  isExpanded.value = window.innerWidth >= 768 // md breakpoint
+}
+
+onMounted(() => {
+  checkIsDesktop()
+  window.addEventListener('resize', checkIsDesktop)
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkIsDesktop)
+  document.removeEventListener('click', handleClickOutside)
+})
+
+// Toggle filters (only works on mobile)
+function toggleFilters() {
+  if (window.innerWidth < 768) {
+    isExpanded.value = !isExpanded.value
+  }
+}
+
+// Extract unique networks from shows
+const availableNetworks = computed(() => {
+  const networks = new Set<string>()
+  if (!props.shows || props.shows.length === 0) {
+    return []
+  }
+  props.shows.forEach((show) => {
+    if (show.network?.name) {
+      networks.add(show.network.name)
+    }
+    if (show.webChannel?.name) {
+      networks.add(show.webChannel.name)
+    }
+  })
+  return Array.from(networks).sort()
+})
+
+// Extract unique years from shows
+const availableYears = computed(() => {
+  const years = new Set<number>()
+  if (!props.shows || props.shows.length === 0) {
+    return []
+  }
+  props.shows.forEach((show) => {
+    if (show.premiered) {
+      const year = new Date(show.premiered).getFullYear()
+      if (!isNaN(year)) {
+        years.add(year)
+      }
+    }
+  })
+  return Array.from(years).sort((a, b) => b - a) // Newest first
+})
+
+// Extract unique streaming services from shows, or show all available platforms
+const availableStreamingServices = computed(() => {
+  const services = new Set<string>()
+
+  // If we have shows, extract services from them
+  if (props.shows && props.shows.length > 0) {
+    props.shows.forEach((show) => {
+      if (show.streamingAvailability) {
+        show.streamingAvailability.forEach((option) => {
+          const platform = STREAMING_PLATFORMS[option.service.id]
+          if (platform) {
+            services.add(platform.name)
+          }
+        })
+      }
+    })
+  }
+
+  // If no services found from shows, show all available platforms
+  if (services.size === 0) {
+    Object.values(STREAMING_PLATFORMS).forEach((platform) => {
+      services.add(platform.name)
+    })
+  }
+
+  return Array.from(services).sort()
+})
+
+// Check if any filters are active
+const hasActiveFilters = computed(() => {
+  return !!(
+    localFilters.value.status ||
+    localFilters.value.network ||
+    localFilters.value.year ||
+    (props.showStreamingFilter && localFilters.value.streaming.length > 0)
+  )
+})
+
+// Clear all filters
+function clearFilters() {
+  localFilters.value = { status: '', network: '', year: '', streaming: [] }
+  showStreamingDropdown.value = false
+  emitFilters()
+}
+
+// Emit filter changes
+function emitFilters() {
+  emit('update:modelValue', { ...localFilters.value })
+}
+
+// Clear individual filters
+function clearStatus() {
+  localFilters.value.status = ''
+  emitFilters()
+}
+
+function clearNetwork() {
+  localFilters.value.network = ''
+  emitFilters()
+}
+
+function clearYear() {
+  localFilters.value.year = ''
+  emitFilters()
+}
+
+// Multi-select streaming functions
+function toggleStreamingDropdown() {
+  showStreamingDropdown.value = !showStreamingDropdown.value
+}
+
+function toggleStreamingService(service: string) {
+  const index = localFilters.value.streaming.indexOf(service)
+  if (index === -1) {
+    localFilters.value.streaming.push(service)
+  } else {
+    localFilters.value.streaming.splice(index, 1)
+  }
+  emitFilters()
+}
+
+function removeStreamingService(service: string) {
+  const index = localFilters.value.streaming.indexOf(service)
+  if (index !== -1) {
+    localFilters.value.streaming.splice(index, 1)
+  }
+  emitFilters()
+}
+
+// Close dropdown when clicking outside
+function handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  if (streamingDropdownRef.value && !streamingDropdownRef.value.contains(target)) {
+    showStreamingDropdown.value = false
+  }
+}
+
+// Watch for external filter changes
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    localFilters.value = {
+      status: newValue.status || '',
+      network: newValue.network || '',
+      year: newValue.year || '',
+      streaming: newValue.streaming || [],
+    }
+  },
+  { deep: true }
+)
+</script>
+
 <template>
   <div
     class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6"
@@ -222,211 +430,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import type { Show } from '@/types'
-import { STREAMING_PLATFORMS } from '@/types/streaming'
-
-interface Filters {
-  status: string
-  network: string
-  year: string
-  streaming: string[]
-}
-
-interface Props {
-  shows: Show[]
-  modelValue?: Filters
-  showStreamingFilter?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: () => ({ status: '', network: '', year: '', streaming: [] }),
-  showStreamingFilter: false,
-})
-
-const emit = defineEmits<{
-  'update:modelValue': [filters: Filters]
-}>()
-
-const { t } = useI18n()
-
-const localFilters = ref<Filters>({
-  status: props.modelValue.status || '',
-  network: props.modelValue.network || '',
-  year: props.modelValue.year || '',
-  streaming: props.modelValue.streaming || [],
-})
-const isExpanded = ref(false)
-const showStreamingDropdown = ref(false)
-const streamingDropdownRef = ref<HTMLElement | null>(null)
-
-// Check if desktop on mount and set expanded state accordingly
-const checkIsDesktop = () => {
-  isExpanded.value = window.innerWidth >= 768 // md breakpoint
-}
-
-onMounted(() => {
-  checkIsDesktop()
-  window.addEventListener('resize', checkIsDesktop)
-  document.addEventListener('click', handleClickOutside)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkIsDesktop)
-  document.removeEventListener('click', handleClickOutside)
-})
-
-// Toggle filters (only works on mobile)
-function toggleFilters() {
-  if (window.innerWidth < 768) {
-    isExpanded.value = !isExpanded.value
-  }
-}
-
-// Extract unique networks from shows
-const availableNetworks = computed(() => {
-  const networks = new Set<string>()
-  if (!props.shows || props.shows.length === 0) {
-    return []
-  }
-  props.shows.forEach((show) => {
-    if (show.network?.name) {
-      networks.add(show.network.name)
-    }
-    if (show.webChannel?.name) {
-      networks.add(show.webChannel.name)
-    }
-  })
-  return Array.from(networks).sort()
-})
-
-// Extract unique years from shows
-const availableYears = computed(() => {
-  const years = new Set<number>()
-  if (!props.shows || props.shows.length === 0) {
-    return []
-  }
-  props.shows.forEach((show) => {
-    if (show.premiered) {
-      const year = new Date(show.premiered).getFullYear()
-      if (!isNaN(year)) {
-        years.add(year)
-      }
-    }
-  })
-  return Array.from(years).sort((a, b) => b - a) // Newest first
-})
-
-// Extract unique streaming services from shows, or show all available platforms
-const availableStreamingServices = computed(() => {
-  const services = new Set<string>()
-
-  // If we have shows, extract services from them
-  if (props.shows && props.shows.length > 0) {
-    props.shows.forEach((show) => {
-      if (show.streamingAvailability) {
-        show.streamingAvailability.forEach((option) => {
-          const platform = STREAMING_PLATFORMS[option.service.id]
-          if (platform) {
-            services.add(platform.name)
-          }
-        })
-      }
-    })
-  }
-
-  // If no services found from shows, show all available platforms
-  if (services.size === 0) {
-    Object.values(STREAMING_PLATFORMS).forEach((platform) => {
-      services.add(platform.name)
-    })
-  }
-
-  return Array.from(services).sort()
-})
-
-// Check if any filters are active
-const hasActiveFilters = computed(() => {
-  return !!(
-    localFilters.value.status ||
-    localFilters.value.network ||
-    localFilters.value.year ||
-    (props.showStreamingFilter && localFilters.value.streaming.length > 0)
-  )
-})
-
-// Clear all filters
-function clearFilters() {
-  localFilters.value = { status: '', network: '', year: '', streaming: [] }
-  showStreamingDropdown.value = false
-  emitFilters()
-}
-
-// Emit filter changes
-function emitFilters() {
-  emit('update:modelValue', { ...localFilters.value })
-}
-
-// Clear individual filters
-function clearStatus() {
-  localFilters.value.status = ''
-  emitFilters()
-}
-
-function clearNetwork() {
-  localFilters.value.network = ''
-  emitFilters()
-}
-
-function clearYear() {
-  localFilters.value.year = ''
-  emitFilters()
-}
-
-// Multi-select streaming functions
-function toggleStreamingDropdown() {
-  showStreamingDropdown.value = !showStreamingDropdown.value
-}
-
-function toggleStreamingService(service: string) {
-  const index = localFilters.value.streaming.indexOf(service)
-  if (index === -1) {
-    localFilters.value.streaming.push(service)
-  } else {
-    localFilters.value.streaming.splice(index, 1)
-  }
-  emitFilters()
-}
-
-function removeStreamingService(service: string) {
-  const index = localFilters.value.streaming.indexOf(service)
-  if (index !== -1) {
-    localFilters.value.streaming.splice(index, 1)
-  }
-  emitFilters()
-}
-
-// Close dropdown when clicking outside
-function handleClickOutside(event: MouseEvent) {
-  const target = event.target as HTMLElement
-  if (streamingDropdownRef.value && !streamingDropdownRef.value.contains(target)) {
-    showStreamingDropdown.value = false
-  }
-}
-
-// Watch for external filter changes
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    localFilters.value = {
-      status: newValue.status || '',
-      network: newValue.network || '',
-      year: newValue.year || '',
-      streaming: newValue.streaming || [],
-    }
-  },
-  { deep: true }
-)
-</script>

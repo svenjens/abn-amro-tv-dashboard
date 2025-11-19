@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useToast } from '@/composables/useToast'
+
+const { toasts, remove } = useToast()
+
+const toastClasses = {
+  success: 'bg-green-600 text-white',
+  error: 'bg-red-600 text-white',
+  warning: 'bg-amber-600 text-white',
+  info: 'bg-blue-600 text-white',
+}
+
+const toastIcons = {
+  success: '✓',
+  error: '✕',
+  warning: '⚠',
+  info: 'ℹ',
+}
+</script>
+
 <template>
   <Teleport to="body">
     <div
@@ -40,26 +60,6 @@
     </div>
   </Teleport>
 </template>
-
-<script setup lang="ts">
-import { useToast } from '@/composables/useToast'
-
-const { toasts, remove } = useToast()
-
-const toastClasses = {
-  success: 'bg-green-600 text-white',
-  error: 'bg-red-600 text-white',
-  warning: 'bg-amber-600 text-white',
-  info: 'bg-blue-600 text-white',
-}
-
-const toastIcons = {
-  success: '✓',
-  error: '✕',
-  warning: '⚠',
-  info: 'ℹ',
-}
-</script>
 
 <style scoped>
 .toast-enter-active,

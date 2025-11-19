@@ -1,3 +1,228 @@
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import SafeHtml from '@/components/SafeHtml.vue'
+import { useShowsStore } from '@/stores'
+import { getShowImage, extractIdFromSlug, createShowSlug } from '@/utils'
+import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
+import RatingBadge from '@/components/RatingBadge.vue'
+import GenreTags from '@/components/GenreTags.vue'
+import ShowCard from '@/components/ShowCard.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
+import WatchlistButton from '@/components/WatchlistButton.vue'
+import AdSense from '@/components/AdSense.vue'
+import SeasonList from '@/components/SeasonList.vue'
+import CastList from '@/components/CastList.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import StreamingAvailability from '@/components/StreamingAvailability.vue'
+import BackButton from '@/components/BackButton.vue'
+import HomeButton from '@/components/HomeButton.vue'
+
+const { t, d } = useI18n()
+const localePath = useLocalePath()
+
+const route = useRoute()
+const router = useRouter()
+const showsStore = useShowsStore()
+
+// Tab configuration
+const tabs = [
+  { id: 'overview', label: 'tabs.overview' },
+  { id: 'episodes', label: 'tabs.episodes' },
+  { id: 'cast', label: 'tabs.cast' },
+]
+
+// Active tab - initialize from query parameter or default to 'overview'
+const validTabs = tabs.map((t) => t.id)
+const initialTab = (route.query.tab as string) || 'overview'
+const activeTab = ref(validTabs.includes(initialTab) ? initialTab : 'overview')
+
+// Function to change tab and update URL
+const changeTab = (tabId: string) => {
+  activeTab.value = tabId
+  router.push({
+    query: { ...route.query, tab: tabId },
+  })
+}
+
+// Watch for query parameter changes (e.g., browser back/forward)
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    const tab = (newTab as string) || 'overview'
+    if (validTabs.includes(tab)) {
+      activeTab.value = tab
+    }
+  }
+)
+
+// Extract ID from slug (format: show-name-123)
+const slug = computed(() => route.params.slug as string)
+const showId = computed(() => extractIdFromSlug(slug.value))
+
+// Get user's country from location middleware
+const { country } = useLocation()
+const userCountry = computed(() => country.value || 'US')
+
+// Validate show ID before fetching
+if (!showId.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Invalid show URL',
+    fatal: true,
+  })
+}
+
+// Server-side data fetching with useAsyncData
+// This runs on the server during SSR and provides instant content
+const {
+  data: show,
+  error,
+  pending: loading,
+} = await useAsyncData(
+  `show-${showId.value}`,
+  () =>
+    // @ts-ignore - Type recursion issue with Nuxt routes
+    $fetch(`/api/shows/${showId.value}`, {
+      query: { country: userCountry.value },
+    }),
+  {
+    watch: [showId, userCountry],
+  }
+)
+
+// Ensure shows are loaded for related shows
+if (showsStore.showsCount === 0 && !showsStore.isLoading) {
+  showsStore.fetchAllShows()
+}
+
+// Streaming availability comes from server now
+const streamingAvailability = computed(() => show.value?.streamingAvailability || [])
+
+// Related shows
+const relatedShows = computed(() => {
+  if (!show.value) return []
+  return showsStore.getRelatedShows(show.value, 6)
+})
+
+// Episodes - prefetch immediately (common action)
+const {
+  data: episodes,
+  error: episodesError,
+  pending: episodesLoading,
+  execute: fetchEpisodes,
+} = await useLazyAsyncData(
+  `episodes-${showId.value}`,
+  () => $fetch(`/api/shows/${showId.value}/episodes`),
+  {
+    immediate: true, // Prefetch episodes (common user action)
+    server: false, // Only fetch on client
+  }
+)
+
+// Cast - lazy loaded via server API when tab is opened
+const {
+  data: cast,
+  error: castError,
+  pending: castLoading,
+  execute: fetchCast,
+} = await useLazyAsyncData(
+  `cast-${showId.value}`,
+  () => $fetch(`/api/shows/${showId.value}/cast`),
+  {
+    immediate: false,
+    server: false, // Only fetch on client when needed
+  }
+)
+
+// Update SEO when show changes (multilingual)
+watch(
+  show,
+  (newShow) => {
+    if (newShow) {
+      const fallbackDesc = t('seo.show.fallbackDescription', { name: newShow.name })
+      const seoConfig = getShowSEO(newShow, fallbackDesc)
+      // Update with show-specific config
+      useSEO(seoConfig)
+      // Add structured data
+      generateShowStructuredData(newShow)
+    }
+  },
+  { immediate: false }
+)
+
+// Validate slug and redirect if incorrect (for SEO)
+watch(
+  show,
+  (showData) => {
+    if (showData && showId.value) {
+      const correctSlug = createShowSlug(showData.name, showId.value)
+      if (slug.value !== correctSlug) {
+        navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
+      }
+    }
+  },
+  { immediate: true }
+)
+
+// Lazy load episodes and cast when tabs are opened
+watch(
+  activeTab,
+  (newTab) => {
+    if (newTab === 'episodes' && !episodes.value && !episodesLoading.value) {
+      fetchEpisodes()
+    } else if (newTab === 'cast' && !cast.value && !castLoading.value) {
+      fetchCast()
+    }
+  },
+  { immediate: true } // Also run on initial load (e.g., refresh with ?tab=cast)
+)
+
+// SEO: Update meta tags when show data changes
+watch(
+  show,
+  (showData) => {
+    if (showData) {
+      const description = showData.summary
+        ? showData.summary.replace(/<[^>]*>/g, '').substring(0, 160)
+        : `Watch ${showData.name} - Find streaming availability and full details on BingeList`
+
+      const title = `${showData.name} - BingeList`
+      const image = showData.image?.original || showData.image?.medium
+
+      useHead({
+        title,
+        meta: [{ name: 'description', content: description }],
+        link: [
+          // Prefetch cast data (loaded when user clicks cast tab)
+          {
+            rel: 'prefetch',
+            href: `/api/shows/${showId.value}/cast`,
+            as: 'fetch',
+            crossorigin: 'anonymous',
+          },
+        ],
+      })
+
+      useSeoMeta({
+        title,
+        description,
+        ogTitle: title,
+        ogDescription: description,
+        ogImage: image,
+        ogType: 'video.tv_show',
+        twitterCard: 'summary_large_image',
+        twitterTitle: title,
+        twitterDescription: description,
+        twitterImage: image,
+      })
+    }
+  },
+  { immediate: true }
+)
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -224,226 +449,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import SafeHtml from '@/components/SafeHtml.vue'
-import { useShowsStore } from '@/stores'
-import { getShowImage, extractIdFromSlug, createShowSlug } from '@/utils'
-import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
-import RatingBadge from '@/components/RatingBadge.vue'
-import GenreTags from '@/components/GenreTags.vue'
-import ShowCard from '@/components/ShowCard.vue'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ErrorMessage from '@/components/ErrorMessage.vue'
-import WatchlistButton from '@/components/WatchlistButton.vue'
-import AdSense from '@/components/AdSense.vue'
-import SeasonList from '@/components/SeasonList.vue'
-import CastList from '@/components/CastList.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import StreamingAvailability from '@/components/StreamingAvailability.vue'
-
-const { t, d } = useI18n()
-const localePath = useLocalePath()
-
-const route = useRoute()
-const router = useRouter()
-const showsStore = useShowsStore()
-
-// Tab configuration
-const tabs = [
-  { id: 'overview', label: 'tabs.overview' },
-  { id: 'episodes', label: 'tabs.episodes' },
-  { id: 'cast', label: 'tabs.cast' },
-]
-
-// Active tab - initialize from query parameter or default to 'overview'
-const validTabs = tabs.map((t) => t.id)
-const initialTab = (route.query.tab as string) || 'overview'
-const activeTab = ref(validTabs.includes(initialTab) ? initialTab : 'overview')
-
-// Function to change tab and update URL
-const changeTab = (tabId: string) => {
-  activeTab.value = tabId
-  router.push({
-    query: { ...route.query, tab: tabId },
-  })
-}
-
-// Watch for query parameter changes (e.g., browser back/forward)
-watch(
-  () => route.query.tab,
-  (newTab) => {
-    const tab = (newTab as string) || 'overview'
-    if (validTabs.includes(tab)) {
-      activeTab.value = tab
-    }
-  }
-)
-
-// Extract ID from slug (format: show-name-123)
-const slug = computed(() => route.params.slug as string)
-const showId = computed(() => extractIdFromSlug(slug.value))
-
-// Get user's country from location middleware
-const { country } = useLocation()
-const userCountry = computed(() => country.value || 'US')
-
-// Validate show ID before fetching
-if (!showId.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Invalid show URL',
-    fatal: true,
-  })
-}
-
-// Server-side data fetching with useAsyncData
-// This runs on the server during SSR and provides instant content
-const {
-  data: show,
-  error,
-  pending: loading,
-} = await useAsyncData(
-  `show-${showId.value}`,
-  () =>
-    // @ts-ignore - Type recursion issue with Nuxt routes
-    $fetch(`/api/shows/${showId.value}`, {
-      query: { country: userCountry.value },
-    }),
-  {
-    watch: [showId, userCountry],
-  }
-)
-
-// Ensure shows are loaded for related shows
-if (showsStore.showsCount === 0 && !showsStore.isLoading) {
-  showsStore.fetchAllShows()
-}
-
-// Streaming availability comes from server now
-const streamingAvailability = computed(() => show.value?.streamingAvailability || [])
-
-// Related shows
-const relatedShows = computed(() => {
-  if (!show.value) return []
-  return showsStore.getRelatedShows(show.value, 6)
-})
-
-// Episodes - prefetch immediately (common action)
-const {
-  data: episodes,
-  error: episodesError,
-  pending: episodesLoading,
-  execute: fetchEpisodes,
-} = await useLazyAsyncData(
-  `episodes-${showId.value}`,
-  () => $fetch(`/api/shows/${showId.value}/episodes`),
-  {
-    immediate: true, // Prefetch episodes (common user action)
-    server: false, // Only fetch on client
-  }
-)
-
-// Cast - lazy loaded via server API when tab is opened
-const {
-  data: cast,
-  error: castError,
-  pending: castLoading,
-  execute: fetchCast,
-} = await useLazyAsyncData(
-  `cast-${showId.value}`,
-  () => $fetch(`/api/shows/${showId.value}/cast`),
-  {
-    immediate: false,
-    server: false, // Only fetch on client when needed
-  }
-)
-
-// Update SEO when show changes (multilingual)
-watch(
-  show,
-  (newShow) => {
-    if (newShow) {
-      const fallbackDesc = t('seo.show.fallbackDescription', { name: newShow.name })
-      const seoConfig = getShowSEO(newShow, fallbackDesc)
-      // Update with show-specific config
-      useSEO(seoConfig)
-      // Add structured data
-      generateShowStructuredData(newShow)
-    }
-  },
-  { immediate: false }
-)
-
-// Validate slug and redirect if incorrect (for SEO)
-watch(
-  show,
-  (showData) => {
-    if (showData && showId.value) {
-      const correctSlug = createShowSlug(showData.name, showId.value)
-      if (slug.value !== correctSlug) {
-        navigateTo(localePath(`/show/${correctSlug}`), { replace: true })
-      }
-    }
-  },
-  { immediate: true }
-)
-
-// Lazy load episodes and cast when tabs are opened
-watch(
-  activeTab,
-  (newTab) => {
-    if (newTab === 'episodes' && !episodes.value && !episodesLoading.value) {
-      fetchEpisodes()
-    } else if (newTab === 'cast' && !cast.value && !castLoading.value) {
-      fetchCast()
-    }
-  },
-  { immediate: true } // Also run on initial load (e.g., refresh with ?tab=cast)
-)
-
-// SEO: Update meta tags when show data changes
-watch(
-  show,
-  (showData) => {
-    if (showData) {
-      const description = showData.summary
-        ? showData.summary.replace(/<[^>]*>/g, '').substring(0, 160)
-        : `Watch ${showData.name} - Find streaming availability and full details on BingeList`
-
-      const title = `${showData.name} - BingeList`
-      const image = showData.image?.original || showData.image?.medium
-
-      useHead({
-        title,
-        meta: [{ name: 'description', content: description }],
-        link: [
-          // Prefetch cast data (loaded when user clicks cast tab)
-          {
-            rel: 'prefetch',
-            href: `/api/shows/${showId.value}/cast`,
-            as: 'fetch',
-            crossorigin: 'anonymous',
-          },
-        ],
-      })
-
-      useSeoMeta({
-        title,
-        description,
-        ogTitle: title,
-        ogDescription: description,
-        ogImage: image,
-        ogType: 'video.tv_show',
-        twitterCard: 'summary_large_image',
-        twitterTitle: title,
-        twitterDescription: description,
-        twitterImage: image,
-      })
-    }
-  },
-  { immediate: true }
-)
-</script>

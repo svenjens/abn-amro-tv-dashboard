@@ -1,3 +1,18 @@
+<script setup lang="ts">
+const { t } = useI18n()
+
+interface Props {
+  examples: string[]
+  hasQuery?: boolean
+}
+
+defineProps<Props>()
+
+defineEmits<{
+  select: [query: string]
+}>()
+</script>
+
 <template>
   <div>
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
@@ -15,18 +30,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-
-interface Props {
-  examples: string[]
-  hasQuery?: boolean
-}
-
-defineProps<Props>()
-
-defineEmits<{
-  select: [query: string]
-}>()
-</script>

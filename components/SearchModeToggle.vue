@@ -1,3 +1,17 @@
+<script setup lang="ts">
+const { t } = useI18n()
+
+interface Props {
+  modelValue: boolean // true = semantic, false = regular
+}
+
+defineProps<Props>()
+
+defineEmits<{
+  'update:modelValue': [value: boolean]
+}>()
+</script>
+
 <template>
   <div class="flex items-center gap-3">
     <button
@@ -25,17 +39,3 @@
     </button>
   </div>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-
-interface Props {
-  modelValue: boolean // true = semantic, false = regular
-}
-
-defineProps<Props>()
-
-defineEmits<{
-  'update:modelValue': [value: boolean]
-}>()
-</script>

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+interface Props {
+  title?: string
+  message: string
+  retry?: boolean
+  fullScreen?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: 'Error',
+  retry: false,
+  fullScreen: false,
+})
+
+defineEmits<{
+  retry: []
+}>()
+
+const containerClass = computed(() => {
+  return props.fullScreen ? 'max-w-2xl mx-auto mt-8' : ''
+})
+</script>
+
 <template>
   <div class="rounded-lg bg-red-50 border border-red-200 p-4" :class="containerClass">
     <div class="flex items-start">
@@ -33,28 +58,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-interface Props {
-  title?: string
-  message: string
-  retry?: boolean
-  fullScreen?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  title: 'Error',
-  retry: false,
-  fullScreen: false,
-})
-
-defineEmits<{
-  retry: []
-}>()
-
-const containerClass = computed(() => {
-  return props.fullScreen ? 'max-w-2xl mx-auto mt-8' : ''
-})
-</script>

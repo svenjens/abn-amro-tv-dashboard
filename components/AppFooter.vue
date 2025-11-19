@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const router = useRouter()
+const route = useRoute()
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+const currentYear = new Date().getFullYear()
+const currentLocale = computed(() => (route.params.locale as string) || 'en')
+
+function switchLocale(newLocale: string) {
+  const currentPath = route.path
+  const newPath = currentPath.replace(`/${currentLocale.value}`, `/${newLocale}`)
+  router.push(newPath)
+}
+</script>
+
 <template>
   <footer
     class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 transition-colors"
@@ -216,21 +234,3 @@
     </div>
   </footer>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-const router = useRouter()
-const route = useRoute()
-const { t } = useI18n()
-const localePath = useLocalePath()
-
-const currentYear = new Date().getFullYear()
-const currentLocale = computed(() => (route.params.locale as string) || 'en')
-
-function switchLocale(newLocale: string) {
-  const currentPath = route.path
-  const newPath = currentPath.replace(`/${currentLocale.value}`, `/${newLocale}`)
-  router.push(newPath)
-}
-</script>

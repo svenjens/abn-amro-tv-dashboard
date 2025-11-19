@@ -1,3 +1,193 @@
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
+import { useSEO } from '@/composables'
+import GenreRow from '@/components/GenreRow.vue'
+import SearchBar from '@/components/SearchBar.client.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
+import FilterBar from '@/components/FilterBar.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import type { Show } from '@/types'
+
+const { t } = useI18n()
+const localePath = useLocalePath()
+const showsStore = useShowsStore()
+const searchStore = useSearchStore()
+const watchlistStore = useWatchlistStore()
+const searchQuery = ref('')
+
+// Filters
+const filters = ref({
+  status: '',
+  network: '',
+  year: '',
+  streaming: [] as string[],
+})
+
+// Filter shows based on selected filters
+const filteredShows = computed(() => {
+  let shows = showsStore.allShows
+
+  if (filters.value.status) {
+    shows = shows.filter((show: Show) => show.status === filters.value.status)
+  }
+
+  if (filters.value.network) {
+    shows = shows.filter(
+      (show: Show) =>
+        show.network?.name === filters.value.network ||
+        show.webChannel?.name === filters.value.network
+    )
+  }
+
+  if (filters.value.year) {
+    const year = parseInt(filters.value.year)
+    shows = shows.filter((show: Show) => {
+      if (!show.premiered) return false
+      const showYear = new Date(show.premiered).getFullYear()
+      return showYear === year
+    })
+  }
+
+  return shows
+})
+
+// Get genres from store's pre-sorted showsByGenre (server-side sorted by rating)
+const filteredGenres = computed(() => {
+  // Use pre-sorted showsByGenre from store (already sorted by rating on server)
+  const serverSortedGenres = showsStore.showsByGenre
+
+  // If filters are applied, filter the shows within each genre
+  if (filters.value.status || filters.value.network || filters.value.year) {
+    const genreMap = new Map<string, Show[]>()
+
+    filteredShows.value.forEach((show: Show) => {
+      if (show.genres && show.genres.length > 0) {
+        show.genres.forEach((genre: string) => {
+          if (!genreMap.has(genre)) {
+            genreMap.set(genre, [])
+          }
+          genreMap.get(genre)!.push(show)
+        })
+      }
+    })
+
+    // Sort by genre size (number of shows per genre)
+    return Array.from(genreMap.entries())
+      .map(([genre, shows]) => ({
+        name: genre,
+        shows: shows, // These are filtered but preserve original order
+      }))
+      .sort((a, b) => b.shows.length - a.shows.length)
+  }
+
+  // No filters: use server-sorted data (already sorted by rating within each genre)
+  return Object.entries(serverSortedGenres)
+    .map(([genre, shows]) => ({
+      name: genre,
+      shows: shows,
+    }))
+    .sort((a, b) => b.shows.length - a.shows.length) // Sort genres by size
+})
+
+// Performance: Lazy load genres with infinite scroll
+const genresPerPage = 5
+const visibleGenresCount = ref(genresPerPage)
+const loadMoreTrigger = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+const displayedGenres = computed(() => {
+  return filteredGenres.value.slice(0, visibleGenresCount.value)
+})
+
+const canLoadMore = computed(() => {
+  return visibleGenresCount.value < filteredGenres.value.length
+})
+
+// Setup intersection observer for infinite scroll
+function setupInfiniteScroll() {
+  if (!loadMoreTrigger.value) return
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0]
+      if (entry && entry.isIntersecting && canLoadMore.value) {
+        // Load more genres when trigger comes into view
+        visibleGenresCount.value += genresPerPage
+      }
+    },
+    {
+      root: null,
+      rootMargin: '100px', // Start loading 100px before the trigger
+      threshold: 0.1,
+    }
+  )
+
+  observer.observe(loadMoreTrigger.value)
+}
+
+onUnmounted(() => {
+  if (observer && loadMoreTrigger.value) {
+    observer.unobserve(loadMoreTrigger.value)
+    observer.disconnect()
+  }
+})
+
+// SEO (multilingual)
+useSEO({
+  title: t('seo.home.title'),
+  description: t('seo.home.description'),
+  keywords: t('seo.home.keywords').split(', '),
+})
+
+function handleSearch(query: string) {
+  if (query.trim()) {
+    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}`))
+  }
+}
+
+function handleSearchFocus() {
+  // If user has already typed something, preserve it when navigating to search page
+  if (searchQuery.value.trim()) {
+    navigateTo(localePath(`/search?q=${encodeURIComponent(searchQuery.value)}`))
+  } else {
+    navigateTo(localePath('/search'))
+  }
+}
+
+// Reset visible genres count when filters change
+watch(
+  filters,
+  () => {
+    visibleGenresCount.value = genresPerPage
+  },
+  { deep: true }
+)
+
+// Server-side data fetching - runs on server during SSR
+const { data: showsData } = await useAsyncData(
+  'all-shows',
+  () => $fetch<{ shows: Show[]; showsByGenre: Record<string, Show[]> }>('/api/shows'),
+  {
+    dedupe: 'defer', // Dedupe requests during SSR
+  }
+)
+
+// Populate store with server-fetched data (including pre-sorted genres)
+if (showsData.value) {
+  showsStore.setShowsWithGenres(showsData.value.shows, showsData.value.showsByGenre)
+}
+
+onMounted(() => {
+  // Setup infinite scroll after genres are loaded
+  setTimeout(() => setupInfiniteScroll(), 100)
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -185,192 +375,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useShowsStore, useSearchStore, useWatchlistStore } from '@/stores'
-import { useSEO } from '@/composables'
-import GenreRow from '@/components/GenreRow.vue'
-import SearchBar from '@/components/SearchBar.client.vue'
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ErrorMessage from '@/components/ErrorMessage.vue'
-import FilterBar from '@/components/FilterBar.vue'
-import type { Show } from '@/types'
-
-const { t } = useI18n()
-const localePath = useLocalePath()
-const showsStore = useShowsStore()
-const searchStore = useSearchStore()
-const watchlistStore = useWatchlistStore()
-const searchQuery = ref('')
-
-// Filters
-const filters = ref({
-  status: '',
-  network: '',
-  year: '',
-  streaming: [] as string[],
-})
-
-// Filter shows based on selected filters
-const filteredShows = computed(() => {
-  let shows = showsStore.allShows
-
-  if (filters.value.status) {
-    shows = shows.filter((show: Show) => show.status === filters.value.status)
-  }
-
-  if (filters.value.network) {
-    shows = shows.filter(
-      (show: Show) =>
-        show.network?.name === filters.value.network ||
-        show.webChannel?.name === filters.value.network
-    )
-  }
-
-  if (filters.value.year) {
-    const year = parseInt(filters.value.year)
-    shows = shows.filter((show: Show) => {
-      if (!show.premiered) return false
-      const showYear = new Date(show.premiered).getFullYear()
-      return showYear === year
-    })
-  }
-
-  return shows
-})
-
-// Get genres from store's pre-sorted showsByGenre (server-side sorted by rating)
-const filteredGenres = computed(() => {
-  // Use pre-sorted showsByGenre from store (already sorted by rating on server)
-  const serverSortedGenres = showsStore.showsByGenre
-
-  // If filters are applied, filter the shows within each genre
-  if (filters.value.status || filters.value.network || filters.value.year) {
-    const genreMap = new Map<string, Show[]>()
-
-    filteredShows.value.forEach((show: Show) => {
-      if (show.genres && show.genres.length > 0) {
-        show.genres.forEach((genre: string) => {
-          if (!genreMap.has(genre)) {
-            genreMap.set(genre, [])
-          }
-          genreMap.get(genre)!.push(show)
-        })
-      }
-    })
-
-    // Sort by genre size (number of shows per genre)
-    return Array.from(genreMap.entries())
-      .map(([genre, shows]) => ({
-        name: genre,
-        shows: shows, // These are filtered but preserve original order
-      }))
-      .sort((a, b) => b.shows.length - a.shows.length)
-  }
-
-  // No filters: use server-sorted data (already sorted by rating within each genre)
-  return Object.entries(serverSortedGenres)
-    .map(([genre, shows]) => ({
-      name: genre,
-      shows: shows,
-    }))
-    .sort((a, b) => b.shows.length - a.shows.length) // Sort genres by size
-})
-
-// Performance: Lazy load genres with infinite scroll
-const genresPerPage = 5
-const visibleGenresCount = ref(genresPerPage)
-const loadMoreTrigger = ref<HTMLElement | null>(null)
-let observer: IntersectionObserver | null = null
-
-const displayedGenres = computed(() => {
-  return filteredGenres.value.slice(0, visibleGenresCount.value)
-})
-
-const canLoadMore = computed(() => {
-  return visibleGenresCount.value < filteredGenres.value.length
-})
-
-// Setup intersection observer for infinite scroll
-function setupInfiniteScroll() {
-  if (!loadMoreTrigger.value) return
-
-  observer = new IntersectionObserver(
-    (entries) => {
-      const entry = entries[0]
-      if (entry && entry.isIntersecting && canLoadMore.value) {
-        // Load more genres when trigger comes into view
-        visibleGenresCount.value += genresPerPage
-      }
-    },
-    {
-      root: null,
-      rootMargin: '100px', // Start loading 100px before the trigger
-      threshold: 0.1,
-    }
-  )
-
-  observer.observe(loadMoreTrigger.value)
-}
-
-onUnmounted(() => {
-  if (observer && loadMoreTrigger.value) {
-    observer.unobserve(loadMoreTrigger.value)
-    observer.disconnect()
-  }
-})
-
-// SEO (multilingual)
-useSEO({
-  title: t('seo.home.title'),
-  description: t('seo.home.description'),
-  keywords: t('seo.home.keywords').split(', '),
-})
-
-function handleSearch(query: string) {
-  if (query.trim()) {
-    navigateTo(localePath(`/search?q=${encodeURIComponent(query)}`))
-  }
-}
-
-function handleSearchFocus() {
-  // If user has already typed something, preserve it when navigating to search page
-  if (searchQuery.value.trim()) {
-    navigateTo(localePath(`/search?q=${encodeURIComponent(searchQuery.value)}`))
-  } else {
-    navigateTo(localePath('/search'))
-  }
-}
-
-// Reset visible genres count when filters change
-watch(
-  filters,
-  () => {
-    visibleGenresCount.value = genresPerPage
-  },
-  { deep: true }
-)
-
-// Server-side data fetching - runs on server during SSR
-const { data: showsData } = await useAsyncData(
-  'all-shows',
-  () => $fetch<{ shows: Show[]; showsByGenre: Record<string, Show[]> }>('/api/shows'),
-  {
-    dedupe: 'defer', // Dedupe requests during SSR
-  }
-)
-
-// Populate store with server-fetched data (including pre-sorted genres)
-if (showsData.value) {
-  showsStore.setShowsWithGenres(showsData.value.shows, showsData.value.showsByGenre)
-}
-
-onMounted(() => {
-  // Setup infinite scroll after genres are loaded
-  setTimeout(() => setupInfiniteScroll(), 100)
-})
-</script>

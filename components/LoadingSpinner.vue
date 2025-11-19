@@ -1,20 +1,3 @@
-<template>
-  <div
-    v-motion
-    :initial="{ opacity: 0, scale: 0.8 }"
-    :enter="{ opacity: 1, scale: 1, transition: { duration: 300 } }"
-    class="flex items-center justify-center"
-    :class="containerClass"
-  >
-    <div
-      class="animate-spin rounded-full border-b-2"
-      :class="spinnerClass"
-      :style="{ width: size, height: size }"
-    />
-    <span v-if="text" class="ml-3 text-gray-600 fade-in">{{ text }}</span>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -40,3 +23,20 @@ const spinnerClass = computed(() => {
   return props.color
 })
 </script>
+
+<template>
+  <div
+    v-motion
+    :initial="{ opacity: 0, scale: 0.8 }"
+    :enter="{ opacity: 1, scale: 1, transition: { duration: 300 } }"
+    class="flex items-center justify-center"
+    :class="containerClass"
+  >
+    <div
+      class="animate-spin rounded-full border-b-2"
+      :class="spinnerClass"
+      :style="{ width: size, height: size }"
+    />
+    <span v-if="text" class="ml-3 text-gray-600 fade-in">{{ text }}</span>
+  </div>
+</template>

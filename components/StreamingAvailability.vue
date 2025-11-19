@@ -1,85 +1,3 @@
-<template>
-  <div class="streaming-availability">
-    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
-      <span class="text-2xl">📺</span>
-      {{ t('streaming.title') }}
-    </h3>
-
-    <!-- Available Streaming Options -->
-    <div v-if="availability.length > 0" class="streaming-scroll-container">
-      <div class="streaming-horizontal-list">
-        <a
-          v-for="option in availability"
-          :key="option.service.id"
-          v-bind="getExternalLinkAttrs(option)"
-          class="streaming-card group"
-          :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
-          @click="handleStreamingClick($event, option.service, option.link)"
-        >
-          <!-- Service Logo/Icon -->
-          <div
-            class="streaming-icon"
-            :style="{
-              background: getServiceGradient(option.service.id),
-            }"
-          >
-            <img
-              v-if="option.service.logo"
-              :src="option.service.logo"
-              :alt="`${option.service.name} logo`"
-              :class="isTMDBLogo(option.service.logo) ? 'streaming-logo-tmdb' : 'streaming-logo'"
-              loading="lazy"
-              @error="handleImageError($event, option.service.id)"
-            />
-            <span v-else class="streaming-brand-text">
-              {{ getServiceBrandName(option.service.id, option.service.name) }}
-            </span>
-          </div>
-
-          <!-- Service Info -->
-          <div class="mt-3 text-center">
-            <div
-              class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-            >
-              {{ option.service.name }}
-            </div>
-            <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-              <span class="capitalize">{{ option.service.type }}</span>
-            </div>
-            <div v-if="hasAffiliate(option.service.id)" class="affiliate-badge mt-1">
-              {{ t('streaming.affiliate_note') }}
-            </div>
-          </div>
-
-          <!-- Price if available -->
-          <div
-            v-if="option.price !== undefined && option.price !== null"
-            class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center"
-          >
-            {{ formatPrice(option.price, option.currency) }}
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <!-- Not Available State -->
-    <div v-else class="not-available-state">
-      <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
-        <Icon name="heroicons:information-circle" class="w-6 h-6" />
-        <p class="text-sm">{{ t('streaming.not_available') }}</p>
-      </div>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
-        {{ t('streaming.check_later') }}
-      </p>
-    </div>
-
-    <!-- Disclaimer -->
-    <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
-      {{ disclaimerText }}
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import type { StreamingAvailability } from '@/types'
 import { trackStreamingClick } from '@/utils'
@@ -217,6 +135,88 @@ const formatPrice = (price: number, currency?: string): string => {
   }).format(price)
 }
 </script>
+
+<template>
+  <div class="streaming-availability">
+    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+      <span class="text-2xl">📺</span>
+      {{ t('streaming.title') }}
+    </h3>
+
+    <!-- Available Streaming Options -->
+    <div v-if="availability.length > 0" class="streaming-scroll-container">
+      <div class="streaming-horizontal-list">
+        <a
+          v-for="option in availability"
+          :key="option.service.id"
+          v-bind="getExternalLinkAttrs(option)"
+          class="streaming-card group"
+          :aria-label="`${t('streaming.watch_on')} ${option.service.name}`"
+          @click="handleStreamingClick($event, option.service, option.link)"
+        >
+          <!-- Service Logo/Icon -->
+          <div
+            class="streaming-icon"
+            :style="{
+              background: getServiceGradient(option.service.id),
+            }"
+          >
+            <img
+              v-if="option.service.logo"
+              :src="option.service.logo"
+              :alt="`${option.service.name} logo`"
+              :class="isTMDBLogo(option.service.logo) ? 'streaming-logo-tmdb' : 'streaming-logo'"
+              loading="lazy"
+              @error="handleImageError($event, option.service.id)"
+            />
+            <span v-else class="streaming-brand-text">
+              {{ getServiceBrandName(option.service.id, option.service.name) }}
+            </span>
+          </div>
+
+          <!-- Service Info -->
+          <div class="mt-3 text-center">
+            <div
+              class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+            >
+              {{ option.service.name }}
+            </div>
+            <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+              <span class="capitalize">{{ option.service.type }}</span>
+            </div>
+            <div v-if="hasAffiliate(option.service.id)" class="affiliate-badge mt-1">
+              {{ t('streaming.affiliate_note') }}
+            </div>
+          </div>
+
+          <!-- Price if available -->
+          <div
+            v-if="option.price !== undefined && option.price !== null"
+            class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center"
+          >
+            {{ formatPrice(option.price, option.currency) }}
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Not Available State -->
+    <div v-else class="not-available-state">
+      <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
+        <Icon name="heroicons:information-circle" class="w-6 h-6" />
+        <p class="text-sm">{{ t('streaming.not_available') }}</p>
+      </div>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+        {{ t('streaming.check_later') }}
+      </p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
+      {{ disclaimerText }}
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .streaming-availability {

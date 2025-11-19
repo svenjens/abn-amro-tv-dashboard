@@ -1,3 +1,118 @@
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import SafeHtml from '@/components/SafeHtml.vue'
+import type { Episode, EpisodesBySeason, ApiError } from '@/types'
+import { useWatchlistStore } from '@/stores'
+import RatingBadge from './RatingBadge.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
+import ErrorMessage from './ErrorMessage.vue'
+
+interface Props {
+  episodes: Episode[]
+  showId: number
+  loading?: boolean
+  error?: ApiError | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+  error: null,
+})
+
+const emit = defineEmits<{
+  retry: []
+}>()
+
+const { t } = useI18n()
+const watchlistStore = useWatchlistStore()
+
+const selectedSeason = ref(1)
+const expandedEpisodes = ref(new Set<number>())
+
+// Group episodes by season
+const episodesBySeason = computed<EpisodesBySeason>(() => {
+  return props.episodes.reduce((acc, episode) => {
+    if (!acc[episode.season]) {
+      acc[episode.season] = []
+    }
+    const seasonEpisodes = acc[episode.season]
+    if (seasonEpisodes) {
+      seasonEpisodes.push(episode)
+    }
+    return acc
+  }, {} as EpisodesBySeason)
+})
+
+// Get available seasons
+const seasons = computed(() => {
+  return Object.keys(episodesBySeason.value)
+    .map(Number)
+    .sort((a, b) => a - b)
+})
+
+// Get episodes for selected season
+const currentSeasonEpisodes = computed(() => {
+  return episodesBySeason.value[selectedSeason.value] || []
+})
+
+// Calculate season progress
+const seasonProgress = computed(() => {
+  const total = currentSeasonEpisodes.value.length
+  const watched = currentSeasonEpisodes.value.filter((ep) =>
+    watchlistStore.isEpisodeWatched(props.showId, ep.id)
+  ).length
+  const percentage = total > 0 ? Math.round((watched / total) * 100) : 0
+
+  return { total, watched, percentage }
+})
+
+// Check if episode is watched
+function isWatched(episodeId: number): boolean {
+  return watchlistStore.isEpisodeWatched(props.showId, episodeId)
+}
+
+// Toggle watched status
+function toggleWatched(episode: Episode) {
+  watchlistStore.toggleEpisodeWatched(props.showId, episode.id, episode.season, episode.number)
+}
+
+// Toggle episode summary expanded state
+function toggleExpanded(episodeId: number) {
+  if (expandedEpisodes.value.has(episodeId)) {
+    expandedEpisodes.value.delete(episodeId)
+  } else {
+    expandedEpisodes.value.add(episodeId)
+  }
+}
+
+// Sanitize HTML
+// SafeHtml component handles sanitization
+
+// Format date
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+// Auto-select last season when episodes load
+watch(
+  () => props.episodes.length,
+  (newLength) => {
+    if (newLength > 0 && seasons.value.length > 0) {
+      const lastSeason = seasons.value[seasons.value.length - 1]
+      if (lastSeason !== undefined) {
+        selectedSeason.value = lastSeason
+      }
+    }
+  },
+  { immediate: true }
+)
+</script>
+
 <template>
   <div class="space-y-6">
     <!-- Season selector -->
@@ -129,121 +244,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import SafeHtml from '@/components/SafeHtml.vue'
-import type { Episode, EpisodesBySeason, ApiError } from '@/types'
-import { useWatchlistStore } from '@/stores'
-import RatingBadge from './RatingBadge.vue'
-import LoadingSpinner from './LoadingSpinner.vue'
-import ErrorMessage from './ErrorMessage.vue'
-
-interface Props {
-  episodes: Episode[]
-  showId: number
-  loading?: boolean
-  error?: ApiError | null
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  error: null,
-})
-
-const emit = defineEmits<{
-  retry: []
-}>()
-
-const { t } = useI18n()
-const watchlistStore = useWatchlistStore()
-
-const selectedSeason = ref(1)
-const expandedEpisodes = ref(new Set<number>())
-
-// Group episodes by season
-const episodesBySeason = computed<EpisodesBySeason>(() => {
-  return props.episodes.reduce((acc, episode) => {
-    if (!acc[episode.season]) {
-      acc[episode.season] = []
-    }
-    const seasonEpisodes = acc[episode.season]
-    if (seasonEpisodes) {
-      seasonEpisodes.push(episode)
-    }
-    return acc
-  }, {} as EpisodesBySeason)
-})
-
-// Get available seasons
-const seasons = computed(() => {
-  return Object.keys(episodesBySeason.value)
-    .map(Number)
-    .sort((a, b) => a - b)
-})
-
-// Get episodes for selected season
-const currentSeasonEpisodes = computed(() => {
-  return episodesBySeason.value[selectedSeason.value] || []
-})
-
-// Calculate season progress
-const seasonProgress = computed(() => {
-  const total = currentSeasonEpisodes.value.length
-  const watched = currentSeasonEpisodes.value.filter((ep) =>
-    watchlistStore.isEpisodeWatched(props.showId, ep.id)
-  ).length
-  const percentage = total > 0 ? Math.round((watched / total) * 100) : 0
-
-  return { total, watched, percentage }
-})
-
-// Check if episode is watched
-function isWatched(episodeId: number): boolean {
-  return watchlistStore.isEpisodeWatched(props.showId, episodeId)
-}
-
-// Toggle watched status
-function toggleWatched(episode: Episode) {
-  watchlistStore.toggleEpisodeWatched(props.showId, episode.id, episode.season, episode.number)
-}
-
-// Toggle episode summary expanded state
-function toggleExpanded(episodeId: number) {
-  if (expandedEpisodes.value.has(episodeId)) {
-    expandedEpisodes.value.delete(episodeId)
-  } else {
-    expandedEpisodes.value.add(episodeId)
-  }
-}
-
-// Sanitize HTML
-// SafeHtml component handles sanitization
-
-// Format date
-function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-// Auto-select last season when episodes load
-watch(
-  () => props.episodes.length,
-  (newLength) => {
-    if (newLength > 0 && seasons.value.length > 0) {
-      const lastSeason = seasons.value[seasons.value.length - 1]
-      if (lastSeason !== undefined) {
-        selectedSeason.value = lastSeason
-      }
-    }
-  },
-  { immediate: true }
-)
-</script>
 
 <style scoped>
 .line-clamp-2 {

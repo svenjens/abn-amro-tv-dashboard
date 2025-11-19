@@ -1,3 +1,60 @@
+<script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+interface ErrorProps {
+  error: {
+    url?: string
+    statusCode?: number
+    statusMessage?: string
+    message?: string
+    description?: string
+    data?: any
+  }
+}
+
+const props = defineProps<ErrorProps>()
+
+const isDev = import.meta.dev
+
+const errorTitle = computed(() => {
+  if (props.error.statusCode === 404) {
+    return t('errors.notFound')
+  } else if (props.error.statusCode === 500) {
+    return t('errors.serverError')
+  }
+  return t('errors.somethingWrong')
+})
+
+const errorMessage = computed(() => {
+  if (props.error.statusCode === 404) {
+    return t('errors.notFoundMessage')
+  } else if (props.error.statusCode === 500) {
+    return t('errors.serverErrorMessage')
+  }
+  return props.error.message || t('errors.defaultMessage')
+})
+
+// SEO for error pages
+useSEO({
+  title: `${errorTitle.value} - BingeList`,
+  description: errorMessage.value,
+})
+
+// Don't index error pages
+useHead({
+  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
+})
+
+const handleError = () => {
+  navigateTo(localePath('/'))
+}
+
+const handleRetry = () => {
+  clearError({ redirect: props.error.url || '/' })
+}
+</script>
+
 <template>
   <NuxtLayout>
     <div
@@ -160,60 +217,3 @@
     </div>
   </NuxtLayout>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-const localePath = useLocalePath()
-
-interface ErrorProps {
-  error: {
-    url?: string
-    statusCode?: number
-    statusMessage?: string
-    message?: string
-    description?: string
-    data?: any
-  }
-}
-
-const props = defineProps<ErrorProps>()
-
-const isDev = import.meta.dev
-
-const errorTitle = computed(() => {
-  if (props.error.statusCode === 404) {
-    return t('errors.notFound')
-  } else if (props.error.statusCode === 500) {
-    return t('errors.serverError')
-  }
-  return t('errors.somethingWrong')
-})
-
-const errorMessage = computed(() => {
-  if (props.error.statusCode === 404) {
-    return t('errors.notFoundMessage')
-  } else if (props.error.statusCode === 500) {
-    return t('errors.serverErrorMessage')
-  }
-  return props.error.message || t('errors.defaultMessage')
-})
-
-// SEO for error pages
-useSEO({
-  title: `${errorTitle.value} - BingeList`,
-  description: errorMessage.value,
-})
-
-// Don't index error pages
-useHead({
-  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
-})
-
-const handleError = () => {
-  navigateTo(localePath('/'))
-}
-
-const handleRetry = () => {
-  clearError({ redirect: props.error.url || '/' })
-}
-</script>

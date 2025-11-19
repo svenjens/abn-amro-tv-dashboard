@@ -1,3 +1,14 @@
+<script setup lang="ts">
+const route = useRoute()
+
+const showDebug = computed(() => {
+  if (!import.meta.client) return false
+  const isDev = import.meta.dev
+  const hasDebugParam = route.query.debug !== undefined
+  return isDev || hasDebugParam
+})
+</script>
+
 <template>
   <div
     class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors"
@@ -22,17 +33,6 @@
     <PWAInstallPrompt />
   </div>
 </template>
-
-<script setup lang="ts">
-const route = useRoute()
-
-const showDebug = computed(() => {
-  if (!import.meta.client) return false
-  const isDev = import.meta.dev
-  const hasDebugParam = route.query.debug !== undefined
-  return isDev || hasDebugParam
-})
-</script>
 
 <style scoped>
 /* Page transition animations */

@@ -1,3 +1,134 @@
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import type { PersonDetailsResponse } from '~/server/api/people/[id].get'
+import { extractIdFromSlug, createSlugWithId } from '~/utils/slug'
+import SafeHtml from '~/components/SafeHtml.vue'
+import DetailPageLayout from '~/components/DetailPageLayout.vue'
+
+const route = useRoute()
+const router = useRouter()
+const { t, d } = useI18n()
+const localePath = useLocalePath()
+
+// Extract person ID from slug
+const slug = computed(() => route.params.slug as string)
+const personId = computed(() => extractIdFromSlug(slug.value))
+
+// Custom back handler - try to go to the show the person came from
+const handleBack = () => {
+  // If we have a show in the credits, try to go back to it
+  // Otherwise, just use browser back
+  router.back()
+}
+
+// Validate person ID before fetching
+if (!personId.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Invalid person URL',
+    fatal: true,
+  })
+}
+
+// Tabs configuration
+const tabs = [
+  { id: 'biography', label: 'tabs.biography' },
+  { id: 'shows', label: 'tabs.shows' },
+  { id: 'information', label: 'tabs.information' },
+]
+
+// Active tab management
+const initialTab = (route.query.tab as string) || 'biography'
+const validTabs = tabs.map((t) => t.id)
+const activeTab = ref(validTabs.includes(initialTab) ? initialTab : 'biography')
+
+// Watch for URL query changes
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    const tab = newTab as string
+    if (validTabs.includes(tab)) {
+      activeTab.value = tab
+    }
+  }
+)
+
+// Display settings
+const initialDisplayCount = ref(10)
+const showAllCredits = ref(false)
+
+// Fetch person data
+const {
+  data: person,
+  pending: loading,
+  error,
+  refresh: refreshPerson,
+} = await useFetch<PersonDetailsResponse>(`/api/people/${personId.value}`, {
+  key: `person-${personId.value}`,
+})
+
+// Computed properties
+// Prefer TMDB biography over TVMaze biography
+const biography = computed(() => {
+  if (person.value?.tmdb?.biography) {
+    return person.value.tmdb.biography
+  }
+  return person.value?.biography || null
+})
+
+// Show place of birth from TMDB if available
+const placeOfBirth = computed(() => {
+  return person.value?.tmdb?.placeOfBirth || null
+})
+
+const age = computed(() => {
+  if (!person.value?.birthday) return null
+  const endDate = person.value.deathday ? new Date(person.value.deathday) : new Date()
+  const birthDate = new Date(person.value.birthday)
+  let age = endDate.getFullYear() - birthDate.getFullYear()
+  const monthDiff = endDate.getMonth() - birthDate.getMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && endDate.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return age
+})
+
+const uniqueCredits = computed(() => {
+  if (!person.value?.castCredits) return []
+
+  // Remove duplicates based on show ID (a person can have multiple roles in the same show)
+  return person.value.castCredits.reduce(
+    (acc, credit) => {
+      if (!acc.find((c) => c.id === credit.id)) {
+        acc.push(credit)
+      }
+      return acc
+    },
+    [] as typeof person.value.castCredits
+  )
+})
+
+const displayedCredits = computed(() => {
+  if (showAllCredits.value) return uniqueCredits.value
+  return uniqueCredits.value.slice(0, initialDisplayCount.value)
+})
+
+// SEO
+if (person.value) {
+  useSEO({
+    title: `${person.value.name} - ${t('person.title')}`,
+    description: person.value.country
+      ? t('person.description', {
+          name: person.value.name,
+          country: person.value.country.name,
+        })
+      : `${person.value.name} - ${t('person.fallbackDescription')}`,
+    keywords: [person.value.name, 'actor', 'actress', 'tv shows', 'cast'],
+    image: person.value.image?.original,
+  })
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Loading State -->
@@ -267,134 +398,3 @@
     </DetailPageLayout>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import type { PersonDetailsResponse } from '~/server/api/people/[id].get'
-import { extractIdFromSlug, createSlugWithId } from '~/utils/slug'
-import SafeHtml from '~/components/SafeHtml.vue'
-import DetailPageLayout from '~/components/DetailPageLayout.vue'
-
-const route = useRoute()
-const router = useRouter()
-const { t, d } = useI18n()
-const localePath = useLocalePath()
-
-// Extract person ID from slug
-const slug = computed(() => route.params.slug as string)
-const personId = computed(() => extractIdFromSlug(slug.value))
-
-// Custom back handler - try to go to the show the person came from
-const handleBack = () => {
-  // If we have a show in the credits, try to go back to it
-  // Otherwise, just use browser back
-  router.back()
-}
-
-// Validate person ID before fetching
-if (!personId.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Invalid person URL',
-    fatal: true,
-  })
-}
-
-// Tabs configuration
-const tabs = [
-  { id: 'biography', label: 'tabs.biography' },
-  { id: 'shows', label: 'tabs.shows' },
-  { id: 'information', label: 'tabs.information' },
-]
-
-// Active tab management
-const initialTab = (route.query.tab as string) || 'biography'
-const validTabs = tabs.map((t) => t.id)
-const activeTab = ref(validTabs.includes(initialTab) ? initialTab : 'biography')
-
-// Watch for URL query changes
-watch(
-  () => route.query.tab,
-  (newTab) => {
-    const tab = newTab as string
-    if (validTabs.includes(tab)) {
-      activeTab.value = tab
-    }
-  }
-)
-
-// Display settings
-const initialDisplayCount = ref(10)
-const showAllCredits = ref(false)
-
-// Fetch person data
-const {
-  data: person,
-  pending: loading,
-  error,
-  refresh: refreshPerson,
-} = await useFetch<PersonDetailsResponse>(`/api/people/${personId.value}`, {
-  key: `person-${personId.value}`,
-})
-
-// Computed properties
-// Prefer TMDB biography over TVMaze biography
-const biography = computed(() => {
-  if (person.value?.tmdb?.biography) {
-    return person.value.tmdb.biography
-  }
-  return person.value?.biography || null
-})
-
-// Show place of birth from TMDB if available
-const placeOfBirth = computed(() => {
-  return person.value?.tmdb?.placeOfBirth || null
-})
-
-const age = computed(() => {
-  if (!person.value?.birthday) return null
-  const endDate = person.value.deathday ? new Date(person.value.deathday) : new Date()
-  const birthDate = new Date(person.value.birthday)
-  let age = endDate.getFullYear() - birthDate.getFullYear()
-  const monthDiff = endDate.getMonth() - birthDate.getMonth()
-  if (monthDiff < 0 || (monthDiff === 0 && endDate.getDate() < birthDate.getDate())) {
-    age--
-  }
-  return age
-})
-
-const uniqueCredits = computed(() => {
-  if (!person.value?.castCredits) return []
-
-  // Remove duplicates based on show ID (a person can have multiple roles in the same show)
-  return person.value.castCredits.reduce(
-    (acc, credit) => {
-      if (!acc.find((c) => c.id === credit.id)) {
-        acc.push(credit)
-      }
-      return acc
-    },
-    [] as typeof person.value.castCredits
-  )
-})
-
-const displayedCredits = computed(() => {
-  if (showAllCredits.value) return uniqueCredits.value
-  return uniqueCredits.value.slice(0, initialDisplayCount.value)
-})
-
-// SEO
-if (person.value) {
-  useSEO({
-    title: `${person.value.name} - ${t('person.title')}`,
-    description: person.value.country
-      ? t('person.description', {
-          name: person.value.name,
-          country: person.value.country.name,
-        })
-      : `${person.value.name} - ${t('person.fallbackDescription')}`,
-    keywords: [person.value.name, 'actor', 'actress', 'tv shows', 'cast'],
-    image: person.value.image?.original,
-  })
-}
-</script>

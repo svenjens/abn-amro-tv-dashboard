@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import { onMounted, computed } from 'vue'
+import { useSEO } from '@/composables'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LegalArticle from '@/components/LegalArticle.vue'
+
+const { t, locale } = useI18n()
+
+const tvmazeLink =
+  '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
+
+const lastUpdated = computed(() => {
+  return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+})
+
+onMounted(() => {
+  useSEO({
+    title: t('legal.termsOfService'),
+    description: 'Terms of Service for BingeList - TV show discovery and tracking platform.',
+  })
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -66,30 +93,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { onMounted, computed } from 'vue'
-import { useSEO } from '@/composables'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LegalArticle from '@/components/LegalArticle.vue'
-
-const { t, locale } = useI18n()
-
-const tvmazeLink =
-  '<a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer external">TVmaze.com</a>'
-
-const lastUpdated = computed(() => {
-  return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-})
-
-onMounted(() => {
-  useSEO({
-    title: t('legal.termsOfService'),
-    description: 'Terms of Service for BingeList - TV show discovery and tracking platform.',
-  })
-})
-</script>

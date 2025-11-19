@@ -1,115 +1,3 @@
-<template>
-  <div
-    ref="cardElement"
-    v-motion
-    :initial="{ opacity: 0, y: 20 }"
-    :visible="{ opacity: 1, y: 0, transition: { duration: 400, delay: 50 } }"
-    class="card group/card cursor-pointer rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full flex flex-col border border-gray-200 dark:border-gray-700"
-    :data-testid="`show-card-${show.id}`"
-    @click="navigateToShow"
-  >
-    <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0">
-      <NuxtImg
-        v-if="imageLoaded && showImage"
-        :src="showImage"
-        :alt="show.name"
-        :loading="lazy ? 'lazy' : 'eager'"
-        :fetchpriority="lazy ? undefined : 'high'"
-        decoding="async"
-        format="webp"
-        :quality="85"
-        class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
-        :data-testid="`show-card-image-${show.id}`"
-        @error="handleImageError"
-      />
-      <div
-        v-else
-        class="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
-      >
-        <svg
-          class="h-16 w-16"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </div>
-
-      <!-- Rating Badge Overlay -->
-      <div v-if="show.rating.average" class="absolute top-2 right-2">
-        <RatingBadge :rating="show.rating.average" />
-      </div>
-
-      <!-- Watchlist Button Overlay -->
-      <div
-        class="absolute top-2 left-2 opacity-0 group-hover/card:opacity-100 transition-opacity"
-        data-e2e-visible="watchlist-button"
-      >
-        <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
-      </div>
-
-      <!-- Match Reason Badge (for Smart Search) -->
-      <div
-        v-if="matchReason"
-        class="absolute bottom-2 left-2 right-2 bg-blue-600 dark:bg-blue-700 px-3 py-2 rounded-md shadow-lg border border-blue-500 dark:border-blue-600"
-      >
-        <p class="text-sm text-white font-semibold">🎯 {{ matchReason }}</p>
-      </div>
-    </div>
-
-    <div class="p-4 flex-1 flex flex-col min-h-0">
-      <h3
-        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
-      >
-        {{ show.name }}
-      </h3>
-
-      <div class="space-y-3">
-        <div class="min-h-[2rem]">
-          <GenreTags
-            v-if="show.genres && show.genres.length > 0"
-            :genres="show.genres"
-            :max-display="4"
-          />
-        </div>
-
-        <!-- Streaming Availability Badges -->
-        <div v-if="streamingLogos.length > 0" class="flex gap-1.5 flex-wrap">
-          <div
-            v-for="logo in streamingLogos.slice(0, 5)"
-            :key="logo.id"
-            class="w-7 h-7 rounded overflow-hidden border border-gray-200 dark:border-gray-700"
-            :style="{ background: logo.gradient }"
-            :title="logo.name"
-          >
-            <img
-              :src="logo.path"
-              :alt="logo.name"
-              class="w-full h-full object-contain p-1 filter brightness-0 invert"
-            />
-          </div>
-          <div
-            v-if="streamingLogos.length > 5"
-            class="w-7 h-7 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
-            :title="`+${streamingLogos.length - 5} more services`"
-          >
-            +{{ streamingLogos.length - 5 }}
-          </div>
-        </div>
-
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {{ premieredYear || '\u00A0' }}
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import type { Show } from '@/types'
@@ -205,3 +93,116 @@ function handleImageError() {
   imageError.value = true
 }
 </script>
+
+<template>
+  <div
+    ref="cardElement"
+    v-motion
+    :initial="{ opacity: 0, y: 20 }"
+    :visible="{ opacity: 1, y: 0, transition: { duration: 400, delay: 50 } }"
+    class="card group/card cursor-pointer rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 hover:-translate-y-1 h-full flex flex-col border border-gray-200 dark:border-gray-700"
+    :data-testid="`show-card-${show.id}`"
+    @click="navigateToShow"
+  >
+    <div class="relative aspect-[2/3] overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0">
+      <NuxtImg
+        v-if="imageLoaded && showImage"
+        :src="showImage"
+        :alt="show.name"
+        :loading="lazy ? 'lazy' : 'eager'"
+        :fetchpriority="lazy ? undefined : 'high'"
+        decoding="async"
+        format="webp"
+        :quality="85"
+        class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-110"
+        :data-testid="`show-card-image-${show.id}`"
+        @error="handleImageError"
+      />
+      <div
+        v-else
+        class="flex h-full w-full items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+      >
+        <svg
+          class="h-16 w-16"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+
+      <!-- Rating Badge Overlay -->
+      <div v-if="show.rating.average" class="absolute top-2 right-2">
+        <RatingBadge :rating="show.rating.average" />
+      </div>
+
+      <!-- Watchlist Button Overlay -->
+      <div
+        class="absolute top-2 left-2 opacity-0 group-hover/card:opacity-100 transition-opacity"
+        data-e2e-visible="watchlist-button"
+      >
+        <WatchlistButton :show="show" variant="icon" size="md" @click.stop />
+      </div>
+
+      <!-- Match Reason Badge (for Smart Search) -->
+      <div
+        v-if="matchReason"
+        class="absolute bottom-2 left-2 right-2 bg-blue-600 dark:bg-blue-700 px-3 py-2 rounded-md shadow-lg border border-blue-500 dark:border-blue-600"
+      >
+        <p class="text-sm text-white font-semibold">🎯 {{ matchReason }}</p>
+      </div>
+    </div>
+
+    <div class="p-4 flex-1 flex flex-col min-h-0">
+      <h3
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 group-hover/card:text-primary-600 dark:group-hover/card:text-primary-400 transition-colors h-[3.5rem]"
+      >
+        {{ show.name }}
+      </h3>
+
+      <div class="space-y-3">
+        <div class="min-h-[2rem]">
+          <GenreTags
+            v-if="show.genres && show.genres.length > 0"
+            :genres="show.genres"
+            :max-display="4"
+            v-motion
+          />
+        </div>
+
+        <!-- Streaming Availability Badges -->
+        <div v-if="streamingLogos.length > 0" class="flex gap-1.5 flex-wrap">
+          <div
+            v-for="logo in streamingLogos.slice(0, 5)"
+            :key="logo.id"
+            class="w-7 h-7 rounded overflow-hidden border border-gray-200 dark:border-gray-700"
+            :style="{ background: logo.gradient }"
+            :title="logo.name"
+          >
+            <img
+              :src="logo.path"
+              :alt="logo.name"
+              class="w-full h-full object-contain p-1 filter brightness-0 invert"
+            />
+          </div>
+          <div
+            v-if="streamingLogos.length > 5"
+            class="w-7 h-7 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700"
+            :title="`+${streamingLogos.length - 5} more services`"
+          >
+            +{{ streamingLogos.length - 5 }}
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+          {{ premieredYear || '\u00A0' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

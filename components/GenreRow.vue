@@ -1,3 +1,77 @@
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import type { Show } from '@/types'
+import ShowCard from './ShowCard.vue'
+
+interface Props {
+  genre: string
+  shows: Show[]
+  priority?: boolean // If true, first shows load eager for better LCP
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  priority: false,
+})
+
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+const scrollContainer = ref<HTMLElement | null>(null)
+const canScrollLeft = ref(false)
+const canScrollRight = ref(true)
+const mobileLimit = ref(6)
+const desktopLimit = 12 // Limit shows on desktop for better performance
+
+const limitedShows = computed(() => {
+  return props.shows.slice(0, mobileLimit.value)
+})
+
+const limitedShowsDesktop = computed(() => {
+  return props.shows.slice(0, desktopLimit)
+})
+
+function scrollLeft() {
+  if (scrollContainer.value) {
+    scrollContainer.value.scrollBy({ left: -400, behavior: 'smooth' })
+  }
+}
+
+function scrollRight() {
+  if (scrollContainer.value) {
+    scrollContainer.value.scrollBy({ left: 400, behavior: 'smooth' })
+  }
+}
+
+function updateScrollButtons() {
+  if (!scrollContainer.value) return
+
+  const { scrollLeft, scrollWidth, clientWidth } = scrollContainer.value
+  canScrollLeft.value = scrollLeft > 0
+  canScrollRight.value = scrollLeft < scrollWidth - clientWidth - 10
+}
+
+function expandMobile() {
+  mobileLimit.value += 6
+}
+
+function navigateToGenre() {
+  navigateTo(localePath(`/genre/${props.genre.toLowerCase()}`))
+}
+
+onMounted(() => {
+  updateScrollButtons()
+  if (scrollContainer.value) {
+    scrollContainer.value.addEventListener('scroll', updateScrollButtons)
+  }
+})
+
+onUnmounted(() => {
+  if (scrollContainer.value) {
+    scrollContainer.value.removeEventListener('scroll', updateScrollButtons)
+  }
+})
+</script>
+
 <template>
   <section
     v-motion
@@ -78,80 +152,6 @@
     </div>
   </section>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import type { Show } from '@/types'
-import ShowCard from './ShowCard.vue'
-
-interface Props {
-  genre: string
-  shows: Show[]
-  priority?: boolean // If true, first shows load eager for better LCP
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  priority: false,
-})
-
-const { t } = useI18n()
-const localePath = useLocalePath()
-
-const scrollContainer = ref<HTMLElement | null>(null)
-const canScrollLeft = ref(false)
-const canScrollRight = ref(true)
-const mobileLimit = ref(6)
-const desktopLimit = 12 // Limit shows on desktop for better performance
-
-const limitedShows = computed(() => {
-  return props.shows.slice(0, mobileLimit.value)
-})
-
-const limitedShowsDesktop = computed(() => {
-  return props.shows.slice(0, desktopLimit)
-})
-
-function scrollLeft() {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: -400, behavior: 'smooth' })
-  }
-}
-
-function scrollRight() {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 400, behavior: 'smooth' })
-  }
-}
-
-function updateScrollButtons() {
-  if (!scrollContainer.value) return
-
-  const { scrollLeft, scrollWidth, clientWidth } = scrollContainer.value
-  canScrollLeft.value = scrollLeft > 0
-  canScrollRight.value = scrollLeft < scrollWidth - clientWidth - 10
-}
-
-function expandMobile() {
-  mobileLimit.value += 6
-}
-
-function navigateToGenre() {
-  navigateTo(localePath(`/genre/${props.genre.toLowerCase()}`))
-}
-
-onMounted(() => {
-  updateScrollButtons()
-  if (scrollContainer.value) {
-    scrollContainer.value.addEventListener('scroll', updateScrollButtons)
-  }
-})
-
-onUnmounted(() => {
-  if (scrollContainer.value) {
-    scrollContainer.value.removeEventListener('scroll', updateScrollButtons)
-  }
-})
-</script>
 
 <style scoped>
 .scrollbar-hide::-webkit-scrollbar {

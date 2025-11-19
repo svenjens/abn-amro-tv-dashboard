@@ -1,24 +1,3 @@
-<template>
-  <button
-    class="relative inline-flex items-center gap-2 rounded-lg transition-colors focus:outline-none focus:ring-2"
-    :class="[buttonClass, focusClass, paddingClass]"
-    :aria-label="t('darkMode.toggle')"
-    :title="themeLabel"
-    @click="toggle"
-  >
-    <!-- Sun Icon (Light Mode) -->
-    <Icon v-if="!isDark" name="heroicons:sun" :class="iconClass" />
-
-    <!-- Moon Icon (Dark Mode) -->
-    <Icon v-else name="heroicons:moon" :class="iconClass" />
-
-    <!-- Optional Text Label (hidden on mobile) -->
-    <span v-if="showLabel" class="hidden sm:inline text-sm font-medium">
-      {{ themeLabel }}
-    </span>
-  </button>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -90,3 +69,24 @@ const focusClass = computed(() => {
   return 'focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800'
 })
 </script>
+
+<template>
+  <button
+    class="relative inline-flex items-center gap-2 rounded-lg transition-colors focus:outline-none focus:ring-2"
+    :class="[buttonClass, focusClass, paddingClass]"
+    :aria-label="t('darkMode.toggle')"
+    :title="themeLabel"
+    @click="toggle"
+  >
+    <!-- Sun Icon (Light Mode) -->
+    <Icon v-if="!isDark" name="heroicons:sun" :class="iconClass" />
+
+    <!-- Moon Icon (Dark Mode) -->
+    <Icon v-else name="heroicons:moon" :class="iconClass" />
+
+    <!-- Optional Text Label (hidden on mobile) -->
+    <span v-if="showLabel" class="hidden sm:inline text-sm font-medium">
+      {{ themeLabel }}
+    </span>
+  </button>
+</template>

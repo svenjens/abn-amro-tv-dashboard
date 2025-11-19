@@ -1,3 +1,18 @@
+<script setup lang="ts">
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+interface Props {
+  variant?: 'header' | 'default'
+  showLabel?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  variant: 'default',
+  showLabel: true,
+})
+</script>
+
 <template>
   <button
     :class="[
@@ -13,18 +28,3 @@
     <span v-if="showLabel">{{ t('navigation.home') }}</span>
   </button>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-const localePath = useLocalePath()
-
-interface Props {
-  variant?: 'header' | 'default'
-  showLabel?: boolean
-}
-
-withDefaults(defineProps<Props>(), {
-  variant: 'default',
-  showLabel: true,
-})
-</script>

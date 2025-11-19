@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useShowsStore } from '@/stores'
+import { useSEO } from '@/composables'
+import ShowCard from '@/components/ShowCard.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import AdSense from '@/components/AdSense.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import BackButton from '@/components/BackButton.vue'
+import HomeButton from '@/components/HomeButton.vue'
+import EmptyState from '@/components/EmptyState.vue'
+
+const { t } = useI18n()
+const route = useRoute()
+const showsStore = useShowsStore()
+
+const genreName = computed(() => {
+  const genre = route.params.genre as string
+  return genre.charAt(0).toUpperCase() + genre.slice(1)
+})
+
+const genreShows = computed(() => {
+  return showsStore.getShowsByGenre(genreName.value)
+})
+
+// SEO
+// SEO (multilingual)
+useSEO({
+  title: t('seo.genre.title', { genre: genreName.value }),
+  description: t('seo.genre.description', { genre: genreName.value }),
+  keywords: t('seo.genre.keywords', { genre: genreName.value }).split(', '),
+})
+
+onMounted(() => {
+  // Ensure shows are loaded
+  if (showsStore.allShows.length === 0) {
+    showsStore.fetchAllShows()
+  }
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -54,42 +96,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import { useShowsStore } from '@/stores'
-import { useSEO } from '@/composables'
-import ShowCard from '@/components/ShowCard.vue'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import AdSense from '@/components/AdSense.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-
-const { t } = useI18n()
-const route = useRoute()
-const showsStore = useShowsStore()
-
-const genreName = computed(() => {
-  const genre = route.params.genre as string
-  return genre.charAt(0).toUpperCase() + genre.slice(1)
-})
-
-const genreShows = computed(() => {
-  return showsStore.getShowsByGenre(genreName.value)
-})
-
-// SEO
-// SEO (multilingual)
-useSEO({
-  title: t('seo.genre.title', { genre: genreName.value }),
-  description: t('seo.genre.description', { genre: genreName.value }),
-  keywords: t('seo.genre.keywords', { genre: genreName.value }).split(', '),
-})
-
-onMounted(() => {
-  // Ensure shows are loaded
-  if (showsStore.allShows.length === 0) {
-    showsStore.fetchAllShows()
-  }
-})
-</script>

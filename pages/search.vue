@@ -1,182 +1,3 @@
-<template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Search Header -->
-    <div
-      class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10 shadow-sm"
-    >
-      <div class="max-w-7xl mx-auto px-4 py-6">
-        <div class="flex items-center gap-4 mb-4">
-          <button
-            class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            aria-label="Go back"
-            @click="navigateTo(localePath('/'))"
-          >
-            <svg
-              class="h-6 w-6 text-gray-600 dark:text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {{ t('search.title') }}
-          </h1>
-        </div>
-
-        <!-- Search Mode Toggle -->
-        <SearchModeToggle v-model="isSemanticMode" class="mb-3" />
-
-        <!-- Info Bar explaining search modes -->
-        <SearchModeInfo :is-semantic-mode="isSemanticMode" class="mb-4" />
-
-        <!-- Search Bar with Submit Button -->
-        <div class="flex gap-0">
-          <div class="flex-1 search-input-wrapper">
-            <SearchBar
-              ref="searchBarRef"
-              v-model="searchQuery"
-              :placeholder="
-                isSemanticMode ? t('search.semanticPlaceholder') : t('search.searchByName')
-              "
-              :recent-searches="searchStore.recentSearches"
-              :disable-type-ahead="isSemanticMode"
-              @search="handleSearch"
-              @clear-recent="searchStore.clearRecentSearches()"
-            />
-          </div>
-          <button
-            class="hidden sm:flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-r-lg font-medium transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed border-l-0"
-            :disabled="!searchQuery.trim() || searchQuery.trim().length < 2"
-            @click="handleSearch(searchQuery)"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Example Queries (in semantic mode when no search performed) -->
-      <ExampleQueries
-        v-if="
-          isSemanticMode && (!searchQuery || !searchStore.hasResults) && !searchStore.isSearching
-        "
-        :examples="exampleQueries"
-        :has-query="!!searchQuery"
-        class="mb-8"
-        @select="
-          (query) => {
-            searchQuery = query
-            handleSearch(query)
-          }
-        "
-      />
-
-      <!-- Semantic Intent Display -->
-      <SemanticIntentDisplay :intent="semanticIntent" class="mb-6" />
-
-      <!-- Filters -->
-      <FilterBar
-        v-model="filters"
-        :shows="searchStore.results"
-        :show-streaming-filter="hasStreamingData"
-      />
-
-      <!-- Loading State -->
-      <div v-if="searchStore.isSearching || isSemanticLoading" class="flex justify-center py-12">
-        <LoadingSpinner :text="isSemanticMode ? t('search.aiSearching') : t('search.searching')" />
-      </div>
-
-      <!-- Error State -->
-      <ErrorMessage
-        v-else-if="searchStore.hasError"
-        :message="searchStore.error?.message || 'Search failed'"
-        :retry="true"
-        @retry="handleSearch(searchQuery)"
-      />
-
-      <!-- Results -->
-      <div v-else-if="searchQuery">
-        <!-- Results Header -->
-        <div class="mb-6">
-          <h2 class="text-xl font-semibold text-gray-900">
-            <span v-if="filteredResults.length > 0">
-              {{
-                t(
-                  'search.resultsFor',
-                  { count: filteredResults.length, query: searchQuery },
-                  filteredResults.length
-                )
-              }}
-            </span>
-            <span v-else-if="searchStore.hasResults && filteredResults.length === 0">
-              {{ t('filters.noResults') }}
-            </span>
-            <span v-else>
-              {{ t('search.noResults', { query: searchQuery }) }}
-            </span>
-          </h2>
-        </div>
-
-        <!-- Results Grid -->
-        <div v-if="filteredResults.length > 0">
-          <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr mb-8"
-          >
-            <ShowCard
-              v-for="(result, index) in filteredResults"
-              :key="result.show.id"
-              :show="result.show"
-              :match-reason="isSemanticMode ? result.matchedTerm : undefined"
-              :lazy="index >= 10"
-            />
-          </div>
-
-          <!-- Advertisement -->
-          <AdSense format="horizontal" />
-        </div>
-
-        <!-- Empty State -->
-        <div v-else class="text-center py-16">
-          <Icon
-            name="heroicons:magnifying-glass"
-            class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500"
-          />
-          <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ t('search.noResultsTitle') }}
-          </h3>
-          <p class="mt-2 text-gray-500 dark:text-gray-400">
-            {{ t('search.noResultsHint') }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Initial State -->
-      <EmptyState
-        v-else
-        :title="t('search.initialStateTitle')"
-        :message="t('search.initialStateHint')"
-        heading-level="h3"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { useSearchStore } from '@/stores'
@@ -192,6 +13,10 @@ import SearchModeToggle from '@/components/SearchModeToggle.vue'
 import SearchModeInfo from '@/components/SearchModeInfo.vue'
 import ExampleQueries from '@/components/ExampleQueries.vue'
 import SemanticIntentDisplay from '@/components/SemanticIntentDisplay.vue'
+import BackButton from '@/components/BackButton.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -373,6 +198,96 @@ onMounted(() => {
   })
 })
 </script>
+
+<template>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <SkipToContent />
+
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white"
+    >
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-4">
+          <BackButton />
+          <div class="flex items-center gap-3">
+            <DarkModeToggle variant="header" />
+            <LanguageSwitcher />
+          </div>
+        </div>
+
+        <SearchBar
+          ref="searchBarRef"
+          v-model="searchQuery"
+          :placeholder="t('search.placeholder')"
+          :recent-searches="searchStore.recentSearches"
+          data-testid="search-bar"
+          @search="handleSearch"
+          @clear-recent="searchStore.clearRecentSearches()"
+        />
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-7xl mx-auto px-4 py-8" tabindex="-1">
+      <div class="mb-6">
+        <SearchModeToggle v-model="isSemanticMode" class="mb-3" />
+        <SearchModeInfo :is-semantic-mode="isSemanticMode" class="mb-4" />
+      </div>
+
+      <div v-if="searchStore.isSearching || isSemanticLoading" class="text-center py-16">
+        <LoadingSpinner :text="t('status.searching')" :full-screen="false" />
+      </div>
+
+      <div v-else-if="searchStore.hasResults">
+        <SemanticIntentDisplay
+          v-if="isSemanticMode"
+          :intent="semanticIntent"
+          :search-query="searchQuery"
+          class="mb-6"
+        />
+
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          {{ t('search.resultsTitle', { query: searchQuery }) }}
+        </h2>
+
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
+        >
+          <ShowCard
+            v-for="result in searchStore.results"
+            :key="result.show.id"
+            :show="result.show"
+            :match-reason="result.matchedTerm"
+          />
+        </div>
+      </div>
+
+      <!-- Initial State -->
+      <EmptyState
+        v-else
+        :title="t('search.initialStateTitle')"
+        :message="t('search.initialStateHint')"
+      />
+
+      <!-- Example Queries (in semantic mode when no search performed) -->
+      <ExampleQueries
+        v-if="
+          isSemanticMode && (!searchQuery || !searchStore.hasResults) && !searchStore.isSearching
+        "
+        :examples="exampleQueries"
+        :has-query="!!searchQuery"
+        @select="
+          (example) => {
+            searchQuery = example
+            handleSearch(example)
+          }
+        "
+        class="mt-8"
+      />
+    </main>
+  </div>
+</template>
 
 <style scoped>
 /* Make search input connect seamlessly with button on desktop */

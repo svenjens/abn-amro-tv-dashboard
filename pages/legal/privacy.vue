@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { onMounted, computed } from 'vue'
+import { useSEO } from '@/composables'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LegalArticle from '@/components/LegalArticle.vue'
+import SafeHtml from '@/components/SafeHtml.vue'
+
+const { t, locale } = useI18n()
+
+const tvmazeLink =
+  '<a href="https://www.tvmaze.com/privacy" target="_blank" rel="noopener noreferrer external">TVmaze Privacy Policy</a>'
+const adSettingsLink =
+  '<a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer external">Google Ad Settings</a>'
+const vercelLink =
+  '<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer external">Vercel Privacy Policy</a>'
+
+const lastUpdated = computed(() => {
+  return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+})
+
+onMounted(() => {
+  useSEO({
+    title: t('legal.privacyPolicy'),
+    description: 'Privacy Policy and Cookie information for BingeList - How we protect your data.',
+  })
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -110,35 +142,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { onMounted, computed } from 'vue'
-import { useSEO } from '@/composables'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LegalArticle from '@/components/LegalArticle.vue'
-import SafeHtml from '@/components/SafeHtml.vue'
-
-const { t, locale } = useI18n()
-
-const tvmazeLink =
-  '<a href="https://www.tvmaze.com/privacy" target="_blank" rel="noopener noreferrer external">TVmaze Privacy Policy</a>'
-const adSettingsLink =
-  '<a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer external">Google Ad Settings</a>'
-const vercelLink =
-  '<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer external">Vercel Privacy Policy</a>'
-
-const lastUpdated = computed(() => {
-  return new Date().toLocaleDateString(locale.value === 'nl' ? 'nl-NL' : 'en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-})
-
-onMounted(() => {
-  useSEO({
-    title: t('legal.privacyPolicy'),
-    description: 'Privacy Policy and Cookie information for BingeList - How we protect your data.',
-  })
-})
-</script>

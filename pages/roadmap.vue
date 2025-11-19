@@ -1,3 +1,142 @@
+<script setup lang="ts">
+const { t } = useI18n()
+
+// SEO
+useSEO({
+  title: t('roadmap.title') + ' - BingeList',
+  description: t('roadmap.subtitle'),
+  keywords: ['AI', 'machine learning', 'roadmap', 'future', 'innovation', 'tv shows'],
+})
+
+// Current features
+const currentFeatures = [
+  {
+    title: 'roadmap.current.smartSearch',
+    description: 'roadmap.current.smartSearchDesc',
+    tech: ['Nuxt 4', 'Vue 3', 'TypeScript', 'TVMaze API'],
+  },
+  {
+    title: 'roadmap.current.watchlist',
+    description: 'roadmap.current.watchlistDesc',
+    tech: ['Pinia', 'LocalStorage', 'PWA'],
+  },
+  {
+    title: 'roadmap.current.multilingual',
+    description: 'roadmap.current.multilingualDesc',
+    tech: ['Vue I18n', 'EN/NL'],
+  },
+  {
+    title: 'roadmap.current.episodeTracking',
+    description: 'roadmap.current.episodeTrackingDesc',
+    tech: ['Progress Tracking', 'Season Progress'],
+  },
+]
+
+// AI features
+const aiFeatures = [
+  {
+    title: 'roadmap.ai.personalizedRecs',
+    description: 'roadmap.ai.personalizedRecsDesc',
+    phase: 'roadmap.phase.nearTerm',
+    phaseColor: 'bg-blue-100 dark:bg-blue-900',
+    badgeColor: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
+    capabilities: [
+      'roadmap.ai.personalizedRecs1',
+      'roadmap.ai.personalizedRecs2',
+      'roadmap.ai.personalizedRecs3',
+    ],
+  },
+  {
+    title: 'roadmap.ai.smartNotifications',
+    description: 'roadmap.ai.smartNotificationsDesc',
+    phase: 'roadmap.phase.nearTerm',
+    phaseColor: 'bg-blue-100 dark:bg-blue-900',
+    badgeColor: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
+    capabilities: [
+      'roadmap.ai.smartNotifications1',
+      'roadmap.ai.smartNotifications2',
+      'roadmap.ai.smartNotifications3',
+    ],
+  },
+  {
+    title: 'roadmap.ai.contentDiscovery',
+    description: 'roadmap.ai.contentDiscoveryDesc',
+    phase: 'roadmap.phase.midTerm',
+    phaseColor: 'bg-purple-100 dark:bg-purple-900',
+    badgeColor: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300',
+    capabilities: [
+      'roadmap.ai.contentDiscovery1',
+      'roadmap.ai.contentDiscovery2',
+      'roadmap.ai.contentDiscovery3',
+    ],
+  },
+  {
+    title: 'roadmap.ai.aiChatbot',
+    description: 'roadmap.ai.aiChatbotDesc',
+    phase: 'roadmap.phase.midTerm',
+    phaseColor: 'bg-purple-100 dark:bg-purple-900',
+    badgeColor: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300',
+    capabilities: ['roadmap.ai.aiChatbot1', 'roadmap.ai.aiChatbot2', 'roadmap.ai.aiChatbot3'],
+  },
+  {
+    title: 'roadmap.ai.predictiveWatching',
+    description: 'roadmap.ai.predictiveWatchingDesc',
+    phase: 'roadmap.phase.longTerm',
+    phaseColor: 'bg-indigo-100 dark:bg-indigo-900',
+    badgeColor: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
+    capabilities: [
+      'roadmap.ai.predictiveWatching1',
+      'roadmap.ai.predictiveWatching2',
+      'roadmap.ai.predictiveWatching3',
+    ],
+  },
+  {
+    title: 'roadmap.ai.socialIntegration',
+    description: 'roadmap.ai.socialIntegrationDesc',
+    phase: 'roadmap.phase.longTerm',
+    phaseColor: 'bg-indigo-100 dark:bg-indigo-900',
+    badgeColor: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
+    capabilities: [
+      'roadmap.ai.socialIntegration1',
+      'roadmap.ai.socialIntegration2',
+      'roadmap.ai.socialIntegration3',
+    ],
+  },
+]
+
+// Technology stacks
+const techStacks = [
+  {
+    category: 'roadmap.tech.frontend',
+    items: [
+      { name: 'Nuxt 4', icon: '💚', purpose: 'Meta Framework' },
+      { name: 'Vue 3', icon: '⚡', purpose: 'UI Framework' },
+      { name: 'TypeScript', icon: 'TS', purpose: 'Type Safety' },
+      { name: 'Tailwind CSS', icon: '🎨', purpose: 'Styling' },
+      { name: 'Pinia', icon: '🍍', purpose: 'State Management' },
+    ],
+  },
+  {
+    category: 'roadmap.tech.aiPotential',
+    items: [
+      { name: 'OpenAI GPT-4', icon: '🤖', purpose: 'Recommendations' },
+      { name: 'TensorFlow.js', icon: '🧠', purpose: 'Client ML' },
+      { name: 'Vector DB', icon: '🔍', purpose: 'Semantic Search' },
+      { name: 'Hugging Face', icon: '🤗', purpose: 'NLP Models' },
+    ],
+  },
+  {
+    category: 'roadmap.tech.infrastructure',
+    items: [
+      { name: 'Vercel', icon: '▲', purpose: 'Hosting' },
+      { name: 'PWA', icon: '📱', purpose: 'Offline Support' },
+      { name: 'Service Worker', icon: '⚙️', purpose: 'Caching' },
+      { name: 'Analytics', icon: '📊', purpose: 'Insights' },
+    ],
+  },
+]
+</script>
+
 <template>
   <div
     class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors"
@@ -227,142 +366,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-
-// SEO
-useSEO({
-  title: t('roadmap.title') + ' - BingeList',
-  description: t('roadmap.subtitle'),
-  keywords: ['AI', 'machine learning', 'roadmap', 'future', 'innovation', 'tv shows'],
-})
-
-// Current features
-const currentFeatures = [
-  {
-    title: 'roadmap.current.smartSearch',
-    description: 'roadmap.current.smartSearchDesc',
-    tech: ['Nuxt 4', 'Vue 3', 'TypeScript', 'TVMaze API'],
-  },
-  {
-    title: 'roadmap.current.watchlist',
-    description: 'roadmap.current.watchlistDesc',
-    tech: ['Pinia', 'LocalStorage', 'PWA'],
-  },
-  {
-    title: 'roadmap.current.multilingual',
-    description: 'roadmap.current.multilingualDesc',
-    tech: ['Vue I18n', 'EN/NL'],
-  },
-  {
-    title: 'roadmap.current.episodeTracking',
-    description: 'roadmap.current.episodeTrackingDesc',
-    tech: ['Progress Tracking', 'Season Progress'],
-  },
-]
-
-// AI features
-const aiFeatures = [
-  {
-    title: 'roadmap.ai.personalizedRecs',
-    description: 'roadmap.ai.personalizedRecsDesc',
-    phase: 'roadmap.phase.nearTerm',
-    phaseColor: 'bg-blue-100 dark:bg-blue-900',
-    badgeColor: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
-    capabilities: [
-      'roadmap.ai.personalizedRecs1',
-      'roadmap.ai.personalizedRecs2',
-      'roadmap.ai.personalizedRecs3',
-    ],
-  },
-  {
-    title: 'roadmap.ai.smartNotifications',
-    description: 'roadmap.ai.smartNotificationsDesc',
-    phase: 'roadmap.phase.nearTerm',
-    phaseColor: 'bg-blue-100 dark:bg-blue-900',
-    badgeColor: 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
-    capabilities: [
-      'roadmap.ai.smartNotifications1',
-      'roadmap.ai.smartNotifications2',
-      'roadmap.ai.smartNotifications3',
-    ],
-  },
-  {
-    title: 'roadmap.ai.contentDiscovery',
-    description: 'roadmap.ai.contentDiscoveryDesc',
-    phase: 'roadmap.phase.midTerm',
-    phaseColor: 'bg-purple-100 dark:bg-purple-900',
-    badgeColor: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300',
-    capabilities: [
-      'roadmap.ai.contentDiscovery1',
-      'roadmap.ai.contentDiscovery2',
-      'roadmap.ai.contentDiscovery3',
-    ],
-  },
-  {
-    title: 'roadmap.ai.aiChatbot',
-    description: 'roadmap.ai.aiChatbotDesc',
-    phase: 'roadmap.phase.midTerm',
-    phaseColor: 'bg-purple-100 dark:bg-purple-900',
-    badgeColor: 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300',
-    capabilities: ['roadmap.ai.aiChatbot1', 'roadmap.ai.aiChatbot2', 'roadmap.ai.aiChatbot3'],
-  },
-  {
-    title: 'roadmap.ai.predictiveWatching',
-    description: 'roadmap.ai.predictiveWatchingDesc',
-    phase: 'roadmap.phase.longTerm',
-    phaseColor: 'bg-indigo-100 dark:bg-indigo-900',
-    badgeColor: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
-    capabilities: [
-      'roadmap.ai.predictiveWatching1',
-      'roadmap.ai.predictiveWatching2',
-      'roadmap.ai.predictiveWatching3',
-    ],
-  },
-  {
-    title: 'roadmap.ai.socialIntegration',
-    description: 'roadmap.ai.socialIntegrationDesc',
-    phase: 'roadmap.phase.longTerm',
-    phaseColor: 'bg-indigo-100 dark:bg-indigo-900',
-    badgeColor: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
-    capabilities: [
-      'roadmap.ai.socialIntegration1',
-      'roadmap.ai.socialIntegration2',
-      'roadmap.ai.socialIntegration3',
-    ],
-  },
-]
-
-// Technology stacks
-const techStacks = [
-  {
-    category: 'roadmap.tech.frontend',
-    items: [
-      { name: 'Nuxt 4', icon: '💚', purpose: 'Meta Framework' },
-      { name: 'Vue 3', icon: '⚡', purpose: 'UI Framework' },
-      { name: 'TypeScript', icon: 'TS', purpose: 'Type Safety' },
-      { name: 'Tailwind CSS', icon: '🎨', purpose: 'Styling' },
-      { name: 'Pinia', icon: '🍍', purpose: 'State Management' },
-    ],
-  },
-  {
-    category: 'roadmap.tech.aiPotential',
-    items: [
-      { name: 'OpenAI GPT-4', icon: '🤖', purpose: 'Recommendations' },
-      { name: 'TensorFlow.js', icon: '🧠', purpose: 'Client ML' },
-      { name: 'Vector DB', icon: '🔍', purpose: 'Semantic Search' },
-      { name: 'Hugging Face', icon: '🤗', purpose: 'NLP Models' },
-    ],
-  },
-  {
-    category: 'roadmap.tech.infrastructure',
-    items: [
-      { name: 'Vercel', icon: '▲', purpose: 'Hosting' },
-      { name: 'PWA', icon: '📱', purpose: 'Offline Support' },
-      { name: 'Service Worker', icon: '⚙️', purpose: 'Caching' },
-      { name: 'Analytics', icon: '📊', purpose: 'Insights' },
-    ],
-  },
-]
-</script>

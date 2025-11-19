@@ -1,3 +1,20 @@
+<script setup lang="ts">
+const { t } = useI18n()
+
+interface SemanticIntent {
+  genres?: string[]
+  mood?: string[]
+  similar?: string
+  fallback?: boolean
+}
+
+interface Props {
+  intent: SemanticIntent | null
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <div
     v-if="intent && !intent.fallback"
@@ -43,20 +60,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const { t } = useI18n()
-
-interface SemanticIntent {
-  genres?: string[]
-  mood?: string[]
-  similar?: string
-  fallback?: boolean
-}
-
-interface Props {
-  intent: SemanticIntent | null
-}
-
-defineProps<Props>()
-</script>

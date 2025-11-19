@@ -1,3 +1,41 @@
+<script setup lang="ts">
+const router = useRouter()
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+export interface Tab {
+  id: string
+  label: string
+}
+
+interface Props {
+  title: string
+  backgroundImage?: string | null
+  tabs?: Tab[]
+  modelValue?: string // Active tab ID
+  backHandler?: () => void // Custom back handler
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  backgroundImage: null,
+  tabs: () => [],
+  modelValue: '',
+  backHandler: undefined,
+})
+
+defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const handleBack = () => {
+  if (props.backHandler) {
+    props.backHandler()
+  } else {
+    router.back()
+  }
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -84,41 +122,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-const router = useRouter()
-const { t } = useI18n()
-const localePath = useLocalePath()
-
-export interface Tab {
-  id: string
-  label: string
-}
-
-interface Props {
-  title: string
-  backgroundImage?: string | null
-  tabs?: Tab[]
-  modelValue?: string // Active tab ID
-  backHandler?: () => void // Custom back handler
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  backgroundImage: null,
-  tabs: () => [],
-  modelValue: '',
-  backHandler: undefined,
-})
-
-defineEmits<{
-  'update:modelValue': [value: string]
-}>()
-
-const handleBack = () => {
-  if (props.backHandler) {
-    props.backHandler()
-  } else {
-    router.back()
-  }
-}
-</script>
