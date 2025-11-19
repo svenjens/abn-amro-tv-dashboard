@@ -42,6 +42,13 @@
     "semanticPlaceholder": "Probeer: 'donkere sci-fi series zoals Black Mirror'",
     "tryAsking": "Probeer te vragen:",
     "orTryAsking": "Of probeer deze voorbeelden:",
+    "exampleQueries": [
+      "donkere sci-fi series zoals Black Mirror",
+      "grappige werkplek comedies",
+      "mystery series met sterke vrouwelijke hoofdrollen",
+      "intense misdaad drama's",
+      "feelgood familie series"
+    ],
     "searchingFor": "Zoeken naar:",
     "similarTo": "Vergelijkbaar met {show}",
     "aiSearching": "Je zoekopdracht begrijpen...",
@@ -119,7 +126,7 @@
     "removedToast": "{name} verwijderd van je watchlist",
     "empty": "Je watchlist is leeg",
     "emptyMessage": "Begin met het toevoegen van series aan je watchlist om bij te houden wat je wilt kijken.",
-    "showCount": "Geen serie | {count} serie | {count} series",
+    "showCount": "Geen series | {count} serie | {count} series",
     "clearAll": "Alles wissen",
     "confirmClear": "Weet je zeker dat je je hele watchlist wilt wissen?",
     "browseShows": "Ontdek Series"

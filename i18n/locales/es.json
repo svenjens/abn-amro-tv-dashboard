@@ -42,6 +42,13 @@
     "semanticPlaceholder": "Prueba: 'series de ciencia ficción oscura como Black Mirror'",
     "tryAsking": "Prueba preguntando:",
     "orTryAsking": "O prueba estos ejemplos:",
+    "exampleQueries": [
+      "series oscuras de ciencia ficción como Black Mirror",
+      "comedias divertidas de oficina",
+      "series de misterio con protagonistas femeninas fuertes",
+      "dramas policiacos intensos",
+      "series familiares para sentirse bien"
+    ],
     "searchingFor": "Buscando:",
     "similarTo": "Similar a {show}",
     "aiSearching": "Entendiendo tu consulta...",

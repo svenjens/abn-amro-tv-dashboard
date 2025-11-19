@@ -205,14 +205,11 @@ const isSemanticMode = ref(false)
 const semanticIntent = ref<any>(null)
 const isSemanticLoading = ref(false)
 
-// Example queries for semantic search
-const exampleQueries = [
-  'dark sci-fi shows like Black Mirror',
-  'funny workplace comedies',
-  'mystery series with strong female leads',
-  'intense crime dramas',
-  'feel-good family shows',
-]
+// Example queries for semantic search (from i18n)
+const exampleQueries = computed(() => {
+  const queries = t('search.exampleQueries', { returnObjects: true })
+  return Array.isArray(queries) ? queries : []
+})
 
 // Check if any search results have streaming data or if we're loading it
 const hasStreamingData = computed(() => {

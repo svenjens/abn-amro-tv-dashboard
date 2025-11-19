@@ -42,6 +42,13 @@
     "semanticPlaceholder": "Try: 'dark sci-fi shows like Black Mirror'",
     "tryAsking": "Try asking:",
     "orTryAsking": "Or try these examples:",
+    "exampleQueries": [
+      "dark sci-fi shows like Black Mirror",
+      "funny workplace comedies",
+      "mystery series with strong female leads",
+      "intense crime dramas",
+      "feel-good family shows"
+    ],
     "searchingFor": "Searching for:",
     "similarTo": "Similar to {show}",
     "aiSearching": "Understanding your query...",
