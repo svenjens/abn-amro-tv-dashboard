@@ -36,7 +36,8 @@
             format="webp"
             :quality="85"
             class="w-full h-full object-cover"
-            preload
+            loading="eager"
+            fetchpriority="low"
           />
         </div>
 
@@ -74,6 +75,7 @@
                 :quality="85"
                 class="w-64 rounded-lg shadow-2xl"
                 preload
+                fetchpriority="high"
                 width="256"
                 height="384"
               />
@@ -343,7 +345,7 @@ const relatedShows = computed(() => {
   return showsStore.getRelatedShows(show.value, 6)
 })
 
-// Episodes - lazy loaded via server API when tab is opened
+// Episodes - prefetch immediately (common action)
 const {
   data: episodes,
   error: episodesError,
@@ -353,8 +355,8 @@ const {
   `episodes-${showId.value}`,
   () => $fetch(`/api/shows/${showId.value}/episodes`),
   {
-    immediate: false,
-    server: false, // Only fetch on client when needed
+    immediate: true, // Prefetch episodes (common user action)
+    server: false, // Only fetch on client
   }
 )
 
@@ -431,6 +433,15 @@ watch(
       useHead({
         title,
         meta: [{ name: 'description', content: description }],
+        link: [
+          // Prefetch cast data (loaded when user clicks cast tab)
+          {
+            rel: 'prefetch',
+            href: `/api/shows/${showId.value}/cast`,
+            as: 'fetch',
+            crossorigin: 'anonymous',
+          },
+        ],
       })
 
       useSeoMeta({
