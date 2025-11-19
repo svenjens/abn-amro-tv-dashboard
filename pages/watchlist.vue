@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { useWatchlistStore } from '@/stores'
+import { useSEO } from '@/composables'
+import ShowCard from '@/components/ShowCard.vue'
+import SkipToContent from '@/components/SkipToContent.client.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import RemoveFromWatchlistButton from '@/components/RemoveFromWatchlistButton.vue'
+import BackButton from '@/components/BackButton.vue'
+import HomeButton from '@/components/HomeButton.vue'
+import EmptyState from '@/components/EmptyState.vue'
+
+const { t } = useI18n()
+const watchlistStore = useWatchlistStore()
+
+// SEO (multilingual)
+useSEO({
+  title: t('watchlist.title') + ' - BingeList',
+  description: t('watchlist.emptyMessage'),
+  keywords: ['watchlist', 'tv shows', 'series', 'favorites'],
+})
+
+function handleClearAll() {
+  if (confirm(t('watchlist.confirmClear'))) {
+    watchlistStore.clearWatchlist()
+  }
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <SkipToContent />
@@ -58,32 +87,3 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useWatchlistStore } from '@/stores'
-import { useSEO } from '@/composables'
-import ShowCard from '@/components/ShowCard.vue'
-import SkipToContent from '@/components/SkipToContent.client.vue'
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import RemoveFromWatchlistButton from '@/components/RemoveFromWatchlistButton.vue'
-import BackButton from '@/components/BackButton.vue'
-import HomeButton from '@/components/HomeButton.vue'
-import EmptyState from '@/components/EmptyState.vue'
-
-const { t } = useI18n()
-const watchlistStore = useWatchlistStore()
-
-// SEO (multilingual)
-useSEO({
-  title: t('watchlist.title') + ' - BingeList',
-  description: t('watchlist.emptyMessage'),
-  keywords: ['watchlist', 'tv shows', 'series', 'favorites'],
-})
-
-function handleClearAll() {
-  if (confirm(t('watchlist.confirmClear'))) {
-    watchlistStore.clearWatchlist()
-  }
-}
-</script>
