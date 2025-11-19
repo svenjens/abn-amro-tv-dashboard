@@ -27,12 +27,7 @@
           </div>
 
           <div class="flex items-center gap-3">
-            <NuxtLink
-              :to="localePath('/')"
-              class="btn-secondary bg-white/10 hover:bg-white/20 text-white border-white/30"
-            >
-              {{ t('watchlist.browseShows') }}
-            </NuxtLink>
+            <HomeButton :text="t('watchlist.browseShows')" />
             <button
               v-if="watchlistStore.hasShows"
               class="btn-secondary bg-white/10 hover:bg-white/20 text-white border-white/30"
@@ -72,6 +67,9 @@ import SkipToContent from '@/components/SkipToContent.client.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import RemoveFromWatchlistButton from '@/components/RemoveFromWatchlistButton.vue'
+import BackButton from '@/components/BackButton.vue'
+import HomeButton from '@/components/HomeButton.vue'
+import EmptyState from '@/components/EmptyState.vue'
 
 const { t } = useI18n()
 const watchlistStore = useWatchlistStore()
