@@ -1,59 +1,73 @@
 /**
  * Server API route to fetch episodes for a show
- * Uses Nitro caching for better performance
+ * Uses Vercel KV for global caching (7 days TTL)
  * Sanitizes HTML summaries server-side
+ * Translates episode names and summaries for non-English locales
  */
 
 import { sanitizeEpisodeSummary } from '~/server/utils/sanitize'
+import { translateText } from '~/server/utils/translate'
+import { getLocaleFromRequest, needsTranslation } from '~/server/utils/language'
+import { getCachedEpisodes } from '~/server/utils/tvmaze-cache'
 
-export default cachedEventHandler(
-  async (event) => {
-    const id = getRouterParam(event, 'id')
+export default defineEventHandler(async (event) => {
+  const id = getRouterParam(event, 'id')
 
-    if (!id) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Show ID is required',
-      })
-    }
-
-    try {
-      const episodes = await $fetch<any[]>(`https://api.tvmaze.com/shows/${id}/episodes`, {
-        headers: {
-          'User-Agent': 'BingeList/1.0',
-        },
-      })
-
-      // Validate response is an array
-      if (!Array.isArray(episodes)) {
-        console.error(`Invalid episodes response for show ${id}:`, episodes)
-        return []
-      }
-
-      // Sanitize episode summaries server-side
-      episodes.forEach((episode) => {
-        if (episode.summary) {
-          episode.summary = sanitizeEpisodeSummary(episode.summary)
-        }
-      })
-
-      return episodes
-    } catch (error) {
-      console.error(`Error fetching episodes for show ${id}:`, error)
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Episodes not found',
-      })
-    }
-  },
-  {
-    // Cache for 7 days (episodes rarely change for completed seasons)
-    maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
-    name: 'show-episodes',
-    getKey: (event) => {
-      const id = getRouterParam(event, 'id') || 'unknown'
-      return `show-${id}-episodes`
-    },
-    swr: true,
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Show ID is required',
+    })
   }
-)
+
+  // Get locale from request for translation
+  const locale = getLocaleFromRequest(event)
+
+  try {
+    // Vercel KV handles caching globally (7 days TTL)
+    const episodes = await getCachedEpisodes(parseInt(id))
+
+    // Validate response is an array
+    if (!Array.isArray(episodes)) {
+      console.error(`Invalid episodes response for show ${id}:`, episodes)
+      return []
+    }
+
+    // Sanitize episode summaries server-side
+    episodes.forEach((episode) => {
+      if (episode.summary) {
+        episode.summary = sanitizeEpisodeSummary(episode.summary)
+      }
+    })
+
+    // Translate episodes if locale is not English
+    // Replace the original fields directly with translated versions
+    if (needsTranslation(locale)) {
+      for (const episode of episodes) {
+        // Translate episode name
+        if (episode.name) {
+          const translatedName = await translateText(episode.name, locale)
+          if (translatedName) {
+            episode.name = translatedName
+          }
+        }
+
+        // Translate episode summary
+        if (episode.summary) {
+          const translatedSummary = await translateText(episode.summary, locale)
+          if (translatedSummary) {
+            episode.summary = translatedSummary
+          }
+        }
+      }
+    }
+
+    return episodes
+  } catch (error) {
+    console.error(`Error fetching episodes for show ${id}:`, error)
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Episodes not found',
+    })
+  }
+})

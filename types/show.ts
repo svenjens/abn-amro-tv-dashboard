@@ -23,7 +23,7 @@ export interface Show {
   dvdCountry: null
   externals: Externals
   image: Image | null
-  summary: string | null
+  summary: string | null // AI-translated for non-English locales, original English otherwise
   updated: number
   _links: Links
   streamingAvailability?: import('./streaming').StreamingAvailability[]
@@ -109,7 +109,7 @@ export interface ApiError {
 export interface Episode {
   id: number
   url: string
-  name: string
+  name: string // AI-translated for non-English locales, original English otherwise
   season: number
   number: number
   type: string
@@ -119,7 +119,7 @@ export interface Episode {
   runtime: number | null
   rating: Rating
   image: Image | null
-  summary: string | null
+  summary: string | null // AI-translated for non-English locales, original English otherwise
   _links: {
     self: Link
     show: Link
@@ -189,7 +189,7 @@ export interface ShowDetailsResponse extends Show {
     id: number
     posterPath: string | null
     backdropPath: string | null
-    overview: string
+    overview: string // AI-translated for non-English locales, original English otherwise
     voteAverage: number
     voteCount: number
     popularity: number

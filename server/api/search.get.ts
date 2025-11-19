@@ -1,63 +1,46 @@
 /**
  * Server API route for searching shows
- * Uses shorter cache as search results may change
+ * Uses Vercel KV for global caching (24 hours TTL)
+ * Popular searches (e.g., "Breaking Bad") benefit from global cache
  */
 
-export default cachedEventHandler(
-  async (event) => {
-    const query = getQuery(event)
-    const searchQuery = query.q as string
+import { getCachedSearch } from '~/server/utils/tvmaze-cache'
 
-    if (!searchQuery || searchQuery.trim().length === 0) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Search query is required',
-      })
-    }
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const searchQuery = query.q as string
 
-    // Require at least 2 characters for better search results
-    if (searchQuery.trim().length < 2) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Search query must be at least 2 characters',
-      })
-    }
-
-    try {
-      const response = await $fetch(
-        `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchQuery)}`,
-        {
-          headers: {
-            'User-Agent': 'BingeList/1.0',
-          },
-        }
-      )
-
-      // Validate response is an array
-      if (!Array.isArray(response)) {
-        console.error('Invalid search response:', response)
-        return []
-      }
-
-      return response
-    } catch (error) {
-      console.error('Error searching shows:', error)
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to search shows',
-      })
-    }
-  },
-  {
-    // Cache for 15 minutes (search results can change more frequently)
-    maxAge: 60 * 15, // 15 minutes in seconds
-    name: 'search',
-    getKey: (event) => {
-      const query = getQuery(event)
-      const searchQuery = query.q as string
-      // Protect against undefined/null values
-      return `search-${(searchQuery || '').toLowerCase()}`
-    },
-    swr: true,
+  if (!searchQuery || searchQuery.trim().length === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Search query is required',
+    })
   }
-)
+
+  // Require at least 2 characters for better search results
+  if (searchQuery.trim().length < 2) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Search query must be at least 2 characters',
+    })
+  }
+
+  try {
+    // Vercel KV handles caching globally (24 hours TTL)
+    const response = await getCachedSearch(searchQuery)
+
+    // Validate response is an array
+    if (!Array.isArray(response)) {
+      console.error('Invalid search response:', response)
+      return []
+    }
+
+    return response
+  } catch (error) {
+    console.error('Error searching shows:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to search shows',
+    })
+  }
+})

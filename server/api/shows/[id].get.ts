@@ -17,6 +17,8 @@ import {
   createValidationError,
 } from '~/server/utils/validation'
 import { ZodError } from 'zod'
+import { translateText } from '~/server/utils/translate'
+import { getLocaleFromRequest, needsTranslation } from '~/server/utils/language'
 
 // TMDB API response types
 interface TMDBSearchResponse {
@@ -49,14 +51,12 @@ interface TMDBProvidersResponse {
 }
 
 /**
- * Fetch show data from TVMaze API
+ * Fetch show data from TVMaze API with caching
  */
 async function fetchShowFromTVMaze(id: number): Promise<TVMazeShow> {
-  const response = await $fetch<unknown>(`https://api.tvmaze.com/shows/${id}`, {
-    headers: {
-      'User-Agent': 'BingeList/1.0',
-    },
-  })
+  // Use cached version for better performance
+  const { getCachedShow } = await import('~/server/utils/tvmaze-cache')
+  const response = await getCachedShow(id)
 
   // Validate response is a valid TVMaze show
   if (!isTVMazeShow(response)) {
@@ -251,8 +251,7 @@ async function enrichWithTMDBData(
   }
 }
 
-export default cachedEventHandler(
-  async (event: H3Event) => {
+export default defineEventHandler(async (event: H3Event) => {
     // Validate route parameters with Zod
     const rawId = getRouterParam(event, 'id')
     const query = getQuery(event)
@@ -271,6 +270,9 @@ export default cachedEventHandler(
       // Validate country code if provided
       const country = query.country ? validateCountryCode(query.country) : 'US'
 
+      // Get locale from request for translation
+      const locale = getLocaleFromRequest(event)
+
       // Fetch show data from TVMaze
       const show = await fetchShowFromTVMaze(id)
 
@@ -287,6 +289,15 @@ export default cachedEventHandler(
         streamingAvailability: [],
       }
 
+      // Translate TVMaze summary if locale is not English
+      // Replace the summary field directly with translated version
+      if (show.summary && needsTranslation(locale)) {
+        const translatedSummary = await translateText(show.summary, locale)
+        if (translatedSummary) {
+          combinedData.summary = translatedSummary
+        }
+      }
+
       // If TMDB API key is available, fetch additional data
       const config = useRuntimeConfig()
       const tmdbApiKey = config.public.tmdbApiKey
@@ -295,48 +306,42 @@ export default cachedEventHandler(
         const tmdbData = await enrichWithTMDBData(show, country, tmdbApiKey)
         combinedData.tmdb = tmdbData.tmdb
         combinedData.streamingAvailability = tmdbData.streamingAvailability
+
+        // Translate TMDB overview if available and locale is not English
+        // Replace the overview field directly with translated version
+        if (tmdbData.tmdb?.overview && needsTranslation(locale)) {
+          const translatedOverview = await translateText(tmdbData.tmdb.overview, locale)
+          if (translatedOverview && combinedData.tmdb) {
+            combinedData.tmdb.overview = translatedOverview
+          }
+        }
       }
 
       return combinedData
-    } catch (error) {
-      // Handle validation errors
-      if (error instanceof ZodError) {
-        throw createError(createValidationError(error))
-      }
-
-      // Preserve existing H3/Nitro errors (from createError)
-      if (error && typeof (error as any).statusCode === 'number') {
-        throw error
-      }
-
-      logger.error(
-        'Failed to fetch show details',
-        {
-          module: 'api/shows/[id]',
-          action: 'fetchShowById',
-          showId: rawId,
-          country: query.country ? String(query.country) : 'US',
-        },
-        error
-      )
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to fetch show details',
-      })
+  } catch (error) {
+    // Handle validation errors
+    if (error instanceof ZodError) {
+      throw createError(createValidationError(error))
     }
-  },
-  {
-    // Cache for 24 hours (show data rarely changes)
-    maxAge: 60 * 60 * 24, // 24 hours in seconds
-    name: 'show-details',
-    getKey: (event) => {
-      const id = getRouterParam(event, 'id') || 'unknown'
-      const query = getQuery(event)
-      const country = (query.country as string) || 'US'
-      return `show-v3-${id}-${country}` // v3: improved TMDB logo handling
-    },
-    swr: true,
-    // Vary cache by country for streaming availability
-    varies: ['country'],
+
+    // Preserve existing H3/Nitro errors (from createError)
+    if (error && typeof (error as any).statusCode === 'number') {
+      throw error
+    }
+
+    logger.error(
+      'Failed to fetch show details',
+      {
+        module: 'api/shows/[id]',
+        action: 'fetchShowById',
+        showId: rawId,
+        country: query.country ? String(query.country) : 'US',
+      },
+      error
+    )
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch show details',
+    })
   }
-)
+})

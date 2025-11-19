@@ -256,7 +256,7 @@ import CastList from '@/components/CastList.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import StreamingAvailability from '@/components/StreamingAvailability.vue'
 
-const { t, d } = useI18n()
+const { t, d, locale } = useI18n()
 const localePath = useLocalePath()
 
 const route = useRoute()
@@ -322,10 +322,13 @@ const {
   () =>
     // @ts-ignore - Type recursion issue with Nuxt routes
     $fetch(`/api/shows/${showId.value}`, {
-      query: { country: userCountry.value },
+      query: { 
+        country: userCountry.value,
+        locale: locale.value
+      },
     }),
   {
-    watch: [showId, userCountry],
+    watch: [showId, userCountry, locale],
   }
 )
 
@@ -351,7 +354,9 @@ const {
   execute: fetchEpisodes,
 } = await useLazyAsyncData(
   `episodes-${showId.value}`,
-  () => $fetch(`/api/shows/${showId.value}/episodes`),
+  () => $fetch(`/api/shows/${showId.value}/episodes`, {
+    query: { locale: locale.value }
+  }),
   {
     immediate: false,
     server: false, // Only fetch on client when needed

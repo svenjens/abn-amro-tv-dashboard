@@ -92,7 +92,9 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Locale-based Routing**: SEO-friendly URLs with locale prefixes (`/en/`, `/nl/`, `/es/`)
 - **Browser Language Detection**: Automatically detects and redirects to user's preferred language
 - **Language Switcher**: Dropdown menu for easy language switching with persistent preferences
-- **Translated Content**: All UI elements, labels, and messages in three languages
+- **Translated UI**: All interface elements, labels, and messages in three languages
+- **AI-Translated Content**: Show summaries, episode descriptions, and cast biographies automatically translated using OpenAI
+- **Global Cache**: Translations shared globally via Vercel KV for instant multilingual content
 
 ### Accessibility (a11y)
 
@@ -160,28 +162,47 @@ cp .env.example .env
 Update the `.env` file with your API keys:
 
 ```env
-# Google AdSense (Optional)
-VITE_GOOGLE_ADSENSE_ID=ca-pub-XXXXXXXXXXXXXXXX
+# OpenAI API (Required for content translation)
+OPENAI_API_KEY=sk-...
 
 # TMDB API (Required for multi-platform streaming data)
 VITE_TMDB_API_KEY=your_tmdb_api_key_here
+
+# Google AdSense (Optional)
+VITE_GOOGLE_ADSENSE_ID=ca-pub-XXXXXXXXXXXXXXXX
 
 # Amazon Associates (Optional)
 VITE_AMAZON_ASSOCIATE_TAG=your-tag-20
 ```
 
-**Get your free TMDB API key:**
+**Get your API keys:**
 
+**OpenAI (for translations):**
+1. Sign up at [platform.openai.com](https://platform.openai.com/)
+2. Go to API Keys section
+3. Create new API key
+4. Copy to `.env` as `OPENAI_API_KEY`
+
+**TMDB (for streaming data):**
 1. Sign up at [themoviedb.org](https://www.themoviedb.org/)
 2. Go to Settings → API
 3. Request an API key (free, no credit card required)
-4. Copy your API key to `.env`
+4. Copy to `.env` as `VITE_TMDB_API_KEY`
+
+**Vercel KV (for global translation cache):**
+1. Deploy to Vercel
+2. Go to Storage tab → Create Database → KV (Redis)
+3. Name it `translation-cache`
+4. Vercel automatically adds required env vars
 
 > **Note**:
 >
-> - TMDB API is free with 40 requests per 10 seconds
+> - OpenAI: ~$0.0001 per translation, cached forever (< $5/month typical)
+> - TMDB API: Free with 40 requests per 10 seconds
+> - Vercel KV: 30,000 commands/month free (enough for most sites)
+> - Without OpenAI key, content shows in English only
 > - Without TMDB key, only webChannel streaming data will be shown
-> - Ads only appear in production builds (`npm run build && npm run preview`)
+> - Without Vercel KV, translations work but aren't shared globally
 
 ## 🏃 Running the Application
 
@@ -584,18 +605,50 @@ See the "Configure Environment Variables" section above for setup details.
 2. **Large Dataset**: Loading all shows (~60K shows) can take a few seconds on first load
 3. **No Pagination**: The show index endpoint returns all shows at once
 
-## 🌍 Internationalization
+## 🌍 Internationalization & AI Translation
 
-The application supports multiple languages with locale-based routing:
+The application supports multiple languages with **AI-powered content translation**:
 
-- **English (en)**: `https://example.com/en/`
-- **Dutch (nl)**: `https://example.com/nl/`
+### Supported Languages
+- **English (en)**: `https://example.com/en/` (original)
+- **Dutch (nl)**: `https://example.com/nl/` (AI-translated)
+- **Spanish (es)**: `https://example.com/es/` (AI-translated)
 
-Language preference is:
+### How Translation Works
 
-1. Detected from URL path
-2. Loaded from localStorage
-3. Falls back to browser language
+1. **UI Elements**: Manually translated via i18n JSON files
+2. **Show Content**: AI-translated on-demand using OpenAI GPT-3.5-turbo
+   - Show summaries
+   - Episode names and descriptions
+   - Cast biographies
+3. **Global Cache**: Translations stored in Vercel KV (Redis) for instant access worldwide
+4. **Smart Caching**: Content-based cache keys ensure same text only translated once
+
+### Translation Flow
+
+```
+User visits /nl/show/house-118
+  ↓
+Check Vercel KV cache: translation-{hash}-nl
+  ↓
+CACHE HIT → Return instantly (most requests)
+CACHE MISS → Translate with OpenAI → Cache forever → Return
+```
+
+### Cost Optimization
+
+- **Content-based caching**: Identical summaries translate once, reused everywhere
+- **Eternal cache**: Translations never expire
+- **Global sharing**: User in Netherlands caches for user in Australia
+- **Typical cost**: < $5/month after initial warmup
+- **Cache hit rate**: 95%+ after warmup period
+
+### Language Preference
+
+Language detected from:
+1. URL path (`/en/`, `/nl/`, `/es/`)
+2. Browser language (auto-redirect)
+3. Cookie preference
 4. Defaults to English
 
 ### SEO Benefits
@@ -604,6 +657,21 @@ Language preference is:
 - Automatic hreflang tags for language variants
 - x-default tag pointing to English version
 - Separate indexing per language
+- Localized content improves rankings in target markets
+
+### Adding New Languages
+
+To add a new language (e.g., French):
+
+1. Add to `server/utils/language.ts`:
+```typescript
+export const SUPPORTED_LOCALES = ['en', 'nl', 'es', 'fr'] as const
+export const LOCALE_TO_LANGUAGE = { /* ... */, fr: 'French' }
+```
+
+2. Create `i18n/locales/fr.json` with UI translations
+
+3. Deploy - AI translation works automatically!
 
 ## ♿ Accessibility
 

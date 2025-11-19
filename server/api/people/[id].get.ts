@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { logger } from '~/utils/logger'
 import type { H3Event } from 'h3'
 import type { TVMazePerson } from '~/types/show'
+import { translateText } from '~/server/utils/translate'
+import { getLocaleFromRequest, needsTranslation } from '~/server/utils/language'
 
 /**
  * TVMaze Cast Credit Response
@@ -83,7 +85,7 @@ export interface PersonDetailsResponse extends TVMazePerson {
   castCredits?: CastCreditShow[]
   tmdb?: {
     id: number
-    biography: string
+    biography: string // AI-translated for non-English locales, original English otherwise
     placeOfBirth: string | null
     profilePath: string | null
     knownForDepartment: string
@@ -133,26 +135,18 @@ function isTVMazePerson(data: unknown): data is TVMazePerson {
 }
 
 /**
- * Fetch person data from TVMaze API
+ * Fetch person data from TVMaze API with caching
  */
 async function fetchPersonFromTVMaze(id: number): Promise<{
   person: TVMazePerson
   credits: CastCredit[]
 }> {
+  // Use cached versions for better performance
+  const { getCachedPerson, getCachedPersonCredits } = await import('~/server/utils/tvmaze-cache')
+
   const [personResponse, creditsResponse] = await Promise.all([
-    $fetch<unknown>(`https://api.tvmaze.com/people/${id}`, {
-      headers: {
-        'User-Agent': 'BingeList/1.0',
-      },
-    }),
-    $fetch<CastCredit[]>(
-      `https://api.tvmaze.com/people/${id}/castcredits?embed[]=show&embed[]=character`,
-      {
-        headers: {
-          'User-Agent': 'BingeList/1.0',
-        },
-      }
-    ).catch(() => [] as CastCredit[]),
+    getCachedPerson(id),
+    getCachedPersonCredits(id).catch(() => [] as CastCredit[]),
   ])
 
   // Validate person response
@@ -175,7 +169,7 @@ async function fetchPersonFromTVMaze(id: number): Promise<{
 
   return {
     person: personResponse,
-    credits: creditsResponse,
+    credits: creditsResponse as CastCredit[],
   }
 }
 
@@ -278,7 +272,8 @@ async function fetchTMDBPersonDetails(
  */
 async function enrichWithTMDBData(
   personData: PersonDetailsResponse,
-  personName: string
+  personName: string,
+  locale: import('~/server/utils/language').SupportedLocale
 ): Promise<void> {
   const config = useRuntimeConfig()
   const tmdbApiKey = config.public.tmdbApiKey
@@ -299,10 +294,19 @@ async function enrichWithTMDBData(
     return
   }
 
-  // Add TMDB data to person data
+  // Translate biography if needed before adding to response
+  let biographyToUse = detailsResponse.biography || ''
+  if (detailsResponse.biography && needsTranslation(locale)) {
+    const translatedBiography = await translateText(detailsResponse.biography, locale)
+    if (translatedBiography) {
+      biographyToUse = translatedBiography
+    }
+  }
+
+  // Add TMDB data to person data (with translated biography in the main field)
   personData.tmdb = {
     id: detailsResponse.id,
-    biography: detailsResponse.biography || '',
+    biography: biographyToUse,
     placeOfBirth: detailsResponse.place_of_birth,
     profilePath: detailsResponse.profile_path,
     knownForDepartment: detailsResponse.known_for_department,
@@ -315,11 +319,11 @@ async function enrichWithTMDBData(
     personName,
     tmdbId,
     hasBiography: !!detailsResponse.biography,
+    wasTranslated: biographyToUse !== detailsResponse.biography,
   })
 }
 
-export default cachedEventHandler(
-  async (event: H3Event) => {
+export default defineEventHandler(async (event: H3Event) => {
     const rawId = getRouterParam(event, 'id')
 
     try {
@@ -332,6 +336,9 @@ export default cachedEventHandler(
       }
 
       const id = validatePersonId(rawId)
+
+      // Get locale from request for translation
+      const locale = getLocaleFromRequest(event)
 
       // Fetch person data from TVMaze
       const { person, credits } = await fetchPersonFromTVMaze(id)
@@ -347,7 +354,7 @@ export default cachedEventHandler(
       }
 
       // Enrich with TMDB data (optional, won't fail if TMDB is unavailable)
-      await enrichWithTMDBData(personData, person.name)
+      await enrichWithTMDBData(personData, person.name, locale)
 
       logger.debug('Person details fetched successfully', {
         module: 'api/people/[id]',
@@ -360,35 +367,26 @@ export default cachedEventHandler(
       })
 
       return personData
-    } catch (error) {
-      // Preserve H3 errors
-      if (error && typeof error === 'object' && 'statusCode' in error) {
-        throw error
-      }
-
-      // Log unexpected errors
-      logger.error(
-        'Failed to fetch person details',
-        {
-          module: 'api/people/[id]',
-          action: 'fetchPersonById',
-          personId: rawId,
-        },
-        error
-      )
-
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to fetch person details',
-      })
+  } catch (error) {
+    // Preserve H3 errors
+    if (error && typeof error === 'object' && 'statusCode' in error) {
+      throw error
     }
-  },
-  {
-    maxAge: 60 * 60 * 24, // Cache for 24 hours
-    swr: true, // Enable stale-while-revalidate
-    getKey: (event: H3Event) => {
-      const id = getRouterParam(event, 'id')
-      return `person-v2-${id}` // v2: includes TMDB biography enrichment
-    },
+
+    // Log unexpected errors
+    logger.error(
+      'Failed to fetch person details',
+      {
+        module: 'api/people/[id]',
+        action: 'fetchPersonById',
+        personId: rawId,
+      },
+      error
+    )
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch person details',
+    })
   }
-)
+})

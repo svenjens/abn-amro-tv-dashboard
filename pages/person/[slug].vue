@@ -275,7 +275,7 @@ import SafeHtml from '~/components/SafeHtml.vue'
 import DetailPageLayout from '~/components/DetailPageLayout.vue'
 
 const route = useRoute()
-const { t, d } = useI18n()
+const { t, d, locale } = useI18n()
 const localePath = useLocalePath()
 
 // Extract person ID from slug
@@ -326,6 +326,8 @@ const {
   refresh: refreshPerson,
 } = await useFetch<PersonDetailsResponse>(`/api/people/${personId.value}`, {
   key: `person-${personId.value}`,
+  query: { locale: locale.value },
+  watch: [locale],
 })
 
 // Computed properties

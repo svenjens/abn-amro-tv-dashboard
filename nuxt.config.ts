@@ -46,6 +46,13 @@ export default defineNuxtConfig({
         '/api/**', // Never prerender API routes
       ],
     },
+    // Storage configuration for global cache sharing
+    storage: {
+      cache: {
+        driver: 'vercel-kv',
+        // Falls back to filesystem in development
+      },
+    },
   },
 
   // Route rules for SSG and caching
