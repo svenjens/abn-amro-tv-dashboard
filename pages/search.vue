@@ -70,9 +70,9 @@
             :key="isSemanticMode ? 'smart' : 'regular'"
             class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
           >
-            <div class="flex items-start gap-2">
+            <div class="flex items-center gap-2">
               <svg
-                class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+                class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

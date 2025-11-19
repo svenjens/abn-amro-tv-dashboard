@@ -22,7 +22,7 @@
           </p>
           <div class="flex gap-4 items-center">
             <!-- Dark mode toggle -->
-            <DarkModeToggle />
+            <DarkModeToggle variant="footer" />
             <!-- Social links -->
             <a
               href="https://github.com/svenjens/tv-show-dashboard"
