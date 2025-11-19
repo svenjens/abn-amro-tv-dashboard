@@ -6,6 +6,21 @@
     >
       <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex items-center gap-4 mb-4">
+          <!-- Logo (hidden on mobile, clickable to home) -->
+          <NuxtLink
+            :to="localePath('/')"
+            class="hidden md:block focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg"
+            :aria-label="t('navigation.home')"
+          >
+            <img
+              src="/optimized/logo-main.png"
+              alt="BingeList Logo"
+              class="h-12 w-12 object-contain hover:scale-105 transition-transform"
+              width="48"
+              height="48"
+              loading="eager"
+            />
+          </NuxtLink>
           <button
             class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Go back"
@@ -70,9 +85,9 @@
             :key="isSemanticMode ? 'smart' : 'regular'"
             class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
           >
-            <div class="flex items-start gap-2">
+            <div class="flex items-center gap-2">
               <svg
-                class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+                class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

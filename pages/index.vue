@@ -32,16 +32,22 @@
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
           <div class="flex items-center gap-4">
-            <!-- Logo (hidden on mobile) -->
-            <img
-              src="/optimized/logo-main.png"
-              alt="BingeList Logo"
-              class="hidden md:block h-16 w-16 object-contain"
-              width="64"
-              height="64"
-              loading="eager"
-              fetchpriority="high"
-            />
+            <!-- Logo (hidden on mobile, clickable to home) -->
+            <NuxtLink
+              :to="localePath('/')"
+              class="hidden md:block focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg"
+              :aria-label="t('navigation.home')"
+            >
+              <img
+                src="/optimized/logo-main.png"
+                alt="BingeList Logo"
+                class="h-16 w-16 object-contain hover:scale-105 transition-transform"
+                width="64"
+                height="64"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </NuxtLink>
             <div>
               <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ t('home.title') }}</h1>
               <p class="text-lg md:text-xl text-white/90 mb-8">

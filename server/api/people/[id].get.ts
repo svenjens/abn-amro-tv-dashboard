@@ -49,10 +49,46 @@ interface CastCreditShow {
 }
 
 /**
+ * TMDB Person Search Response
+ */
+interface TMDBPersonSearchResponse {
+  results: Array<{
+    id: number
+    name: string
+    profile_path: string | null
+    known_for_department: string
+    popularity: number
+  }>
+}
+
+/**
+ * TMDB Person Details Response
+ */
+interface TMDBPersonDetails {
+  id: number
+  name: string
+  biography: string
+  birthday: string | null
+  deathday: string | null
+  place_of_birth: string | null
+  profile_path: string | null
+  known_for_department: string
+  popularity: number
+}
+
+/**
  * Person Details Response
  */
 export interface PersonDetailsResponse extends TVMazePerson {
   castCredits?: CastCreditShow[]
+  tmdb?: {
+    id: number
+    biography: string
+    placeOfBirth: string | null
+    profilePath: string | null
+    knownForDepartment: string
+    popularity: number
+  } | null
 }
 
 /**
@@ -173,6 +209,66 @@ export default cachedEventHandler(
       const personData: PersonDetailsResponse = {
         ...personResponse,
         castCredits,
+        tmdb: null,
+      }
+
+      // Fetch TMDB data if API key is available
+      const config = useRuntimeConfig()
+      const tmdbApiKey = config.public.tmdbApiKey
+
+      if (tmdbApiKey) {
+        try {
+          // Search for the person on TMDB by name
+          const searchUrl = `https://api.themoviedb.org/3/search/person?api_key=${tmdbApiKey}&query=${encodeURIComponent(personResponse.name)}`
+          const searchResponse = await $fetch<TMDBPersonSearchResponse>(searchUrl)
+
+          if (
+            searchResponse.results &&
+            Array.isArray(searchResponse.results) &&
+            searchResponse.results.length > 0
+          ) {
+            const tmdbPerson = searchResponse.results[0]
+            if (!tmdbPerson) {
+              logger.debug('No TMDB person found', {
+                module: 'api/people/[id]',
+                action: 'fetchTMDBPerson',
+                personName: personResponse.name,
+              })
+            } else {
+              const tmdbId = tmdbPerson.id
+
+              // Fetch full person details from TMDB
+              const detailsUrl = `https://api.themoviedb.org/3/person/${tmdbId}?api_key=${tmdbApiKey}`
+              const detailsResponse = await $fetch<TMDBPersonDetails>(detailsUrl)
+
+              // Add TMDB data to combined response
+              personData.tmdb = {
+                id: detailsResponse.id,
+                biography: detailsResponse.biography || '',
+                placeOfBirth: detailsResponse.place_of_birth,
+                profilePath: detailsResponse.profile_path,
+                knownForDepartment: detailsResponse.known_for_department,
+                popularity: detailsResponse.popularity,
+              }
+
+              logger.debug('TMDB person data fetched successfully', {
+                module: 'api/people/[id]',
+                action: 'fetchTMDBPerson',
+                personName: personResponse.name,
+                tmdbId,
+                hasBiography: !!detailsResponse.biography,
+              })
+            }
+          }
+        } catch (error) {
+          // Log but don't fail if TMDB enrichment fails
+          logger.warn('Failed to fetch TMDB person data', {
+            module: 'api/people/[id]',
+            action: 'fetchTMDBPerson',
+            personName: personResponse.name,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
       }
 
       logger.debug('Person details fetched successfully', {
@@ -181,6 +277,7 @@ export default cachedEventHandler(
         personId: id,
         creditsCount: castCredits.length,
         hasCredits: castCredits.length > 0,
+        hasTMDBData: !!personData.tmdb,
         firstCredit: castCredits[0] ? { id: castCredits[0].id, name: castCredits[0].name } : null,
       })
 
@@ -213,7 +310,7 @@ export default cachedEventHandler(
     swr: true, // Enable stale-while-revalidate
     getKey: (event: H3Event) => {
       const id = getRouterParam(event, 'id')
-      return `person-${id}`
+      return `person-v2-${id}` // v2: includes TMDB biography enrichment
     },
   }
 )

@@ -1,22 +1,25 @@
 <template>
   <NuxtLayout>
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4 py-12">
+    <div
+      class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4 py-12"
+    >
       <div class="max-w-2xl w-full">
         <!-- BingeList Logo -->
         <div class="text-center mb-8">
           <NuxtLink :to="localePath('/')" class="inline-block">
-            <NuxtImg
-              src="/optimized/logo-full.png"
+            <img
+              src="/optimized/logo-main.png"
               alt="BingeList"
-              width="200"
-              height="60"
-              class="h-12 w-auto mx-auto dark:brightness-110"
-              loading="eager"
+              width="300"
+              height="90"
+              class="h-20 w-auto mx-auto dark:brightness-110 hover:scale-105 transition-transform"
             />
           </NuxtLink>
         </div>
 
-        <div class="text-center bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+        <div
+          class="text-center bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12 border border-gray-200 dark:border-gray-700"
+        >
           <!-- Error Icon -->
           <div class="mb-8">
             <div
@@ -57,53 +60,53 @@
             </div>
           </div>
 
-        <!-- Error Code -->
-        <h1 class="text-6xl font-bold text-gray-900 dark:text-white mb-4">
-          {{ error.statusCode }}
-        </h1>
+          <!-- Error Code -->
+          <h1 class="text-6xl font-bold text-gray-900 dark:text-white mb-4">
+            {{ error.statusCode }}
+          </h1>
 
-        <!-- Error Message -->
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-          {{ errorTitle }}
-        </h2>
+          <!-- Error Message -->
+          <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+            {{ errorTitle }}
+          </h2>
 
-        <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-          {{ errorMessage }}
-        </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+            {{ errorMessage }}
+          </p>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            class="btn-primary inline-flex items-center justify-center gap-2"
-            @click="handleError"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            {{ t('navigation.home') }}
-          </button>
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              class="btn-primary inline-flex items-center justify-center gap-2"
+              @click="handleError"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              {{ t('navigation.home') }}
+            </button>
 
-          <button
-            v-if="error.statusCode !== 404"
-            class="btn-secondary inline-flex items-center justify-center gap-2"
-            @click="handleRetry"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            {{ t('errors.tryAgain') }}
-          </button>
-        </div>
+            <button
+              v-if="error.statusCode !== 404"
+              class="btn-secondary inline-flex items-center justify-center gap-2"
+              @click="handleRetry"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+              {{ t('errors.tryAgain') }}
+            </button>
+          </div>
 
           <!-- Additional Help -->
           <div
@@ -140,21 +143,18 @@
 
         <!-- Developer Info (only in dev mode) -->
         <div v-if="isDev" class="mt-8">
-          <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-left border border-gray-200 dark:border-gray-700">
+          <div
+            class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-left border border-gray-200 dark:border-gray-700"
+          >
             <details>
               <summary class="cursor-pointer font-semibold text-gray-900 dark:text-white mb-2">
                 Developer Info
               </summary>
-              <pre
-                class="text-xs text-gray-700 dark:text-gray-300 overflow-auto mt-2"
-              >{{ error }}</pre>
+              <pre class="text-xs text-gray-700 dark:text-gray-300 overflow-auto mt-2">{{
+                error
+              }}</pre>
             </details>
           </div>
-        </div>
-
-        <!-- Dark Mode Toggle -->
-        <div class="mt-8 flex justify-center">
-          <DarkModeToggle />
         </div>
       </div>
     </div>
@@ -202,7 +202,11 @@ const errorMessage = computed(() => {
 useSEO({
   title: `${errorTitle.value} - BingeList`,
   description: errorMessage.value,
-  robots: 'noindex, nofollow', // Don't index error pages
+})
+
+// Don't index error pages
+useHead({
+  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 
 const handleError = () => {
@@ -213,4 +217,3 @@ const handleRetry = () => {
   clearError({ redirect: props.error.url || '/' })
 }
 </script>
-

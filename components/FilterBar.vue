@@ -140,15 +140,20 @@
     <div
       v-if="hasActiveFilters"
       v-show="isExpanded"
-      class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+      class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
     >
-      <span class="text-xs text-gray-600 dark:text-gray-400">{{ t('filters.active') }}:</span>
+      <span class="inline-flex items-center text-xs text-gray-600 dark:text-gray-400">
+        {{ t('filters.active') }}:
+      </span>
       <span
         v-if="localFilters.status"
-        class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
+        class="inline-flex items-center gap-1 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded text-xs"
       >
         {{ t('filters.status') }}: {{ localFilters.status }}
-        <button @click="clearStatus">
+        <button
+          class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+          @click="clearStatus"
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -160,10 +165,13 @@
       </span>
       <span
         v-if="localFilters.network"
-        class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
+        class="inline-flex items-center gap-1 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded text-xs"
       >
         {{ t('filters.network') }}: {{ localFilters.network }}
-        <button @click="clearNetwork">
+        <button
+          class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+          @click="clearNetwork"
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -175,10 +183,13 @@
       </span>
       <span
         v-if="localFilters.year"
-        class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
+        class="inline-flex items-center gap-1 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded text-xs"
       >
         {{ t('filters.year') }}: {{ localFilters.year }}
-        <button @click="clearYear">
+        <button
+          class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+          @click="clearYear"
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
@@ -192,10 +203,13 @@
         v-for="service in localFilters.streaming"
         v-if="showStreamingFilter"
         :key="service"
-        class="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs"
+        class="inline-flex items-center gap-1 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded text-xs"
       >
         {{ service }}
-        <button @click="removeStreamingService(service)">
+        <button
+          class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+          @click="removeStreamingService(service)"
+        >
           <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
