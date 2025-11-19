@@ -43,25 +43,11 @@
 
         <div class="relative max-w-7xl mx-auto px-4 py-12">
           <div class="flex items-center justify-between mb-6">
-            <button
-              class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-2 py-1"
-              :aria-label="t('navigation.back')"
-              @click="router.push(localePath('/'))"
-            >
-              <Icon name="heroicons:chevron-left" class="h-5 w-5" />
-              {{ t('navigation.back') }}
-            </button>
+            <BackButton variant="header" :custom-handler="() => navigateTo(localePath('/'))" />
 
             <div class="flex items-center gap-3">
               <DarkModeToggle variant="header" />
-              <button
-                class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
-                :aria-label="t('navigation.home')"
-                @click="router.push(localePath('/'))"
-              >
-                <Icon name="heroicons:home" class="h-5 w-5" />
-                {{ t('navigation.home') }}
-              </button>
+              <HomeButton variant="header" />
             </div>
           </div>
 

@@ -9,21 +9,7 @@
       <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-4">
-            <button
-              class="inline-flex items-center gap-2 hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 rounded-lg px-2 py-1"
-              :aria-label="t('navigation.back')"
-              @click="useRouter().back()"
-            >
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              {{ t('navigation.back') }}
-            </button>
+            <BackButton variant="header" />
           </div>
 
           <div class="flex items-center gap-3">
