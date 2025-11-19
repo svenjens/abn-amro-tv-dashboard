@@ -299,7 +299,7 @@ export default defineNuxtConfig({
       ],
       link: [
         // Favicon - red color works in both light and dark mode
-        { rel: 'icon', type: 'image/png', href: '/favicon-light.png' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         // Apple touch icon
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
