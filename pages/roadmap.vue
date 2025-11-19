@@ -10,21 +10,38 @@
     >
       <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between mb-4">
-          <button
-            class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg px-2 py-1"
-            :aria-label="t('navigation.back')"
-            @click="useRouter().back()"
-          >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
+          <div class="flex items-center gap-4">
+            <!-- Logo (hidden on mobile, clickable to home) -->
+            <NuxtLink
+              :to="localePath('/')"
+              class="hidden md:block focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg"
+              :aria-label="t('navigation.home')"
+            >
+              <img
+                src="/optimized/logo-main.png"
+                alt="BingeList Logo"
+                class="h-12 w-12 object-contain hover:scale-105 transition-transform"
+                width="48"
+                height="48"
+                loading="eager"
               />
-            </svg>
-            {{ t('navigation.back') }}
-          </button>
+            </NuxtLink>
+            <button
+              class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg px-2 py-1"
+              :aria-label="t('navigation.back')"
+              @click="useRouter().back()"
+            >
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              {{ t('navigation.back') }}
+            </button>
+          </div>
           <DarkModeToggle />
         </div>
 

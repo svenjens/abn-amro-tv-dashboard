@@ -6,6 +6,21 @@
     >
       <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex items-center gap-4 mb-4">
+          <!-- Logo (hidden on mobile, clickable to home) -->
+          <NuxtLink
+            :to="localePath('/')"
+            class="hidden md:block focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg"
+            :aria-label="t('navigation.home')"
+          >
+            <img
+              src="/optimized/logo-main.png"
+              alt="BingeList Logo"
+              class="h-12 w-12 object-contain hover:scale-105 transition-transform"
+              width="48"
+              height="48"
+              loading="eager"
+            />
+          </NuxtLink>
           <button
             class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Go back"
