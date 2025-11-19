@@ -156,7 +156,7 @@ export function isTVMazeShow(obj: unknown): obj is TVMazeShow {
 
   // Validate genres array contains only strings
   const hasGenresArray = Array.isArray(show.genres)
-  const hasValidGenres = hasGenresArray && show.genres.every((g) => typeof g === 'string')
+  const hasValidGenres = hasGenresArray && show.genres!.every((g) => typeof g === 'string')
 
   // Validate rating structure (rating may be null or an object with optional average)
   const hasRating = show.rating !== undefined
