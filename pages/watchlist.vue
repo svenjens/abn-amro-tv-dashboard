@@ -111,7 +111,6 @@ import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 const watchlistStore = useWatchlistStore()
 
 // SEO (multilingual)
