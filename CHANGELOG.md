@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/svenjens/tv-show-dashboard/compare/v3.2.0...v4.0.0) (2025-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* Configuration file locations have changed
+
+### Features
+
+* reorganize config files and add initial e2e tests ([#71](https://github.com/svenjens/tv-show-dashboard/issues/71)) ([02eede5](https://github.com/svenjens/tv-show-dashboard/commit/02eede575eb90889c7cd8f9fb3dce5ba56241e4a))
+
 ## [3.2.0](https://github.com/svenjens/tv-show-dashboard/compare/v3.1.0...v3.2.0) (2025-11-18)
 
 ### Features
