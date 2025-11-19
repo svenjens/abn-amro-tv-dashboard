@@ -20,7 +20,7 @@ export default defineNuxtPlugin(() => {
       // Generate hreflang links for each locale
       locales.value.forEach((loc: any) => {
         const localeCode = loc.code
-        const isoCode = loc.iso
+        const isoCode = loc.iso.toLowerCase() // Convert to lowercase per Google guidelines
         const localePath = switchLocalePath(localeCode)
 
         if (localePath) {
