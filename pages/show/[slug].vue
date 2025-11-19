@@ -183,7 +183,7 @@
                 role="list"
               >
                 <ShowCard
-                  v-for="(relatedShow, index) in relatedShows"
+                  v-for="relatedShow in relatedShows"
                   :key="relatedShow.id"
                   :show="relatedShow"
                   :lazy="false"
