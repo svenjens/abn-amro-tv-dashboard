@@ -97,7 +97,7 @@
 
               <dl class="space-y-3 text-gray-200">
                 <div v-if="person.birthday" class="flex flex-col sm:flex-row sm:gap-2">
-                  <dt class="font-semibold text-primary-300 min-w-[120px]">
+                  <dt class="font-semibold text-white min-w-[120px]">
                     {{ t('person.birthday') }}:
                   </dt>
                   <dd>
@@ -109,23 +109,19 @@
                 </div>
 
                 <div v-if="person.deathday" class="flex flex-col sm:flex-row sm:gap-2">
-                  <dt class="font-semibold text-primary-300 min-w-[120px]">
+                  <dt class="font-semibold text-white min-w-[120px]">
                     {{ t('person.deathday') }}:
                   </dt>
                   <dd>{{ d(new Date(person.deathday), 'long') }}</dd>
                 </div>
 
                 <div v-if="person.country" class="flex flex-col sm:flex-row sm:gap-2">
-                  <dt class="font-semibold text-primary-300 min-w-[120px]">
-                    {{ t('person.country') }}:
-                  </dt>
+                  <dt class="font-semibold text-white min-w-[120px]">{{ t('person.country') }}:</dt>
                   <dd>{{ person.country.name }}</dd>
                 </div>
 
                 <div v-if="person.gender" class="flex flex-col sm:flex-row sm:gap-2">
-                  <dt class="font-semibold text-primary-300 min-w-[120px]">
-                    {{ t('person.gender') }}:
-                  </dt>
+                  <dt class="font-semibold text-white min-w-[120px]">{{ t('person.gender') }}:</dt>
                   <dd>{{ person.gender }}</dd>
                 </div>
               </dl>
