@@ -25,6 +25,7 @@
       :title="person.name"
       :background-image="person.image?.original"
       :tabs="tabs"
+      :back-handler="handleBack"
     >
       <!-- Header Content -->
       <template #header>
@@ -275,12 +276,20 @@ import SafeHtml from '~/components/SafeHtml.vue'
 import DetailPageLayout from '~/components/DetailPageLayout.vue'
 
 const route = useRoute()
+const router = useRouter()
 const { t, d } = useI18n()
 const localePath = useLocalePath()
 
 // Extract person ID from slug
 const slug = computed(() => route.params.slug as string)
 const personId = computed(() => extractIdFromSlug(slug.value))
+
+// Custom back handler - try to go to the show the person came from
+const handleBack = () => {
+  // If we have a show in the credits, try to go back to it
+  // Otherwise, just use browser back
+  router.back()
+}
 
 // Validate person ID before fetching
 if (!personId.value) {

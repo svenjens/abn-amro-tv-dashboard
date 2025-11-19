@@ -27,7 +27,7 @@
           <button
             class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-2 py-1"
             :aria-label="t('navigation.back')"
-            @click="router.back()"
+            @click="handleBack"
           >
             <Icon name="heroicons:chevron-left" class="h-5 w-5" />
             {{ t('navigation.back') }}
@@ -100,15 +100,25 @@ interface Props {
   backgroundImage?: string | null
   tabs?: Tab[]
   modelValue?: string // Active tab ID
+  backHandler?: () => void // Custom back handler
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   backgroundImage: null,
   tabs: () => [],
   modelValue: '',
+  backHandler: undefined,
 })
 
 defineEmits<{
   'update:modelValue': [value: string]
 }>()
+
+const handleBack = () => {
+  if (props.backHandler) {
+    props.backHandler()
+  } else {
+    router.back()
+  }
+}
 </script>
