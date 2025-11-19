@@ -8,11 +8,11 @@
         <div class="text-center mb-8">
           <NuxtLink :to="localePath('/')" class="inline-block">
             <img
-              src="/optimized/logo-full.png"
+              src="/optimized/logo-main.png"
               alt="BingeList"
-              width="200"
-              height="60"
-              class="h-12 w-auto mx-auto dark:brightness-110"
+              width="300"
+              height="90"
+              class="h-20 w-auto mx-auto dark:brightness-110 hover:scale-105 transition-transform"
             />
           </NuxtLink>
         </div>
@@ -155,11 +155,6 @@
               }}</pre>
             </details>
           </div>
-        </div>
-
-        <!-- Dark Mode Toggle -->
-        <div class="mt-8 flex justify-center">
-          <DarkModeToggle />
         </div>
       </div>
     </div>

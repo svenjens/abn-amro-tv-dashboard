@@ -162,19 +162,26 @@
     "deathday": "Died",
     "country": "Country",
     "gender": "Gender",
+    "placeOfBirth": "Place of Birth",
     "yearsOld": "years old",
     "knownFor": "Known For",
     "asCharacter": "as {character}",
     "showMore": "Show More",
     "noCredits": "No TV show credits available",
     "noCreditsMessage": "This person has no recorded TV show appearances.",
+    "biography": "Biography",
+    "noBiography": "No biography available for this person.",
+    "information": "Information",
     "description": "{name} - {country} actor/actress",
     "fallbackDescription": "View filmography and biography"
   },
   "tabs": {
     "overview": "Overview",
     "episodes": "Episodes",
-    "cast": "Cast"
+    "cast": "Cast",
+    "biography": "Biography",
+    "shows": "TV Shows",
+    "information": "Information"
   },
   "filters": {
     "title": "Filters",

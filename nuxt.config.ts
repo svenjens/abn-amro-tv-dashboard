@@ -4,6 +4,28 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
+  // Performance optimizations
+  experimental: {
+    payloadExtraction: true, // Extract payload to separate files
+    renderJsonPayloads: true, // Render JSON payloads for better performance
+    componentIslands: true, // Enable component islands for partial hydration
+  },
+
+  // Vite optimization
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor chunks for better caching
+            'vue-vendor': ['vue', 'vue-router', '@vue/runtime-core'],
+            'nuxt-vendor': ['#app'],
+          },
+        },
+      },
+    },
+  },
+
   // Nitro configuration
   nitro: {
     prerender: {
@@ -131,10 +153,19 @@ export default defineNuxtConfig({
     domains: ['static.tvmaze.com', 'image.tmdb.org'],
   },
 
-  // Icon configuration - bundle icons locally to avoid CORS issues
+  // Icon configuration - bundle icons locally for better performance
   icon: {
     serverBundle: {
-      collections: ['heroicons'], // Bundle heroicons locally
+      collections: ['heroicons'], // Bundle heroicons for SSR
+    },
+    clientBundle: {
+      icons: [
+        'heroicons:chevron-left',
+        'heroicons:light-bulb',
+        'heroicons:code-bracket',
+        'heroicons:link',
+      ],
+      scan: true, // Automatically scan and bundle icons used in the app
     },
   },
 
@@ -299,9 +330,14 @@ export default defineNuxtConfig({
       ],
       link: [
         // Favicon - red color works in both light and dark mode
-        { rel: 'icon', type: 'image/png', href: '/favicon-light.png' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         // Apple touch icon
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        // Resource hints for performance
+        { rel: 'preconnect', href: 'https://api.themoviedb.org' },
+        { rel: 'preconnect', href: 'https://image.tmdb.org' },
+        { rel: 'dns-prefetch', href: 'https://api.tvmaze.com' },
+        { rel: 'dns-prefetch', href: 'https://pagead2.googlesyndication.com' },
       ],
     },
   },

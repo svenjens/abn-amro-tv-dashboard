@@ -162,19 +162,26 @@
     "deathday": "Overleden",
     "country": "Land",
     "gender": "Geslacht",
+    "placeOfBirth": "Geboorteplaats",
     "yearsOld": "jaar oud",
     "knownFor": "Bekend van",
     "asCharacter": "als {character}",
     "showMore": "Meer tonen",
     "noCredits": "Geen tv-serie credits beschikbaar",
     "noCreditsMessage": "Deze persoon heeft geen geregistreerde tv-serie optredens.",
+    "biography": "Biografie",
+    "noBiography": "Geen biografie beschikbaar voor deze persoon.",
+    "information": "Informatie",
     "description": "{name} - {country} acteur/actrice",
     "fallbackDescription": "Bekijk filmografie en biografie"
   },
   "tabs": {
     "overview": "Overzicht",
     "episodes": "Afleveringen",
-    "cast": "Cast"
+    "cast": "Cast",
+    "biography": "Biografie",
+    "shows": "TV-series",
+    "information": "Informatie"
   },
   "filters": {
     "title": "Filters",
