@@ -326,51 +326,51 @@ const {
     translationAbortController?.abort()
     translationAbortController = null
 
-    // Step 1: Load show WITHOUT translations for instant display
+    // Step 1: Load show WITHOUT translations AND without TMDB for instant display
     // @ts-ignore - Type recursion issue with Nuxt routes
     const untranslatedShow = await $fetch(`/api/shows/${showId.value}`, {
       query: {
         country: userCountry.value,
         locale: locale.value,
-        skipTranslation: 'true',
+        skipTranslation: 'true', // Skip AI translations for speed
+        skipTMDB: 'true', // Skip TMDB API calls for speed
       },
     })
 
-    // Step 2: If not English, fetch translations in the background
-    if (locale.value !== 'en') {
-      // Create new AbortController for this request
-      translationAbortController = new AbortController()
-      const currentLocale = locale.value
-      const currentShowId = showId.value
-      const currentController = translationAbortController
+    // Step 2: Always fetch full data (with TMDB + translations) in background
+    // Create new AbortController for this request
+    translationAbortController = new AbortController()
+    const currentLocale = locale.value
+    const currentShowId = showId.value
+    const currentController = translationAbortController
 
-      // Return untranslated immediately, then fetch translations
-      setTimeout(async () => {
-        try {
-          // @ts-ignore - Type recursion issue with Nuxt routes
-          const translatedShow = await $fetch(`/api/shows/${currentShowId}`, {
-            query: {
-              country: userCountry.value,
-              locale: currentLocale,
-            },
-            signal: currentController.signal,
-          })
-          // Only update if show/locale hasn't changed and request wasn't aborted
-          if (
-            showId.value === currentShowId &&
-            locale.value === currentLocale &&
-            !currentController.signal.aborted
-          ) {
-            show.value = translatedShow
-          }
-        } catch (error: any) {
-          // Ignore abort errors - they're expected
-          if (error.name !== 'AbortError') {
-            console.warn('Failed to load show translations:', error)
-          }
+    // Return untranslated immediately, then fetch full data
+    setTimeout(async () => {
+      try {
+        // @ts-ignore - Type recursion issue with Nuxt routes
+        const fullShow = await $fetch(`/api/shows/${currentShowId}`, {
+          query: {
+            country: userCountry.value,
+            locale: currentLocale,
+            // No skip flags - get everything (TMDB + translations)
+          },
+          signal: currentController.signal,
+        })
+        // Only update if show/locale hasn't changed and request wasn't aborted
+        if (
+          showId.value === currentShowId &&
+          locale.value === currentLocale &&
+          !currentController.signal.aborted
+        ) {
+          show.value = fullShow
         }
-      }, 100) // Small delay to let UI render first
-    }
+      } catch (error: any) {
+        // Ignore abort errors - they're expected
+        if (error.name !== 'AbortError') {
+          console.warn('Failed to load full show data:', error)
+        }
+      }
+    }, 100) // Small delay to let UI render first
 
     return untranslatedShow
   },

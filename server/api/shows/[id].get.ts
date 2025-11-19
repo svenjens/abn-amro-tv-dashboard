@@ -275,6 +275,8 @@ export default defineEventHandler(async (event: H3Event) => {
 
     // Allow skipping translation for faster initial load (progressive enhancement)
     const skipTranslation = query.skipTranslation === 'true'
+    // Allow skipping TMDB data for faster initial load (streaming availability)
+    const skipTMDB = query.skipTMDB === 'true'
 
     // Fetch show data from TVMaze
     const show = await fetchShowFromTVMaze(id)
@@ -301,11 +303,11 @@ export default defineEventHandler(async (event: H3Event) => {
       }
     }
 
-    // If TMDB API key is available, fetch additional data
+    // If TMDB API key is available AND not skipped, fetch additional data
     const config = useRuntimeConfig()
     const tmdbApiKey = config.public.tmdbApiKey
 
-    if (tmdbApiKey) {
+    if (tmdbApiKey && !skipTMDB) {
       const tmdbData = await enrichWithTMDBData(show, country, tmdbApiKey)
       combinedData.tmdb = tmdbData.tmdb
       combinedData.streamingAvailability = tmdbData.streamingAvailability
