@@ -72,14 +72,6 @@
                 {{ placeOfBirth }}
               </span>
             </div>
-
-            <!-- Biography Preview (first 300 chars) -->
-            <div v-if="biography" class="text-gray-200 leading-relaxed">
-              <p class="line-clamp-4">
-                {{ biography.replace(/<[^>]*>/g, '').slice(0, 300)
-                }}{{ biography.length > 300 ? '...' : '' }}
-              </p>
-            </div>
           </div>
         </div>
       </template>
