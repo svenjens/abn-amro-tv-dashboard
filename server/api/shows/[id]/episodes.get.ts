@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
   // Get locale from request for translation
   const locale = getLocaleFromRequest(event)
-  
+
   // Allow skipping translation for faster initial load (progressive enhancement)
   const skipTranslation = query.skipTranslation === 'true'
 
