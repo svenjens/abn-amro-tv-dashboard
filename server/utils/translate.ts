@@ -246,9 +246,7 @@ export async function batchTranslateTexts(
 ): Promise<(string | null)[]> {
   // Translate in parallel with rate limiting
   // Most requests should be cache hits after warmup
-  return Promise.all(
-    texts.map(text => translateText(text, targetLocale))
-  )
+  return Promise.all(texts.map((text) => translateText(text, targetLocale)))
 }
 
 /**
