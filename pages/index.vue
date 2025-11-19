@@ -7,14 +7,27 @@
       class="relative bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 text-white overflow-hidden"
     >
       <!-- Hero Background -->
-      <img
-        src="/optimized/hero-background.png"
-        alt=""
-        class="absolute inset-0 opacity-10 dark:opacity-20 w-full h-full object-cover"
-        aria-hidden="true"
-        loading="eager"
-        fetchpriority="high"
-      />
+      <picture>
+        <source
+          media="(min-width: 1280px)"
+          srcset="/optimized/hero-background.webp"
+          type="image/webp"
+        />
+        <source
+          media="(min-width: 768px)"
+          srcset="/optimized/hero-background-1280.webp"
+          type="image/webp"
+        />
+        <source srcset="/optimized/hero-background-768.webp" type="image/webp" />
+        <img
+          src="/optimized/hero-background.png"
+          alt=""
+          class="absolute inset-0 opacity-10 dark:opacity-20 w-full h-full object-cover"
+          aria-hidden="true"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </picture>
 
       <div class="relative max-w-7xl mx-auto px-4 py-12">
         <div class="flex justify-between items-start mb-6">
