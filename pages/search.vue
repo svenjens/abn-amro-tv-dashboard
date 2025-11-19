@@ -31,71 +31,10 @@
         </div>
 
         <!-- Search Mode Toggle -->
-        <div class="flex items-center gap-3 mb-3">
-          <button
-            :class="[
-              'px-4 py-2 rounded-lg font-medium transition-all',
-              !isSemanticMode
-                ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-            ]"
-            @click="isSemanticMode = false"
-          >
-            {{ t('search.regular') }}
-          </button>
-          <button
-            :class="[
-              'px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2',
-              isSemanticMode
-                ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-            ]"
-            @click="isSemanticMode = true"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-              />
-            </svg>
-            {{ t('search.smart') }}
-          </button>
-        </div>
+        <SearchModeToggle v-model="isSemanticMode" class="mb-3" />
 
         <!-- Info Bar explaining search modes -->
-        <Transition name="fade" mode="out-in">
-          <div
-            :key="isSemanticMode ? 'smart' : 'regular'"
-            class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-          >
-            <div class="flex items-center gap-2">
-              <svg
-                class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div class="text-sm text-blue-800 dark:text-blue-200">
-                <span v-if="!isSemanticMode">
-                  {{ t('search.regularInfo') }}
-                </span>
-                <span v-else>
-                  {{ t('search.smartInfo') }}
-                  <strong class="font-semibold">{{ t('search.smartInfoAction') }}</strong>
-                </span>
-              </div>
-            </div>
-          </div>
-        </Transition>
+        <SearchModeInfo :is-semantic-mode="isSemanticMode" class="mb-4" />
 
         <!-- Search Bar with Submit Button -->
         <div class="flex gap-0">
@@ -133,82 +72,23 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Example Queries (in semantic mode when no search performed) -->
-      <div
+      <ExampleQueries
         v-if="
           isSemanticMode && (!searchQuery || !searchStore.hasResults) && !searchStore.isSearching
         "
+        :examples="exampleQueries"
+        :has-query="!!searchQuery"
         class="mb-8"
-      >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          {{ searchQuery ? t('search.orTryAsking') : t('search.tryAsking') }}
-        </h3>
-        <div class="flex flex-wrap gap-3">
-          <button
-            v-for="example in exampleQueries"
-            :key="example"
-            class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-sm"
-            @click="
-              () => {
-                searchQuery = example
-                handleSearch(example)
-              }
-            "
-          >
-            {{ example }}
-          </button>
-        </div>
-      </div>
+        @select="
+          (query) => {
+            searchQuery = query
+            handleSearch(query)
+          }
+        "
+      />
 
       <!-- Semantic Intent Display -->
-      <div
-        v-if="semanticIntent && !semanticIntent.fallback"
-        class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
-      >
-        <div class="flex items-start gap-3">
-          <svg
-            class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
-              {{ t('search.searchingFor') }}
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="genre in semanticIntent.genres"
-                v-if="semanticIntent.genres"
-                :key="genre"
-                class="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded text-xs font-medium"
-              >
-                {{ genre }}
-              </span>
-              <span
-                v-for="mood in semanticIntent.mood"
-                v-if="semanticIntent.mood"
-                :key="mood"
-                class="px-2 py-1 bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 rounded text-xs font-medium"
-              >
-                {{ mood }}
-              </span>
-              <span
-                v-if="semanticIntent.similar"
-                class="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded text-xs font-medium"
-              >
-                {{ t('search.similarTo', { show: semanticIntent.similar }) }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SemanticIntentDisplay :intent="semanticIntent" class="mb-6" />
 
       <!-- Filters -->
       <FilterBar
@@ -319,6 +199,10 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorMessage from '@/components/ErrorMessage.vue'
 import AdSense from '@/components/AdSense.vue'
 import FilterBar from '@/components/FilterBar.vue'
+import SearchModeToggle from '@/components/SearchModeToggle.vue'
+import SearchModeInfo from '@/components/SearchModeInfo.vue'
+import ExampleQueries from '@/components/ExampleQueries.vue'
+import SemanticIntentDisplay from '@/components/SemanticIntentDisplay.vue'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -505,17 +389,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Fade transition for info bar when switching modes */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 /* Make search input connect seamlessly with button on desktop */
 @media (min-width: 640px) {
   .search-input-wrapper :deep(input) {
