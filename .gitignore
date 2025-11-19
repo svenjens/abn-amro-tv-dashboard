@@ -36,6 +36,9 @@ scripts/setup-vercel.sh
 coverage
 *.lcov
 .nyc_output
+test-results/
+playwright-report/
+playwright/.cache/
 
 # Environment
 .env

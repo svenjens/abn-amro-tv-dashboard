@@ -155,6 +155,10 @@ export interface Person {
   }
 }
 
+export interface TVMazePerson extends Person {
+  biography?: string | null
+}
+
 export interface Character {
   id: number
   url: string

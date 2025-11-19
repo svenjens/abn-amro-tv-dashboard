@@ -45,7 +45,7 @@
             <button
               class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-2 py-1"
               :aria-label="t('navigation.back')"
-              @click="useRouter().push('/')"
+              @click="router.back()"
             >
               <Icon name="heroicons:chevron-left" class="h-5 w-5" />
               {{ t('navigation.back') }}
@@ -56,7 +56,7 @@
               <button
                 class="inline-flex items-center gap-2 text-white hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg px-3 py-2 bg-white/10 hover:bg-white/20"
                 :aria-label="t('navigation.home')"
-                @click="navigateTo(localePath('/'))"
+                @click="router.push(localePath('/'))"
               >
                 <Icon name="heroicons:home" class="h-5 w-5" />
                 {{ t('navigation.home') }}
@@ -93,9 +93,9 @@
                 <div v-if="show.premiered" class="flex items-center gap-2">
                   <dt class="font-semibold">{{ t('show.premiered') }}:</dt>
                   <dd>
-                    {{ formatDate(show.premiered) }}
+                    {{ d(new Date(show.premiered), 'long') }}
                     <span v-if="show.ended" class="text-gray-400">
-                      - {{ formatDate(show.ended) }}
+                      - {{ d(new Date(show.ended), 'long') }}
                     </span>
                   </dd>
                 </div>
@@ -112,34 +112,11 @@
                   </dd>
                 </div>
 
-                <div v-if="show.network" class="flex items-center gap-2">
-                  <dt class="font-semibold">{{ t('show.network') }}:</dt>
-                  <dd>{{ show.network.name }}</dd>
-                </div>
-
-                <div v-if="show.schedule" class="flex items-center gap-2">
-                  <dt class="font-semibold">{{ t('show.schedule') }}:</dt>
-                  <dd>{{ formatSchedule(show.schedule) }}</dd>
-                </div>
-
                 <div v-if="show.runtime" class="flex items-center gap-2">
                   <dt class="font-semibold">{{ t('show.runtime') }}:</dt>
                   <dd>{{ t('show.minutes', { count: show.runtime }) }}</dd>
                 </div>
               </dl>
-
-              <div v-if="show.officialSite" class="mt-6">
-                <a
-                  :href="show.officialSite"
-                  target="_blank"
-                  rel="noopener noreferrer external nofollow"
-                  class="inline-flex items-center gap-2 btn-primary focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-                  :aria-label="`${t('show.officialWebsite')} - ${t('accessibility.externalLink')}`"
-                >
-                  {{ t('show.officialWebsite') }}
-                  <Icon name="heroicons:arrow-top-right-on-square" class="h-4 w-4" />
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -161,7 +138,7 @@
               "
               :aria-selected="activeTab === tab.id"
               role="tab"
-              @click="activeTab = tab.id"
+              @click="changeTab(tab.id)"
             >
               {{ t(tab.label) }}
             </button>
@@ -198,7 +175,9 @@
               class="mt-12"
               :aria-label="t('show.relatedShows')"
             >
-              <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ t('show.relatedShows') }}</h2>
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+                {{ t('show.relatedShows') }}
+              </h2>
               <div
                 class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-fr"
                 role="list"
@@ -207,6 +186,7 @@
                   v-for="relatedShow in relatedShows"
                   :key="relatedShow.id"
                   :show="relatedShow"
+                  :lazy="false"
                   role="listitem"
                 />
               </div>
@@ -244,7 +224,7 @@
         <p class="text-gray-600 mb-6">{{ t('show.notFoundMessage') }}</p>
         <button
           class="btn-primary focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
-          @click="navigateTo(localePath('/'))"
+          @click="router.push(localePath('/'))"
         >
           {{ t('show.goHome') }}
         </button>
@@ -257,7 +237,7 @@
 import { ref, computed, watch } from 'vue'
 import SafeHtml from '@/components/SafeHtml.vue'
 import { useShowsStore } from '@/stores'
-import { getShowImage, formatSchedule, extractIdFromSlug, createShowSlug } from '@/utils'
+import { getShowImage, extractIdFromSlug, createShowSlug } from '@/utils'
 import { useSEO, getShowSEO, generateShowStructuredData } from '@/composables'
 import RatingBadge from '@/components/RatingBadge.vue'
 import GenreTags from '@/components/GenreTags.vue'
@@ -272,14 +252,12 @@ import CastList from '@/components/CastList.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import StreamingAvailability from '@/components/StreamingAvailability.vue'
 
-const { t } = useI18n()
+const { t, d } = useI18n()
 const localePath = useLocalePath()
 
 const route = useRoute()
+const router = useRouter()
 const showsStore = useShowsStore()
-
-// Active tab
-const activeTab = ref('overview')
 
 // Tab configuration
 const tabs = [
@@ -287,6 +265,30 @@ const tabs = [
   { id: 'episodes', label: 'tabs.episodes' },
   { id: 'cast', label: 'tabs.cast' },
 ]
+
+// Active tab - initialize from query parameter or default to 'overview'
+const validTabs = tabs.map((t) => t.id)
+const initialTab = (route.query.tab as string) || 'overview'
+const activeTab = ref(validTabs.includes(initialTab) ? initialTab : 'overview')
+
+// Function to change tab and update URL
+const changeTab = (tabId: string) => {
+  activeTab.value = tabId
+  router.push({
+    query: { ...route.query, tab: tabId },
+  })
+}
+
+// Watch for query parameter changes (e.g., browser back/forward)
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    const tab = (newTab as string) || 'overview'
+    if (validTabs.includes(tab)) {
+      activeTab.value = tab
+    }
+  }
+)
 
 // Extract ID from slug (format: show-name-123)
 const slug = computed(() => route.params.slug as string)
@@ -374,14 +376,6 @@ watch(
   { immediate: false }
 )
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
 // Validate slug and redirect if incorrect (for SEO)
 watch(
   show,
@@ -397,13 +391,17 @@ watch(
 )
 
 // Lazy load episodes and cast when tabs are opened
-watch(activeTab, (newTab) => {
-  if (newTab === 'episodes' && !episodes.value && !episodesLoading.value) {
-    fetchEpisodes()
-  } else if (newTab === 'cast' && !cast.value && !castLoading.value) {
-    fetchCast()
-  }
-})
+watch(
+  activeTab,
+  (newTab) => {
+    if (newTab === 'episodes' && !episodes.value && !episodesLoading.value) {
+      fetchEpisodes()
+    } else if (newTab === 'cast' && !cast.value && !castLoading.value) {
+      fetchCast()
+    }
+  },
+  { immediate: true } // Also run on initial load (e.g., refresh with ?tab=cast)
+)
 
 // SEO: Update meta tags when show data changes
 watch(

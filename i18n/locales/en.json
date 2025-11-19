@@ -24,6 +24,10 @@
     "resultsFor": "Found {count} result for \"{query}\" | Found {count} results for \"{query}\"",
     "noResults": "No results found for \"{query}\"",
     "noResultsMessage": "Try searching with different keywords or check your spelling.",
+    "noResultsTitle": "No shows found",
+    "noResultsHint": "Try searching with different keywords or check your spelling.",
+    "initialStateTitle": "Start searching",
+    "initialStateHint": "Enter a TV show name to search through our extensive database.",
     "recentSearches": "Recent Searches",
     "clearRecent": "Clear",
     "startSearching": "Start searching",
@@ -149,6 +153,22 @@
     "self": "Self",
     "showMore": "Show more cast",
     "more": "more"
+  },
+  "person": {
+    "title": "Actor Profile",
+    "loading": "Loading person details...",
+    "birthday": "Birthday",
+    "deathday": "Died",
+    "country": "Country",
+    "gender": "Gender",
+    "yearsOld": "years old",
+    "knownFor": "Known For",
+    "asCharacter": "as {character}",
+    "showMore": "Show More",
+    "noCredits": "No TV show credits available",
+    "noCreditsMessage": "This person has no recorded TV show appearances.",
+    "description": "{name} - {country} actor/actress",
+    "fallbackDescription": "View filmography and biography"
   },
   "tabs": {
     "overview": "Overview",

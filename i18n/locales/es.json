@@ -24,6 +24,10 @@
     "resultsFor": "Se encontró {count} resultado para \"{query}\" | Se encontraron {count} resultados para \"{query}\"",
     "noResults": "No se encontraron resultados para \"{query}\"",
     "noResultsMessage": "Intenta buscar con palabras clave diferentes o verifica la ortografía.",
+    "noResultsTitle": "No se encontraron series",
+    "noResultsHint": "Intenta buscar con palabras clave diferentes o verifica la ortografía.",
+    "initialStateTitle": "Comienza a buscar",
+    "initialStateHint": "Ingresa el nombre de una serie para buscar en nuestra extensa base de datos.",
     "recentSearches": "Búsquedas Recientes",
     "clearRecent": "Limpiar",
     "startSearching": "Comienza a buscar",
@@ -149,6 +153,22 @@
     "self": "Él mismo/Ella misma",
     "showMore": "Mostrar más reparto",
     "more": "más"
+  },
+  "person": {
+    "title": "Perfil de Actor",
+    "loading": "Cargando detalles de la persona...",
+    "birthday": "Fecha de nacimiento",
+    "deathday": "Fallecimiento",
+    "country": "País",
+    "gender": "Género",
+    "yearsOld": "años",
+    "knownFor": "Conocido por",
+    "asCharacter": "como {character}",
+    "showMore": "Mostrar más",
+    "noCredits": "No hay créditos de series disponibles",
+    "noCreditsMessage": "Esta persona no tiene apariciones registradas en series de TV.",
+    "description": "{name} - actor/actriz de {country}",
+    "fallbackDescription": "Ver filmografía y biografía"
   },
   "tabs": {
     "overview": "Resumen",

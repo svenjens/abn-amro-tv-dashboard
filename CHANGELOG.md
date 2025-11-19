@@ -2,10 +2,9 @@
 
 ## [3.2.0](https://github.com/svenjens/tv-show-dashboard/compare/v3.1.0...v3.2.0) (2025-11-18)
 
-
 ### Features
 
-* implement best practices improvements ([#69](https://github.com/svenjens/tv-show-dashboard/issues/69)) ([b49d136](https://github.com/svenjens/tv-show-dashboard/commit/b49d1367c4ece89d2fd47f9d7ecaffb8c8a58b94))
+- implement best practices improvements ([#69](https://github.com/svenjens/tv-show-dashboard/issues/69)) ([b49d136](https://github.com/svenjens/tv-show-dashboard/commit/b49d1367c4ece89d2fd47f9d7ecaffb8c8a58b94))
 
 ## [3.1.0](https://github.com/svenjens/tv-show-dashboard/compare/v3.0.1...v3.1.0) (2025-11-18)
 

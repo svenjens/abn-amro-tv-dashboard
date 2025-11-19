@@ -9,10 +9,11 @@
     <!-- Cast grid -->
     <div v-else-if="cast.length > 0">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        <div
+        <NuxtLink
           v-for="member in displayedCast"
           :key="member.person.id"
-          class="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-primary-300 hover:shadow-lg transition-all"
+          :to="localePath(`/person/${createSlugWithId(member.person.name, member.person.id)}`)"
+          class="group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all"
         >
           <!-- Person image -->
           <div class="aspect-[3/4] bg-gray-100 overflow-hidden relative">
@@ -48,17 +49,23 @@
 
           <!-- Cast info -->
           <div class="p-3">
-            <h3 class="font-semibold text-gray-900 text-sm truncate" :title="member.person.name">
+            <h3
+              class="font-semibold text-gray-900 dark:text-white text-sm truncate"
+              :title="member.person.name"
+            >
               {{ member.person.name }}
             </h3>
-            <p class="text-xs text-gray-500 truncate" :title="member.character.name">
+            <p
+              class="text-xs text-gray-500 dark:text-gray-400 truncate"
+              :title="member.character.name"
+            >
               {{ member.character.name }}
             </p>
-            <p v-if="member.person.country" class="text-xs text-gray-400 mt-1">
+            <p v-if="member.person.country" class="text-xs text-gray-400 dark:text-gray-500 mt-1">
               {{ member.person.country.name }}
             </p>
           </div>
-        </div>
+        </NuxtLink>
       </div>
 
       <!-- Show more button -->
@@ -83,6 +90,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { CastMember, ApiError } from '@/types'
+import { createSlugWithId } from '~/utils/slug'
 import LoadingSpinner from './LoadingSpinner.vue'
 import ErrorMessage from './ErrorMessage.vue'
 
@@ -104,6 +112,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 const showAll = ref(false)
 
 const displayedCast = computed(() => {

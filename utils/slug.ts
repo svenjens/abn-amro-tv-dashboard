@@ -21,17 +21,27 @@ export function createSlug(name: string): string {
 }
 
 /**
- * Create a show URL with slug and ID for uniqueness
- * Format: /shows/{slug}-{id}
+ * Create a URL with slug and ID for uniqueness
+ * Format: {slug}-{id}
  * This ensures uniqueness while keeping URLs readable
+ * Can be used for shows, persons, or any other entity
  *
  * Examples:
  * - "Breaking Bad" (id: 169) → "breaking-bad-169"
  * - "Kingdom" (id: 214) → "kingdom-214"
+ * - "Aaron Paul" (id: 14327) → "aaron-paul-14327"
  */
-export function createShowSlug(name: string, id: number): string {
+export function createSlugWithId(name: string, id: number): string {
   const slug = createSlug(name)
   return `${slug}-${id}`
+}
+
+/**
+ * @deprecated Use createSlugWithId instead
+ * Create a show URL with slug and ID for uniqueness
+ */
+export function createShowSlug(name: string, id: number): string {
+  return createSlugWithId(name, id)
 }
 
 /**

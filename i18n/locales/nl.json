@@ -24,6 +24,10 @@
     "resultsFor": "{count} resultaat gevonden voor \"{query}\" | {count} resultaten gevonden voor \"{query}\"",
     "noResults": "Geen resultaten gevonden voor \"{query}\"",
     "noResultsMessage": "Probeer te zoeken met andere trefwoorden of controleer je spelling.",
+    "noResultsTitle": "Geen series gevonden",
+    "noResultsHint": "Probeer te zoeken met andere trefwoorden of controleer je spelling.",
+    "initialStateTitle": "Begin met zoeken",
+    "initialStateHint": "Voer een serienaam in om te zoeken in onze uitgebreide database.",
     "recentSearches": "Recente zoekopdrachten",
     "clearRecent": "Wissen",
     "startSearching": "Begin met zoeken",
@@ -149,6 +153,22 @@
     "self": "Zichzelf",
     "showMore": "Meer cast tonen",
     "more": "meer"
+  },
+  "person": {
+    "title": "Acteursprofiel",
+    "loading": "Persoonlijke details laden...",
+    "birthday": "Geboortedatum",
+    "deathday": "Overleden",
+    "country": "Land",
+    "gender": "Geslacht",
+    "yearsOld": "jaar oud",
+    "knownFor": "Bekend van",
+    "asCharacter": "als {character}",
+    "showMore": "Meer tonen",
+    "noCredits": "Geen tv-serie credits beschikbaar",
+    "noCreditsMessage": "Deze persoon heeft geen geregistreerde tv-serie optredens.",
+    "description": "{name} - {country} acteur/actrice",
+    "fallbackDescription": "Bekijk filmografie en biografie"
   },
   "tabs": {
     "overview": "Overzicht",

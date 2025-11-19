@@ -3,7 +3,7 @@
  * Used for lazy loading images and content
  */
 
-import { ref, onMounted, onUnmounted, type Ref } from 'vue'
+import { ref, watch, onUnmounted, type Ref } from 'vue'
 
 export interface UseIntersectionObserverOptions {
   /**
@@ -51,17 +51,16 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
     }
   }
 
-  onMounted(() => {
-    if (!target.value) {
-      return
-    }
-
+  const startObserving = (element: Element) => {
     // Check if IntersectionObserver is supported
     if (typeof IntersectionObserver === 'undefined') {
       // Fallback for browsers without IntersectionObserver
       isIntersecting.value = true
       return
     }
+
+    // Clean up any existing observer
+    cleanup()
 
     observer = new IntersectionObserver(
       (entries) => {
@@ -88,8 +87,21 @@ export function useIntersectionObserver(options: UseIntersectionObserverOptions 
       }
     )
 
-    observer.observe(target.value)
-  })
+    observer.observe(element)
+  }
+
+  // Watch for target changes and start observing when element is available
+  watch(
+    target,
+    (newTarget) => {
+      if (newTarget) {
+        startObserving(newTarget)
+      } else {
+        cleanup()
+      }
+    },
+    { immediate: true }
+  )
 
   onUnmounted(() => {
     cleanup()
