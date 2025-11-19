@@ -7,13 +7,12 @@
         <!-- BingeList Logo -->
         <div class="text-center mb-8">
           <NuxtLink :to="localePath('/')" class="inline-block">
-            <NuxtImg
+            <img
               src="/optimized/logo-full.png"
               alt="BingeList"
               width="200"
               height="60"
               class="h-12 w-auto mx-auto dark:brightness-110"
-              loading="eager"
             />
           </NuxtLink>
         </div>
