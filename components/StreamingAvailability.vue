@@ -26,14 +26,15 @@
             }"
           >
             <img
-              v-if="getServiceLogo(option.service.id)"
-              :src="getServiceLogo(option.service.id)"
+              v-if="option.service.logo"
+              :src="option.service.logo"
               :alt="`${option.service.name} logo`"
-              class="streaming-logo"
-              @error="handleImageError"
+              :class="isTMDBLogo(option.service.logo) ? 'streaming-logo-tmdb' : 'streaming-logo'"
+              loading="lazy"
+              @error="handleImageError($event, option.service.id)"
             />
             <span v-else class="streaming-brand-text">
-              {{ getServiceBrandName(option.service.id) }}
+              {{ getServiceBrandName(option.service.id, option.service.name) }}
             </span>
           </div>
 
@@ -140,17 +141,16 @@ const handleStreamingClick = (
 }
 
 /**
- * Get logo path for a streaming service
+ * Check if logo is from TMDB (needs different styling)
  */
-const getServiceLogo = (serviceId: string): string => {
-  const platform = STREAMING_PLATFORMS[serviceId]
-  return platform?.logo || ''
+const isTMDBLogo = (logoUrl: string): boolean => {
+  return logoUrl.includes('themoviedb.org') || logoUrl.includes('image.tmdb.org')
 }
 
 /**
  * Get brand name to display for a streaming service
  */
-const getServiceBrandName = (serviceId: string): string => {
+const getServiceBrandName = (serviceId: string, serviceName: string): string => {
   const brandNames: Record<string, string> = {
     netflix: 'NETFLIX',
     prime: 'prime video',
@@ -163,7 +163,8 @@ const getServiceBrandName = (serviceId: string): string => {
     skyshowtime: 'SkyShowtime',
     videoland: 'Videoland',
   }
-  return brandNames[serviceId] || serviceId.toUpperCase()
+  // Use the mapped brand name, or the service name directly if available
+  return brandNames[serviceId] || serviceName || serviceId.toUpperCase()
 }
 
 /**
@@ -177,8 +178,11 @@ const hasAffiliate = (serviceId: string): boolean => {
 /**
  * Handle image loading errors
  */
-const handleImageError = (event: Event) => {
+const handleImageError = (event: Event, serviceId: string) => {
   const target = event.target as HTMLImageElement
+  if (import.meta.dev) {
+    console.warn('[StreamingAvailability] Logo failed to load:', { serviceId, src: target.src })
+  }
   // Hide the image if it fails to load
   target.style.display = 'none'
 }
@@ -252,6 +256,11 @@ const formatPrice = (price: number, currency?: string): string => {
   @apply w-full h-full object-contain;
   /* Make SVG logos white on colored backgrounds */
   filter: brightness(0) invert(1);
+}
+
+.streaming-logo-tmdb {
+  @apply w-full h-full object-contain;
+  /* TMDB logos are already colored, don't apply filter */
 }
 
 .streaming-brand-text {

@@ -153,8 +153,23 @@ export default cachedEventHandler(
               const transformProvider = (p: TMDBProvider, type: string): StreamingAvailability => {
                 const tmdbProviderId = String(p.provider_id)
                 // Map TMDB provider ID to our internal service ID
-                const serviceId = TMDB_PROVIDER_MAP[tmdbProviderId] || tmdbProviderId
-                const platform = STREAMING_PLATFORMS[serviceId]
+                const serviceId = TMDB_PROVIDER_MAP[tmdbProviderId]
+                const platform = serviceId ? STREAMING_PLATFORMS[serviceId] : undefined
+
+                // Log unknown providers for future mapping
+                if (!serviceId) {
+                  logger.info('Unknown TMDB provider encountered', {
+                    module: 'api/shows/[id]',
+                    action: 'transformProvider',
+                    tmdbProviderId,
+                    providerName: p.provider_name,
+                    country,
+                    showName: show.name,
+                  })
+                }
+
+                // For unmapped providers, create a unique ID from the provider name
+                const finalServiceId = serviceId || `tmdb-${tmdbProviderId}`
 
                 // Use our platform's homepage or fallback to TMDB/JustWatch link
                 const link =
@@ -164,7 +179,7 @@ export default cachedEventHandler(
 
                 return {
                   service: {
-                    id: serviceId, // Use our internal service ID
+                    id: finalServiceId,
                     name: platform?.name || p.provider_name,
                     logo:
                       platform?.logo ||
@@ -248,7 +263,7 @@ export default cachedEventHandler(
       const id = getRouterParam(event, 'id') || 'unknown'
       const query = getQuery(event)
       const country = (query.country as string) || 'US'
-      return `show-v2-${id}-${country}` // v2: includes TMDB_PROVIDER_MAP
+      return `show-v3-${id}-${country}` // v3: improved TMDB logo handling
     },
     swr: true,
     // Vary cache by country for streaming availability

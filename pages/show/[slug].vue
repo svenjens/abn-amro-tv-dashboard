@@ -163,7 +163,11 @@
 
             <!-- Streaming Availability -->
             <section class="mb-12">
-              <StreamingAvailability :availability="streamingAvailability" :show-name="show.name" />
+              <StreamingAvailability
+                :key="`streaming-${show.id}`"
+                :availability="streamingAvailability"
+                :show-name="show.name"
+              />
             </section>
 
             <!-- Advertisement -->
