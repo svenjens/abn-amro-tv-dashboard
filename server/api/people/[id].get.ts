@@ -76,7 +76,7 @@ function validatePersonId(id: string | number): number {
 /**
  * Type guard to validate TVMaze person response
  */
-function isTVMazePerson(data: unknown): data is Person {
+function isTVMazePerson(data: unknown): data is TVMazePerson {
   if (!data || typeof data !== 'object') return false
 
   const person = data as Record<string, unknown>
@@ -159,7 +159,9 @@ export default cachedEventHandler(
               ...showData,
               _embedded: embedded.character
                 ? {
-                    character: embedded.character as CastCreditShow['_embedded']['character'],
+                    character: embedded.character as NonNullable<
+                      CastCreditShow['_embedded']
+                    >['character'],
                   }
                 : undefined,
             }
