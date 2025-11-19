@@ -110,7 +110,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useWatchlistStore } from '@/stores'
 import { useSEO } from '@/composables'
 import ShowCard from '@/components/ShowCard.vue'
@@ -134,8 +133,4 @@ function handleClearAll() {
     watchlistStore.clearWatchlist()
   }
 }
-
-onMounted(() => {
-  // Ensure watchlist is loaded (already done in store init, but just in case)
-})
 </script>
