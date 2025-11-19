@@ -6,21 +6,24 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         <!-- Brand -->
         <div class="col-span-1 md:col-span-1">
-          <div class="flex items-center gap-3 mb-4">
-            <img
-              src="/optimized/logo-main.png"
-              alt="BingeList Logo"
-              class="h-10 w-10 object-contain"
-              width="40"
-              height="40"
-            />
-            <span class="text-xl font-bold text-gray-900 dark:text-white">BingeList</span>
-          </div>
+          <NuxtLink
+            :to="localePath('/')"
+            class="inline-block mb-4 group focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg"
+            :aria-label="t('navigation.home')"
+          >
+            <span
+              class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+            >
+              BingeList
+            </span>
+          </NuxtLink>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
             {{ t('footer.tagline') }}
           </p>
-          <div class="flex gap-4">
-            <!-- Social links placeholder -->
+          <div class="flex gap-4 items-center">
+            <!-- Dark mode toggle -->
+            <DarkModeToggle />
+            <!-- Social links -->
             <a
               href="https://github.com/svenjens/tv-show-dashboard"
               target="_blank"

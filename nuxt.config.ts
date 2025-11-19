@@ -153,10 +153,19 @@ export default defineNuxtConfig({
     domains: ['static.tvmaze.com', 'image.tmdb.org'],
   },
 
-  // Icon configuration - bundle icons locally to avoid CORS issues
+  // Icon configuration - bundle icons locally for better performance
   icon: {
     serverBundle: {
-      collections: ['heroicons'], // Bundle heroicons locally
+      collections: ['heroicons'], // Bundle heroicons for SSR
+    },
+    clientBundle: {
+      icons: [
+        'heroicons:chevron-left',
+        'heroicons:light-bulb',
+        'heroicons:code-bracket',
+        'heroicons:link',
+      ],
+      scan: true, // Automatically scan and bundle icons used in the app
     },
   },
 
