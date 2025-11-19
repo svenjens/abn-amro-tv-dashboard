@@ -275,6 +275,7 @@ async function fetchTMDBPersonDetails(
 
 /**
  * Enrich person data with TMDB information
+ * Already optimized: search and fetch are sequential by necessity (need ID first)
  */
 async function enrichWithTMDBData(
   personData: PersonDetailsResponse,

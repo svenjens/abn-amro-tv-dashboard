@@ -5,6 +5,7 @@
  */
 
 import { sanitizeEpisodeSummary } from '~/server/utils/sanitize'
+import { logger } from '~/utils/logger'
 
 export default cachedEventHandler(
   async (event) => {
@@ -26,7 +27,16 @@ export default cachedEventHandler(
 
       // Validate response is an array
       if (!Array.isArray(episodes)) {
-        console.error(`Invalid episodes response for show ${id}:`, episodes)
+        logger.error(
+          'Invalid episodes response from TVMaze API',
+          {
+            module: 'api/shows/[id]/episodes',
+            action: 'fetchEpisodes',
+            showId: id,
+            responseType: typeof episodes,
+          },
+          episodes
+        )
         return []
       }
 
@@ -39,7 +49,15 @@ export default cachedEventHandler(
 
       return episodes
     } catch (error) {
-      console.error(`Error fetching episodes for show ${id}:`, error)
+      logger.error(
+        'Failed to fetch episodes from TVMaze API',
+        {
+          module: 'api/shows/[id]/episodes',
+          action: 'fetchEpisodes',
+          showId: id,
+        },
+        error
+      )
       throw createError({
         statusCode: 404,
         statusMessage: 'Episodes not found',

@@ -3,6 +3,8 @@
  * Uses shorter cache as search results may change
  */
 
+import { logger } from '~/utils/logger'
+
 export default cachedEventHandler(
   async (event) => {
     const query = getQuery(event)
@@ -35,13 +37,30 @@ export default cachedEventHandler(
 
       // Validate response is an array
       if (!Array.isArray(response)) {
-        console.error('Invalid search response:', response)
+        logger.error(
+          'Invalid search response from TVMaze API',
+          {
+            module: 'api/search',
+            action: 'searchShows',
+            searchQuery,
+            responseType: typeof response,
+          },
+          response
+        )
         return []
       }
 
       return response
     } catch (error) {
-      console.error('Error searching shows:', error)
+      logger.error(
+        'Failed to search shows from TVMaze API',
+        {
+          module: 'api/search',
+          action: 'searchShows',
+          searchQuery,
+        },
+        error
+      )
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to search shows',

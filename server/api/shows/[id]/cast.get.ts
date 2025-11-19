@@ -3,6 +3,8 @@
  * Uses Nitro caching for better performance
  */
 
+import { logger } from '~/utils/logger'
+
 export default cachedEventHandler(
   async (event) => {
     const id = getRouterParam(event, 'id')
@@ -23,7 +25,15 @@ export default cachedEventHandler(
 
       return response
     } catch (error) {
-      console.error(`Error fetching cast for show ${id}:`, error)
+      logger.error(
+        'Failed to fetch cast from TVMaze API',
+        {
+          module: 'api/shows/[id]/cast',
+          action: 'fetchCast',
+          showId: id,
+        },
+        error
+      )
       throw createError({
         statusCode: 404,
         statusMessage: 'Cast not found',
