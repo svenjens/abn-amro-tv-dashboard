@@ -273,6 +273,9 @@ export default defineEventHandler(async (event: H3Event) => {
     // Get locale from request for translation
     const locale = getLocaleFromRequest(event)
 
+    // Allow skipping translation for faster initial load (progressive enhancement)
+    const skipTranslation = query.skipTranslation === 'true'
+
     // Fetch show data from TVMaze
     const show = await fetchShowFromTVMaze(id)
 
@@ -289,9 +292,9 @@ export default defineEventHandler(async (event: H3Event) => {
       streamingAvailability: [],
     }
 
-    // Translate TVMaze summary if locale is not English
+    // Translate TVMaze summary if locale is not English (unless skipped for fast load)
     // Replace the summary field directly with translated version
-    if (show.summary && needsTranslation(locale)) {
+    if (show.summary && needsTranslation(locale) && !skipTranslation) {
       const translatedSummary = await translateText(show.summary, locale)
       if (translatedSummary) {
         combinedData.summary = sanitizeShowSummary(translatedSummary)
@@ -307,9 +310,9 @@ export default defineEventHandler(async (event: H3Event) => {
       combinedData.tmdb = tmdbData.tmdb
       combinedData.streamingAvailability = tmdbData.streamingAvailability
 
-      // Translate TMDB overview if available and locale is not English
+      // Translate TMDB overview if available and locale is not English (unless skipped for fast load)
       // Replace the overview field directly with translated version
-      if (tmdbData.tmdb?.overview && needsTranslation(locale)) {
+      if (tmdbData.tmdb?.overview && needsTranslation(locale) && !skipTranslation) {
         const translatedOverview = await translateText(tmdbData.tmdb.overview, locale)
         if (translatedOverview && combinedData.tmdb) {
           combinedData.tmdb.overview = sanitizeShowSummary(translatedOverview)
