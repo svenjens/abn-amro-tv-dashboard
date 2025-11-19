@@ -288,7 +288,7 @@
 
       <!-- Initial State -->
       <div v-else class="text-center py-16">
-        <NuxtImg
+        <img
           src="/optimized/empty-state-illustration.png"
           alt=""
           class="mx-auto h-48 w-48 object-contain opacity-50 dark:opacity-30"
