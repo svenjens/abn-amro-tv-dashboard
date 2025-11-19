@@ -168,4 +168,3 @@ export async function kvDel(key: string): Promise<void> {
 export function isKVAvailable(): boolean {
   return kvAvailable
 }
-
