@@ -452,13 +452,14 @@ Small, focused, reusable components follow the Single Responsibility Principle:
 
 ### Data Processing Strategy
 
-Since the TVMaze API doesn't provide a dedicated genre endpoint:
+Since the TVMaze API doesn't provide a dedicated genre endpoint, we use the "Show index" endpoint (`/shows`) which contains all the data we need:
 
-1. **Fetch all shows** from the `/shows` endpoint
+1. **Fetch all shows** from the `/shows` endpoint (server-side)
 2. **Extract genres** from each show
-3. **Group shows by genre** in the Pinia store
+3. **Group shows by genre** on the server using `groupShowsByGenre()`
 4. **Sort within genres** by rating (descending)
-5. **Cache results** to minimize API calls
+5. **Cache results** server-side to minimize API calls
+6. **Populate Pinia store** with pre-processed data (client receives already grouped data)
 
 ```typescript
 export function groupShowsByGenre(shows: Show[]): ShowsByGenre {
