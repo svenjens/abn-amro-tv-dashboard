@@ -21,7 +21,7 @@ const searchBarRef = ref<InstanceType<typeof SearchBar> | null>(null)
 
 // Expose focus method
 defineExpose({
-  focus: () => searchBarRef.value?.focus()
+  focus: () => searchBarRef.value?.focus(),
 })
 </script>
 
@@ -51,4 +51,3 @@ defineExpose({
     </div>
   </header>
 </template>
-

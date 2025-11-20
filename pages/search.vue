@@ -57,7 +57,7 @@ async function handleSearch(query: string) {
     // Regular keyword search
     searchStore.semanticIntent = null
     await searchStore.search(query)
-    
+
     // Enrich results with streaming data (runs in background)
     if (searchStore.hasResults) {
       searchStore.enrichWithStreamingData()
@@ -71,7 +71,7 @@ watch(
   (newQuery) => {
     if (typeof newQuery === 'string' && newQuery !== searchQuery.value) {
       searchQuery.value = newQuery
-      // We default to regular search when URL changes without explicit mode toggle, 
+      // We default to regular search when URL changes without explicit mode toggle,
       // but handleSearch handles the logic based on isSemanticMode which is set in onMounted/watch
       // Wait, if URL changes, we just call searchStore.search?
       // The original code did:
@@ -79,10 +79,6 @@ watch(
       searchQuery.value = newQuery
       searchStore.search(newQuery)
       */
-      // I should probably stick to that or use handleSearch? 
-      // handleSearch updates URL, so calling it from URL watcher might cause loop? 
-      // But route.query.q change comes from URL update.
-      // So just searching is correct.
       searchStore.search(newQuery)
       // Also enrich?
       if (searchStore.hasResults) {
@@ -129,11 +125,7 @@ onMounted(() => {
     <SkipToContent />
 
     <!-- Header -->
-    <SearchHeader
-      ref="searchHeaderRef"
-      v-model="searchQuery"
-      @search="handleSearch"
-    />
+    <SearchHeader ref="searchHeaderRef" v-model="searchQuery" @search="handleSearch" />
 
     <!-- Main Content -->
     <main id="main-content" class="max-w-7xl mx-auto px-4 py-8" tabindex="-1">

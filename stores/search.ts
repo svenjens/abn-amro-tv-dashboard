@@ -108,7 +108,7 @@ export const useSearchStore = defineStore('search', () => {
         score: r.score,
         matchedTerm: r.matchedTerm,
       }))
-      
+
       // Use setResults logic but call it here or logic reuse
       // Cancel any ongoing streaming enrichment from previous results
       if (enrichmentController) {
@@ -118,7 +118,7 @@ export const useSearchStore = defineStore('search', () => {
       }
 
       searchResults.value = results
-      
+
       if (hasResults.value) {
         enrichWithStreamingData()
       }
@@ -130,7 +130,7 @@ export const useSearchStore = defineStore('search', () => {
       // The fallback search handles its own loading state, so we can let it run.
       // However, we are in a try-catch block.
       await search(query)
-      
+
       // If fallback search found results, enrich them
       if (hasResults.value) {
         enrichWithStreamingData()

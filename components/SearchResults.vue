@@ -26,9 +26,7 @@ const searchStore = useSearchStore()
       {{ t('search.resultsTitle', { query: searchQuery }) }}
     </h2>
 
-    <div
-      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr"
-    >
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-fr">
       <ShowCard
         v-for="result in searchStore.fullResults"
         :key="result.show.id"
@@ -38,4 +36,3 @@ const searchStore = useSearchStore()
     </div>
   </div>
 </template>
-
