@@ -1,5 +1,40 @@
 # Changelog
 
+## [4.2.0](https://github.com/svenjens/tv-show-dashboard/compare/v4.1.0...v4.2.0) (2025-11-20)
+
+
+### Features
+
+* **a11y:** improve keyboard navigation with visible focus states ([c5febd0](https://github.com/svenjens/tv-show-dashboard/commit/c5febd0994a06e8e6c1e568fd68d65badf5c0964))
+* improve developer experience and streaming UI ([53057b0](https://github.com/svenjens/tv-show-dashboard/commit/53057b01a0b4c367fc15f59a218d6f81dd995bb1))
+* migrate to @vite-pwa/nuxt for modern PWA support ([0b6a76f](https://github.com/svenjens/tv-show-dashboard/commit/0b6a76f34e370afd7a5406d2ab9e67353f48fe41))
+* **search:** add empty state for no search results and optimize images in-place ([128251a](https://github.com/svenjens/tv-show-dashboard/commit/128251a27325a46e97198fa51ff5b22b5726cfe1))
+* **show:** add external links section with IMDb, official site, and TVMaze ([665c520](https://github.com/svenjens/tv-show-dashboard/commit/665c5200acdf1744995f0f668278e52a37ec31e8))
+* **streaming:** add YouTube TV and fuboTV support with logos and TMDB provider mappings ([3ce07c2](https://github.com/svenjens/tv-show-dashboard/commit/3ce07c2ca93cd81891d82fb9d863afe4f79dc017))
+
+
+### Bug Fixes
+
+* **a11y:** prevent focus ring from overflowing card boundaries ([348ecd4](https://github.com/svenjens/tv-show-dashboard/commit/348ecd4e672a5fcfc8f82497fa86870255740058))
+* **images:** use native picture elements for static local assets ([0053074](https://github.com/svenjens/tv-show-dashboard/commit/0053074f0fb167bde87820bf58abb42d8af6d9bd))
+* **plugins:** resolve typecheck errors and add missing apple-tv logo ([21b8439](https://github.com/svenjens/tv-show-dashboard/commit/21b84392a29d5b75af5144611de5769f02edfc41))
+* **pwa:** prevent SSR errors and improve configuration ([4a91d26](https://github.com/svenjens/tv-show-dashboard/commit/4a91d2634059d6c387c46d805f4e55f85bceb708))
+* **ui:** align back button with other navigation buttons ([eb09b61](https://github.com/svenjens/tv-show-dashboard/commit/eb09b61805ca04c995b5875cf2dec35416eb6722))
+* **ui:** move back button higher on show detail page ([2a3bd5d](https://github.com/svenjens/tv-show-dashboard/commit/2a3bd5deafae7aedd9aca44bbbb0eeb68cefca3b))
+* **ui:** use img instead of NuxtImg for empty state and add watchlist button to show detail tabs ([86eba8c](https://github.com/svenjens/tv-show-dashboard/commit/86eba8cfca2cb4972e6d3d90b0a64e5c30c461e0))
+* **ui:** use NuxtImg with original empty state image for production compatibility ([2d58db3](https://github.com/svenjens/tv-show-dashboard/commit/2d58db31a2e21406dbbbaf0698ac0d07a8a12707))
+* **ui:** use pre-optimized images with picture element for consistent production behavior ([72bc917](https://github.com/svenjens/tv-show-dashboard/commit/72bc9172df3481c23e13c28a1c865366ed1618ea))
+
+
+### Performance Improvements
+
+* **build:** strip comments in production builds ([0e17a58](https://github.com/svenjens/tv-show-dashboard/commit/0e17a58a735e708beb5f7f6eaf040f783d3f3cda))
+
+
+### Reverts
+
+* remove external links section from show detail page ([0a36f26](https://github.com/svenjens/tv-show-dashboard/commit/0a36f26d85f74b96f2cf662648ef734102308d17))
+
 ## [4.1.0](https://github.com/svenjens/tv-show-dashboard/compare/v4.0.0...v4.1.0) (2025-11-20)
 
 ### Features
