@@ -189,6 +189,7 @@ export interface AffiliateConfig {
 // https://www.themoviedb.org/talk/5efb0b71d11adf001682f79c
 export const TMDB_PROVIDER_MAP: Record<string, string> = {
   '8': 'netflix', // Netflix
+  '1796': 'netflix', // Netflix Standard with Ads
   '9': 'prime', // Amazon Prime Video
   '10': 'prime', // Amazon Video (buy/rent)
   '119': 'prime', // Amazon Prime Video (alternate ID)
