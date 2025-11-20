@@ -38,10 +38,16 @@ const SERVICE_GRADIENTS: Record<string, string> = {
   hbo: 'linear-gradient(135deg, #002BE7 0%, #001BA0 100%)',
   hulu: 'linear-gradient(135deg, #1CE783 0%, #16B864 100%)',
   apple: 'linear-gradient(135deg, #1d1d1f 0%, #000000 100%)',
+  'apple-tv': 'linear-gradient(135deg, #1d1d1f 0%, #000000 100%)',
   paramount: 'linear-gradient(135deg, #0064FF 0%, #0050CC 100%)',
   peacock: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
   skyshowtime: 'linear-gradient(135deg, #5433FF 0%, #3D20CC 100%)',
   videoland: 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)',
+  'google-play': 'linear-gradient(135deg, #01875f 0%, #015a3f 100%)',
+  'fandango-at-home': 'linear-gradient(135deg, #FF6600 0%, #CC5200 100%)',
+  fubo: 'linear-gradient(135deg, #FF6B35 0%, #CC5529 100%)',
+  'youtube-tv': 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)',
+  tbs: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
 }
 
 /**
@@ -66,3 +72,4 @@ export function getServiceGradient(serviceId: string, themeColor?: string): stri
   // Fallback to simple semi-transparent gradient
   return 'linear-gradient(135deg, #666 0%, #444 100%)'
 }
+
