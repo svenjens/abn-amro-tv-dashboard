@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const { t } = useI18n()
 
@@ -98,10 +98,15 @@ function handleClickOutside(event: MouseEvent) {
   }
 }
 
-// Add click outside listener
-if (typeof window !== 'undefined') {
+// Add click outside listener on mount (client-side only)
+onMounted(() => {
   document.addEventListener('click', handleClickOutside)
-}
+})
+
+// Clean up event listener on unmount
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>

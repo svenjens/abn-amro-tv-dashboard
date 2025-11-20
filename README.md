@@ -297,7 +297,7 @@ tv-show-dashboard/
 │   ├── LanguageSwitcher.vue
 │   ├── LoadingSpinner.vue
 │   ├── RatingBadge.vue
-│   ├── SearchBar.client.vue
+│   ├── SearchBar.vue
 │   ├── ShowCard.vue
 │   ├── SkipToContent.client.vue
 │   └── ...               # And more components
