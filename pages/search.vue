@@ -179,29 +179,16 @@ onMounted(() => {
     <SkipToContent />
 
     <!-- Header -->
-    <SearchHeader ref="searchHeaderRef" v-model="searchQuery" @search="handleSearch" />
+    <SearchHeader
+      ref="searchHeaderRef"
+      v-model="searchQuery"
+      :is-semantic-mode="isSemanticMode"
+      @update:is-semantic-mode="isSemanticMode = $event"
+      @search="handleSearch"
+    />
 
     <!-- Main Content -->
     <main id="main-content" class="max-w-7xl mx-auto px-4 py-8" tabindex="-1">
-      <div class="mb-6">
-        <SearchModeToggle v-model="isSemanticMode" class="mb-3" />
-        <SearchModeInfo :is-semantic-mode="isSemanticMode" class="mb-4" />
-      </div>
-
-      <!-- Example Queries (always show in semantic mode) -->
-      <ExampleQueries
-        v-if="showExampleQueries"
-        class="mb-8"
-        :examples="exampleQueries"
-        :has-query="!!searchQuery"
-        @select="
-          (example) => {
-            searchQuery = example
-            handleSearch(example)
-          }
-        "
-      />
-
       <!-- Filters (shown when we have results) -->
       <FilterBar
         v-if="showFilters"
@@ -222,9 +209,9 @@ onMounted(() => {
         :filtered-results="filteredResults"
       />
 
-      <!-- Initial State (only show when NOT in semantic mode OR when semantic but no query) -->
+      <!-- Initial State -->
       <EmptyState
-        v-else-if="!isSemanticMode || !showExampleQueries"
+        v-else
         :title="t('search.initialStateTitle')"
         :message="t('search.initialStateHint')"
       />
