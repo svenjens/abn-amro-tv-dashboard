@@ -177,17 +177,26 @@ onMounted(() => {
       <!-- Filters (shown when we have results) -->
       <FilterBar v-if="showFilters" v-model="filters" :shows="searchShows" class="mb-6" />
 
+      <!-- Loading State -->
       <div v-if="searchStore.isSearching" class="text-center py-16">
         <LoadingSpinner :text="t('status.searching')" :full-screen="false" />
       </div>
 
+      <!-- Results -->
       <SearchResults
         v-else-if="searchStore.hasResults"
         :search-query="searchQuery"
         :filtered-results="filteredResults"
       />
 
-      <!-- Initial State -->
+      <!-- No Results (after search) -->
+      <EmptyState
+        v-else-if="searchQuery && !searchStore.isSearching"
+        :title="t('search.noResultsTitle')"
+        :message="t('search.noResultsHint', { query: searchQuery })"
+      />
+
+      <!-- Initial State (no search yet) -->
       <EmptyState
         v-else
         :title="t('search.initialStateTitle')"

@@ -12,18 +12,17 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <div class="text-center py-16 px-4" role="status">
-    <picture>
-      <source srcset="/optimized/empty-state-illustration.webp" type="image/webp" />
-      <img
-        src="/optimized/empty-state-illustration.png"
-        alt=""
-        class="mx-auto h-48 w-48 object-contain opacity-50 dark:opacity-30"
-        aria-hidden="true"
-        width="192"
-        height="192"
-        loading="lazy"
-      />
-    </picture>
+    <NuxtImg
+      src="/empty-state-illustration.png"
+      alt=""
+      class="mx-auto h-48 w-48 object-contain opacity-50 dark:opacity-30"
+      aria-hidden="true"
+      width="192"
+      height="192"
+      loading="lazy"
+      format="webp"
+      :quality="85"
+    />
     <component :is="headingLevel" class="mt-6 text-lg font-medium text-gray-900 dark:text-gray-100">
       {{ title }}
     </component>

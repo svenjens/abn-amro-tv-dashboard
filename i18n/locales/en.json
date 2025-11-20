@@ -27,7 +27,7 @@
     "noResults": "No results found for \"{query}\"",
     "noResultsMessage": "Try searching with different keywords or check your spelling.",
     "noResultsTitle": "No shows found",
-    "noResultsHint": "Try searching with different keywords or check your spelling.",
+    "noResultsHint": "No results for \"{query}\". Try different keywords or check your spelling.",
     "initialStateTitle": "Start searching",
     "initialStateHint": "Enter a TV show name to search through our extensive database.",
     "recentSearches": "Recent Searches",

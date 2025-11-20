@@ -27,7 +27,7 @@
     "noResults": "No se encontraron resultados para \"{query}\"",
     "noResultsMessage": "Intenta buscar con palabras clave diferentes o verifica la ortografía.",
     "noResultsTitle": "No se encontraron series",
-    "noResultsHint": "Intenta buscar con palabras clave diferentes o verifica la ortografía.",
+    "noResultsHint": "No hay resultados para \"{query}\". Intenta con palabras clave diferentes o verifica la ortografía.",
     "initialStateTitle": "Comienza a buscar",
     "initialStateHint": "Ingresa el nombre de una serie para buscar en nuestra extensa base de datos.",
     "recentSearches": "Búsquedas Recientes",
