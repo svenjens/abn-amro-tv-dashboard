@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.2](https://github.com/svenjens/tv-show-dashboard/compare/v4.2.1...v4.2.2) (2025-11-20)
+
+
+### Bug Fixes
+
+* **pwa:** fix manifest detection and service worker configuration ([2568dc0](https://github.com/svenjens/tv-show-dashboard/commit/2568dc0ae556e140b33ef6040605f7d55da8feff))
+
 ## [4.2.1](https://github.com/svenjens/tv-show-dashboard/compare/v4.2.0...v4.2.1) (2025-11-20)
 
 ### Bug Fixes
