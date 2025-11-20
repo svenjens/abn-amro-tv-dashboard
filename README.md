@@ -5,7 +5,7 @@ Your ultimate TV show discovery and tracking platform. Built with **Nuxt 4**, Ty
 🌐 **Live:** [bingelist.app](https://bingelist.app)
 
 [![Deploy Pipeline](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/svenjens/tv-show-dashboard/actions/workflows/deploy.yml)
-![Nuxt](https://img.shields.io/badge/Nuxt-4.0-00DC82?logo=nuxt.js)
+![Nuxt](https://img.shields.io/badge/Nuxt-4.2-00DC82?logo=nuxt.js)
 ![Vue 3](https://img.shields.io/badge/Vue-3.5-brightgreen?logo=vue.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-cyan?logo=tailwindcss)
@@ -117,7 +117,7 @@ The application includes subtle, performant micro-animations that enhance UX:
 - **Responsive Design**: Fully responsive UI that works seamlessly on all devices
 - **Performance Optimized**: API caching, lazy loading, code splitting
 - **Type-Safe**: Full TypeScript implementation with strict mode
-- **Well-Tested**: Extensive unit test coverage (>80%) using Vitest
+- **Well-Tested**: Unit and E2E tests using Vitest and Playwright
 - **Modern UI/UX**: Clean, intuitive interface built with Tailwind CSS
 - **Clean Architecture**: Separation of concerns with composables and utilities
 
@@ -193,7 +193,7 @@ Start the development server with hot-reload:
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
+The application will be available at `http://localhost:3000`
 
 ### Production Build
 
@@ -281,62 +281,97 @@ To show multi-platform availability (e.g., a show on both Netflix and Hulu), we 
 
 ```
 tv-show-dashboard/
-├── src/
-│   ├── api/              # API service layer
-│   │   ├── tvmaze.ts     # TVMaze API client with caching
-│   │   └── index.ts      # API exports
-│   ├── components/       # Reusable Vue components
-│   │   ├── ErrorMessage.vue
-│   │   ├── GenreRow.vue
-│   │   ├── GenreTags.vue
-│   │   ├── LanguageSwitcher.vue  # i18n language switcher
-│   │   ├── LoadingSpinner.vue
-│   │   ├── Pagination.vue        # Pagination component
-│   │   ├── RatingBadge.vue
-│   │   ├── SearchBar.vue
-│   │   ├── ShowCard.vue
-│   │   └── SkipToContent.vue     # Accessibility skip link
-│   ├── composables/      # Vue composables (reusable logic)
-│   │   ├── useApi.ts     # Generic API handler
-│   │   ├── useDebounce.ts
-│   │   ├── useIntersectionObserver.ts
-│   │   ├── usePagination.ts      # Pagination logic
-│   │   ├── useSEO.ts             # SEO meta tag management
-│   │   └── index.ts
-│   ├── i18n/             # Internationalization
-│   │   ├── locales/
-│   │   │   ├── en.json   # English translations
-│   │   │   ├── nl.json   # Dutch translations
-│   │   │   └── es.json   # Spanish translations
-│   │   ├── helpers.ts    # i18n helper functions
-│   │   └── index.ts      # i18n configuration
-│   ├── router/           # Vue Router configuration
-│   │   └── index.ts      # Routes with locale support
-│   ├── stores/           # Pinia stores
-│   │   ├── shows.ts      # Shows state management
-│   │   ├── search.ts     # Search state management
-│   │   └── index.ts
-│   ├── types/            # TypeScript type definitions
-│   │   ├── show.ts       # Show-related types
-│   │   └── index.ts
-│   ├── utils/            # Utility functions
-│   │   ├── show.ts       # Show-related utilities
-│   │   └── index.ts
-│   ├── views/            # Page components
-│   │   ├── Home.vue      # Homepage with genre rows
-│   │   ├── ShowDetail.vue # Show details page
-│   │   └── Search.vue    # Search page
-│   ├── __tests__/        # Unit tests
-│   ├── App.vue           # Root component
-│   ├── main.ts           # Application entry point
-│   └── style.css         # Global styles with Tailwind
+├── __tests__/            # Unit tests
+│   ├── components/       # Component tests
+│   ├── composables/      # Composable tests
+│   ├── stores/           # Store tests
+│   ├── utils/            # Utility tests
+│   └── server/           # Server-side tests
+├── assets/               # CSS and other assets
+│   └── css/
+│       └── main.css      # Global styles with Tailwind
+├── components/           # Reusable Vue components
+│   ├── ErrorMessage.vue
+│   ├── GenreRow.vue
+│   ├── GenreTags.vue
+│   ├── LanguageSwitcher.vue
+│   ├── LoadingSpinner.vue
+│   ├── RatingBadge.vue
+│   ├── SearchBar.client.vue
+│   ├── ShowCard.vue
+│   ├── SkipToContent.client.vue
+│   └── ...               # And more components
+├── composables/          # Vue composables (reusable logic)
+│   ├── useApi.ts         # Generic API handler
+│   ├── useDebounce.ts    # Debounce composable
+│   ├── useIntersectionObserver.ts
+│   ├── useSEO.ts         # SEO meta tag management
+│   └── index.ts
+├── e2e/                  # End-to-end tests with Playwright
+│   ├── homepage.spec.ts
+│   ├── search.spec.ts
+│   ├── show-details.spec.ts
+│   └── watchlist.spec.ts
+├── i18n/                 # Internationalization
+│   └── locales/
+│       ├── en.json       # English translations
+│       ├── nl.json       # Dutch translations
+│       └── es.json       # Spanish translations
+├── layouts/              # Nuxt layouts
+│   └── default.vue
+├── middleware/           # Nuxt middleware
+│   └── location.global.ts
+├── pages/                # File-based routing (Nuxt)
+│   ├── index.vue         # Homepage
+│   ├── search.vue        # Search page
+│   ├── watchlist.vue     # Watchlist page
+│   ├── show/
+│   │   └── [slug].vue    # Show detail page
+│   ├── genre/
+│   │   └── [genre].vue   # Genre page
+│   └── legal/            # Legal pages
+├── plugins/              # Nuxt plugins
+│   ├── console-art.client.ts
+│   ├── i18n-datetime.ts
+│   └── vercel-analytics.client.ts
 ├── public/               # Static assets
-├── index.html            # HTML entry point
+│   ├── logos/            # Streaming service logos
+│   ├── favicon.png
+│   └── ...
+├── server/               # Server-side code (Nitro)
+│   ├── api/              # API routes
+│   │   ├── shows/        # Show endpoints
+│   │   ├── search/       # Search endpoints
+│   │   └── location.get.ts
+│   ├── plugins/          # Server plugins
+│   │   └── warm-cache.ts
+│   └── utils/            # Server utilities
+│       ├── sanitize.ts
+│       ├── shows.ts
+│       └── validation.ts
+├── stores/               # Pinia stores
+│   ├── shows.ts          # Shows state management
+│   ├── search.ts         # Search state management
+│   ├── watchlist.ts      # Watchlist state management
+│   └── index.ts
+├── types/                # TypeScript type definitions
+│   ├── show.ts           # Show-related types
+│   ├── streaming.ts      # Streaming types
+│   ├── tvmaze.ts         # TVMaze API types
+│   └── index.ts
+├── utils/                # Utility functions
+│   ├── show.ts           # Show-related utilities
+│   ├── slug.ts           # URL slug utilities
+│   ├── streaming.ts      # Streaming utilities
+│   ├── countries.ts      # Country utilities
+│   └── index.ts
+├── error.vue             # Error page
+├── nuxt.config.ts        # Nuxt configuration
 ├── package.json          # Dependencies and scripts
-├── tsconfig.json         # TypeScript configuration
-├── vite.config.ts        # Vite configuration
-├── vitest.config.ts      # Vitest configuration
+├── playwright.config.ts  # Playwright E2E configuration
 ├── tailwind.config.js    # Tailwind CSS configuration
+├── tsconfig.json         # TypeScript configuration
+├── vitest.config.ts      # Vitest configuration
 ├── eslint.config.js      # ESLint configuration
 └── README.md             # This file
 ```
@@ -376,24 +411,21 @@ export const useShowsStore = defineStore('shows', () => {
 })
 ```
 
-#### 3. **Service Layer Pattern**
+#### 3. **Server API Routes (Nitro)**
 
-API calls are centralized in a service layer, providing:
+API routes are implemented using Nuxt's server directory, providing:
 
-- Single source of truth for API endpoints
-- Centralized error handling
-- Response caching to minimize API calls
-- Easy mocking for tests
+- Server-side API endpoints with file-based routing
+- Centralized error handling and validation
+- Multi-layer caching (route cache + server cache)
+- Type-safe API responses with TypeScript
 
 ```typescript
-// Example: API service with caching
-class TVMazeAPI {
-  private cache: Map<string, { data: unknown; timestamp: number }>
-
-  async fetchAllShows(): Promise<Show[]> {
-    // Check cache first, then fetch if needed
-  }
-}
+// Example: Server API route (server/api/shows/index.get.ts)
+export default defineEventHandler(async (event) => {
+  const shows = await fetchShowsFromTVMaze()
+  return shows
+})
 ```
 
 #### 4. **Utility-First CSS with Tailwind**
@@ -494,9 +526,9 @@ npm run format
 
 - **Unit Tests**: Individual functions, components, stores
 - **Integration Tests**: Component interactions with stores
-- **Coverage Target**: >80% code coverage
+- **E2E Tests**: End-to-end testing with Playwright
 
-Test files are co-located with source files in the `__tests__` directory.
+Test files are located in the `__tests__` and `e2e/` directories.
 
 ## 🌐 Browser Support
 
