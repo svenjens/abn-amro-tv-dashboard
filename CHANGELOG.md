@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.3.0](https://github.com/svenjens/tv-show-dashboard/compare/v4.2.3...v4.3.0) (2025-11-20)
+
+
+### Features
+
+* add debug mode for country detection ([063f260](https://github.com/svenjens/tv-show-dashboard/commit/063f26045392f9af74159136dad97bd0e3d3344c))
+* use @vercel/functions geolocation API ([643a45c](https://github.com/svenjens/tv-show-dashboard/commit/643a45c31ad666747cae2a9ad2e3b8db33af15b9))
+
+
+### Bug Fixes
+
+* **location:** change all US defaults to NL ([d76a8e3](https://github.com/svenjens/tv-show-dashboard/commit/d76a8e3a3da1764d667a04684c6815d0863678fc))
+* **streaming:** deduplicate providers and default to NL country ([2bf992b](https://github.com/svenjens/tv-show-dashboard/commit/2bf992b04589afabf47994b00edf2308e47dd3ff))
+
 ## [4.2.3](https://github.com/svenjens/tv-show-dashboard/compare/v4.2.2...v4.2.3) (2025-11-20)
 
 ### Bug Fixes
