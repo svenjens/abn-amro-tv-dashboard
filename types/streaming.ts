@@ -124,6 +124,24 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
     themeColorCode: '#5433FF',
     hasAffiliateProgram: false,
   },
+  'youtube-tv': {
+    id: 'youtube-tv',
+    name: 'YouTube TV',
+    logo: '/logos/streaming/youtube-tv.svg',
+    homePage: 'https://tv.youtube.com',
+    searchUrl: 'https://tv.youtube.com/search?q={query}',
+    themeColorCode: '#FF0000',
+    hasAffiliateProgram: false,
+  },
+  fubo: {
+    id: 'fubo',
+    name: 'fuboTV',
+    logo: '/logos/streaming/fubo.svg',
+    homePage: 'https://www.fubo.tv',
+    searchUrl: 'https://www.fubo.tv/welcome/search?query={query}',
+    themeColorCode: '#FF4A00',
+    hasAffiliateProgram: false,
+  },
   videoland: {
     id: 'videoland',
     name: 'Videoland',
@@ -141,15 +159,6 @@ export const STREAMING_PLATFORMS: Record<string, StreamingPlatform> = {
     searchUrl: 'https://www.amazon.com/s?k={query}',
     themeColorCode: '#002BE7',
     hasAffiliateProgram: true,
-  },
-  'youtube-tv': {
-    id: 'youtube-tv',
-    name: 'YouTube TV',
-    logo: '/logos/streaming/youtube-tv.svg',
-    homePage: 'https://tv.youtube.com',
-    searchUrl: 'https://tv.youtube.com/search?q={query}',
-    themeColorCode: '#FF0000',
-    hasAffiliateProgram: false,
   },
   tbs: {
     id: 'tbs',
@@ -207,6 +216,7 @@ export const TMDB_PROVIDER_MAP: Record<string, string> = {
   '72': 'videoland', // Videoland
   '1970': 'hbo', // HBO Max Amazon Channel
   '188': 'youtube-tv', // YouTube TV
+  '257': 'fubo', // fuboTV
   '503': 'tbs', // TBS
   '3': 'google-play', // Google Play Movies
   '7': 'fandango-at-home', // Vudu / Fandango At Home
