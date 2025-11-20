@@ -408,10 +408,18 @@ export default defineNuxtConfig({
         /^\/sw.js/,
         /^\/manifest.webmanifest/,
         /^\/manifest/,
+        /^\/en$/, // Don't precache /en (it's the fallback, handled by runtime)
+        /^\/nl$/, // Don't precache locale roots
+        /^\/es$/, // Don't precache locale roots
       ],
       globPatterns: ['**/*.{js,css,html,png,jpg,svg,ico,webp,woff2}'],
       maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
-      globIgnores: ['**/originals/**', '**/node_modules/**', '**/*.map'],
+      globIgnores: [
+        '**/originals/**',
+        '**/node_modules/**',
+        '**/*.map',
+        '**/favicon-*.png', // Ignore symlinks (use icon-*.png instead)
+      ],
       cleanupOutdatedCaches: true,
       skipWaiting: true,
       clientsClaim: true,
