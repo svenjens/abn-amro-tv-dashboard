@@ -5,7 +5,7 @@ import ShowCard from '@/components/ShowCard.vue'
 import SkipToContent from '@/components/SkipToContent.client.vue'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import RemoveFromWatchlistButton from '@/components/RemoveFromWatchlistButton.vue'
+import WatchlistButtonRemove from '@/components/WatchlistButtonRemove.vue'
 import BackButton from '@/components/BackButton.vue'
 import HomeButton from '@/components/HomeButton.vue'
 import EmptyState from '@/components/EmptyState.vue'
@@ -78,7 +78,7 @@ function handleClearAll() {
       >
         <div v-for="show in watchlistStore.watchlist" :key="show.id" class="relative group">
           <ShowCard :show="show" />
-          <RemoveFromWatchlistButton :show-id="show.id" />
+          <WatchlistButtonRemove :show-id="show.id" />
         </div>
       </div>
 
