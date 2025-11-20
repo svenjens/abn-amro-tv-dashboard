@@ -159,6 +159,10 @@ function handleSearchFocus() {
   }
 }
 
+const showFilters = computed(() => {
+  return !showsStore.isLoading && showsStore.showsCount > 0
+})
+
 // Reset visible genres count when filters change
 watch(
   filters,
@@ -295,7 +299,7 @@ onMounted(() => {
       <!-- Filters -->
       <div class="px-4 md:px-0">
         <FilterBar
-          v-if="!showsStore.isLoading && showsStore.showsCount > 0"
+          v-if="showFilters"
           v-model="filters"
           :shows="showsStore.allShows"
         />

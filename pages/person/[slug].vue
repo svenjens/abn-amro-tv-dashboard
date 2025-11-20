@@ -113,6 +113,10 @@ const displayedCredits = computed(() => {
   return uniqueCredits.value.slice(0, initialDisplayCount.value)
 })
 
+const canShowMore = computed(() => {
+  return uniqueCredits.value.length > initialDisplayCount.value && !showAllCredits.value
+})
+
 // SEO
 if (person.value) {
   useSEO({
@@ -309,7 +313,7 @@ if (person.value) {
 
             <!-- Show More Button -->
             <div
-              v-if="uniqueCredits.length > initialDisplayCount && !showAllCredits"
+              v-if="canShowMore"
               class="text-center mt-6"
             >
               <button
