@@ -126,16 +126,15 @@ if (typeof window !== 'undefined') {
         ref="searchInput"
         v-model="localQuery"
         type="text"
-        class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-3 pl-10 pr-20 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-primary-600 dark:focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-500 focus:shadow-lg sm:text-sm transition-all duration-200"
+        class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-3 pl-10 pr-12 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-primary-600 dark:focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-500 focus:shadow-lg sm:text-sm transition-all duration-200"
         :placeholder="placeholder"
         :aria-label="placeholder"
         @input="handleInput"
         @keyup.enter="handleSearch"
         @focus="handleFocus"
       />
-      <div class="absolute inset-y-0 right-0 flex items-center pr-3 gap-1">
+      <div v-if="localQuery" class="absolute inset-y-0 right-0 flex items-center pr-3">
         <button
-          v-if="localQuery"
           class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
           aria-label="Clear search"
           @click="clearSearch"
@@ -144,13 +143,6 @@ if (typeof window !== 'undefined') {
             name="heroicons:x-mark"
             class="h-5 w-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
           />
-        </button>
-        <button
-          class="rounded-lg bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white p-1.5 transition-colors flex items-center justify-center"
-          aria-label="Search"
-          @click="handleSearch"
-        >
-          <Icon name="heroicons:magnifying-glass" class="h-4 w-4" />
         </button>
       </div>
     </div>

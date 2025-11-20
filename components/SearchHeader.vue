@@ -58,16 +58,25 @@ defineExpose({
         </div>
       </div>
 
-      <SearchBar
-        ref="searchBarRef"
-        :model-value="modelValue"
-        @update:model-value="emit('update:modelValue', $event)"
-        :placeholder="t('search.placeholder')"
-        :recent-searches="searchStore.recentSearches"
-        data-testid="search-bar"
-        @search="emit('search', $event)"
-        @clear-recent="searchStore.clearRecentSearches()"
-      />
+      <div class="flex items-start gap-3">
+        <SearchBar
+          ref="searchBarRef"
+          :model-value="modelValue"
+          @update:model-value="emit('update:modelValue', $event)"
+          :placeholder="t('search.placeholder')"
+          :recent-searches="searchStore.recentSearches"
+          data-testid="search-bar"
+          @search="emit('search', $event)"
+          @clear-recent="searchStore.clearRecentSearches()"
+        />
+        <button
+          @click="emit('search', modelValue)"
+          class="flex-shrink-0 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 text-primary-600 dark:text-primary-400 font-medium px-6 py-3 rounded-lg transition-colors shadow-sm border border-white/20"
+          :aria-label="t('search.searchButton')"
+        >
+          <Icon name="heroicons:magnifying-glass" class="h-5 w-5" />
+        </button>
+      </div>
 
       <!-- Search Mode Toggle and Info -->
       <div class="mt-6">
