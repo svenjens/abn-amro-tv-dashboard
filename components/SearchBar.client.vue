@@ -105,12 +105,7 @@ if (typeof window !== 'undefined') {
 </script>
 
 <template>
-  <div
-    v-motion
-    :initial="{ opacity: 0, y: -10 }"
-    :visible="{ opacity: 1, y: 0, transition: { duration: 400, delay: 200 } }"
-    class="relative w-full max-w-2xl mx-auto"
-  >
+  <div class="relative w-full max-w-2xl mx-auto">
     <div class="relative">
       <div
         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 transition-transform duration-200"
