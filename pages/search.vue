@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, nextTick, computed } from 'vue'
 import { useSearchStore } from '@/stores'
 import { useSEO } from '@/composables'
 import SearchHeader from '@/components/SearchHeader.vue'
@@ -13,7 +13,15 @@ import type { Filters } from '@/components/FilterBar.vue'
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const router = useRouter()
 const searchStore = useSearchStore()
+
+// Track if user is navigating to a show detail page
+let navigatingToShow = false
+const unregisterGuard = router.beforeEach((to) => {
+  // Check if navigating to a show detail page
+  navigatingToShow = to.path.includes('/show/')
+})
 
 const searchHeaderRef = ref<InstanceType<typeof SearchHeader> | null>(null)
 const searchQuery = ref('')
@@ -156,6 +164,17 @@ onMounted(() => {
   nextTick(() => {
     searchHeaderRef.value?.focus()
   })
+})
+
+// Clean up search state when leaving search page (unless going to show detail)
+onBeforeUnmount(() => {
+  // Unregister route guard
+  unregisterGuard()
+  
+  // Only clear search if NOT navigating to a show detail page
+  if (!navigatingToShow) {
+    searchStore.clearSearch()
+  }
 })
 </script>
 

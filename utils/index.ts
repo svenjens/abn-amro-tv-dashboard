@@ -4,6 +4,5 @@
 
 export * from './show'
 export * from './logger'
-export * from './pwa.client'
 export * from './slug'
 export * from './gtag'

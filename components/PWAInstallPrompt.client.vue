@@ -1,69 +1,64 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { showInstallPrompt, isPWA, logger } from '@/utils'
+import { ref, computed, watch } from 'vue'
+import { useRegisterSW } from 'virtual:pwa-register/vue'
+import { logger } from '@/utils'
 
 const { t } = useI18n()
-const showPrompt = ref(false)
+
+// @vite-pwa/nuxt composable
+const {
+  offlineReady,
+  needRefresh,
+  updateServiceWorker,
+} = useRegisterSW()
 
 // Storage key for dismissal tracking
 const STORAGE_KEY = 'pwa-install-dismissed'
-
-// Check browser-only values on client
-const isAlreadyInstalled = ref(false)
 const dismissedRecently = ref(false)
 
-onMounted(() => {
-  // Don't show if already installed as PWA
-  isAlreadyInstalled.value = isPWA()
-
-  // Check if user previously dismissed
-  const dismissedAt = localStorage.getItem(STORAGE_KEY)
-  dismissedRecently.value =
-    !!dismissedAt && Date.now() - parseInt(dismissedAt) < 7 * 24 * 60 * 60 * 1000 // 7 days
-})
-
-function handleInstallAvailable() {
-  // Show prompt if not already installed and not recently dismissed
-  if (!isAlreadyInstalled.value && !dismissedRecently.value) {
-    // Show after a short delay to not be too intrusive
-    setTimeout(() => {
-      showPrompt.value = true
-    }, 3000)
+// Check if user previously dismissed (client-side only)
+if (import.meta.client) {
+  try {
+    const dismissedAt = localStorage.getItem(STORAGE_KEY)
+    dismissedRecently.value =
+      !!dismissedAt && Date.now() - parseInt(dismissedAt) < 7 * 24 * 60 * 60 * 1000 // 7 days
+  } catch (e) {
+    // Ignore localStorage errors
   }
 }
 
-function handleInstalled() {
-  showPrompt.value = false
-  logger.debug('[PWA Install Prompt] App installed')
-}
+// Show prompt when PWA is ready and not recently dismissed
+const showPrompt = computed(() => {
+  return offlineReady.value && !dismissedRecently.value
+})
+
+// Watch for need to refresh
+watch(needRefresh, (value) => {
+  if (value) {
+    logger.info('[PWA] New version available')
+  }
+})
 
 async function handleInstall() {
-  const outcome = await showInstallPrompt()
-
-  if (outcome === 'accepted') {
-    showPrompt.value = false
-    logger.debug('[PWA Install Prompt] User accepted install')
-  } else if (outcome === 'dismissed') {
-    handleDismiss()
-    logger.debug('[PWA Install Prompt] User dismissed install')
+  try {
+    await updateServiceWorker(true)
+    logger.debug('[PWA Install Prompt] Service worker updated')
+  } catch (error) {
+    logger.error('[PWA Install Prompt] Update failed:', error)
   }
 }
 
 function handleDismiss() {
-  showPrompt.value = false
-  localStorage.setItem(STORAGE_KEY, Date.now().toString())
-  logger.debug('[PWA Install Prompt] User dismissed prompt')
+  dismissedRecently.value = true
+  if (import.meta.client) {
+    try {
+      localStorage.setItem(STORAGE_KEY, Date.now().toString())
+      logger.debug('[PWA Install Prompt] User dismissed prompt')
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+  }
 }
-
-onMounted(() => {
-  window.addEventListener('pwa-install-available', handleInstallAvailable)
-  window.addEventListener('pwa-installed', handleInstalled)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('pwa-install-available', handleInstallAvailable)
-  window.removeEventListener('pwa-installed', handleInstalled)
-})
 </script>
 
 <template>

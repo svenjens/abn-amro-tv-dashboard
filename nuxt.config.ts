@@ -254,6 +254,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxtjs/fontaine',
     'nuxt-security',
+    '@vite-pwa/nuxt',
   ],
 
   // Runtime config for env variables
@@ -339,6 +340,112 @@ export default defineNuxtConfig({
         { rel: 'dns-prefetch', href: 'https://api.tvmaze.com' },
         { rel: 'dns-prefetch', href: 'https://pagead2.googlesyndication.com' },
       ],
+    },
+  },
+
+  // PWA configuration
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'BingeList - TV Show Discovery',
+      short_name: 'BingeList',
+      description:
+        'Your ultimate platform to discover, track, and binge-watch thousands of TV shows',
+      theme_color: '#dc2626',
+      background_color: '#ffffff',
+      display: 'standalone',
+      orientation: 'portrait-primary',
+      scope: '/',
+      start_url: '/',
+      lang: 'en',
+      dir: 'ltr',
+      categories: ['entertainment', 'lifestyle'],
+      icons: [
+        {
+          src: '/favicon-192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'any',
+        },
+        {
+          src: '/favicon-512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any maskable',
+        },
+        {
+          src: '/apple-touch-icon.png',
+          sizes: '180x180',
+          type: 'image/png',
+          purpose: 'any',
+        },
+      ],
+      screenshots: [
+        {
+          src: '/og-image.png',
+          sizes: '1200x1200',
+          type: 'image/png',
+        },
+      ],
+    },
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,jpg,svg,ico}'],
+      maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
+      globIgnores: ['**/originals/**', '**/node_modules/**'],
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/api\.tvmaze\.com\/.*/i,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'tvmaze-api-cache',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24, // 1 day
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/static\.tvmaze\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'tvmaze-images-cache',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'tmdb-images-cache',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
+    },
+    client: {
+      installPrompt: true,
+      // Periodicaly check for updates every hour
+      periodicSyncForUpdates: 3600,
+    },
+    devOptions: {
+      enabled: true,
+      type: 'module',
     },
   },
 })
